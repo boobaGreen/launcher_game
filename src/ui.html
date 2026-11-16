@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -341,7 +341,7 @@
         .games-grid {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 20px 20px 80px 20px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 16px;
@@ -375,6 +375,7 @@
             position: relative;
             width: 100%;
             aspect-ratio: 3 / 4;
+            min-height: 180px;
             background: #151b26;
             overflow: hidden;
             display: flex;
@@ -387,6 +388,7 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.2s;
+            display: block;
         }
 
         .game-card:hover .card-cover {
@@ -400,25 +402,27 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 12px;
+            padding: 16px 10px;
             text-align: center;
-            background: linear-gradient(135deg, #161c28 0%, #0c1018 100%);
+            background: radial-gradient(circle at 50% 35%, #1f293d 0%, #0d121c 100%);
         }
 
         .fallback-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 8px;
-            opacity: 0.8;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
         }
 
         .fallback-title {
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             font-weight: 700;
-            color: #fff;
+            color: #e6edf3;
+            line-height: 1.25;
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
         .card-badge-sys {
@@ -468,6 +472,7 @@
             flex-direction: column;
             gap: 4px;
             flex: 1;
+            min-height: 52px;
         }
 
         .card-title {
@@ -477,6 +482,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 1.3;
         }
 
         .card-meta {
@@ -582,7 +588,15 @@
     <!-- Top Bar -->
     <div class="top-bar">
         <div class="brand" style="display:flex; align-items:center; gap:8px;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4" fill="rgba(88,166,255,0.4)"/><path d="M12 11v6"/><path d="M6 17h12l2 4H4l2-4z" fill="rgba(88,166,255,0.2)"/></svg>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="10" width="20" height="10" rx="5" fill="#1a2233" stroke="#58a6ff" stroke-width="1.6"/>
+              <rect x="10" y="2" width="4" height="10" rx="2" fill="#58a6ff"/>
+              <circle cx="17" cy="15" r="2" fill="#ff7b72"/>
+              <circle cx="7" cy="15" r="1.2" fill="#58a6ff"/>
+              <circle cx="10" cy="13" r="1.2" fill="#58a6ff"/>
+              <circle cx="4" cy="15" r="1.2" fill="#58a6ff"/>
+              <circle cx="7" cy="17" r="1.2" fill="#58a6ff"/>
+            </svg>
             <span style="font-size:1.15rem; font-weight:800; color:#fff;">Retro<span style="color:var(--accent);">Hub</span></span>
             <div class="badge-count" id="totalBadge">-</div>
         </div>
@@ -794,16 +808,25 @@
             grid.innerHTML = allGames.map((g, idx) => {
                 const isSelected = idx === selectedGameIndex;
                 const favActive = g.is_favorite ? 'active' : '';
+                const sysIcon = g.system_code === 'MAME' ? '🕹️' : (g.system_code === 'C64' ? '💾' : (g.system_code === 'DOS' ? '💻' : (g.system_code === 'SCUMMVM' ? '🏝️' : '🎮')));
+                const hasCover = !!(g.cover_url && g.cover_url.trim());
                 return `
                 <div class="game-card ${isSelected ? 'selected' : ''}" data-idx="${idx}" onclick="selectCard(${idx})" ondblclick="launchGame(${g.id})">
                     <div class="card-cover-wrapper">
-                        <img class="card-cover" src="${g.cover_url || ''}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        ${hasCover ? `
+                        <img class="card-cover" src="${g.cover_url}" loading="eager" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="${g.title}">
                         <div class="card-cover-fallback" style="display: none;">
-                            <div class="fallback-icon">🎮</div>
+                            <div class="fallback-icon">${sysIcon}</div>
                             <div class="fallback-title">${g.title}</div>
                         </div>
+                        ` : `
+                        <div class="card-cover-fallback" style="display: flex;">
+                            <div class="fallback-icon">${sysIcon}</div>
+                            <div class="fallback-title">${g.title}</div>
+                        </div>
+                        `}
                         <span class="card-badge-sys">${g.system_code}</span>
-                        <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id}, ${idx})" title="Preferito">⭐</button>
+                        <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id}, ${idx})" title="Preferito">★</button>
                     </div>
                     <div class="card-info">
                         <div class="card-title" title="${g.title}">${g.title}</div>
@@ -844,7 +867,7 @@
             
             const coverEl = document.getElementById('heroCover');
             coverEl.src = game.cover_url || '';
-            coverEl.onerror = () => { coverEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="110" viewBox="0 0 80 110"><rect width="80" height="110" fill="%231a2233"/><text x="40" y="55" fill="%2358a6ff" font-family="sans-serif" font-size="24" text-anchor="middle" dominant-baseline="middle"></text></svg>'; };
+            coverEl.onerror = () => { coverEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="110" viewBox="0 0 80 110"><rect width="80" height="110" fill="%231a2233"/><text x="40" y="52" fill="%2358a6ff" font-family="sans-serif" font-size="30" text-anchor="middle" dominant-baseline="middle">?</text><text x="40" y="82" fill="%238b949e" font-family="sans-serif" font-size="10" text-anchor="middle">No Cover</text></svg>'; };
 
             document.getElementById('heroPlayBtn').onclick = () => launchGame(game.id);
         }

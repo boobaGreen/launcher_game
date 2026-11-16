@@ -64,7 +64,16 @@ impl CatalogLoader {
     }
 
     fn build_cover_url(sys_code: &str, title: &str) -> String {
-        let clean_title = title.replace('/', "-").replace(':', "");
+        // Libretro thumbnail standard invalid character replacements:
+        let clean_title = title
+            .replace(':', "_")
+            .replace('/', "_")
+            .replace('*', "_")
+            .replace('?', "_")
+            .replace('"', "_")
+            .replace('<', "_")
+            .replace('>', "_")
+            .replace('|', "_");
         let clean_encoded = clean_title.replace(' ', "%20");
         
         let repo_system = match sys_code.to_uppercase().as_str() {
@@ -79,6 +88,7 @@ impl CatalogLoader {
             "ATOMISWAVE" => "Sammy_-_Atomiswave",
             "PSX" => "Sony_-_PlayStation",
             "DOS" => "DOS",
+            "SCUMMVM" => "ScummVM",
             _ => "MAME",
         };
 
