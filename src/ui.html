@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetroHub — Gaming Launcher</title>
+    <style>
+        :root {
+            --bg: #090c10;
+            --surface: #121722;
+            --surface-hover: #1b2334;
+            --border: #232c3f;
+            --text: #e6edf3;
+            --text-dim: #8b949e;
+            --accent: #58a6ff;
+            --green: #2ea043;
+            --gold: #e3b341;
+            --red: #f85149;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-family);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            height: 64px;
+            background: linear-gradient(180deg, #161c28 0%, #0d121c 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 16px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+
+        .brand span {
+            color: var(--accent);
+        }
+
+        .badge-count {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: #070a0f;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 36px 9px 14px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        .search-clear:hover { color: #fff; }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .action-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .action-btn:hover {
+            background: var(--surface-hover);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .action-btn.active {
+            background: rgba(227, 179, 65, 0.15);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .gamepad-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--green);
+            background: rgba(46, 160, 67, 0.1);
+            border: 1px solid rgba(46, 160, 67, 0.3);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        /* Layout */
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #0d111a;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+            padding-left: 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--text);
+            transition: all 0.15s;
+            margin-bottom: 2px;
+        }
+
+        .nav-item:hover {
+            background: var(--surface-hover);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent);
+            font-weight: 600;
+            border-left: 3px solid var(--accent);
+        }
+
+        .nav-count {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            background: linear-gradient(180deg, rgba(18, 23, 34, 0.95) 0%, rgba(9, 12, 16, 0.98) 100%),
+                        radial-gradient(circle at top right, rgba(88, 166, 255, 0.15), transparent 70%);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            min-height: 140px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .hero-boxart {
+            width: 80px;
+            height: 110px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #1a2233;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            flex-shrink: 0;
+        }
+
+        .hero-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .badge-sys {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+
+        .tag-info {
+            background: var(--surface);
+            color: var(--text-dim);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        .hero-controls {
+            color: var(--green);
+            font-size: 0.82rem;
+            font-family: monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hero-action {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .play-btn {
+            background: linear-gradient(180deg, #2ea043 0%, #238636 100%);
+            border: 1px solid #3fb950;
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(46, 160, 67, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.15s;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 18px rgba(46, 160, 67, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .play-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Grid */
+        .games-grid {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            align-content: start;
+        }
+
+        /* Game Card */
+        .game-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover, .game-card.selected {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--accent);
+        }
+
+        .game-card.selected {
+            outline: 2px solid var(--accent);
+        }
+
+        .card-cover-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            background: #151b26;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.2s;
+        }
+
+        .game-card:hover .card-cover {
+            transform: scale(1.04);
+        }
+
+        .card-cover-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            text-align: center;
+            background: linear-gradient(135deg, #161c28 0%, #0c1018 100%);
+        }
+
+        .fallback-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+
+        .fallback-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-badge-sys {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            font-size: 0.68rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .card-fav-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.8rem;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.15s;
+        }
+
+        .card-fav-btn:hover {
+            transform: scale(1.15);
+            color: var(--gold);
+        }
+
+        .card-fav-btn.active {
+            color: var(--gold);
+        }
+
+        .card-info {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-meta {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Detail Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 650px;
+            overflow: hidden;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-body {
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Pad Help Footer */
+        .footer-pad-help {
+            height: 36px;
+            background: #090c12;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            flex-shrink: 0;
+        }
+
+        .pad-key {
+            background: #21262d;
+            border: 1px solid var(--border);
+            padding: 1px 6px;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.72rem;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 48px;
+            right: 24px;
+            background: var(--surface);
+            border: 1px solid var(--green);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 200;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="brand">
+            🕹️ Retro<span>Hub</span>
+            <div class="badge-count" id="totalBadge">Caricamento...</div>
+        </div>
+
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cerca per titolo, anno, autore, genere (es. street, shmup, mario)...">
+            <button id="searchClear" class="search-clear">&times;</button>
+        </div>
+
+        <div class="top-actions">
+            <button class="action-btn" id="favFilterBtn">⭐ Preferiti</button>
+            <div class="gamepad-indicator" id="padIndicator">
+                🎮 Xbox Pad Connesso
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div>
+                <div class="sidebar-section-title">Piattaforme</div>
+                <div id="platformsList">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <div>
+                <div class="sidebar-section-title">Decadi Temporali</div>
+                <div id="decadesList">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Hero Showcase -->
+            <div class="hero-banner" id="heroBanner">
+                <img id="heroCover" class="hero-boxart" src="" alt="Cover">
+                <div class="hero-info">
+                    <h2 class="hero-title" id="heroTitle">Seleziona un Gioco</h2>
+                    <div class="hero-tags">
+                        <span class="badge-sys" id="heroPlatform">-</span>
+                        <span class="tag-info" id="heroYear">-</span>
+                        <span class="tag-info" id="heroGenre">-</span>
+                        <span class="tag-info" id="heroDev">-</span>
+                    </div>
+                    <div class="hero-controls" id="heroControls">🎮 Comandi Xbox Controller</div>
+                </div>
+                <div class="hero-action">
+                    <button class="play-btn" id="heroPlayBtn">▶ GIOCA ORA</button>
+                </div>
+            </div>
+
+            <!-- Games Grid -->
+            <div class="games-grid" id="gamesGrid">
+                <!-- Cards populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Controller Help Footer -->
+    <div class="footer-pad-help">
+        <span><span class="pad-key">D-Pad / Levetta</span> Sfoglia</span>
+        <span><span class="pad-key">A</span> Avvia Gioco</span>
+        <span><span class="pad-key">X</span> Dettagli / Comandi</span>
+        <span><span class="pad-key">Y</span> Preferito</span>
+        <span><span class="pad-key">LB / RB</span> Cambia Piattaforma</span>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Dettagli Gioco</h3>
+                <button class="action-btn" id="modalCloseBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img id="modalCover" style="width: 140px; height: 190px; border-radius: 6px; object-fit: cover;" src="" alt="Cover">
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <div><strong>Piattaforma:</strong> <span id="modalPlatform"></span></div>
+                    <div><strong>Anno:</strong> <span id="modalYear"></span></div>
+                    <div><strong>Genere:</strong> <span id="modalGenre"></span></div>
+                    <div><strong>Sviluppatore:</strong> <span id="modalDev"></span></div>
+                    <div><strong>Partite Giocate:</strong> <span id="modalPlays"></span></div>
+                    <div style="margin-top: 8px;">
+                        <strong>🎮 Mappatura Comandi:</strong>
+                        <div id="modalControls" style="color: var(--green); margin-top: 4px; font-family: monospace; font-size: 0.85rem;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn" id="modalFavBtn">⭐ Preferito</button>
+                <button class="play-btn" id="modalPlayBtn">▶ Avvia Partita</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">✔ Gioco avviato con successo!</div>
+
+    <script>
+        let allGames = [];
+        let selectedGameIndex = 0;
+        let currentPlatform = 'ALL';
+        let currentDecade = 'ALL';
+        let favoritesOnly = false;
+        let activeModalGame = null;
+
+        // Fetch Initial Data
+        async function init() {
+            await Promise.all([
+                loadPlatforms(),
+                loadDecades(),
+                fetchGames()
+            ]);
+            initGamepadPolling();
+        }
+
+        async function loadPlatforms() {
+            try {
+                const res = await fetch('/api/platforms');
+                const platforms = await res.json();
+                const container = document.getElementById('platformsList');
+                let html = `<div class="nav-item ${currentPlatform === 'ALL' ? 'active' : ''}" onclick="selectPlatform('ALL')">
+                    <span>Tutte le Piattaforme</span>
+                    <span class="nav-count" id="allCount">-</span>
+                </div>`;
+
+                platforms.forEach(p => {
+                    html += `<div class="nav-item ${currentPlatform === p.code ? 'active' : ''}" onclick="selectPlatform('${p.code}')">
+                        <span style="display:flex; align-items:center; gap:6px;">
+                            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:${p.badge_color};"></span>
+                            ${p.name}
+                        </span>
+                        <span class="nav-count">${p.count}</span>
+                    </div>`;
+                });
+                container.innerHTML = html;
+            } catch (e) {
+                console.error("Errore caricamento piattaforme:", e);
+            }
+        }
+
+        async function loadDecades() {
+            try {
+                const res = await fetch('/api/decades');
+                const decades = await res.json();
+                const container = document.getElementById('decadesList');
+                let html = `<div class="nav-item ${currentDecade === 'ALL' ? 'active' : ''}" onclick="selectDecade('ALL')">
+                    <span>Tutti gli Anni</span>
+                </div>`;
+
+                decades.forEach(d => {
+                    html += `<div class="nav-item ${currentDecade === d.decade ? 'active' : ''}" onclick="selectDecade('${d.decade}')">
+                        <span>Anni ${d.decade.replace('s', '')}</span>
+                        <span class="nav-count">${d.count}</span>
+                    </div>`;
+                });
+                container.innerHTML = html;
+            } catch (e) {
+                console.error("Errore caricamento decadi:", e);
+            }
+        }
+
+        async function fetchGames() {
+            const query = document.getElementById('searchInput').value.trim();
+            const params = new URLSearchParams();
+            if (query) params.append('query', query);
+            if (currentPlatform !== 'ALL') params.append('platform', currentPlatform);
+            if (currentDecade !== 'ALL') params.append('decade', currentDecade);
+            if (favoritesOnly) params.append('favorites_only', 'true');
+
+            try {
+                const res = await fetch('/api/games?' + params.toString());
+                allGames = await res.json();
+                renderGames();
+            } catch (e) {
+                console.error("Errore fetch giochi:", e);
+            }
+        }
+
+        function renderGames() {
+            const grid = document.getElementById('gamesGrid');
+            document.getElementById('totalBadge').innerText = `${allGames.length} Giochi`;
+            if (currentPlatform === 'ALL' && !favoritesOnly && !document.getElementById('searchInput').value) {
+                const allEl = document.getElementById('allCount');
+                if (allEl) allEl.innerText = allGames.length;
+            }
+
+            if (allGames.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--text-dim);">
+                    <h3>Nessun gioco trovato con i filtri attuali</h3>
+                    <p style="margin-top: 8px;">Prova a modificare la ricerca o seleziona un'altra piattaforma.</p>
+                </div>`;
+                updateHero(null);
+                return;
+            }
+
+            if (selectedGameIndex >= allGames.length) {
+                selectedGameIndex = 0;
+            }
+
+            grid.innerHTML = allGames.map((g, idx) => {
+                const isSelected = idx === selectedGameIndex;
+                const favActive = g.is_favorite ? 'active' : '';
+                return `
+                <div class="game-card ${isSelected ? 'selected' : ''}" data-idx="${idx}" onclick="selectCard(${idx})" ondblclick="launchGame(${g.id})">
+                    <div class="card-cover-wrapper">
+                        <img class="card-cover" src="${g.cover_url || ''}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="card-cover-fallback" style="display: none;">
+                            <div class="fallback-icon">🕹️</div>
+                            <div class="fallback-title">${g.title}</div>
+                        </div>
+                        <span class="card-badge-sys">${g.system_code}</span>
+                        <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id}, ${idx})" title="Preferito">⭐</button>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-title" title="${g.title}">${g.title}</div>
+                        <div class="card-meta">
+                            <span>${g.year}</span>
+                            <span style="max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${g.genre}</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            updateHero(allGames[selectedGameIndex]);
+            scrollSelectedIntoView();
+        }
+
+        function selectCard(idx) {
+            selectedGameIndex = idx;
+            document.querySelectorAll('.game-card').forEach((el, i) => {
+                el.classList.toggle('selected', i === idx);
+            });
+            updateHero(allGames[idx]);
+        }
+
+        function updateHero(game) {
+            const banner = document.getElementById('heroBanner');
+            if (!game) {
+                banner.style.opacity = '0.5';
+                return;
+            }
+            banner.style.opacity = '1';
+            document.getElementById('heroTitle').innerText = game.title;
+            document.getElementById('heroPlatform').innerText = game.platform;
+            document.getElementById('heroYear').innerText = game.year;
+            document.getElementById('heroGenre').innerText = game.genre;
+            document.getElementById('heroDev').innerText = game.developer;
+            document.getElementById('heroControls').innerText = `🎮 ${game.controls}`;
+            
+            const coverEl = document.getElementById('heroCover');
+            coverEl.src = game.cover_url || '';
+            coverEl.onerror = () => { coverEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="110" viewBox="0 0 80 110"><rect width="80" height="110" fill="%231a2233"/><text x="40" y="55" fill="%2358a6ff" font-family="sans-serif" font-size="24" text-anchor="middle" dominant-baseline="middle">🕹️</text></svg>'; };
+
+            document.getElementById('heroPlayBtn').onclick = () => launchGame(game.id);
+        }
+
+        async function launchGame(gameId) {
+            showToast("Avvio in corso...");
+            try {
+                const res = await fetch('/api/launch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: gameId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`✔ ${data.message}`);
+                    const g = allGames.find(x => x.id === gameId);
+                    if (g) g.play_count = data.play_count;
+                } else {
+                    showToast(`❌ ${data.message}`);
+                }
+            } catch (e) {
+                showToast("Errore di connessione al launcher");
+            }
+        }
+
+        async function toggleFav(e, gameId, idx) {
+            e.stopPropagation();
+            try {
+                const res = await fetch('/api/favorite', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: gameId })
+                });
+                const data = await res.json();
+                if (allGames[idx]) {
+                    allGames[idx].is_favorite = data.is_favorite;
+                    renderGames();
+                }
+            } catch (err) {
+                console.error("Errore toggle fav:", err);
+            }
+        }
+
+        function selectPlatform(sys) {
+            currentPlatform = sys;
+            loadPlatforms();
+            fetchGames();
+        }
+
+        function selectDecade(dec) {
+            currentDecade = dec;
+            loadDecades();
+            fetchGames();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 3500);
+        }
+
+        function scrollSelectedIntoView() {
+            const selEl = document.querySelector(`.game-card[data-idx="${selectedGameIndex}"]`);
+            if (selEl) {
+                selEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // Search Handlers
+        let debounceTimer;
+        const searchInput = document.getElementById('searchInput');
+        const searchClear = document.getElementById('searchClear');
+
+        searchInput.addEventListener('input', () => {
+            searchClear.style.display = searchInput.value ? 'block' : 'none';
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(fetchGames, 150);
+        });
+
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            searchClear.style.display = 'none';
+            fetchGames();
+        });
+
+        // Favorites filter
+        const favFilterBtn = document.getElementById('favFilterBtn');
+        favFilterBtn.addEventListener('click', () => {
+            favoritesOnly = !favoritesOnly;
+            favFilterBtn.classList.toggle('active', favoritesOnly);
+            fetchGames();
+        });
+
+        // Detail Modal
+        function openDetailModal(game) {
+            if (!game) return;
+            activeModalGame = game;
+            document.getElementById('modalTitle').innerText = game.title;
+            document.getElementById('modalPlatform').innerText = game.platform;
+            document.getElementById('modalYear').innerText = game.year;
+            document.getElementById('modalGenre').innerText = game.genre;
+            document.getElementById('modalDev').innerText = game.developer;
+            document.getElementById('modalPlays').innerText = `${game.play_count} volte`;
+            document.getElementById('modalControls').innerText = game.controls;
+            document.getElementById('modalCover').src = game.cover_url || '';
+            document.getElementById('detailModal').style.display = 'flex';
+
+            document.getElementById('modalPlayBtn').onclick = () => {
+                document.getElementById('detailModal').style.display = 'none';
+                launchGame(game.id);
+            };
+        }
+
+        document.getElementById('modalCloseBtn').addEventListener('click', () => {
+            document.getElementById('detailModal').style.display = 'none';
+        });
+
+        // Gamepad Loop
+        let lastPadTime = 0;
+        function initGamepadPolling() {
+            window.addEventListener("gamepadconnected", () => {
+                document.getElementById('padIndicator').style.display = 'flex';
+                showToast("🎮 Controller Xbox collegato!");
+            });
+
+            function poll() {
+                const pads = navigator.getGamepads ? navigator.getGamepads() : [];
+                const pad = pads[0];
+                const now = Date.now();
+
+                if (pad && (now - lastPadTime > 180)) {
+                    const up = pad.buttons[12]?.pressed || pad.axes[1] < -0.5;
+                    const down = pad.buttons[13]?.pressed || pad.axes[1] > 0.5;
+                    const left = pad.buttons[14]?.pressed || pad.axes[0] < -0.5;
+                    const right = pad.buttons[15]?.pressed || pad.axes[0] > 0.5;
+
+                    const btnA = pad.buttons[0]?.pressed; // Launch
+                    const btnB = pad.buttons[1]?.pressed; // Back / Close modal
+                    const btnX = pad.buttons[2]?.pressed; // Info
+                    const btnY = pad.buttons[3]?.pressed; // Fav
+                    const btnLB = pad.buttons[4]?.pressed; // Prev platform
+                    const btnRB = pad.buttons[5]?.pressed; // Next platform
+
+                    if (document.getElementById('detailModal').style.display === 'flex') {
+                        if (btnB) document.getElementById('detailModal').style.display = 'none';
+                        if (btnA && activeModalGame) {
+                            document.getElementById('detailModal').style.display = 'none';
+                            launchGame(activeModalGame.id);
+                        }
+                    } else {
+                        // Grid navigation
+                        const cols = getGridCols();
+                        if (right && selectedGameIndex < allGames.length - 1) {
+                            selectCard(selectedGameIndex + 1);
+                            lastPadTime = now;
+                        } else if (left && selectedGameIndex > 0) {
+                            selectCard(selectedGameIndex - 1);
+                            lastPadTime = now;
+                        } else if (down && selectedGameIndex + cols < allGames.length) {
+                            selectCard(selectedGameIndex + cols);
+                            lastPadTime = now;
+                        } else if (up && selectedGameIndex - cols >= 0) {
+                            selectCard(selectedGameIndex - cols);
+                            lastPadTime = now;
+                        } else if (btnA && allGames[selectedGameIndex]) {
+                            launchGame(allGames[selectedGameIndex].id);
+                            lastPadTime = now + 400;
+                        } else if (btnX && allGames[selectedGameIndex]) {
+                            openDetailModal(allGames[selectedGameIndex]);
+                            lastPadTime = now + 250;
+                        } else if (btnY && allGames[selectedGameIndex]) {
+                            toggleFav({ stopPropagation: () => {} }, allGames[selectedGameIndex].id, selectedGameIndex);
+                            lastPadTime = now + 250;
+                        }
+                    }
+                }
+                requestAnimationFrame(poll);
+            }
+            requestAnimationFrame(poll);
+        }
+
+        function getGridCols() {
+            const grid = document.getElementById('gamesGrid');
+            if (!grid) return 4;
+            const w = grid.clientWidth;
+            return Math.max(1, Math.floor(w / 176));
+        }
+
+        // Start
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 use crate::models::Game;
 use regex::Regex;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 pub struct CatalogLoader;
 
