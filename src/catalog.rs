@@ -93,6 +93,19 @@ impl CatalogLoader {
                 } else {
                     (dir_cache.resolve(emu_root, sys_code, &title), Self::build_cover_url(sys_code, &title))
                 }
+            } else if sys_code.eq_ignore_ascii_case("NAOMI") || sys_code.eq_ignore_ascii_case("ATOMISWAVE") {
+                // Estrai codice ROM tra parentesi es. "( ikaruga )" -> "ikaruga"
+                let rom_code = if let Some(open) = title.rfind('(') {
+                    if let Some(close) = title[open..].find(')') {
+                        title[open + 1..open + close].trim()
+                    } else { "" }
+                } else { "" };
+                let c_url = if !rom_code.is_empty() {
+                    format!("/api/cover/naomi/{}", rom_code)
+                } else {
+                    Self::build_cover_url(sys_code, &title)
+                };
+                (dir_cache.resolve(emu_root, sys_code, &title), c_url)
             } else {
                 if sys_code.eq_ignore_ascii_case("DOS") {
                     if let Some(meta) = dos_meta_map.get(&title) {
@@ -147,7 +160,8 @@ impl CatalogLoader {
                 else if t_lower.contains("ufo 50") { Some("1147860") }
                 else if t_lower.contains("cave story") { Some("200900") }
                 else if t_lower.contains("spelunky") { Some("239350") }
-                else if t_lower.contains("maldita castilla") || t_lower.contains("cursed castilla") { Some("534290") }
+                else if t_lower.contains("la-mulana") { Some("230700") }
+                else if t_lower.contains("maldita castilla") || t_lower.contains("cursed castilla") || t_lower.contains("hydorah") || t_lower.contains("the curse of issyos") { Some("534290") }
                 else { None };
 
             if let Some(app_id) = steam_app {
@@ -159,6 +173,90 @@ impl CatalogLoader {
             }
             if t_lower.contains("streets of rage") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Mega_Drive_-_Genesis/master/Named_Boxarts/Streets%20of%20Rage%202%20(USA).png".to_string();
+            }
+            if t_lower.contains("8bit killer") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Wolfenstein%203D.png".to_string();
+            }
+            if t_lower.contains("darkula") || t_lower.contains("l'abbaye") {
+                return "https://steamcdn-a.akamaihd.net/steam/apps/534290/library_600x900.jpg".to_string();
+            }
+        }
+
+        // 2. Mappe dedicate per Nintendo GameCube
+        if sys_code.eq_ignore_ascii_case("GAMECUBE") {
+            if t_lower.contains("wind waker") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_GameCube/master/Named_Boxarts/Legend%20of%20Zelda,%20The%20-%20The%20Wind%20Waker%20(USA).png".to_string();
+            }
+            if t_lower.contains("twilight princess") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_GameCube/master/Named_Boxarts/Legend%20of%20Zelda,%20The%20-%20Twilight%20Princess%20(USA).png".to_string();
+            }
+            if t_lower.contains("metroid prime 2") || t_lower.contains("echoes") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_GameCube/master/Named_Boxarts/Metroid%20Prime%202%20-%20Echoes%20(USA).png".to_string();
+            }
+            if t_lower.contains("metroid prime") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_GameCube/master/Named_Boxarts/Metroid%20Prime%20(USA).png".to_string();
+            }
+            if t_lower.contains("f-zero") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_GameCube/master/Named_Boxarts/F-Zero%20GX%20(USA).png".to_string();
+            }
+        }
+
+        // 3. Mappe dedicate per LaserDisc Arcade (Hypseus Singe)
+        if sys_code.eq_ignore_ascii_case("HYPSEUS") {
+            if t_lower.contains("dragon's lair ii") || t_lower.contains("dragons lair 2") || t_lower.contains("time warp") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_Amiga/master/Named_Boxarts/Dragon's%20Lair%20II%20-%20Time%20Warp.png".to_string();
+            }
+            if t_lower.contains("dragon's lair") || t_lower.contains("dragons lair") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Mega-CD_-_Sega_CD/master/Named_Boxarts/Dragon's%20Lair%20(USA).png".to_string();
+            }
+            if t_lower.contains("space ace") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Mega-CD_-_Sega_CD/master/Named_Boxarts/Space%20Ace%20(USA).png".to_string();
+            }
+            if t_lower.contains("time gal") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Mega-CD_-_Sega_CD/master/Named_Boxarts/Time%20Gal%20(USA).png".to_string();
+            }
+            if t_lower.contains("cliff hanger") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Cliff%20Hanger.png".to_string();
+            }
+        }
+
+        // 4. Mappe dedicate per Commodore 64 classici
+        if sys_code.eq_ignore_ascii_case("C64") {
+            if t_lower == "1943" {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/1943%20-%20The%20Battle%20of%20Midway%20(Europe).png".to_string();
+            }
+            if t_lower == "archon" {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Archon%20(USA,%20Europe).png".to_string();
+            }
+            if t_lower.contains("archon ii") || t_lower.contains("adept") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Archon%20II%20-%20Adept%20(USA,%20Europe).png".to_string();
+            }
+            if t_lower.contains("bomb jack") || t_lower == "bombjack" {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Bombjack%20(Europe).png".to_string();
+            }
+            if t_lower == "cybernoid" {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Cybernoid%20-%20The%20Fighting%20Machine%20(Europe).png".to_string();
+            }
+            if t_lower.contains("ghostbusters") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Ghostbusters%20(USA).png".to_string();
+            }
+            if t_lower.contains("ghosts 'n goblins") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Ghosts%20'n%20Goblins%20(USA).png".to_string();
+            }
+            if t_lower.contains("ghouls 'n ghosts") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Ghouls%20'n%20Ghosts%20(USA).png".to_string();
+            }
+            if t_lower.contains("hero") || t_lower == "h.e.r.o." {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/H.E.R.O.%20(Europe).png".to_string();
+            }
+            if t_lower.contains("chopper command") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Chopper%20Command%20(USA).png".to_string();
+            }
+            if t_lower.contains("international karate") || t_lower.contains("ik+") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/IK+%20-%20International%20Karate%20+%20(Europe).png".to_string();
+            }
+            if t_lower.contains("mutant camels") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Attack%20of%20the%20Mutant%20Camels%20(Europe).png".to_string();
             }
         }
 
@@ -298,9 +396,11 @@ impl CatalogLoader {
             .replace('|', "_");
         let clean_encoded = clean_title.replace(' ', "%20");
 
+        let branch = if repo_system == "Sega_-_Naomi" { "main" } else { "master" };
+
         format!(
-            "https://raw.githubusercontent.com/libretro-thumbnails/{}/master/{}/{}.png",
-            repo_system, folder, clean_encoded
+            "https://raw.githubusercontent.com/libretro-thumbnails/{}/{}/{}/{}.png",
+            repo_system, branch, folder, clean_encoded
         )
     }
 }

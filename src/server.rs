@@ -63,16 +63,51 @@ impl HttpServer {
                 let found_file = candidates.into_iter().find(|p| p.exists());
                 if let Some(path_buf) = found_file {
                     if let Ok(bytes) = std::fs::read(&path_buf) {
-                        let mime = if path_buf.extension().map_or(false, |e| e == "jpg" || e == "jpeg") {
-                            "image/jpeg"
-                        } else {
-                            "image/png"
-                        };
-                        let header_ct = Header::from_bytes(&b"Content-Type"[..], mime.as_bytes()).unwrap();
-                        let header_cache = Header::from_bytes(&b"Cache-Control"[..], &b"public, max-age=86400"[..]).unwrap();
-                        let response = Response::from_data(bytes).with_header(header_ct).with_header(header_cache);
-                        let _ = request.respond(response);
-                        continue;
+                        if bytes.len() > 500 && !bytes.starts_with(b"<!DOCTYPE") {
+                            let mime = if path_buf.extension().map_or(false, |e| e == "jpg" || e == "jpeg") {
+                                "image/jpeg"
+                            } else {
+                                "image/png"
+                            };
+                            let header_ct = Header::from_bytes(&b"Content-Type"[..], mime.as_bytes()).unwrap();
+                            let header_cache = Header::from_bytes(&b"Cache-Control"[..], &b"public, max-age=86400"[..]).unwrap();
+                            let response = Response::from_data(bytes).with_header(header_ct).with_header(header_cache);
+                            let _ = request.respond(response);
+                            continue;
+                        }
+                    }
+                }
+                let _ = request.respond(Response::empty(404));
+                continue;
+            }
+
+            // Servizio boxart locali SEGA NAOMI / ATOMISWAVE (18 boxart ad alta risoluzione su disco a 0ms)
+            if method == Method::Get && path.starts_with("/api/cover/naomi/") {
+                let rom = path.trim_start_matches("/api/cover/naomi/").trim();
+                let clean_rom = rom.replace(['/', '\\', '.', ':', ';'], "");
+                let emu_naomi = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\NAOMI - Flycast\data\boxart");
+                let mut candidates = vec![
+                    emu_naomi.join(format!("{}.png", clean_rom)),
+                    emu_naomi.join(format!("{}.jpg", clean_rom)),
+                ];
+                if clean_rom == "vtenis2c" || clean_rom == "vtennis2" {
+                    candidates.push(emu_naomi.join("76261428.jpg"));
+                }
+                let found_file = candidates.into_iter().find(|p| p.exists());
+                if let Some(path_buf) = found_file {
+                    if let Ok(bytes) = std::fs::read(&path_buf) {
+                        if bytes.len() > 500 && !bytes.starts_with(b"<!DOCTYPE") {
+                            let mime = if path_buf.extension().map_or(false, |e| e == "jpg" || e == "jpeg") {
+                                "image/jpeg"
+                            } else {
+                                "image/png"
+                            };
+                            let header_ct = Header::from_bytes(&b"Content-Type"[..], mime.as_bytes()).unwrap();
+                            let header_cache = Header::from_bytes(&b"Cache-Control"[..], &b"public, max-age=86400"[..]).unwrap();
+                            let response = Response::from_data(bytes).with_header(header_ct).with_header(header_cache);
+                            let _ = request.respond(response);
+                            continue;
+                        }
                     }
                 }
                 let _ = request.respond(Response::empty(404));

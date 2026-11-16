@@ -1052,6 +1052,32 @@
             transform: scale(1.02);
         }
 
+        .drawer-play-btn.launching {
+            background: linear-gradient(135deg, #0284c7, #06b6d4) !important;
+            box-shadow: 0 4px 18px rgba(6, 182, 212, 0.5) !important;
+            cursor: wait !important;
+            animation: pulsePlayBtn 1.2s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        .drawer-play-btn.running {
+            background: #15803d !important;
+            box-shadow: 0 4px 14px rgba(21, 128, 61, 0.4) !important;
+            cursor: default !important;
+            pointer-events: none;
+        }
+
+        @keyframes pulsePlayBtn {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.82; transform: scale(0.98); }
+        }
+
+        .game-card.launching {
+            border-color: #06b6d4 !important;
+            box-shadow: 0 0 0 2px #06b6d4, 0 0 22px rgba(6, 182, 212, 0.5) !important;
+            animation: pulsePlayBtn 1.2s infinite ease-in-out;
+        }
+
         .drawer-fav-btn {
             width: 44px;
             height: 44px;
@@ -1508,29 +1534,32 @@
             font-size: 0.85rem;
         }
 
-        /* Toast Feedback */
+        /* Toast Feedback - Posizionato al centro in basso con z-index massimo assoluto sopra card zoomate e drawer */
         .toast {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: #1e293b;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px);
+            background: rgba(15, 23, 42, 0.96);
+            backdrop-filter: blur(12px);
             color: #fff;
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--accent);
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-            font-size: 0.88rem;
-            font-weight: 600;
-            z-index: 200;
-            transform: translateY(100px);
+            border: 1px solid var(--accent);
+            border-left: 5px solid var(--accent);
+            padding: 13px 26px;
+            border-radius: 10px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 255, 204, 0.25);
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            z-index: 999999;
             opacity: 0;
-            transition: all 0.25s ease;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
+            white-space: nowrap;
         }
 
         .toast.show {
-            transform: translateY(0);
+            transform: translateX(-50%) translateY(0);
             opacity: 1;
         }
     </style>
@@ -2556,33 +2585,58 @@
             const currentSrc = decodeURIComponent(img.src);
             const sys = (img.getAttribute('data-sys') || '').toUpperCase();
 
-            // 0. Fallback MAME da endpoint locale a Libretro repository
+            // 0. Fallback MAME locale -> Libretro remoto
             if (currentSrc.includes('/api/cover/mame/')) {
                 const title = img.getAttribute('data-title') || '';
                 const clean = title.replace(/[:/*?"<>|]/g, '_').trim();
+                img.setAttribute('data-err-step', '1');
                 img.src = `https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/${encodeURIComponent(clean)}.png`;
                 return;
             }
 
-            // 1. Se ha già provato Europe, fallisci ed elimina img per mostrare il fallback elegante
-            if (currentSrc.includes('(Europe).png')) {
-                img.remove();
+            // 1. Fallback NAOMI locale -> Libretro remoto branch main
+            if (currentSrc.includes('/api/cover/naomi/')) {
+                const title = img.getAttribute('data-title') || '';
+                let clean = title.replace(/\([^)]*\)/g, '').replace(/[:/*?"<>|]/g, '_').trim();
+                img.setAttribute('data-err-step', '1');
+                img.src = `https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Naomi/main/Named_Boxarts/${encodeURIComponent(clean)}.png`;
                 return;
             }
 
-            // 2. Se ha provato USA, prova con Europe
-            if (currentSrc.includes('(USA).png')) {
-                img.src = img.src.replace('%20(USA).png', '%20(Europe).png').replace(' (USA).png', ' (Europe).png');
-                return;
-            }
+            const step = parseInt(img.getAttribute('data-err-step') || '0', 10);
 
-            // 3. Primo fallback per sistemi console
-            if (sys === 'C64') {
-                img.src = img.src.replace('.png', '%20(Europe).png');
-                return;
-            } else if (['GAMECUBE', 'DREAMCAST', 'N64', 'SNES', 'NES', 'PSX'].includes(sys)) {
-                img.src = img.src.replace('.png', '%20(USA).png');
-                return;
+            // Cascata regionale intelligente (Step 0: Prova Europe/USA -> Step 1: USA, Europe -> Step 2: USA -> Step 3: Nome puro)
+            if (step === 0) {
+                img.setAttribute('data-err-step', '1');
+                if (currentSrc.includes('(Europe).png')) {
+                    img.src = img.src.replace('(Europe).png', '(USA,%20Europe).png');
+                    return;
+                } else if (currentSrc.includes('(USA).png')) {
+                    img.src = img.src.replace('(USA).png', '(USA,%20Europe).png');
+                    return;
+                } else if (sys === 'C64') {
+                    img.src = img.src.replace('.png', '%20(Europe).png');
+                    return;
+                }
+            } else if (step === 1) {
+                img.setAttribute('data-err-step', '2');
+                if (currentSrc.includes('(USA,%20Europe).png') || currentSrc.includes('(USA, Europe).png')) {
+                    img.src = img.src.replace('(USA,%20Europe).png', '(USA).png').replace('(USA, Europe).png', '(USA).png');
+                    return;
+                }
+            } else if (step === 2) {
+                img.setAttribute('data-err-step', '3');
+                let base = img.src
+                    .replace('%20(Europe).png', '.png')
+                    .replace(' (Europe).png', '.png')
+                    .replace('%20(USA).png', '.png')
+                    .replace(' (USA).png', '.png')
+                    .replace('%20(USA,%20Europe).png', '.png')
+                    .replace(' (USA, Europe).png', '.png');
+                if (base !== img.src) {
+                    img.src = base;
+                    return;
+                }
             } else if (sys === 'SCUMMVM' || sys === 'DOS') {
                 if (!currentSrc.includes('_alt_tried')) {
                     let newSrc = img.src;
@@ -2598,7 +2652,7 @@
                 }
             }
 
-            // Per altri sistemi (o fallimento): rimuovi e mostra il bellissimo fallback tipografico
+            // Fallito dopo tutti i tentativi: rimuovi per mostrare il badge tipografico
             img.remove();
         }
 
@@ -2613,12 +2667,33 @@
         }
 
         // ----------------------------------------------------
-        // AZIONI GIOCHI (Lancio & Preferiti)
+        // AZIONI GIOCHI (Lancio Protetto & Preferiti)
         // ----------------------------------------------------
+        let isLaunchingGame = false;
+
         async function launchGame(id) {
+            if (isLaunchingGame) {
+                showToast("⏳ Un gioco è già in fase di avvio, attendi un istante...");
+                return;
+            }
+
             const g = displayedGames.find(x => x.id === id) || allGames.find(x => x.id === id);
             const title = g ? g.title : 'Gioco';
+
+            isLaunchingGame = true;
             showToast(`🚀 Avvio di "${title}" in corso...`);
+
+            // Feedback visivo immediato sul pulsante drawer
+            const drawerBtn = document.getElementById('drawerPlayBtn');
+            const origDrawerHtml = drawerBtn ? drawerBtn.innerHTML : '';
+            if (drawerBtn) {
+                drawerBtn.classList.add('launching');
+                drawerBtn.innerHTML = `<span>⏳</span><span>AVVIO IN CORSO...</span>`;
+            }
+
+            // Feedback visivo sulla card selezionata
+            const activeCard = document.querySelector(`.game-card[data-id="${id}"]`);
+            if (activeCard) activeCard.classList.add('launching');
 
             try {
                 const res = await fetch('/api/launch', {
@@ -2633,12 +2708,35 @@
                         g.play_count = data.play_count;
                         g.last_played_at = new Date().toISOString();
                     }
+                    if (drawerBtn) {
+                        drawerBtn.classList.remove('launching');
+                        drawerBtn.classList.add('running');
+                        drawerBtn.innerHTML = `<span>🎮</span><span>IN ESECUZIONE</span>`;
+                    }
                     renderRecentRow();
                 } else {
                     showToast(`❌ Errore: ${data.message || 'Impossibile avviare'}`);
+                    if (drawerBtn) {
+                        drawerBtn.classList.remove('launching', 'running');
+                        drawerBtn.innerHTML = origDrawerHtml;
+                    }
                 }
             } catch (err) {
                 showToast(`❌ Errore di connessione al launcher`);
+                if (drawerBtn) {
+                    drawerBtn.classList.remove('launching', 'running');
+                    drawerBtn.innerHTML = origDrawerHtml;
+                }
+            } finally {
+                // Cooldown protettivo di 3.5s per evitare doppi click e dare tempo al processo di stabilizzarsi
+                setTimeout(() => {
+                    isLaunchingGame = false;
+                    if (activeCard) activeCard.classList.remove('launching');
+                    if (drawerBtn) {
+                        drawerBtn.classList.remove('launching', 'running');
+                        drawerBtn.innerHTML = origDrawerHtml || `<span>▶</span><span>GIOCA ORA</span>`;
+                    }
+                }, 3500);
             }
         }
 
@@ -2833,13 +2931,18 @@
             }
         }
 
+        let toastTimeoutId = null;
         function showToast(msg) {
             const t = document.getElementById('toastNotification');
             t.innerText = msg;
             t.classList.add('show');
-            setTimeout(() => {
+            if (toastTimeoutId) {
+                clearTimeout(toastTimeoutId);
+            }
+            toastTimeoutId = setTimeout(() => {
                 t.classList.remove('show');
-            }, 3000);
+                toastTimeoutId = null;
+            }, 3200);
         }
     </script>
 </body>

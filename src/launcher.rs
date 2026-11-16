@@ -26,15 +26,17 @@ impl Launcher {
         let path = Path::new(trimmed);
 
         if path.exists() {
-            // Using PowerShell Start-Process handles all shortcuts (.lnk), batch files (.bat),
-            // and executables with complete immunity to apostrophes ('), ampersands (&),
-            // parentheses, and spaces.
-            let escaped = trimmed.replace('\'', "''");
-            let script = format!("Start-Process -FilePath '{}'", escaped);
-            Command::new("powershell")
-                .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
-                .spawn()
-                .map_err(|e| format!("Errore esecuzione comando: {}", e))?;
+            // Usa il meccanismo nativo Windows Shell (ShellExecuteW con SW_SHOWNORMAL):
+            // garantisce che la finestra dell'emulatore sia visibile in primo piano (MAI nascosta),
+            // rispetta la working directory interna dei collegamenti .lnk e degli script .bat
+            if let Err(e) = open::that(path) {
+                let parent = path.parent().unwrap_or(Path::new("."));
+                Command::new("cmd")
+                    .args(&["/C", "start", "", trimmed])
+                    .current_dir(parent)
+                    .spawn()
+                    .map_err(|e2| format!("Errore lancio (open: {}, cmd: {})", e, e2))?;
+            }
             return Ok(format!("Avviato: {}", trimmed));
         }
 
