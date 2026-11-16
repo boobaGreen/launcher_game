@@ -959,94 +959,120 @@
             document.getElementById('detailModal').style.display = 'none';
         });
 
-                // Universal Gamepad Loop (Xbox, PlayStation 1/2 Dual USB Adapter, Generic DirectInput)
+                        // Universal Gamepad Loop: Simultaneous Mixed Controllers (Xbox + Dual PS1 USB Adapter)
         let lastPadTime = 0;
         function initGamepadPolling() {
-            window.addEventListener("gamepadconnected", (e) => {
+            function updateIndicator() {
+                const rawPads = navigator.getGamepads ? navigator.getGamepads() : [];
+                const connected = Array.from(rawPads).filter(p => p && p.connected);
                 const indicator = document.getElementById('padIndicator');
-                indicator.style.display = 'flex';
-                const padName = e.gamepad.id.toLowerCase();
-                if (padName.includes("ps") || padName.includes("twin") || padName.includes("playstation") || padName.includes("0810")) {
-                    indicator.innerText = "ðŸŽ® Joypad PS1 Connesso (USB Dual)";
-                    showToast("ðŸŽ® Adattatore Joypad PS1 rilevato!");
-                } else {
-                    indicator.innerText = "ðŸŽ® Controller Connesso";
-                    showToast(`ðŸŽ® Controller connesso: ${e.gamepad.id.substring(0, 24)}`);
+                
+                if (connected.length === 0) {
+                    indicator.style.display = 'none';
+                    return;
                 }
+                
+                indicator.style.display = 'flex';
+                let hasXbox = false;
+                let hasPs1 = false;
+
+                connected.forEach(p => {
+                    const id = p.id.toLowerCase();
+                    if (id.includes('ps') || id.includes('twin') || id.includes('playstation') || id.includes('0810') || p.mapping !== 'standard') {
+                        hasPs1 = true;
+                    } else {
+                        hasXbox = true;
+                    }
+                });
+
+                if (hasXbox && hasPs1) {
+                    indicator.innerText = `ðŸŽ® ${connected.length} Pad: Xbox + Adattatore PS1`;
+                } else if (hasPs1) {
+                    indicator.innerText = `ðŸŽ® ${connected.length} Joypad PS1 Connesso${connected.length > 1 ? 'i' : ''}`;
+                } else {
+                    indicator.innerText = `ðŸŽ® ${connected.length} Controller Xbox Connesso${connected.length > 1 ? 'i' : ''}`;
+                }
+            }
+
+            window.addEventListener("gamepadconnected", (e) => {
+                updateIndicator();
+                showToast(`ðŸŽ® Connesso: ${e.gamepad.id.substring(0, 26)}`);
+            });
+
+            window.addEventListener("gamepaddisconnected", () => {
+                updateIndicator();
             });
 
             function poll() {
                 const rawPads = navigator.getGamepads ? navigator.getGamepads() : [];
-                // Find first active connected gamepad (Port 1 or Port 2 of PS1 adapter, or Xbox)
-                let pad = null;
-                for (let i = 0; i < rawPads.length; i++) {
-                    if (rawPads[i] && rawPads[i].connected) {
-                        pad = rawPads[i];
-                        break;
-                    }
-                }
-
                 const now = Date.now();
 
-                if (pad && (now - lastPadTime > 180)) {
-                    const isStandard = pad.mapping === "standard";
-                    const idLower = pad.id.toLowerCase();
-                    const isPs1Adapter = idLower.includes("twin") || idLower.includes("ps") || idLower.includes("0810") || !isStandard;
+                if (now - lastPadTime > 180) {
+                    // Check every connected gamepad so whichever you touch responds immediately!
+                    for (let i = 0; i < rawPads.length; i++) {
+                        const pad = rawPads[i];
+                        if (!pad || !pad.connected) continue;
 
-                    // Directional inputs: support Standard Buttons (12-15), Left Analog Stick, and DirectInput Hat Switch / Axes
-                    const stickX = pad.axes[0] || 0;
-                    const stickY = pad.axes[1] || 0;
-                    const hatAxis = pad.axes[9] !== undefined ? pad.axes[9] : (pad.axes[4] !== undefined ? pad.axes[4] : null);
+                        const isStandard = pad.mapping === "standard";
+                        const idLower = pad.id.toLowerCase();
+                        const isPs1Adapter = idLower.includes("twin") || idLower.includes("ps") || idLower.includes("0810") || !isStandard;
 
-                    const up = pad.buttons[12]?.pressed || stickY < -0.5 || (hatAxis !== null && Math.abs(hatAxis - (-1.0)) < 0.1);
-                    const down = pad.buttons[13]?.pressed || stickY > 0.5 || (hatAxis !== null && Math.abs(hatAxis - (0.14)) < 0.1);
-                    const left = pad.buttons[14]?.pressed || stickX < -0.5 || (hatAxis !== null && Math.abs(hatAxis - (0.71)) < 0.1);
-                    const right = pad.buttons[15]?.pressed || stickX > 0.5 || (hatAxis !== null && Math.abs(hatAxis - (-0.42)) < 0.1);
+                        // Directional inputs
+                        const stickX = pad.axes[0] || 0;
+                        const stickY = pad.axes[1] || 0;
+                        const hatAxis = pad.axes[9] !== undefined ? pad.axes[9] : (pad.axes[4] !== undefined ? pad.axes[4] : null);
 
-                    // Button Mappings
-                    // Standard: 0=A/Cross, 1=B/Circle, 2=X/Square, 3=Y/Triangle
-                    // PS1 Twin USB adapter (DirectInput): 2=Cross, 1=Circle, 3=Square, 0=Triangle OR 0/1/2/3
-                    const btnConfirm = pad.buttons[0]?.pressed || (isPs1Adapter && pad.buttons[2]?.pressed); // A / Croce (Avvia)
-                    const btnBack = pad.buttons[1]?.pressed; // B / Cerchio (Indietro)
-                    const btnDetails = pad.buttons[2]?.pressed || (isPs1Adapter && pad.buttons[3]?.pressed); // X / Quadrato (Info)
-                    const btnFav = pad.buttons[3]?.pressed || (isPs1Adapter && pad.buttons[0]?.pressed); // Y / Triangolo (Preferito)
-                    const btnLB = pad.buttons[4]?.pressed || pad.buttons[6]?.pressed; // L1 / L2
-                    const btnRB = pad.buttons[5]?.pressed || pad.buttons[7]?.pressed; // R1 / R2
+                        const up = pad.buttons[12]?.pressed || stickY < -0.5 || (hatAxis !== null && Math.abs(hatAxis - (-1.0)) < 0.1);
+                        const down = pad.buttons[13]?.pressed || stickY > 0.5 || (hatAxis !== null && Math.abs(hatAxis - (0.14)) < 0.1);
+                        const left = pad.buttons[14]?.pressed || stickX < -0.5 || (hatAxis !== null && Math.abs(hatAxis - (0.71)) < 0.1);
+                        const right = pad.buttons[15]?.pressed || stickX > 0.5 || (hatAxis !== null && Math.abs(hatAxis - (-0.42)) < 0.1);
 
-                    if (document.getElementById('detailModal').style.display === 'flex') {
-                        if (btnBack) document.getElementById('detailModal').style.display = 'none';
-                        if (btnConfirm && activeModalGame) {
-                            document.getElementById('detailModal').style.display = 'none';
-                            launchGame(activeModalGame.id);
-                        }
-                    } else {
-                        // Grid navigation
-                        const cols = getGridCols();
-                        if (right && selectedGameIndex < allGames.length - 1) {
-                            selectCard(selectedGameIndex + 1);
-                            lastPadTime = now;
-                        } else if (left && selectedGameIndex > 0) {
-                            selectCard(selectedGameIndex - 1);
-                            lastPadTime = now;
-                        } else if (down && selectedGameIndex + cols < allGames.length) {
-                            selectCard(selectedGameIndex + cols);
-                            lastPadTime = now;
-                        } else if (up && selectedGameIndex - cols >= 0) {
-                            selectCard(selectedGameIndex - cols);
-                            lastPadTime = now;
-                        } else if (btnConfirm && allGames[selectedGameIndex]) {
-                            launchGame(allGames[selectedGameIndex].id);
-                            lastPadTime = now + 400;
-                        } else if (btnDetails && allGames[selectedGameIndex]) {
-                            openDetailModal(allGames[selectedGameIndex]);
-                            lastPadTime = now + 250;
-                        } else if (btnFav && allGames[selectedGameIndex]) {
-                            toggleFav({ stopPropagation: () => {} }, allGames[selectedGameIndex].id, selectedGameIndex);
-                            lastPadTime = now + 250;
-                        } else if (btnLB || btnRB) {
-                            // Cycle platform with bumpers
-                            cyclePlatform(btnRB ? 1 : -1);
-                            lastPadTime = now + 250;
+                        // Actions
+                        const btnConfirm = pad.buttons[0]?.pressed || (isPs1Adapter && pad.buttons[2]?.pressed); // A / Croce
+                        const btnBack = pad.buttons[1]?.pressed; // B / Cerchio
+                        const btnDetails = pad.buttons[2]?.pressed || (isPs1Adapter && pad.buttons[3]?.pressed); // X / Quadrato
+                        const btnFav = pad.buttons[3]?.pressed || (isPs1Adapter && pad.buttons[0]?.pressed); // Y / Triangolo
+                        const btnLB = pad.buttons[4]?.pressed || pad.buttons[6]?.pressed;
+                        const btnRB = pad.buttons[5]?.pressed || pad.buttons[7]?.pressed;
+
+                        const hasInput = up || down || left || right || btnConfirm || btnBack || btnDetails || btnFav || btnLB || btnRB;
+
+                        if (hasInput) {
+                            if (document.getElementById('detailModal').style.display === 'flex') {
+                                if (btnBack) document.getElementById('detailModal').style.display = 'none';
+                                if (btnConfirm && activeModalGame) {
+                                    document.getElementById('detailModal').style.display = 'none';
+                                    launchGame(activeModalGame.id);
+                                }
+                            } else {
+                                const cols = getGridCols();
+                                if (right && selectedGameIndex < allGames.length - 1) {
+                                    selectCard(selectedGameIndex + 1);
+                                    lastPadTime = now;
+                                } else if (left && selectedGameIndex > 0) {
+                                    selectCard(selectedGameIndex - 1);
+                                    lastPadTime = now;
+                                } else if (down && selectedGameIndex + cols < allGames.length) {
+                                    selectCard(selectedGameIndex + cols);
+                                    lastPadTime = now;
+                                } else if (up && selectedGameIndex - cols >= 0) {
+                                    selectCard(selectedGameIndex - cols);
+                                    lastPadTime = now;
+                                } else if (btnConfirm && allGames[selectedGameIndex]) {
+                                    launchGame(allGames[selectedGameIndex].id);
+                                    lastPadTime = now + 400;
+                                } else if (btnDetails && allGames[selectedGameIndex]) {
+                                    openDetailModal(allGames[selectedGameIndex]);
+                                    lastPadTime = now + 250;
+                                } else if (btnFav && allGames[selectedGameIndex]) {
+                                    toggleFav({ stopPropagation: () => {} }, allGames[selectedGameIndex].id, selectedGameIndex);
+                                    lastPadTime = now + 250;
+                                } else if (btnLB || btnRB) {
+                                    cyclePlatform(btnRB ? 1 : -1);
+                                    lastPadTime = now + 250;
+                                }
+                            }
+                            break; // Handled input from this active controller
                         }
                     }
                 }
@@ -1054,6 +1080,7 @@
             }
             requestAnimationFrame(poll);
         }
+
 
         function cyclePlatform(dir) {
             const items = Array.from(document.querySelectorAll('#platformsList .nav-item'));
@@ -1078,4 +1105,5 @@
     </script>
 </body>
 </html>
+
 
