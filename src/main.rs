@@ -13,7 +13,25 @@ use db::Database;
 use server::HttpServer;
 
 fn open_app_window(url: &str) {
-    // Apre l'interfaccia nel browser dell'utente in modo affidabile al 100% senza conflitti di lock o crash di Edge
+    // Apre RetroHub come finestra applicativa standalone dedicata (modalità App senza barra URL o schede)
+    let edge_paths = [
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+    ];
+
+    for path in &edge_paths {
+        if Path::new(path).exists() {
+            if Command::new(path)
+                .args(&[&format!("--app={}", url), "--window-size=1440,900"])
+                .spawn()
+                .is_ok()
+            {
+                return;
+            }
+        }
+    }
+
+    // Fallback: browser di default se Edge non è presente
     if open::that(url).is_err() {
         let _ = Command::new("cmd").args(&["/C", "start", url]).spawn();
     }
