@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RetroHub - Gaming Launcher</title>
+    <title>RetroHub - Il tuo Centro Retrogaming</title>
     <style>
         :root {
-            --bg: #090c10;
-            --surface: #121722;
-            --surface-hover: #1b2334;
-            --border: #232c3f;
-            --text: #e6edf3;
-            --text-dim: #8b949e;
-            --accent: #58a6ff;
-            --green: #2ea043;
-            --gold: #e3b341;
-            --red: #f85149;
+            --bg-base: #0b0f17;
+            --bg-surface: #131926;
+            --bg-surface-hover: #1b2436;
+            --bg-card: #141a27;
+            --border: #212c40;
+            --border-hover: #324361;
+            --accent: #00d2b4;
+            --accent-glow: rgba(0, 210, 180, 0.35);
+            --accent-blue: #38bdf8;
+            --accent-purple: #8b5cf6;
+            --accent-gold: #fbbf24;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
             --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
         }
 
@@ -27,360 +31,698 @@
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg-base);
+            color: var(--text-main);
             font-family: var(--font-family);
             height: 100vh;
             display: flex;
-            flex-direction: column;
             overflow: hidden;
         }
 
-        /* Top Bar */
-        .top-bar {
-            height: 64px;
-            background: linear-gradient(180deg, #161c28 0%, #0d121c 100%);
-            border-bottom: 1px solid var(--border);
+        /* Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #232d3f;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        /* ----------------------------------------------------
+           SIDEBAR (Stile RecompLauncher / Steam)
+        ---------------------------------------------------- */
+        .sidebar {
+            width: 250px;
+            background: #0f141f;
+            border-right: 1px solid var(--border);
             display: flex;
-            align-items: center;
-            padding: 0 24px;
-            gap: 16px;
+            flex-direction: column;
             flex-shrink: 0;
             z-index: 10;
         }
 
-        .brand {
+        .sidebar-brand {
+            height: 64px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, #141b2a 0%, #0f141f 100%);
+        }
+
+        .brand-icon {
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 8px var(--accent));
+        }
+
+        .brand-text {
             font-size: 1.25rem;
             font-weight: 800;
             letter-spacing: -0.5px;
             color: #fff;
-        }
-
-        .brand span {
-            color: var(--accent);
-        }
-
-        .badge-count {
-            background: rgba(88, 166, 255, 0.15);
-            color: var(--accent);
-            border: 1px solid rgba(88, 166, 255, 0.3);
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .search-wrapper {
-            position: relative;
-            flex: 1;
-            max-width: 500px;
-        }
-
-        .search-input {
-            width: 100%;
-            background: #070a0f;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 9px 36px 9px 14px;
-            color: #fff;
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
-        }
-
-        .search-clear {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-dim);
-            font-size: 1.1rem;
-            cursor: pointer;
-            display: none;
-        }
-
-        .search-clear:hover { color: #fff; }
-
-        .top-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: auto;
-        }
-
-        .action-btn {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.15s;
         }
 
-        .action-btn:hover {
-            background: var(--surface-hover);
-            border-color: var(--accent);
-            color: #fff;
+        .brand-badge {
+            background: var(--accent);
+            color: #0b0f17;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
         }
 
-        .action-btn.active {
-            background: rgba(227, 179, 65, 0.15);
-            border-color: var(--gold);
-            color: var(--gold);
-        }
-
-        .gamepad-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.8rem;
-            color: var(--green);
-            background: rgba(46, 160, 67, 0.1);
-            border: 1px solid rgba(46, 160, 67, 0.3);
-            padding: 5px 10px;
-            border-radius: 20px;
-        }
-
-        /* Layout */
-        .main-layout {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: #0d111a;
-            border-right: 1px solid var(--border);
-            overflow-y: auto;
-            padding: 16px;
+        .sidebar-nav {
+            padding: 16px 12px 10px 12px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            flex-shrink: 0;
+            gap: 4px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .sidebar-section-title {
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: left;
+            width: 100%;
+        }
+
+        .nav-btn:hover {
+            background: var(--bg-surface-hover);
+            color: #fff;
+        }
+
+        .nav-btn.active {
+            background: rgba(0, 210, 180, 0.12);
+            border-color: rgba(0, 210, 180, 0.3);
+            color: var(--accent);
+        }
+
+        .nav-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .sidebar-platforms {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .platforms-title {
             font-size: 0.72rem;
             font-weight: 700;
-            color: var(--text-dim);
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            margin-bottom: 8px;
-            padding-left: 6px;
+            color: var(--text-dim);
+            padding: 6px 10px;
         }
 
-        .nav-item {
+        .platform-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 8px 12px;
             border-radius: 6px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
             font-size: 0.85rem;
+            font-weight: 500;
             cursor: pointer;
-            color: var(--text);
-            transition: all 0.15s;
-            margin-bottom: 2px;
+            transition: all 0.15s ease;
+            width: 100%;
+            text-align: left;
         }
 
-        .nav-item:hover {
-            background: var(--surface-hover);
+        .platform-item:hover {
+            background: var(--bg-surface-hover);
             color: #fff;
         }
 
-        .nav-item.active {
-            background: rgba(88, 166, 255, 0.15);
+        .platform-item.active {
+            background: #182235;
             color: var(--accent);
-            font-weight: 600;
-            border-left: 3px solid var(--accent);
+            font-weight: 700;
         }
 
-        .nav-count {
+        .platform-count {
             font-size: 0.75rem;
-            color: var(--text-dim);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
             padding: 2px 6px;
             border-radius: 10px;
-        }
-
-        /* Content Area */
-        .content-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            background: var(--bg);
-        }
-
-        /* Hero Banner */
-        .hero-banner {
-            background: linear-gradient(180deg, rgba(18, 23, 34, 0.95) 0%, rgba(9, 12, 16, 0.98) 100%),
-                        radial-gradient(circle at top right, rgba(88, 166, 255, 0.15), transparent 70%);
-            border-bottom: 1px solid var(--border);
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            min-height: 140px;
-            flex-shrink: 0;
-            position: relative;
-        }
-
-        .hero-boxart {
-            width: 80px;
-            height: 110px;
-            border-radius: 6px;
-            object-fit: cover;
-            background: #1a2233;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            flex-shrink: 0;
-        }
-
-        .hero-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .hero-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .hero-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .badge-sys {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            border: 1px solid transparent;
-        }
-
-        .tag-info {
-            background: var(--surface);
             color: var(--text-dim);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            border: 1px solid var(--border);
         }
 
-        .hero-controls {
-            color: var(--green);
-            font-size: 0.82rem;
-            font-family: monospace;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .platform-item.active .platform-count {
+            background: var(--accent);
+            color: #0b0f17;
+            font-weight: 800;
         }
 
-        .hero-action {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .play-btn {
-            background: linear-gradient(180deg, #2ea043 0%, #238636 100%);
-            border: 1px solid #3fb950;
-            color: #fff;
-            font-size: 1.05rem;
-            font-weight: 700;
-            padding: 12px 28px;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(46, 160, 67, 0.3);
+        .sidebar-footer {
+            padding: 14px 16px;
+            border-top: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.15s;
+            gap: 10px;
+            background: #0d121c;
         }
 
-        .play-btn:hover {
-            transform: scale(1.03);
-            box-shadow: 0 6px 18px rgba(46, 160, 67, 0.5);
-            filter: brightness(1.1);
-        }
-
-        .play-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Grid */
-        .games-grid {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px 20px 80px 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-            gap: 16px;
-            align-content: start;
-        }
-
-        /* Game Card */
-        .game-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .game-card:hover, .game-card.selected {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--accent);
-        }
-
-        .game-card.selected {
-            outline: 2px solid var(--accent);
-        }
-
-        .card-cover-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 3 / 4;
-            min-height: 190px;
-            background: radial-gradient(circle at 50% 35%, #1f293d 0%, #0d121c 100%);
-            overflow: hidden;
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d2b4 0%, #3b82f6 100%);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            color: #0b0f17;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .user-status {
+            font-size: 0.72rem;
+            color: var(--accent);
+        }
+
+        /* ----------------------------------------------------
+           MAIN CONTENT AREA
+        ---------------------------------------------------- */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Top Header Search & Controls */
+        .top-header {
+            height: 64px;
+            background: rgba(15, 20, 31, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            gap: 20px;
+            z-index: 5;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 540px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            pointer-events: none;
+            font-size: 1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 40px;
+            background: #141b29;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0 38px 0 40px;
+            color: #fff;
+            font-size: 0.88rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+            background: #172132;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 1rem;
+            display: none;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: #161e2c;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--bg-surface-hover);
+            color: #fff;
+            border-color: var(--border-hover);
+        }
+
+        .action-btn.primary {
+            background: var(--accent);
+            color: #0b0f17;
+            border-color: var(--accent);
+            font-weight: 700;
+        }
+
+        .action-btn.primary:hover {
+            box-shadow: 0 0 16px var(--accent-glow);
+            filter: brightness(1.05);
+        }
+
+        /* ----------------------------------------------------
+           VIEWS (Home vs Libreria)
+        ---------------------------------------------------- */
+        .content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* ----------------------------------------------------
+           HOME VIEW (Ispirata a RecompLauncher Home)
+        ---------------------------------------------------- */
+        .home-container {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Hero Spotlight Banner */
+        .hero-banner {
+            position: relative;
+            min-height: 340px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #131c2d 0%, #0a0e17 100%);
+            border: 1px solid var(--border);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            padding: 36px 40px;
+        }
+
+        .hero-bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 80% 50%, rgba(0, 210, 180, 0.12) 0%, transparent 60%),
+                        radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            align-self: flex-start;
+            background: rgba(0, 210, 180, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(0, 210, 180, 0.3);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            color: #fff;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .hero-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #cbd5e1;
+            margin-top: 4px;
+        }
+
+        .hero-controls {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+            background: rgba(251, 191, 36, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            padding: 6px 12px;
+            border-radius: 6px;
+            margin-top: 4px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .hero-play-btn {
+            background: var(--accent);
+            color: #0b0f17;
+            font-size: 1rem;
+            font-weight: 800;
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px var(--accent-glow);
+            transition: all 0.2s ease;
+        }
+
+        .hero-play-btn:hover {
+            transform: scale(1.04);
+            filter: brightness(1.1);
+        }
+
+        .hero-secondary-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .hero-secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .hero-pagination {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 3;
+        }
+
+        .hero-nav-arrow {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .hero-nav-arrow:hover {
+            background: var(--accent);
+            color: #0b0f17;
+            border-color: var(--accent);
+        }
+
+        /* Home Row Sections */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-action {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .section-action:hover {
+            text-decoration: underline;
+        }
+
+        .carousel-row {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scroll-behavior: smooth;
+        }
+
+        /* ----------------------------------------------------
+           LIBRERIA VIEW (Ispirata a RecompLauncher Libreria)
+        ---------------------------------------------------- */
+        .libreria-container {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            max-width: 1700px;
+            margin: 0 auto;
+        }
+
+        .libreria-header {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .libreria-title-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .libreria-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .libreria-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-dim);
+        }
+
+        /* Filter Pills Bar */
+        .filter-pills-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+        }
+
+        .filter-pill {
+            background: #141b27;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+        }
+
+        .filter-pill:hover {
+            background: var(--bg-surface-hover);
+            color: #fff;
+        }
+
+        .filter-pill.active {
+            background: var(--accent);
+            color: #0b0f17;
+            border-color: var(--accent);
+            font-weight: 800;
+        }
+
+        .libreria-controls-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .controls-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.84rem;
+            color: var(--text-muted);
+        }
+
+        .select-filter {
+            background: #141a27;
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .select-filter:focus {
+            border-color: var(--accent);
+        }
+
+        /* ----------------------------------------------------
+           CARD GRID & CARD UNIFORMI (Rapporto fisso 275px)
+        ---------------------------------------------------- */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+            grid-auto-rows: 275px; /* ALTEZZA FISSA IDENTICA PER TUTTE LE CARD */
+            gap: 16px;
+            padding-bottom: 80px;
+        }
+
+        .game-card {
+            height: 275px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--accent);
+        }
+
+        .game-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        /* Area Copertina / Artwork (200px fissi) */
+        .card-cover-wrapper {
+            position: relative;
+            width: 100%;
+            height: 200px; /* ALTEZZA FISSA ARTWORK */
+            flex-shrink: 0;
+            overflow: hidden;
+            background: #0f141f;
         }
 
         .card-cover {
@@ -389,8 +731,9 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
             opacity: 0;
-            transition: opacity 0.25s ease, transform 0.2s ease;
+            transition: opacity 0.25s ease, transform 0.25s ease;
             z-index: 2;
         }
 
@@ -402,6 +745,7 @@
             transform: scale(1.04);
         }
 
+        /* Fallback Elegante (Stile GTI Club 2 di RecompLauncher) */
         .card-cover-fallback {
             position: absolute;
             inset: 0;
@@ -409,1115 +753,1010 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 16px 10px;
+            padding: 16px 12px;
+            background: linear-gradient(145deg, #182333 0%, #0d121c 100%);
             text-align: center;
-            background: radial-gradient(circle at 50% 35%, #1f293d 0%, #0d121c 100%);
             z-index: 1;
         }
 
-        .fallback-icon {
-            font-size: 3rem;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
-            transition: transform 0.2s;
-        }
-
-        .game-card:hover .fallback-icon {
-            transform: scale(1.12);
-        }
-
-        .card-badge-sys {
+        .fallback-sys-pill {
             position: absolute;
-            top: 6px;
-            left: 6px;
-            font-size: 0.68rem;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 210, 180, 0.12);
+            border: 1px solid rgba(0, 210, 180, 0.35);
+            color: var(--accent);
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
             padding: 2px 6px;
             border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .fallback-title-centered {
+            color: #fff;
+            font-size: 0.88rem;
             font-weight: 700;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            line-height: 1.35;
+            max-height: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            padding: 0 4px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .fallback-watermark {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 2.2rem;
+            opacity: 0.12;
+            pointer-events: none;
         }
 
         .card-fav-btn {
             position: absolute;
-            top: 6px;
-            right: 6px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            width: 26px;
-            height: 26px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
-            font-size: 0.8rem;
             cursor: pointer;
-            backdrop-filter: blur(4px);
-            transition: all 0.15s;
+            z-index: 4;
+            transition: all 0.15s ease;
         }
 
         .card-fav-btn:hover {
+            color: #fff;
             transform: scale(1.15);
-            color: var(--gold);
         }
 
         .card-fav-btn.active {
-            color: var(--gold);
+            color: var(--accent-gold);
+            background: rgba(251, 191, 36, 0.2);
+            border-color: var(--accent-gold);
+            text-shadow: 0 0 6px var(--accent-gold);
         }
 
+        /* Area Metadati / Testo (75px fissi) */
         .card-info {
-            padding: 10px;
+            height: 75px; /* ALTEZZA FISSA TESTO */
+            padding: 10px 12px;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             gap: 4px;
-            flex: 1;
-            min-height: 52px;
+            background: var(--bg-card);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
         }
 
         .card-title {
-            font-size: 0.85rem;
+            font-size: 0.86rem;
             font-weight: 700;
             color: #fff;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            line-height: 1.3;
         }
 
-        .card-meta {
-            font-size: 0.72rem;
-            color: var(--text-dim);
+        .card-meta-row {
             display: flex;
+            align-items: center;
             justify-content: space-between;
+            font-size: 0.74rem;
+            color: var(--text-dim);
+            font-weight: 500;
         }
 
-        /* Detail Modal */
+        .card-meta-genre {
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ----------------------------------------------------
+           MODALI (Arena Online & Guida)
+        ---------------------------------------------------- */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 100;
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 100;
             padding: 20px;
         }
 
-        .modal-content {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            width: 100%;
-            max-width: 650px;
-            overflow: hidden;
-            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.7);
+        .modal-overlay.open {
             display: flex;
-            flex-direction: column;
+        }
+
+        .modal-card {
+            background: #141b29;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            animation: modalPop 0.2s ease-out;
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .modal-header {
-            padding: 16px 20px;
+            padding: 18px 24px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .modal-body {
-            padding: 20px;
-            display: flex;
-            gap: 20px;
-        }
-
-        .modal-footer {
-            padding: 16px 20px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        /* Pad Help Footer */
-        .footer-pad-help {
-            height: 36px;
-            background: #090c12;
-            border-top: 1px solid var(--border);
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 24px;
-            font-size: 0.78rem;
+            gap: 8px;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
             color: var(--text-dim);
-            flex-shrink: 0;
+            font-size: 1.2rem;
+            cursor: pointer;
         }
 
-        .pad-key {
-            background: #21262d;
-            border: 1px solid var(--border);
-            padding: 1px 6px;
-            border-radius: 4px;
+        .modal-close:hover {
             color: #fff;
-            font-weight: 700;
-            font-size: 0.72rem;
         }
 
-        /* Toast notification */
+        .modal-body {
+            padding: 24px;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .roadmap-badge {
+            background: rgba(0, 210, 180, 0.12);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        /* Toast Feedback */
         .toast {
             position: fixed;
-            bottom: 48px;
+            bottom: 24px;
             right: 24px;
-            background: var(--surface);
-            border: 1px solid var(--green);
+            background: #1e293b;
             color: #fff;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
             padding: 12px 20px;
             border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-            display: none;
-            align-items: center;
-            gap: 10px;
-            z-index: 200;
-            font-size: 0.9rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            font-size: 0.88rem;
             font-weight: 600;
+            z-index: 200;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.25s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="brand" style="display:flex; align-items:center; gap:8px;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="10" width="20" height="10" rx="5" fill="#1a2233" stroke="#58a6ff" stroke-width="1.6"/>
-              <rect x="10" y="2" width="4" height="10" rx="2" fill="#58a6ff"/>
-              <circle cx="17" cy="15" r="2" fill="#ff7b72"/>
-              <circle cx="7" cy="15" r="1.2" fill="#58a6ff"/>
-              <circle cx="10" cy="13" r="1.2" fill="#58a6ff"/>
-              <circle cx="4" cy="15" r="1.2" fill="#58a6ff"/>
-              <circle cx="7" cy="17" r="1.2" fill="#58a6ff"/>
-            </svg>
-            <span style="font-size:1.15rem; font-weight:800; color:#fff;">Retro<span style="color:var(--accent);">Hub</span></span>
-            <div class="badge-count" id="totalBadge">-</div>
-        </div>
-
-        <div class="search-wrapper">
-            <input type="search" id="searchInput" class="search-input" placeholder="Cerca giochi, generi o anni..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-bwignore="true" data-1p-ignore="true" data-form-type="other" name="retrohub_search_bar">
-            <button id="searchClear" class="search-clear">&times;</button>
-        </div>
-
-        <div class="top-actions">
-            <button class="action-btn" id="manualBtn" style="background: rgba(46, 160, 67, 0.15); border-color: var(--green); color: #fff;" onclick="openManualModal()">📖 Guida & Info</button>
-            <button class="action-btn" id="onlineArenaBtn" style="background: rgba(88, 166, 255, 0.15); border-color: var(--accent); color: var(--accent);" onclick="openOnlineArena()">🌐 Arena Online</button>
-            <button class="action-btn" id="favFilterBtn">★ Preferiti</button>
-            <div class="gamepad-indicator" id="padIndicator">
-                🎮 Xbox Pad Connesso
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Layout -->
-    <div class="main-layout">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div>
-                <div class="sidebar-section-title">Piattaforme</div>
-                <div id="platformsList">
-                    <!-- Populated dynamically -->
-                </div>
-            </div>
-
-            <div>
-                <div class="sidebar-section-title">Decadi Temporali</div>
-                <div id="decadesList">
-                    <!-- Populated dynamically -->
-                </div>
+    <!-- SIDEBAR SINISTRA -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <span class="brand-icon">🕹️</span>
+            <div class="brand-text">
+                RetroHub
+                <span class="brand-badge">2.0</span>
             </div>
         </div>
 
-        <!-- Content Area -->
-        <div class="content-area">
-            <!-- Hero Showcase -->
-            <div class="hero-banner" id="heroBanner">
-                <img id="heroCover" class="hero-boxart" src="" alt="Cover">
-                <div class="hero-info">
-                    <h2 class="hero-title" id="heroTitle">Seleziona un Gioco</h2>
-                    <div class="hero-tags">
-                        <span class="badge-sys" id="heroPlatform">-</span>
-                        <span class="tag-info" id="heroYear">-</span>
-                        <span class="tag-info" id="heroGenre">-</span>
-                        <span class="tag-info" id="heroDev">-</span>
+        <nav class="sidebar-nav">
+            <button class="nav-btn active" id="navHome" onclick="switchView('home')">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </button>
+            <button class="nav-btn" id="navLibreria" onclick="switchView('libreria')">
+                <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+                Libreria
+            </button>
+            <button class="nav-btn" id="navArena" onclick="openArenaModal()">
+                <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                Arena Online
+            </button>
+            <button class="nav-btn" id="navGuida" onclick="openGuidaModal()">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                Guida & Info
+            </button>
+        </nav>
+
+        <div class="sidebar-platforms" id="platformList">
+            <div class="platforms-title">Piattaforme (16)</div>
+            <button class="platform-item active" onclick="selectPlatform('ALL')">
+                <span>Tutte le Piattaforme</span>
+                <span class="platform-count" id="countAll">1.149</span>
+            </button>
+            <!-- Caricate dinamicamente via JS -->
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar">C</div>
+            <div class="user-info">
+                <span class="user-name">Claudio (Clod)</span>
+                <span class="user-status">● 1.149 Giochi Pronti</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- AREA PRINCIPALE -->
+    <main class="main-container">
+        <!-- Top Search Bar -->
+        <header class="top-header">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Cerca giochi (es. mario -kart, capcom NOT 1995, racing)..." oninput="handleSearchInput()">
+                <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn" onclick="toggleFavoritesOnly()" id="favToggleBtn">
+                    ★ Preferiti
+                </button>
+                <button class="action-btn primary" onclick="launchRandomGame()">
+                    🎲 Gioco Casuale
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="content-scroll">
+
+            <!-- VISTA 1: HOME (Stile RecompLauncher) -->
+            <section class="view-section active" id="viewHome">
+                <div class="home-container">
+
+                    <!-- Spotlight Hero Banner -->
+                    <div class="hero-banner" id="heroBanner">
+                        <div class="hero-bg-overlay"></div>
+                        <div class="hero-content">
+                            <div class="hero-tag" id="heroTag">SPOTLIGHT IN EVIDENZA</div>
+                            <h1 class="hero-title" id="heroTitle">Crazy Taxi 2</h1>
+                            <div class="hero-meta" id="heroMeta">
+                                <span>Sega Dreamcast</span> • <span>2001</span> • <span>Arcade Driving</span>
+                            </div>
+                            <p class="hero-desc" id="heroDesc">
+                                Sfreccia tra le strade di New York caricando fino a 4 passeggeri con l'iconico salto Crazy Hop!
+                            </p>
+                            <div class="hero-controls" id="heroControls">
+                                🎮 Xbox: RT Acceleratore, LT Freno/Retromarcia, Y/A Crazy Dash
+                            </div>
+                            <div class="hero-buttons">
+                                <button class="hero-play-btn" id="heroPlayBtn" onclick="launchHeroGame()">
+                                    ▶ GIOCA ORA
+                                </button>
+                                <button class="hero-secondary-btn" id="heroFavBtn" onclick="toggleHeroFavorite()">
+                                    ★ Preferito
+                                </button>
+                                <button class="hero-secondary-btn" onclick="switchView('libreria')">
+                                    📚 Vai alla Libreria
+                                </button>
+                            </div>
+                        </div>
+                        <div class="hero-pagination">
+                            <button class="hero-nav-arrow" onclick="prevHeroGame()" title="Precedente">‹</button>
+                            <button class="hero-nav-arrow" onclick="nextHeroGame()" title="Successivo">›</button>
+                        </div>
                     </div>
-                    <div class="hero-controls" id="heroControls">🎮 Comandi Xbox Controller</div>
-                </div>
-                <div class="hero-action">
-                    <button class="action-btn" style="border-color: var(--accent); color: var(--accent); margin-bottom: 4px;" onclick="hostCurrentGameOnline()">🌐 Sfida Online</button>
-                    <button class="play-btn" id="heroPlayBtn">▶ GIOCA ORA</button>
-                </div>
-            </div>
 
-            <!-- Games Grid -->
-            <div class="games-grid" id="gamesGrid">
-                <!-- Cards populated dynamically -->
-            </div>
+                    <!-- Riga: Riprendi a Giocare / Preferiti -->
+                    <div>
+                        <div class="section-header">
+                            <h2 class="section-title">⭐ In Evidenza & Preferiti</h2>
+                            <span class="section-action" onclick="showFavoritesInLibrary()">Vedi tutti i preferiti →</span>
+                        </div>
+                        <div class="carousel-row" id="featuredRow">
+                            <!-- Inseriti via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Riga: Accesso Rapido Sistemi -->
+                    <div>
+                        <div class="section-header">
+                            <h2 class="section-title">🕹️ Accesso Rapido Sistemi</h2>
+                            <span class="section-action" onclick="switchView('libreria')">Esplora tutti →</span>
+                        </div>
+                        <div class="carousel-row" id="quickSystemsRow">
+                            <!-- Inseriti via JS -->
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- VISTA 2: LIBRERIA (Stile RecompLauncher Libreria) -->
+            <section class="view-section" id="viewLibreria">
+                <div class="libreria-container">
+                    
+                    <div class="libreria-header">
+                        <div class="libreria-title-row">
+                            <h1 class="libreria-title">Libreria</h1>
+                            <span class="libreria-subtitle" id="libreriaCounter">1.149 giochi trovati</span>
+                        </div>
+                    </div>
+
+                    <!-- Barra Filtri Pillole Orizzontale -->
+                    <div class="filter-pills-bar" id="filterPillsBar">
+                        <button class="filter-pill active" onclick="selectPlatform('ALL')">Tutti (1.149)</button>
+                        <button class="filter-pill" onclick="selectPlatform('MAME')">MAME Arcade (596)</button>
+                        <button class="filter-pill" onclick="selectPlatform('C64')">Commodore 64 (224)</button>
+                        <button class="filter-pill" onclick="selectPlatform('DOS')">MS-DOS (100)</button>
+                        <button class="filter-pill" onclick="selectPlatform('SCUMMVM')">ScummVM (64)</button>
+                        <button class="filter-pill" onclick="selectPlatform('RECOMP')">Recomp Native (45)</button>
+                        <button class="filter-pill" onclick="selectPlatform('INDIE')">LocoMalito & Indie (33)</button>
+                        <button class="filter-pill" onclick="selectPlatform('NAOMI')">Sega NAOMI (27)</button>
+                        <button class="filter-pill" onclick="selectPlatform('SNES')">Super Nintendo (21)</button>
+                        <button class="filter-pill" onclick="selectPlatform('ATOMISWAVE')">Atomiswave (8)</button>
+                        <button class="filter-pill" onclick="selectPlatform('DREAMCAST')">Dreamcast (5)</button>
+                        <button class="filter-pill" onclick="selectPlatform('GAMECUBE')">GameCube (5)</button>
+                        <button class="filter-pill" onclick="selectPlatform('HYPSEUS')">LaserDisc (5)</button>
+                        <button class="filter-pill" onclick="selectPlatform('N64')">Nintendo 64 (5)</button>
+                        <button class="filter-pill" onclick="selectPlatform('NES')">NES (5)</button>
+                        <button class="filter-pill" onclick="selectPlatform('HIKARU')">Sega Hikaru (4)</button>
+                        <button class="filter-pill" onclick="selectPlatform('PSX')">PlayStation (2)</button>
+                    </div>
+
+                    <!-- Ordinamento & Opzioni -->
+                    <div class="libreria-controls-bar">
+                        <div class="controls-left">
+                            <span>Ordina:</span>
+                            <select class="select-filter" id="sortSelect" onchange="handleSortChange()">
+                                <option value="title_asc">Titolo (A - Z)</option>
+                                <option value="title_desc">Titolo (Z - A)</option>
+                                <option value="year_desc">Anno (Più recente)</option>
+                                <option value="year_asc">Anno (Più classico)</option>
+                                <option value="play_desc">Più giocati</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Griglia di Card Fisse 275px -->
+                    <div class="games-grid" id="gamesGrid">
+                        <!-- Card renderizzate via JS -->
+                    </div>
+
+                </div>
+            </section>
+
         </div>
-    </div>
+    </main>
 
-    <!-- Controller Help Footer -->
-    <div class="footer-pad-help">
-        <span><span class="pad-key">D-Pad / Levetta</span> Sfoglia</span>
-        <span><span class="pad-key">A</span> Avvia Gioco</span>
-        <span><span class="pad-key">X</span> Dettagli / Comandi</span>
-        <span><span class="pad-key">Y</span> Preferito</span>
-        <span><span class="pad-key">LB / RB</span> Cambia Piattaforma</span>
-    </div>
-
-    <!-- Detail Modal -->
-    <div class="modal-overlay" id="detailModal">
-        <div class="modal-content">
+    <!-- MODALE: ARENA ONLINE -->
+    <div class="modal-overlay" id="arenaModal" onclick="closeModalOnBackdrop(event, 'arenaModal')">
+        <div class="modal-card">
             <div class="modal-header">
-                <h3 id="modalTitle">Dettagli Gioco</h3>
-                <button class="action-btn" id="modalCloseBtn">&times;</button>
+                <div class="modal-title">🕹️ Arena Online & Matchmaking</div>
+                <button class="modal-close" onclick="closeModal('arenaModal')">✕</button>
             </div>
             <div class="modal-body">
-                <img id="modalCover" style="width: 140px; height: 190px; border-radius: 6px; object-fit: cover;" src="" alt="Cover">
-                <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                    <div><strong>Piattaforma:</strong> <span id="modalPlatform"></span></div>
-                    <div><strong>Anno:</strong> <span id="modalYear"></span></div>
-                    <div><strong>Genere:</strong> <span id="modalGenre"></span></div>
-                    <div><strong>Sviluppatore:</strong> <span id="modalDev"></span></div>
-                    <div><strong>Partite Giocate:</strong> <span id="modalPlays"></span></div>
-                    <div style="margin-top: 8px;">
-                        <strong>🎮 Mappatura Comandi:</strong>
-                        <div id="modalControls" style="color: var(--green); margin-top: 4px; font-family: monospace; font-size: 0.85rem;"></div>
-                    </div>
+                <div class="roadmap-badge">
+                    <strong>🗺️ Stato Roadmap:</strong> In arrivo nelle Fasi 2 e 3
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="action-btn" id="modalFavBtn">★ Preferito</button>
-                <button class="play-btn" id="modalPlayBtn">▶ Avvia Partita</button>
+                <p>
+                    <strong>Fase 2 (Multigiocatore Diretto con Codice):</strong><br>
+                    Crea una stanza e invia un codice breve (es. <code>RH-8291</code>) al tuo amico per avviare Flycast, Snes9x, Dolphin o DuckStation sincronizzati in P2P con misurazione del Ping in tempo reale.
+                </p>
+                <p>
+                    <strong>Fase 3 (Lobby Cloud & Server Matchmaker):</strong><br>
+                    Una bacheca pubblica con la lista delle stanze *"In attesa di sfidante"* per cercare sfide aperte e unirsi con un solo click.
+                </p>
+                <button class="action-btn primary" style="width: 100%; justify-content: center;" onclick="closeModal('arenaModal')">
+                    Ho Capito
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">✔ Gioco avviato con successo!</div>
+    <!-- MODALE: GUIDA & INFO -->
+    <div class="modal-overlay" id="guidaModal" onclick="closeModalOnBackdrop(event, 'guidaModal')">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">ℹ️ Guida Rapida RetroHub</div>
+                <button class="modal-close" onclick="closeModal('guidaModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>⌨️ Scorciatoie da Tastiera:</strong></p>
+                <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 6px;">
+                    <li><code>Frecce Su/Giù/Sx/Dx</code> : Naviga tra le card della griglia</li>
+                    <li><code>Invio</code> o <code>Doppio Click</code> : Avvia il gioco selezionato</li>
+                    <li><code>F</code> o <code>Spazio</code> : Aggiunge o rimuove dai Preferiti</li>
+                    <li><code>/</code> : Focus immediato sulla barra di ricerca</li>
+                    <li><code>ESC</code> : Chiude modali o svuota la ricerca</li>
+                </ul>
+                <p style="margin-top: 10px;"><strong>🔍 Ricerca Avanzata con Operatore NOT:</strong></p>
+                <p style="font-size: 0.85rem; color: #94a3b8;">
+                    Puoi cercare su più campi contemporaneamente ed escludere termini con <code>-</code> o <code>NOT</code>:<br>
+                    • <code>mario -kart</code> (Trova Mario escludendo i giochi di kart)<br>
+                    • <code>capcom NOT 1995</code> (Trova Capcom escludendo il 1995)<br>
+                    • <code>arcade racing</code> (Trova giochi di corse arcade)
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICA -->
+    <div class="toast" id="toastNotification">Notifica RetroHub</div>
 
     <script>
+        // Stato Applicazione
         let allGames = [];
-        let selectedGameIndex = 0;
+        let displayedGames = [];
+        let platformsData = [];
         let currentPlatform = 'ALL';
-        let currentDecade = 'ALL';
+        let currentSort = 'title_asc';
         let favoritesOnly = false;
-        let activeModalGame = null;
+        let selectedGameIndex = 0;
+        let searchDebounce = null;
+        let currentView = 'home';
 
-        // Fetch Initial Data
-        async function init() {
-            await Promise.all([
-                loadPlatforms(),
-                loadDecades(),
-                fetchGames()
-            ]);
-            initGamepadPolling();
+        // Spotlight Hero Games
+        const SPOTLIGHT_IDS = [
+            "Crazy Taxi 2", "Demolish Fist", "F-Zero GX", "OutRun", "Metal Slug 6",
+            "Super Mario World", "Tekken 3", "The Secret of Monkey Island"
+        ];
+        let heroGamesList = [];
+        let heroCurrentIdx = 0;
+
+        // Inizializzazione
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadPlatforms();
+            await loadGames();
+            setupKeyboardNav();
+        });
+
+        // ----------------------------------------------------
+        // SWITCH VIEW (Home vs Libreria)
+        // ----------------------------------------------------
+        function switchView(viewName) {
+            currentView = viewName;
+            document.getElementById('viewHome').classList.toggle('active', viewName === 'home');
+            document.getElementById('viewLibreria').classList.toggle('active', viewName === 'libreria');
+            document.getElementById('navHome').classList.toggle('active', viewName === 'home');
+            document.getElementById('navLibreria').classList.toggle('active', viewName === 'libreria');
+
+            if (viewName === 'libreria') {
+                renderGrid();
+            }
         }
 
+        // ----------------------------------------------------
+        // CARICAMENTO DATI
+        // ----------------------------------------------------
         async function loadPlatforms() {
             try {
                 const res = await fetch('/api/platforms');
-                const platforms = await res.json();
-                const container = document.getElementById('platformsList');
-                let html = `<div class="nav-item ${currentPlatform === 'ALL' ? 'active' : ''}" onclick="selectPlatform('ALL')">
-                    <span>Tutte le Piattaforme</span>
-                    <span class="nav-count" id="allCount">-</span>
-                </div>`;
-
-                platforms.forEach(p => {
-                    html += `<div class="nav-item ${currentPlatform === p.code ? 'active' : ''}" onclick="selectPlatform('${p.code}')">
-                        <span style="display:flex; align-items:center; gap:6px;">
-                            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:${p.badge_color};"></span>
-                            ${p.name}
-                        </span>
-                        <span class="nav-count">${p.count}</span>
-                    </div>`;
-                });
-                container.innerHTML = html;
-            } catch (e) {
-                console.error("Errore caricamento piattaforme:", e);
+                platformsData = await res.json();
+                renderSidebarPlatforms();
+            } catch (err) {
+                console.error("Errore caricamento piattaforme:", err);
             }
         }
 
-        async function loadDecades() {
+        async function loadGames() {
             try {
-                const res = await fetch('/api/decades');
-                const decades = await res.json();
-                const container = document.getElementById('decadesList');
-                let html = `<div class="nav-item ${currentDecade === 'ALL' ? 'active' : ''}" onclick="selectDecade('ALL')">
-                    <span>Tutti gli Anni</span>
-                </div>`;
+                const sortParts = currentSort.split('_');
+                const sortBy = sortParts[0];
+                const sortAsc = sortParts[1] !== 'desc';
+                const queryVal = document.getElementById('searchInput').value.trim();
 
-                decades.forEach(d => {
-                    html += `<div class="nav-item ${currentDecade === d.decade ? 'active' : ''}" onclick="selectDecade('${d.decade}')">
-                        <span>Anni ${d.decade.replace('s', '')}</span>
-                        <span class="nav-count">${d.count}</span>
-                    </div>`;
+                const params = new URLSearchParams({
+                    platform: currentPlatform,
+                    sort_by: sortBy,
+                    sort_asc: sortAsc.toString(),
+                    favorites_only: favoritesOnly.toString()
                 });
-                container.innerHTML = html;
-            } catch (e) {
-                console.error("Errore caricamento decadi:", e);
+
+                if (queryVal) {
+                    params.set('query', queryVal);
+                }
+
+                const res = await fetch(`/api/games?${params.toString()}`);
+                displayedGames = await res.json();
+
+                if (currentPlatform === 'ALL' && !queryVal && !favoritesOnly) {
+                    allGames = [...displayedGames];
+                    setupHeroSpotlights();
+                    renderFeaturedRow();
+                    renderQuickSystems();
+                }
+
+                document.getElementById('libreriaCounter').innerText = `${displayedGames.length} giochi trovati`;
+                renderGrid();
+            } catch (err) {
+                console.error("Errore caricamento giochi:", err);
             }
         }
 
-        async function fetchGames() {
-            const query = document.getElementById('searchInput').value.trim();
-            const params = new URLSearchParams();
-            if (query) params.append('query', query);
-            if (currentPlatform !== 'ALL') params.append('platform', currentPlatform);
-            if (currentDecade !== 'ALL') params.append('decade', currentDecade);
-            if (favoritesOnly) params.append('favorites_only', 'true');
+        function renderSidebarPlatforms() {
+            const list = document.getElementById('platformList');
+            const total = platformsData.reduce((acc, p) => acc + p.count, 0);
+            document.getElementById('countAll').innerText = total.toLocaleString();
 
-            try {
-                const res = await fetch('/api/games?' + params.toString());
-                allGames = await res.json();
-                renderGames();
-            } catch (e) {
-                console.error("Errore fetch giochi:", e);
-            }
-        }
-
-        function renderGames() {
-            const grid = document.getElementById('gamesGrid');
-            document.getElementById('totalBadge').innerText = `${allGames.length} Giochi`;
-            if (currentPlatform === 'ALL' && !favoritesOnly && !document.getElementById('searchInput').value) {
-                const allEl = document.getElementById('allCount');
-                if (allEl) allEl.innerText = allGames.length;
-            }
-
-            if (allGames.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--text-dim);">
-                    <h3>Nessun gioco trovato con i filtri attuali</h3>
-                    <p style="margin-top: 8px;">Prova a modificare la ricerca o seleziona un'altra piattaforma.</p>
-                </div>`;
-                updateHero(null);
-                return;
-            }
-
-            if (selectedGameIndex >= allGames.length) {
-                selectedGameIndex = 0;
-            }
-
-            grid.innerHTML = allGames.map((g, idx) => {
-                const isSelected = idx === selectedGameIndex;
-                const favActive = g.is_favorite ? 'active' : '';
-                const sysIcon = g.system_code === 'MAME' ? '🕹️' : (g.system_code === 'C64' ? '💾' : (g.system_code === 'DOS' ? '💻' : (g.system_code === 'SCUMMVM' ? '🏝️' : (g.system_code === 'DREAMCAST' ? '🌀' : '🎮'))));
-                const cover = (g.cover_url && g.cover_url.trim()) ? g.cover_url : null;
+            const itemsHtml = platformsData.map(p => {
+                const active = p.code === currentPlatform ? 'active' : '';
                 return `
-                <div class="game-card ${isSelected ? 'selected' : ''}" data-idx="${idx}" onclick="selectCard(${idx})" ondblclick="launchGame(${g.id})">
-                    <div class="card-cover-wrapper">
-                        <div class="card-cover-fallback">
-                            <div class="fallback-icon">${sysIcon}</div>
-                        </div>
-                        ${cover ? `<img class="card-cover" src="${cover}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.remove()" alt="${g.title}">` : ''}
-                        <span class="card-badge-sys">${g.system_code}</span>
-                        <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id}, ${idx})" title="Preferito">★</button>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title" title="${g.title}">${g.title}</div>
-                        <div class="card-meta">
-                            <span>${g.year}</span>
-                            <span style="max-width: 95px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${g.genre}</span>
-                        </div>
+                <button class="platform-item ${active}" onclick="selectPlatform('${p.code}')">
+                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${p.name}</span>
+                    <span class="platform-count">${p.count}</span>
+                </button>
+                `;
+            }).join('');
+
+            list.innerHTML = `
+                <div class="platforms-title">Piattaforme (${platformsData.length})</div>
+                <button class="platform-item ${currentPlatform === 'ALL' ? 'active' : ''}" onclick="selectPlatform('ALL')">
+                    <span>Tutte le Piattaforme</span>
+                    <span class="platform-count">${total.toLocaleString()}</span>
+                </button>
+                ${itemsHtml}
+            `;
+        }
+
+        function selectPlatform(sysCode) {
+            currentPlatform = sysCode;
+            renderSidebarPlatforms();
+
+            // Aggiorna pillole nella libreria
+            document.querySelectorAll('.filter-pill').forEach(pill => {
+                const clickAttr = pill.getAttribute('onclick') || '';
+                pill.classList.toggle('active', clickAttr.includes(`'${sysCode}'`));
+            });
+
+            switchView('libreria');
+            loadGames();
+        }
+
+        // ----------------------------------------------------
+        // HERO SPOTLIGHT (Home)
+        // ----------------------------------------------------
+        function setupHeroSpotlights() {
+            heroGamesList = allGames.filter(g => 
+                SPOTLIGHT_IDS.some(id => g.title.toLowerCase().includes(id.toLowerCase()))
+            );
+            if (heroGamesList.length === 0 && allGames.length > 0) {
+                heroGamesList = allGames.slice(0, 8);
+            }
+            renderHero();
+        }
+
+        function renderHero() {
+            if (!heroGamesList || heroGamesList.length === 0) return;
+            const g = heroGamesList[heroCurrentIdx];
+            if (!g) return;
+
+            document.getElementById('heroTag').innerText = `${g.system_code} • SPOTLIGHT IN EVIDENZA`;
+            document.getElementById('heroTitle').innerText = g.title;
+            document.getElementById('heroMeta').innerHTML = `
+                <span>${g.platform}</span> • <span>${g.year}</span> • <span>${g.genre}</span> • <span>${g.developer}</span>
+            `;
+            document.getElementById('heroDesc').innerText = g.developer ? 
+                `Un grande classico ${g.genre} del ${g.year} sviluppato da ${g.developer}. Pronto per essere giocato subito sul tuo PC.` :
+                `Esperienza retrogaming autentica per ${g.platform}.`;
+
+            if (g.controls) {
+                document.getElementById('heroControls').style.display = 'inline-flex';
+                document.getElementById('heroControls').innerText = `🎮 ${g.controls}`;
+            } else {
+                document.getElementById('heroControls').style.display = 'none';
+            }
+
+            const favBtn = document.getElementById('heroFavBtn');
+            favBtn.innerText = g.is_favorite ? '★ Salvato nei Preferiti' : '★ Aggiungi ai Preferiti';
+            favBtn.style.color = g.is_favorite ? 'var(--accent-gold)' : '#fff';
+        }
+
+        function nextHeroGame() {
+            if (heroGamesList.length === 0) return;
+            heroCurrentIdx = (heroCurrentIdx + 1) % heroGamesList.length;
+            renderHero();
+        }
+
+        function prevHeroGame() {
+            if (heroGamesList.length === 0) return;
+            heroCurrentIdx = (heroCurrentIdx - 1 + heroGamesList.length) % heroGamesList.length;
+            renderHero();
+        }
+
+        function launchHeroGame() {
+            const g = heroGamesList[heroCurrentIdx];
+            if (g) launchGame(g.id);
+        }
+
+        function toggleHeroFavorite() {
+            const g = heroGamesList[heroCurrentIdx];
+            if (g) {
+                toggleFavDirect(g.id);
+                g.is_favorite = !g.is_favorite;
+                renderHero();
+            }
+        }
+
+        // ----------------------------------------------------
+        // SEZIONI EXTRA HOME
+        // ----------------------------------------------------
+        function renderFeaturedRow() {
+            const row = document.getElementById('featuredRow');
+            const featured = allGames.filter(g => g.is_favorite).slice(0, 10);
+            const list = featured.length > 0 ? featured : allGames.slice(0, 8);
+
+            row.innerHTML = list.map(g => createCardHtml(g)).join('');
+        }
+
+        function renderQuickSystems() {
+            const row = document.getElementById('quickSystemsRow');
+            const popular = ['MAME', 'C64', 'DOS', 'SCUMMVM', 'DREAMCAST', 'GAMECUBE', 'RECOMP', 'SNES'];
+            
+            row.innerHTML = popular.map(code => {
+                const p = platformsData.find(x => x.code === code) || { name: code, count: '' };
+                const icon = code === 'MAME' ? '🕹️' : (code === 'C64' ? '💾' : (code === 'DOS' ? '💻' : (code === 'SCUMMVM' ? '🏝️' : (code === 'DREAMCAST' ? '🌀' : '🎮'))));
+                return `
+                <div style="min-width: 170px; height: 110px; background: #141b29; border: 1px solid var(--border); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: all 0.2s ease;" onclick="selectPlatform('${code}')" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+                    <div style="font-size: 1.8rem;">${icon}</div>
+                    <div>
+                        <div style="font-size: 0.9rem; font-weight: 700; color: #fff;">${p.name}</div>
+                        <div style="font-size: 0.75rem; color: var(--accent);">${p.count} Giochi</div>
                     </div>
                 </div>
                 `;
             }).join('');
-
-            updateHero(allGames[selectedGameIndex]);
-            scrollSelectedIntoView();
         }
 
-        function selectCard(idx) {
-            selectedGameIndex = idx;
-            document.querySelectorAll('.game-card').forEach((el, i) => {
-                el.classList.toggle('selected', i === idx);
-            });
-            updateHero(allGames[idx]);
+        function showFavoritesInLibrary() {
+            favoritesOnly = true;
+            document.getElementById('favToggleBtn').classList.add('primary');
+            switchView('libreria');
+            loadGames();
         }
 
-        function updateHero(game) {
-            const banner = document.getElementById('heroBanner');
-            if (!game) {
-                banner.style.opacity = '0.5';
+        // ----------------------------------------------------
+        // RENDERING GRIGLIA GIOCHI (Libreria)
+        // ----------------------------------------------------
+        function renderGrid() {
+            const grid = document.getElementById('gamesGrid');
+            if (!grid) return;
+
+            if (displayedGames.length === 0) {
+                grid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 80px 20px; color: var(--text-dim);">
+                    <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
+                    <h2 style="color: #fff; margin-bottom: 6px;">Nessun gioco trovato</h2>
+                    <p>Prova a modificare i filtri o la query di ricerca (es. prova a togliere gli operatori NOT).</p>
+                </div>
+                `;
                 return;
             }
-            banner.style.opacity = '1';
-            document.getElementById('heroTitle').innerText = game.title;
-            document.getElementById('heroPlatform').innerText = game.platform;
-            document.getElementById('heroYear').innerText = game.year;
-            document.getElementById('heroGenre').innerText = game.genre;
-            document.getElementById('heroDev').innerText = game.developer;
-            document.getElementById('heroControls').innerText = `🎮 ${game.controls}`;
-            
-            const coverEl = document.getElementById('heroCover');
-            coverEl.src = game.cover_url || '';
-            coverEl.onerror = () => { coverEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="110" viewBox="0 0 80 110"><rect width="80" height="110" fill="%231a2233"/><text x="40" y="52" fill="%2358a6ff" font-family="sans-serif" font-size="30" text-anchor="middle" dominant-baseline="middle">?</text><text x="40" y="82" fill="%238b949e" font-family="sans-serif" font-size="10" text-anchor="middle">No Cover</text></svg>'; };
 
-            document.getElementById('heroPlayBtn').onclick = () => launchGame(game.id);
-        }
-
-        async function launchGame(gameId) {
-            showToast("Avvio in corso...");
-            try {
-                const res = await fetch('/api/launch', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ game_id: gameId })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    showToast(`✔ ${data.message}`);
-                    const g = allGames.find(x => x.id === gameId);
-                    if (g) g.play_count = data.play_count;
-                } else {
-                    showToast(`âŒ ${data.message}`);
-                }
-            } catch (e) {
-                showToast("Errore di connessione al launcher");
+            if (selectedGameIndex >= displayedGames.length) {
+                selectedGameIndex = 0;
             }
+
+            grid.innerHTML = displayedGames.map((g, idx) => createCardHtml(g, idx)).join('');
+            highlightSelectedCard();
         }
 
-        async function toggleFav(e, gameId, idx) {
-            e.stopPropagation();
+        // Costruttore HTML per la Card Posteriore
+        function createCardHtml(g, idx = -1) {
+            const isSelected = idx === selectedGameIndex;
+            const favActive = g.is_favorite ? 'active' : '';
+            const cover = (g.cover_url && g.cover_url.trim()) ? g.cover_url : null;
+
+            return `
+            <div class="game-card ${isSelected ? 'selected' : ''}" data-id="${g.id}" data-idx="${idx}" onclick="selectCard(${idx})" ondblclick="launchGame(${g.id})">
+                <div class="card-cover-wrapper">
+                    <div class="card-cover-fallback">
+                        <span class="fallback-sys-pill">${g.system_code}</span>
+                        <div class="fallback-title-centered">${escapeHtml(g.title)}</div>
+                        <div class="fallback-watermark">🎮</div>
+                    </div>
+                    ${cover ? `<img class="card-cover" src="${cover}" loading="lazy" data-title="${escapeHtml(g.title)}" data-sys="${g.system_code}" onload="this.classList.add('loaded')" onerror="handleCoverError(this)" alt="${escapeHtml(g.title)}">` : ''}
+                    <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id})" title="Preferito">★</button>
+                </div>
+                <div class="card-info">
+                    <div class="card-title" title="${escapeHtml(g.title)}">${escapeHtml(g.title)}</div>
+                    <div class="card-meta-row">
+                        <span style="color: var(--accent); font-weight: 700;">${g.system_code}</span>
+                        <span>${g.year}</span>
+                        <span class="card-meta-genre" title="${escapeHtml(g.genre)}">${escapeHtml(g.genre)}</span>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        // ----------------------------------------------------
+        // CASCATA RECUPERO COPERTINE LIBRETRO (USA / Europe)
+        // ----------------------------------------------------
+        function handleCoverError(img) {
+            const currentSrc = img.src;
+            const title = img.getAttribute('data-title') || '';
+            const sys = img.getAttribute('data-sys') || '';
+
+            // Se ha già provato Europe, fallisci ed elimina img per mostrare il fallback elegante
+            if (currentSrc.includes('%20(Europe).png')) {
+                img.remove();
+                return;
+            }
+
+            // Se ha provato USA, prova con Europe
+            if (currentSrc.includes('%20(USA).png')) {
+                img.src = currentSrc.replace('%20(USA).png', '%20(Europe).png');
+                return;
+            }
+
+            // Primo fallback: aggiungi (USA) per i sistemi console
+            const consoleSystems = ['GAMECUBE', 'DREAMCAST', 'N64', 'SNES', 'NES', 'PSX', 'C64'];
+            if (consoleSystems.includes(sys.toUpperCase())) {
+                img.src = currentSrc.replace('.png', '%20(USA).png');
+                return;
+            }
+
+            // Per altri sistemi (o fallimento): rimuovi e mostra il bellissimo fallback tipografico
+            img.remove();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // ----------------------------------------------------
+        // AZIONI GIOCHI (Lancio & Preferiti)
+        // ----------------------------------------------------
+        async function launchGame(id) {
+            const g = displayedGames.find(x => x.id === id) || allGames.find(x => x.id === id);
+            const title = g ? g.title : 'Gioco';
+            showToast(`🚀 Avvio di "${title}" in corso...`);
+
             try {
-                const res = await fetch('/api/favorite', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ game_id: gameId })
-                });
+                const res = await fetch(`/api/games/${id}/launch`, { method: 'POST' });
                 const data = await res.json();
-                if (allGames[idx]) {
-                    allGames[idx].is_favorite = data.is_favorite;
-                    renderGames();
+                if (data.status === 'ok') {
+                    showToast(`✅ "${title}" avviato con successo!`);
+                    if (g) g.play_count = (g.play_count || 0) + 1;
+                } else {
+                    showToast(`❌ Errore: ${data.message || 'Impossibile avviare'}`);
                 }
             } catch (err) {
-                console.error("Errore toggle fav:", err);
+                showToast(`❌ Errore di connessione al launcher`);
             }
         }
 
-        function selectPlatform(sys) {
-            currentPlatform = sys;
-            loadPlatforms();
-            fetchGames();
+        async function toggleFav(event, id) {
+            if (event) event.stopPropagation();
+            await toggleFavDirect(id);
         }
 
-        function selectDecade(dec) {
-            currentDecade = dec;
-            loadDecades();
-            fetchGames();
+        async function toggleFavDirect(id) {
+            try {
+                const res = await fetch(`/api/games/${id}/favorite`, { method: 'POST' });
+                const data = await res.json();
+                
+                // Aggiorna stato locale
+                const updateItem = (item) => {
+                    if (item && item.id === id) {
+                        item.is_favorite = data.is_favorite;
+                    }
+                };
+                allGames.forEach(updateItem);
+                displayedGames.forEach(updateItem);
+
+                // Aggiorna pulsante sulla card se presente
+                const card = document.querySelector(`.game-card[data-id="${id}"]`);
+                if (card) {
+                    const btn = card.querySelector('.card-fav-btn');
+                    if (btn) btn.classList.toggle('active', data.is_favorite);
+                }
+
+                showToast(data.is_favorite ? "★ Aggiunto ai Preferiti" : "Rimosso dai Preferiti");
+            } catch (err) {
+                console.error("Errore toggle favorite:", err);
+            }
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.style.display = 'flex';
-            setTimeout(() => { toast.style.display = 'none'; }, 3500);
+        function toggleFavoritesOnly() {
+            favoritesOnly = !favoritesOnly;
+            document.getElementById('favToggleBtn').classList.toggle('primary', favoritesOnly);
+            switchView('libreria');
+            loadGames();
+        }
+
+        function launchRandomGame() {
+            if (displayedGames.length === 0) return;
+            const randIdx = Math.floor(Math.random() * displayedGames.length);
+            launchGame(displayedGames[randIdx].id);
+        }
+
+        // ----------------------------------------------------
+        // RICERCA & FILTRI
+        // ----------------------------------------------------
+        function handleSearchInput() {
+            const val = document.getElementById('searchInput').value;
+            document.getElementById('searchClear').style.display = val ? 'block' : 'none';
+
+            clearTimeout(searchDebounce);
+            searchDebounce = setTimeout(() => {
+                if (val.trim() && currentView !== 'libreria') {
+                    switchView('libreria');
+                }
+                loadGames();
+            }, 250);
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchClear').style.display = 'none';
+            loadGames();
+        }
+
+        function handleSortChange() {
+            currentSort = document.getElementById('sortSelect').value;
+            loadGames();
+        }
+
+        // ----------------------------------------------------
+        // NAVIGAZIONE TASTIERA
+        // ----------------------------------------------------
+        function selectCard(idx) {
+            if (idx >= 0 && idx < displayedGames.length) {
+                selectedGameIndex = idx;
+                highlightSelectedCard();
+            }
+        }
+
+        function highlightSelectedCard() {
+            document.querySelectorAll('.game-card').forEach((card, i) => {
+                const cardIdx = parseInt(card.getAttribute('data-idx'));
+                card.classList.toggle('selected', cardIdx === selectedGameIndex);
+            });
+        }
+
+        function setupKeyboardNav() {
+            window.addEventListener('keydown', (e) => {
+                // Non intercettare se l'utente scrive nella barra di ricerca
+                if (document.activeElement === document.getElementById('searchInput')) {
+                    if (e.key === 'Escape') {
+                        clearSearch();
+                        document.getElementById('searchInput').blur();
+                    }
+                    return;
+                }
+
+                if (e.key === '/') {
+                    e.preventDefault();
+                    document.getElementById('searchInput').focus();
+                    return;
+                }
+
+                if (e.key === 'Escape') {
+                    closeModal('arenaModal');
+                    closeModal('guidaModal');
+                    return;
+                }
+
+                if (currentView !== 'libreria' || displayedGames.length === 0) return;
+
+                const grid = document.getElementById('gamesGrid');
+                const cols = Math.floor(grid.clientWidth / 190) || 1;
+
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    selectedGameIndex = Math.min(displayedGames.length - 1, selectedGameIndex + 1);
+                    highlightSelectedCard();
+                    scrollSelectedIntoView();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    selectedGameIndex = Math.max(0, selectedGameIndex - 1);
+                    highlightSelectedCard();
+                    scrollSelectedIntoView();
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    selectedGameIndex = Math.min(displayedGames.length - 1, selectedGameIndex + cols);
+                    highlightSelectedCard();
+                    scrollSelectedIntoView();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    selectedGameIndex = Math.max(0, selectedGameIndex - cols);
+                    highlightSelectedCard();
+                    scrollSelectedIntoView();
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const g = displayedGames[selectedGameIndex];
+                    if (g) launchGame(g.id);
+                } else if (e.key === 'f' || e.key === 'F' || e.key === ' ') {
+                    e.preventDefault();
+                    const g = displayedGames[selectedGameIndex];
+                    if (g) toggleFavDirect(g.id);
+                }
+            });
         }
 
         function scrollSelectedIntoView() {
-            const selEl = document.querySelector(`.game-card[data-idx="${selectedGameIndex}"]`);
-            if (selEl) {
-                selEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            const card = document.querySelector(`.game-card[data-idx="${selectedGameIndex}"]`);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         }
 
-        // Search Handlers
-        let debounceTimer;
-        const searchInput = document.getElementById('searchInput');
-        const searchClear = document.getElementById('searchClear');
-
-        searchInput.addEventListener('input', () => {
-            searchClear.style.display = searchInput.value ? 'block' : 'none';
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(fetchGames, 150);
-        });
-
-        searchClear.addEventListener('click', () => {
-            searchInput.value = '';
-            searchClear.style.display = 'none';
-            fetchGames();
-        });
-
-        // Favorites filter
-        const favFilterBtn = document.getElementById('favFilterBtn');
-        favFilterBtn.addEventListener('click', () => {
-            favoritesOnly = !favoritesOnly;
-            favFilterBtn.classList.toggle('active', favoritesOnly);
-            fetchGames();
-        });
-
-        // Detail Modal
-        function openDetailModal(game) {
-            if (!game) return;
-            activeModalGame = game;
-            document.getElementById('modalTitle').innerText = game.title;
-            document.getElementById('modalPlatform').innerText = game.platform;
-            document.getElementById('modalYear').innerText = game.year;
-            document.getElementById('modalGenre').innerText = game.genre;
-            document.getElementById('modalDev').innerText = game.developer;
-            document.getElementById('modalPlays').innerText = `${game.play_count} volte`;
-            document.getElementById('modalControls').innerText = game.controls;
-            document.getElementById('modalCover').src = game.cover_url || '';
-            document.getElementById('detailModal').style.display = 'flex';
-
-            document.getElementById('modalPlayBtn').onclick = () => {
-                document.getElementById('detailModal').style.display = 'none';
-                launchGame(game.id);
-            };
+        // ----------------------------------------------------
+        // MODALI & TOAST
+        // ----------------------------------------------------
+        function openArenaModal() {
+            document.getElementById('arenaModal').classList.add('open');
         }
 
-        document.getElementById('modalCloseBtn').addEventListener('click', () => {
-            document.getElementById('detailModal').style.display = 'none';
-        });
-
-                        // Universal Gamepad Loop: Simultaneous Mixed Controllers (Xbox + Dual PS1 USB Adapter)
-        let lastPadTime = 0;
-        function initGamepadPolling() {
-            function updateIndicator() {
-                const rawPads = navigator.getGamepads ? navigator.getGamepads() : [];
-                const connected = Array.from(rawPads).filter(p => p && p.connected);
-                const indicator = document.getElementById('padIndicator');
-                
-                if (connected.length === 0) {
-                    indicator.style.display = 'none';
-                    return;
-                }
-                
-                indicator.style.display = 'flex';
-                let hasXbox = false;
-                let hasPs1 = false;
-
-                connected.forEach(p => {
-                    const id = p.id.toLowerCase();
-                    if (id.includes('ps') || id.includes('twin') || id.includes('playstation') || id.includes('0810') || p.mapping !== 'standard') {
-                        hasPs1 = true;
-                    } else {
-                        hasXbox = true;
-                    }
-                });
-
-                if (hasXbox && hasPs1) {
-                    indicator.innerText = `🎮 ${connected.length} Pad: Xbox + Adattatore PS1`;
-                } else if (hasPs1) {
-                    indicator.innerText = `🎮 ${connected.length} Joypad PS1`;
-                } else {
-                    indicator.innerText = `🎮 ${connected.length} Controller Xbox`;
-                }
-            }
-
-            window.addEventListener("gamepadconnected", (e) => {
-                updateIndicator();
-                showToast(`🎮 Connesso: ${e.gamepad.id.substring(0, 26)}`);
-            });
-
-            window.addEventListener("gamepaddisconnected", () => {
-                updateIndicator();
-            });
-
-            function poll() {
-                const rawPads = navigator.getGamepads ? navigator.getGamepads() : [];
-                const now = Date.now();
-
-                if (now - lastPadTime > 180) {
-                    // Check every connected gamepad so whichever you touch responds immediately!
-                    for (let i = 0; i < rawPads.length; i++) {
-                        const pad = rawPads[i];
-                        if (!pad || !pad.connected) continue;
-
-                        const isStandard = pad.mapping === "standard";
-                        const idLower = pad.id.toLowerCase();
-                        const isPs1Adapter = idLower.includes("twin") || idLower.includes("ps") || idLower.includes("0810") || !isStandard;
-
-                        // Directional inputs
-                        const stickX = pad.axes[0] || 0;
-                        const stickY = pad.axes[1] || 0;
-                        const hatAxis = pad.axes[9] !== undefined ? pad.axes[9] : (pad.axes[4] !== undefined ? pad.axes[4] : null);
-
-                        const up = pad.buttons[12]?.pressed || stickY < -0.5 || (hatAxis !== null && Math.abs(hatAxis - (-1.0)) < 0.1);
-                        const down = pad.buttons[13]?.pressed || stickY > 0.5 || (hatAxis !== null && Math.abs(hatAxis - (0.14)) < 0.1);
-                        const left = pad.buttons[14]?.pressed || stickX < -0.5 || (hatAxis !== null && Math.abs(hatAxis - (0.71)) < 0.1);
-                        const right = pad.buttons[15]?.pressed || stickX > 0.5 || (hatAxis !== null && Math.abs(hatAxis - (-0.42)) < 0.1);
-
-                        // Actions
-                        const btnConfirm = pad.buttons[0]?.pressed || (isPs1Adapter && pad.buttons[2]?.pressed); // A / Croce
-                        const btnBack = pad.buttons[1]?.pressed; // B / Cerchio
-                        const btnDetails = pad.buttons[2]?.pressed || (isPs1Adapter && pad.buttons[3]?.pressed); // X / Quadrato
-                        const btnFav = pad.buttons[3]?.pressed || (isPs1Adapter && pad.buttons[0]?.pressed); // Y / Triangolo
-                        const btnLB = pad.buttons[4]?.pressed || pad.buttons[6]?.pressed;
-                        const btnRB = pad.buttons[5]?.pressed || pad.buttons[7]?.pressed;
-
-                        const hasInput = up || down || left || right || btnConfirm || btnBack || btnDetails || btnFav || btnLB || btnRB;
-
-                        if (hasInput) {
-                            if (document.getElementById('detailModal').style.display === 'flex') {
-                                if (btnBack) document.getElementById('detailModal').style.display = 'none';
-                                if (btnConfirm && activeModalGame) {
-                                    document.getElementById('detailModal').style.display = 'none';
-                                    launchGame(activeModalGame.id);
-                                }
-                            } else {
-                                const cols = getGridCols();
-                                if (right && selectedGameIndex < allGames.length - 1) {
-                                    selectCard(selectedGameIndex + 1);
-                                    lastPadTime = now;
-                                } else if (left && selectedGameIndex > 0) {
-                                    selectCard(selectedGameIndex - 1);
-                                    lastPadTime = now;
-                                } else if (down && selectedGameIndex + cols < allGames.length) {
-                                    selectCard(selectedGameIndex + cols);
-                                    lastPadTime = now;
-                                } else if (up && selectedGameIndex - cols >= 0) {
-                                    selectCard(selectedGameIndex - cols);
-                                    lastPadTime = now;
-                                } else if (btnConfirm && allGames[selectedGameIndex]) {
-                                    launchGame(allGames[selectedGameIndex].id);
-                                    lastPadTime = now + 400;
-                                } else if (btnDetails && allGames[selectedGameIndex]) {
-                                    openDetailModal(allGames[selectedGameIndex]);
-                                    lastPadTime = now + 250;
-                                } else if (btnFav && allGames[selectedGameIndex]) {
-                                    toggleFav({ stopPropagation: () => {} }, allGames[selectedGameIndex].id, selectedGameIndex);
-                                    lastPadTime = now + 250;
-                                } else if (btnLB || btnRB) {
-                                    cyclePlatform(btnRB ? 1 : -1);
-                                    lastPadTime = now + 250;
-                                }
-                            }
-                            break; // Handled input from this active controller
-                        }
-                    }
-                }
-                requestAnimationFrame(poll);
-            }
-            requestAnimationFrame(poll);
+        function openGuidaModal() {
+            document.getElementById('guidaModal').classList.add('open');
         }
 
-
-        function cyclePlatform(dir) {
-            const items = Array.from(document.querySelectorAll('#platformsList .nav-item'));
-            if (!items.length) return;
-            let curIdx = items.findIndex(el => el.classList.contains('active'));
-            if (curIdx === -1) curIdx = 0;
-            let nextIdx = (curIdx + dir + items.length) % items.length;
-            items[nextIdx].click();
-            items[nextIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('open');
         }
 
-
-        function getGridCols() {
-            const grid = document.getElementById('gamesGrid');
-            if (!grid) return 4;
-            const w = grid.clientWidth;
-            return Math.max(1, Math.floor(w / 176));
-        }
-
-        // Start
-        // EXPLICIT BOOTSTRAP
-        init();
-        window.addEventListener('DOMContentLoaded', init);
-        init(); // Startup trigger
-        init(); // Immediate startup
-            // Online Netplay State
-        let currentNetplaySession = null;
-        let netplayPollInterval = null;
-
-                // Manual Modal Logic
-        function openManualModal() {
-            document.getElementById('manualModal').style.display = 'flex';
-        }
-
-        function closeManualModal() {
-            document.getElementById('manualModal').style.display = 'none';
-        }
-
-        function switchManualTab(tab) {
-            const tabs = ['pad', 'online', 'search', 'collec', 'about'];
-            tabs.forEach(t => {
-                const navId = 'tabMan' + t.charAt(0).toUpperCase() + t.slice(1);
-                const contentId = 'manContent' + t.charAt(0).toUpperCase() + t.slice(1);
-                const navEl = document.getElementById(navId);
-                const contentEl = document.getElementById(contentId);
-                const isActive = (t === tab);
-                if (navEl) navEl.classList.toggle('active', isActive);
-                if (contentEl) contentEl.style.display = isActive ? 'block' : 'none';
-            });
-        }
-
-        function openOnlineArena() {
-            const game = allGames[selectedGameIndex] || allGames[0];
-            if (game) {
-                document.getElementById('onlineGameTitle').innerText = (game ? game.title : 'Partita');
-            }
-            document.getElementById('onlineModal').style.display = 'flex';
-        }
-
-        function closeOnlineArena() {
-            document.getElementById('onlineModal').style.display = 'none';
-            if (netplayPollInterval) clearInterval(netplayPollInterval);
-        }
-
-        function hostCurrentGameOnline() {
-            openOnlineArena();
-            switchOnlineTab('host');
-        }
-
-        function switchOnlineTab(tab) {
-            const isHost = tab === 'host';
-            document.getElementById('hostView').style.display = isHost ? 'block' : 'none';
-            document.getElementById('joinView').style.display = isHost ? 'none' : 'block';
-            document.getElementById('tabHostBtn').style.borderBottom = isHost ? '2px solid var(--accent)' : 'none';
-            document.getElementById('tabHostBtn').style.opacity = isHost ? '1' : '0.6';
-            document.getElementById('tabJoinBtn').style.borderBottom = !isHost ? '2px solid var(--accent)' : 'none';
-            document.getElementById('tabJoinBtn').style.opacity = !isHost ? '1' : '0.6';
-        }
-
-        async function startHostRoom() {
-            const game = allGames[selectedGameIndex] || allGames[0];
-            if (!game) return;
-            const name = document.getElementById('hostPlayerName').value || "Host";
-
-            try {
-                const res = await fetch('/api/netplay/create', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ game_id: game.id, player_name: name })
-                });
-                const session = await res.json();
-                currentNetplaySession = session;
-
-                document.getElementById('hostSetupArea').style.display = 'none';
-                document.getElementById('hostActiveArea').style.display = 'block';
-                document.getElementById('roomCodeDisplay').innerText = session.room_code;
-
-                // Start polling room status for guest connection
-                if (netplayPollInterval) clearInterval(netplayPollInterval);
-                netplayPollInterval = setInterval(checkNetplayStatus, 800);
-            } catch (err) {
-                showToast("Errore creazione stanza online");
+        function closeModalOnBackdrop(e, modalId) {
+            if (e.target.id === modalId) {
+                closeModal(modalId);
             }
         }
 
-        async function connectToHost() {
-            const token = document.getElementById('joinTokenInput').value.trim();
-            const name = document.getElementById('joinPlayerName').value || "Guest";
-            if (!token) {
-                showToast("Inserisci un token valido");
-                return;
-            }
-
-            try {
-                const res = await fetch('/api/netplay/join', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: token, player_name: name })
-                });
-                const session = await res.json();
-                if (session.error) {
-                    showToast("❌ " + (session.error || "Errore"));
-                    return;
-                }
-
-                currentNetplaySession = session;
-                document.getElementById('joinStatusArea').style.display = 'block';
-                document.getElementById('joinStatusMsg').innerText = '✔ Connesso all\'Host!';
-                document.getElementById('joinPingInfo').innerText = 'Latenza P2P: ~' + (session.ping_ms || 18) + 'ms. In attesa di avvio partita...';
-
-                // Poll for game start
-                if (netplayPollInterval) clearInterval(netplayPollInterval);
-                netplayPollInterval = setInterval(checkNetplayStatus, 800);
-            } catch (err) {
-                showToast("Errore connessione all'host");
-            }
+        function showToast(msg) {
+            const t = document.getElementById('toastNotification');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => {
+                t.classList.remove('show');
+            }, 3000);
         }
-
-        async function checkNetplayStatus() {
-            try {
-                const res = await fetch('/api/netplay/status');
-                const sess = await res.json();
-                if (!sess) return;
-
-                if (sess.is_host && sess.status === 'Connected') {
-                    document.getElementById('hostStatusMsg').innerHTML = `<span style="color:var(--green); font-weight:700;">✔ Avversario collegato: ${sess.peer_name || "Player 2"} (Ping: ${sess.ping_ms || 18}ms)</span>`;
-                    document.getElementById('hostStartGameBtn').style.display = 'flex';
-                } else if (!sess.is_host && sess.status === 'InGame') {
-                    // Host started the game, auto-launch on guest!
-                    clearInterval(netplayPollInterval);
-                    closeOnlineArena();
-                    showToast("🚀 L'Host ha avviato la partita online! Buon divertimento!");
-                    launchGame(sess.game_id);
-                }
-            } catch (e) {}
-        }
-
-        async function triggerNetplayStart() {
-            try {
-                await fetch('/api/netplay/start', { method: 'POST' });
-                closeOnlineArena();
-                showToast("🚀 Partita online avviata su entrambi i PC!");
-            } catch (e) {
-                showToast("Errore avvio partita online");
-            }
-        }
-
-        function copyTokenToClipboard() {
-            if (currentNetplaySession && currentNetplaySession.connection_token) {
-                navigator.clipboard.writeText(currentNetplaySession.connection_token).then(() => {
-                    showToast("📋 Token invito copiato negli appunti!");
-                }).catch(() => {
-                    prompt("Copia il tuo token invito:", currentNetplaySession.connection_token);
-                });
-            }
-        }
-</script>
-    <!-- Online Arena Modal -->
-        <!-- Manual & Info Modal -->
-    <div class="modal-overlay" id="manualModal">
-        <div class="modal-content" style="max-width: 820px; max-height: 85vh; height: 680px; display: flex; flex-direction: column;">
-            <div class="modal-header">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 1.4rem;">📖</span>
-                    <div>
-                        <h3 style="margin: 0; font-size: 1.15rem; color: #fff;">Manuale Utente & Centro Informazioni</h3>
-                        <div style="font-size: 0.75rem; color: var(--text-dim);">RetroHub v1.0.0 — Motore Nativo Rust ad Altissime Prestazioni</div>
-                    </div>
-                </div>
-                <button class="action-btn" onclick="closeManualModal()">&times;</button>
-            </div>
-
-            <div style="display: flex; flex: 1; overflow: hidden;">
-                <!-- Manual Sidebar Tabs -->
-                <div style="width: 220px; background: #0c1017; border-right: 1px solid var(--border); padding: 12px; display: flex; flex-direction: column; gap: 4px; flex-shrink: 0;">
-                    <div class="nav-item active" id="tabManPad" onclick="switchManualTab('pad')">🎮 Guida Controller</div>
-                    <div class="nav-item" id="tabManOnline" onclick="switchManualTab('online')">🌐 Multiplayer Online</div>
-                    <div class="nav-item" id="tabManSearch" onclick="switchManualTab('search')">🔍 Ricerca & Filtri</div>
-                    <div class="nav-item" id="tabManCollec" onclick="switchManualTab('collec')">🕹️ Sistemi & Collezione</div>
-                    <div class="nav-item" id="tabManAbout" onclick="switchManualTab('about')">ℹ️ Info Progetto & Git</div>
-                </div>
-
-                <!-- Manual Content Panel -->
-                <div style="flex: 1; overflow-y: auto; padding: 24px; font-size: 0.9rem; line-height: 1.6; color: var(--text);">
-                    
-                    <!-- TAB 1: CONTROLLER -->
-                    <div id="manContentPad">
-                        <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-                            🎮 Guida Completa ai Controller (Xbox & Joypad PS1)
-                        </h4>
-                        <p style="color: var(--text-dim); margin-bottom: 16px;">
-                            RetroHub supporta il controllo completo da divano. Sia il pad Xbox sia l'adattatore USB PS1/PS2 a 2 porte sono riconosciuti istantaneamente e possono essere usati <strong>anche contemporaneamente</strong>.
-                        </p>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                            <!-- XBOX CARD -->
-                            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px;">
-                                <div style="font-weight: 700; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                                    <span style="color: var(--green);">●</span> Controller Xbox (XInput)
-                                </div>
-                                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem;">
-                                    <div><span class="pad-key">D-Pad / Stick</span> Sfoglia la griglia copertine</div>
-                                    <div><span class="pad-key">A</span> Avvia Gioco istantaneamente</div>
-                                    <div><span class="pad-key">B</span> Chiudi finestra / Torna indietro</div>
-                                    <div><span class="pad-key">X</span> Scheda dettagli & comandi</div>
-                                    <div><span class="pad-key">Y</span> Aggiungi / Rimuovi Preferito ⭐</div>
-                                    <div><span class="pad-key">LB / RB</span> Salta da una console all'altra</div>
-                                </div>
-                            </div>
-
-                            <!-- PS1 CARD -->
-                            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px;">
-                                <div style="font-weight: 700; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                                    <span style="color: #79c0ff;">●</span> Adattatore USB PS1 (Dual)
-                                </div>
-                                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem;">
-                                    <div><span class="pad-key">Frecce / Stick</span> Sfoglia la griglia copertine</div>
-                                    <div><span class="pad-key">✕ (Croce)</span> Avvia Gioco istantaneamente</div>
-                                    <div><span class="pad-key">○ (Cerchio)</span> Chiudi finestra / Indietro</div>
-                                    <div><span class="pad-key">□ (Quadrato)</span> Scheda dettagli & comandi</div>
-                                    <div><span class="pad-key">△ (Triangolo)</span> Aggiungi / Rimuovi Preferito ⭐</div>
-                                    <div><span class="pad-key">L1 / R1</span> Salta tra le console</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="background: rgba(227, 179, 65, 0.1); border-left: 3px solid var(--gold); padding: 12px; border-radius: 0 6px 6px 0; font-size: 0.85rem;">
-                            <strong>💡 Consiglio per Adattatore PS1:</strong> Se la croce direzionale non risponde nei menu, premi il pulsante <strong>ANALOG</strong> al centro del joypad per accendere la spia rossa.
-                        </div>
-                    </div>
-
-                    <!-- TAB 2: ONLINE NETPLAY -->
-                    <div id="manContentOnline" style="display: none;">
-                        <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-                            🌐 Come Funziona il Multiplayer Online P2P
-                        </h4>
-                        <p style="color: var(--text-dim); margin-bottom: 14px;">
-                            RetroHub include un netcode Peer-to-Peer diretto a bassissima latenza. Non serve configurare router o aprire porte NAT:
-                        </p>
-
-                        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px;">
-                            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
-                                <strong style="color: var(--accent);">Passo 1 — Se ospiti tu (Host):</strong>
-                                <div style="font-size: 0.85rem; color: var(--text-dim); margin-top: 4px;">
-                                    Seleziona un gioco e clicca <strong>🌐 Sfida Online</strong>. Inserisci il tuo nome e premi <em>Genera Stanza Online</em>. Clicca <strong>📋 Copia Token Invito</strong> e invia la stringa al tuo amico (via WhatsApp, Telegram, Discord, ecc.).
-                                </div>
-                            </div>
-
-                            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
-                                <strong style="color: var(--green);">Passo 2 — Se partecipi tu (Guest):</strong>
-                                <div style="font-size: 0.85rem; color: var(--text-dim); margin-top: 4px;">
-                                    Clicca sul tasto <strong>🌐 Arena Online</strong> in alto, vai sulla scheda <em>Partecipa a Stanza</em>, incolla il token dell'amico e clicca <em>Collegati</em>.
-                                </div>
-                            </div>
-
-                            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
-                                <strong style="color: var(--gold);">Passo 3 — Via alla Sfida:</strong>
-                                <div style="font-size: 0.85rem; color: var(--text-dim); margin-top: 4px;">
-                                    L'Host vedrà la spia verde con il Ping calcolato (es. <em>15ms</em>) e premerà <strong>AVVIA PARTITA</strong>. Il gioco si aprirà contemporaneamente sui due computer in perfetta sincronia!
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- TAB 3: RICERCA & FILTRI -->
-                    <div id="manContentSearch" style="display: none;">
-                        <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-                            🔍 Motore di Ricerca Fuzzy & Filtri Ponderati
-                        </h4>
-                        <p style="color: var(--text-dim); margin-bottom: 14px;">
-                            Il motore di ricerca in Rust indicizza oltre 1.149 giochi in tempo reale con tolleranza agli errori di battitura:
-                        </p>
-
-                        <ul style="margin-left: 20px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem;">
-                            <li><strong>Refusi e Errori:</strong> Scrivendo <code>stret fiter</code> il motore troverà <em>Street Fighter II</em>; cercando <code>zellda</code> troverà <em>The Legend of Zelda</em>.</li>
-                            <li><strong>Ricerca per Genere o Studio:</strong> Scrivi <code>capcom</code>, <code>shmup</code>, <code>picchiaduro</code>, <code>racing</code> o <code>platform</code> per isolare interi filoni videoludici.</li>
-                            <li><strong>Filtro Decadi:</strong> Usa la barra laterale per navigare tra gli anni '80, '90, 2000 o le produzioni moderne (2020-2026).</li>
-                            <li><strong>Preferiti ⭐:</strong> Clicca sulla stella su qualsiasi scheda per salvare i tuoi titoli più amati e filtrarli con il pulsante in alto.</li>
-                        </ul>
-                    </div>
-
-                    <!-- TAB 4: COLLEZIONE -->
-                    <div id="manContentCollec" style="display: none;">
-                        <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-                            🕹️ La Collezione Completa (1.149 Titoli su 16 Sistemi)
-                        </h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.82rem; margin-bottom: 16px;">
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>MAME Arcade:</strong> 596 giochi</div>
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>Commodore 64:</strong> 224 giochi (Warp 2000%)</div>
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>MS-DOS:</strong> 100 classici per controller</div>
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>ScummVM:</strong> 64 avventure in italiano</div>
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>Recomp Native PC:</strong> 45 progetti (Zelda, Mario, Forza Horizon)</div>
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>Sega NAOMI Arcade:</strong> 27 giochi</div>
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>LocoMalito & Indie:</strong> 33 capolavori PC</div>
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>Super Nintendo:</strong> 21 giochi</div>
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>Sammy Atomiswave:</strong> 8 giochi (Metal Slug 6, Hokuto)</div>
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>LaserDisc Hypseus:</strong> 5 giochi (Dragon's Lair...)</div>
-                            <div style="background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);"><strong>Console 3D:</strong> Dreamcast, GameCube, N64, PSX</div>
-                        </div>
-                    </div>
-
-                    <!-- TAB 5: ABOUT -->
-                    <div id="manContentAbout" style="display: none;">
-                        <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-                            ℹ️ Informazioni Progetto & Repository
-                        </h4>
-                        <p style="margin-bottom: 14px;">
-                            <strong>RetroHub</strong> è un software open-source sviluppato specificamente per la gestione unificata della collezione retrogaming.
-                        </p>
-                        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 0.85rem; display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px;">
-                            <div><strong>Versione:</strong> 1.0.0 (Rust Release)</div>
-                            <div><strong>Autore:</strong> Claudio Dall'Ara</div>
-                            <div><strong>Motore:</strong> Rust 1.99 + SQLite + tiny_http + Webview Native</div>
-                            <div><strong>Dimensione Binario:</strong> ~3,5 MB (Zero dipendenze esterne)</div>
-                            <div><strong>Repository GitHub:</strong> <a href="https://github.com/boobaGreen/launcher_game" target="_blank" style="color: var(--accent); text-decoration: none;">github.com/boobaGreen/launcher_game</a></div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button class="action-btn" onclick="closeManualModal()">Chiudi Guida</button>
-            </div>
-        </div>
-    </div>
-    <div class="modal-overlay" id="onlineModal">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-header">
-                <h3>🌐 Arena Multiplayer Online P2P (Rollback Netplay)</h3>
-                <button class="action-btn" onclick="closeOnlineArena()">&times;</button>
-            </div>
-            <div style="display: flex; border-bottom: 1px solid var(--border);">
-                <button id="tabHostBtn" class="action-btn" style="flex:1; border-radius:0; border:none; border-bottom:2px solid var(--accent);" onclick="switchOnlineTab('host')">Ospita Stanza (Host)</button>
-                <button id="tabJoinBtn" class="action-btn" style="flex:1; border-radius:0; border:none; opacity:0.6;" onclick="switchOnlineTab('join')">Partecipa a Stanza (Guest)</button>
-            </div>
-            
-            <div class="modal-body" style="flex-direction: column; gap: 16px;">
-                <!-- HOST VIEW -->
-                <div id="hostView">
-                    <div style="font-size:0.9rem; color:var(--text-dim); margin-bottom:10px;">
-                        Crea una stanza privata per sfidare un amico a qualsiasi gioco arcade, MAME, NAOMI, C64 o console:
-                    </div>
-                    <div><strong>Gioco Selezionato:</strong> <span id="onlineGameTitle" style="color:var(--accent); font-weight:700;">-</span></div>
-                    
-                    <div id="hostSetupArea" style="margin-top:15px;">
-                        <input type="text" id="hostPlayerName" class="search-input" style="margin-bottom:10px;" value="Player 1" placeholder="Cerca giochi, generi o anni...">
-                        <button class="play-btn" style="width:100%; justify-content:center;" onclick="startHostRoom()">⚡ Genera Stanza Online</button>
-                    </div>
-
-                    <div id="hostActiveArea" style="display:none; margin-top:15px; background:var(--bg); padding:16px; border-radius:8px; border:1px solid var(--border);">
-                        <div style="font-size:0.8rem; color:var(--text-dim);">Codice Stanza da inviare all'amico:</div>
-                        <div style="display:flex; gap:10px; align-items:center; margin:8px 0;">
-                            <div id="roomCodeDisplay" style="font-size:1.6rem; font-weight:800; color:var(--gold); letter-spacing:1px; font-family:monospace;">RH-0000</div>
-                            <button class="action-btn" onclick="copyTokenToClipboard()">📋 Copia Token Invito</button>
-                        </div>
-                        <div id="hostStatusMsg" style="color:var(--text-dim); font-size:0.85rem; display:flex; align-items:center; gap:8px;">
-                            <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--gold); animation: pulse 1.5s infinite;"></span>
-                            In attesa che l'avversario si colleghi...
-                        </div>
-                        <button id="hostStartGameBtn" class="play-btn" style="width:100%; justify-content:center; margin-top:15px; display:none;" onclick="triggerNetplayStart()">
-                            ▶ AVVIA PARTITA ONLINE (ENTRAMBI I PC)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- JOIN VIEW -->
-                <div id="joinView" style="display:none;">
-                    <div style="font-size:0.9rem; color:var(--text-dim); margin-bottom:12px;">
-                        Incolla il codice o il token ricevuto dal tuo amico per collegarti alla sua stanza:
-                    </div>
-                    <input type="text" id="joinPlayerName" class="search-input" style="margin-bottom:10px;" value="Player 2" placeholder="Cerca giochi, generi o anni...">
-                    <input type="text" id="joinTokenInput" class="search-input" style="margin-bottom:12px;" placeholder="Cerca giochi, generi o anni...">
-                    <button class="play-btn" style="width:100%; justify-content:center;" onclick="connectToHost()">🔗 Collegati alla Stanza</button>
-                    
-                    <div id="joinStatusArea" style="display:none; margin-top:15px; background:var(--bg); padding:16px; border-radius:8px; border:1px solid var(--border);">
-                        <div id="joinStatusMsg" style="color:var(--green); font-weight:700;">✔ Collegamento riuscito!</div>
-                        <div id="joinPingInfo" style="font-size:0.85rem; color:var(--text-dim); margin-top:4px;">In attesa che l'Host avvii il gioco...</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="action-btn" onclick="closeOnlineArena()">Chiudi</button>
-            </div>
-        </div>
-    </div>
-
-    <style>
-        @keyframes pulse {
-            0% { opacity: 0.3; transform: scale(0.9); }
-            50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 0.3; transform: scale(0.9); }
-        }
-    </style>
+    </script>
 </body>
 </html>
-
-
-
-

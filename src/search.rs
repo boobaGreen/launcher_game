@@ -24,38 +24,28 @@ impl SearchEngine {
     pub fn parse_query(raw: &str) -> ParsedQuery {
         let mut pq = ParsedQuery::default();
         let tokens: Vec<&str> = raw.split_whitespace().collect();
+        let mut i = 0;
 
-        for token in tokens {
+        while i < tokens.len() {
+            let token = tokens[i];
             let lower = token.to_lowercase();
 
-            // 1. Check for exclusions with '-' or '!'
+            // Support standalone 'NOT', 'SENZA', '!' as prefix keyword for the next token
+            if (lower == "not" || lower == "senza" || lower == "!") && i + 1 < tokens.len() {
+                i += 1;
+                let next_lower = tokens[i].to_lowercase();
+                Self::add_negative_clause(&mut pq, &next_lower);
+                i += 1;
+                continue;
+            }
+
+            // 1. Check for exclusions with '-' or '!' prefix
             if lower.starts_with('-') || lower.starts_with('!') {
                 let neg = &lower[1..];
-                if neg.is_empty() {
-                    continue;
+                if !neg.is_empty() {
+                    Self::add_negative_clause(&mut pq, neg);
                 }
-
-                if neg == "multi" || neg == "multiplayer" || neg == "2p" || neg == "coop" {
-                    pq.no_multiplayer = true;
-                } else if let Some(val) = neg.strip_prefix("dev:")
-                    .or_else(|| neg.strip_prefix("developer:"))
-                    .or_else(|| neg.strip_prefix("autore:"))
-                    .or_else(|| neg.strip_prefix("pub:"))
-                {
-                    pq.excluded_dev = Some(val.to_string());
-                } else if let Some(val) = neg.strip_prefix("genre:")
-                    .or_else(|| neg.strip_prefix("genere:")
-                    .or_else(|| neg.strip_prefix("g:")))
-                {
-                    pq.excluded_genre = Some(val.to_string());
-                } else if let Some(val) = neg.strip_prefix("sys:")
-                    .or_else(|| neg.strip_prefix("platform:")
-                    .or_else(|| neg.strip_prefix("p:")))
-                {
-                    pq.excluded_sys = Some(val.to_string());
-                } else {
-                    pq.negative_terms.push(neg.to_string());
-                }
+                i += 1;
                 continue;
             }
 
@@ -68,6 +58,7 @@ impl SearchEngine {
                 if let (Ok(y1), Ok(y2)) = (start_s.parse::<u16>(), end_s.parse::<u16>()) {
                     pq.year_min = Some(y1.min(y2));
                     pq.year_max = Some(y1.max(y2));
+                    i += 1;
                     continue;
                 }
             } else if let Some((start_s, end_s)) = year_target.split_once('-') {
@@ -75,23 +66,27 @@ impl SearchEngine {
                     if let (Ok(y1), Ok(y2)) = (start_s.parse::<u16>(), end_s.parse::<u16>()) {
                         pq.year_min = Some(y1.min(y2));
                         pq.year_max = Some(y1.max(y2));
+                        i += 1;
                         continue;
                     }
                 }
             } else if let Some(min_s) = year_target.strip_prefix('>') {
                 if let Ok(y) = min_s.parse::<u16>() {
                     pq.year_min = Some(y);
+                    i += 1;
                     continue;
                 }
             } else if let Some(max_s) = year_target.strip_prefix('<') {
                 if let Ok(y) = max_s.parse::<u16>() {
                     pq.year_max = Some(y);
+                    i += 1;
                     continue;
                 }
             } else if lower.starts_with("year:") || lower.starts_with("anno:") {
                 if let Ok(y) = year_target.parse::<u16>() {
                     pq.year_min = Some(y);
                     pq.year_max = Some(y);
+                    i += 1;
                     continue;
                 }
             }
@@ -102,6 +97,7 @@ impl SearchEngine {
                 .or_else(|| lower.strip_prefix("g:"))
             {
                 pq.required_genre = Some(val.to_string());
+                i += 1;
                 continue;
             }
 
@@ -111,6 +107,7 @@ impl SearchEngine {
                 .or_else(|| lower.strip_prefix("pub:"))
             {
                 pq.required_dev = Some(val.to_string());
+                i += 1;
                 continue;
             }
 
@@ -119,24 +116,52 @@ impl SearchEngine {
                 .or_else(|| lower.strip_prefix("p:"))
             {
                 pq.required_sys = Some(val.to_string());
+                i += 1;
                 continue;
             }
 
             // 4. Multiplayer / Singleplayer flags
             if lower == "single" || lower == "singleplayer" || lower == "1p" {
                 pq.no_multiplayer = true;
+                i += 1;
                 continue;
             }
             if lower == "multi" || lower == "multiplayer" || lower == "2p" {
                 pq.only_multiplayer = true;
+                i += 1;
                 continue;
             }
 
-            // 5. Default positive keyword (fuzzy / substring)
+            // 5. Default positive keyword (multi-field search)
             pq.positive_terms.push(lower);
+            i += 1;
         }
 
         pq
+    }
+
+    fn add_negative_clause(pq: &mut ParsedQuery, neg: &str) {
+        if neg == "multi" || neg == "multiplayer" || neg == "2p" || neg == "coop" {
+            pq.no_multiplayer = true;
+        } else if let Some(val) = neg.strip_prefix("dev:")
+            .or_else(|| neg.strip_prefix("developer:"))
+            .or_else(|| neg.strip_prefix("autore:"))
+            .or_else(|| neg.strip_prefix("pub:"))
+        {
+            pq.excluded_dev = Some(val.to_string());
+        } else if let Some(val) = neg.strip_prefix("genre:")
+            .or_else(|| neg.strip_prefix("genere:")
+            .or_else(|| neg.strip_prefix("g:")))
+        {
+            pq.excluded_genre = Some(val.to_string());
+        } else if let Some(val) = neg.strip_prefix("sys:")
+            .or_else(|| neg.strip_prefix("platform:")
+            .or_else(|| neg.strip_prefix("p:")))
+        {
+            pq.excluded_sys = Some(val.to_string());
+        } else {
+            pq.negative_terms.push(neg.to_string());
+        }
     }
 
     /// Determines if a game has multiplayer features based on controls/genre/title.
@@ -276,14 +301,17 @@ impl SearchEngine {
                     return false;
                 }
 
-                // General Negative Terms (e.g. -capcom, -kart)
+                // General Negative Terms (e.g. -capcom, -kart, NOT 1995, NOT c64)
                 for neg in &parsed.negative_terms {
                     let t = g.title.to_lowercase();
                     let d = g.developer.to_lowercase();
                     let p = g.publisher.to_lowercase();
                     let gen = g.genre.to_lowercase();
+                    let sys = g.system_code.to_lowercase();
+                    let plat = g.platform.to_lowercase();
+                    let y = g.year.to_string();
 
-                    if t.contains(neg) || d.contains(neg) || p.contains(neg) || gen.contains(neg) {
+                    if t.contains(neg) || d.contains(neg) || p.contains(neg) || gen.contains(neg) || sys.contains(neg) || plat.contains(neg) || y == *neg {
                         return false;
                     }
                 }
@@ -381,7 +409,14 @@ impl SearchEngine {
 
             // 5. Year match
             if year_str == *token {
-                token_max = token_max.max(0.6);
+                token_max = token_max.max(0.7);
+            }
+
+            // 6. Platform / System match
+            let sys_lower = game.system_code.to_lowercase();
+            let plat_lower = game.platform.to_lowercase();
+            if sys_lower.contains(token) || plat_lower.contains(token) {
+                token_max = token_max.max(0.75);
             }
 
             total_score += token_max;

@@ -64,8 +64,20 @@ impl CatalogLoader {
     }
 
     fn build_cover_url(sys_code: &str, title: &str) -> String {
+        // Strip trailing arcade ROM codes like " ( demofist )" or " ( mslug6 )"
+        let mut clean = title.trim();
+        if let Some(open_p) = clean.rfind('(') {
+            if let Some(close_p) = clean[open_p..].find(')') {
+                let inside = clean[open_p + 1..open_p + close_p].trim();
+                // If it's a short alphanumeric token or romcode without spaces, or starts with known rom code
+                if inside.len() <= 12 && !inside.contains("19") && !inside.contains("20") {
+                    clean = clean[..open_p].trim();
+                }
+            }
+        }
+
         // Libretro thumbnail standard invalid character replacements:
-        let clean_title = title
+        let clean_title = clean
             .replace(':', "_")
             .replace('/', "_")
             .replace('*', "_")
@@ -76,25 +88,25 @@ impl CatalogLoader {
             .replace('|', "_");
         let clean_encoded = clean_title.replace(' ', "%20");
         
-        let repo_system = match sys_code.to_uppercase().as_str() {
-            "MAME" => "MAME",
-            "C64" => "Commodore_-_64",
-            "SNES" => "Nintendo_-_Super_Nintendo_Entertainment_System",
-            "NES" => "Nintendo_-_Nintendo_Entertainment_System",
-            "N64" => "Nintendo_-_Nintendo_64",
-            "GAMECUBE" => "Nintendo_-_GameCube",
-            "DREAMCAST" => "Sega_-_Dreamcast",
-            "NAOMI" => "Sega_-_NAOMI",
-            "ATOMISWAVE" => "Sammy_-_Atomiswave",
-            "PSX" => "Sony_-_PlayStation",
-            "DOS" => "DOS",
-            "SCUMMVM" => "ScummVM",
-            _ => "MAME",
+        let (repo_system, folder) = match sys_code.to_uppercase().as_str() {
+            "MAME" => ("MAME", "Named_Snaps"),
+            "C64" => ("Commodore_-_64", "Named_Boxarts"),
+            "SNES" => ("Nintendo_-_Super_Nintendo_Entertainment_System", "Named_Boxarts"),
+            "NES" => ("Nintendo_-_Nintendo_Entertainment_System", "Named_Boxarts"),
+            "N64" => ("Nintendo_-_Nintendo_64", "Named_Boxarts"),
+            "GAMECUBE" => ("Nintendo_-_GameCube", "Named_Boxarts"),
+            "DREAMCAST" => ("Sega_-_Dreamcast", "Named_Boxarts"),
+            "NAOMI" => ("Sega_-_Naomi", "Named_Boxarts"),
+            "ATOMISWAVE" => ("Atomiswave", "Named_Boxarts"),
+            "PSX" => ("Sony_-_PlayStation", "Named_Boxarts"),
+            "DOS" => ("DOS", "Named_Boxarts"),
+            "SCUMMVM" => ("ScummVM", "Named_Boxarts"),
+            _ => ("MAME", "Named_Snaps"),
         };
 
         format!(
-            "https://raw.githubusercontent.com/libretro-thumbnails/{}/master/Named_Boxarts/{}.png",
-            repo_system, clean_encoded
+            "https://raw.githubusercontent.com/libretro-thumbnails/{}/master/{}/{}.png",
+            repo_system, folder, clean_encoded
         )
     }
 }

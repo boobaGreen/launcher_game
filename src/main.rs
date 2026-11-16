@@ -41,27 +41,21 @@ fn main() {
     let db_path = "retro_hub.db";
     let db = Database::open(db_path).expect("Inizializzazione database fallita");
 
-    let count = db.get_all_games().unwrap_or_default().len();
-    let force_refresh = std::env::args().any(|a| a == "--refresh");
-
     let emu_path = Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu");
 
-    if count == 0 || force_refresh {
-        println!("⏳ Sincronizzazione collezione con il catalogo unificato (1149 giochi)...");
-        match CatalogLoader::load_from_master_catalog(emu_path) {
-            Ok(games) => {
-                let total = games.len();
-                for g in &games {
-                    let _ = db.upsert_game(g);
-                }
-                println!("✔ {} giochi caricati e sincronizzati in retro_hub.db!", total);
+    // Sincronizzazione automatica all'avvio: aggiorna i percorsi e i link alle copertine in <80ms preservando i preferiti
+    println!("⏳ Sincronizzazione collezione con il catalogo unificato (1149 giochi)...");
+    match CatalogLoader::load_from_master_catalog(emu_path) {
+        Ok(games) => {
+            let total = games.len();
+            for g in &games {
+                let _ = db.upsert_game(g);
             }
-            Err(e) => {
-                eprintln!("⚠ Caricamento da catalogo non riuscito: {}", e);
-            }
+            println!("✔ {} giochi caricati e sincronizzati in retro_hub.db!", total);
         }
-    } else {
-        println!("⚡ Avvio istantaneo: {} giochi pronti nel database locale.", count);
+        Err(e) => {
+            eprintln!("⚠ Caricamento da catalogo non riuscito: {}", e);
+        }
     }
 
     // Launch window in dedicated thread
