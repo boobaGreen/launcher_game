@@ -1,4 +1,4 @@
-use crate::models::{DecadeInfo, Game, GenreInfo, PlatformInfo, StatsSummary};
+use crate::models::{DecadeInfo, DeveloperInfo, Game, GenreInfo, PlatformInfo, StatsSummary};
 use rusqlite::{params, Connection, Result};
 use std::collections::HashMap;
 
@@ -269,6 +269,27 @@ impl Database {
         let mut list: Vec<GenreInfo> = counts
             .into_iter()
             .map(|(name, count)| GenreInfo { name, count })
+            .collect();
+
+        list.sort_by(|a, b| b.count.cmp(&a.count));
+        Ok(list)
+    }
+
+    pub fn get_developers(&self) -> Result<Vec<DeveloperInfo>> {
+        let games = self.get_all_games()?;
+        let mut counts: HashMap<String, usize> = HashMap::new();
+
+        for g in games {
+            let dev = g.developer.trim();
+            if !dev.is_empty() && dev != "Unknown" && dev != "N/A" {
+                *counts.entry(dev.to_string()).or_insert(0) += 1;
+            }
+        }
+
+        let mut list: Vec<DeveloperInfo> = counts
+            .into_iter()
+            .filter(|(_, count)| *count >= 2)
+            .map(|(name, count)| DeveloperInfo { name, count })
             .collect();
 
         list.sort_by(|a, b| b.count.cmp(&a.count));

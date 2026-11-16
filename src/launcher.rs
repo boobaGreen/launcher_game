@@ -11,6 +11,18 @@ impl Launcher {
             return Err("Target di lancio non specificato".to_string());
         }
 
+        // Avvio nativo MAME: avvia direttamente l'eseguibile MAME con la ROM specifica e working dir corretta
+        if let Some(rom) = trimmed.strip_prefix("MAME:") {
+            let mame_dir = Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\mame");
+            let mame_exe = mame_dir.join("mame.exe");
+            Command::new(&mame_exe)
+                .arg(rom.trim())
+                .current_dir(mame_dir)
+                .spawn()
+                .map_err(|e| format!("Errore avvio MAME: {}", e))?;
+            return Ok(format!("Avviato MAME (ROM: {})", rom));
+        }
+
         let path = Path::new(trimmed);
 
         if path.exists() {

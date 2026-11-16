@@ -182,28 +182,144 @@ impl SearchEngine {
             || title.contains("2 player")
     }
 
+    /// Determines if a single game satisfies all clauses in a ParsedQuery, returning (matches, score)
+    pub fn matches_parsed(g: &Game, parsed: &ParsedQuery) -> (bool, f64) {
+        // Year Min / Max Range
+        if let Some(min) = parsed.year_min {
+            if g.year < min {
+                return (false, 0.0);
+            }
+        }
+        if let Some(max) = parsed.year_max {
+            if g.year > max {
+                return (false, 0.0);
+            }
+        }
+
+        // Required Genre (e.g. genre:shmup)
+        if let Some(ref req_g) = parsed.required_genre {
+            if !g.genre.to_lowercase().contains(req_g) {
+                return (false, 0.0);
+            }
+        }
+
+        // Excluded Genre (e.g. -genre:rpg)
+        if let Some(ref exc_g) = parsed.excluded_genre {
+            if g.genre.to_lowercase().contains(exc_g) {
+                return (false, 0.0);
+            }
+        }
+
+        // Required Developer / Publisher (e.g. dev:capcom)
+        if let Some(ref req_d) = parsed.required_dev {
+            let d = g.developer.to_lowercase();
+            let p = g.publisher.to_lowercase();
+            if !d.contains(req_d) && !p.contains(req_d) {
+                return (false, 0.0);
+            }
+        }
+
+        // Excluded Developer / Publisher (e.g. -dev:capcom)
+        if let Some(ref exc_d) = parsed.excluded_dev {
+            let d = g.developer.to_lowercase();
+            let p = g.publisher.to_lowercase();
+            if d.contains(exc_d) || p.contains(exc_d) {
+                return (false, 0.0);
+            }
+        }
+
+        // Required System (e.g. sys:c64)
+        if let Some(ref req_s) = parsed.required_sys {
+            if !g.system_code.to_lowercase().contains(req_s) && !g.platform.to_lowercase().contains(req_s) {
+                return (false, 0.0);
+            }
+        }
+
+        // Excluded System (e.g. -sys:mame)
+        if let Some(ref exc_s) = parsed.excluded_sys {
+            if g.system_code.to_lowercase().contains(exc_s) || g.platform.to_lowercase().contains(exc_s) {
+                return (false, 0.0);
+            }
+        }
+
+        // Excluded Multiplayer (e.g. -multi, -2p, single)
+        let is_multi = Self::is_multiplayer_game(g);
+        if parsed.no_multiplayer && is_multi {
+            return (false, 0.0);
+        }
+        if parsed.only_multiplayer && !is_multi {
+            return (false, 0.0);
+        }
+
+        // General Negative Terms
+        for neg in &parsed.negative_terms {
+            let t = g.title.to_lowercase();
+            let d = g.developer.to_lowercase();
+            let p = g.publisher.to_lowercase();
+            let gen = g.genre.to_lowercase();
+            let sys = g.system_code.to_lowercase();
+            let plat = g.platform.to_lowercase();
+            let y = g.year.to_string();
+
+            if t.contains(neg) || d.contains(neg) || p.contains(neg) || gen.contains(neg) || sys.contains(neg) || plat.contains(neg) || y == *neg {
+                return (false, 0.0);
+            }
+        }
+
+        if parsed.positive_terms.is_empty() {
+            return (true, 1.0);
+        }
+
+        let score = Self::calculate_score(g, &parsed.positive_terms);
+        if score >= 0.38 {
+            (true, score)
+        } else {
+            (false, 0.0)
+        }
+    }
+
     /// Filters and ranks a list of games based on the provided SearchFilter.
     pub fn filter_and_rank(games: &[Game], filter: &SearchFilter) -> Vec<Game> {
-        let parsed = filter
-            .query
-            .as_deref()
-            .map(Self::parse_query)
-            .unwrap_or_default();
+        let raw_query = filter.query.as_deref().unwrap_or("").trim();
+        let subqueries: Vec<&str> = if raw_query.contains(" | ") {
+            raw_query.split(" | ").collect()
+        } else if raw_query.contains(" OR ") {
+            raw_query.split(" OR ").collect()
+        } else {
+            vec![raw_query]
+        };
+
+        let parsed_list: Vec<ParsedQuery> = subqueries
+            .iter()
+            .map(|q| Self::parse_query(q.trim()))
+            .collect();
+
+        let has_query = !raw_query.is_empty();
 
         let mut scored_games: Vec<(Game, f64)> = games
             .iter()
-            .filter(|g| {
+            .filter_map(|g| {
                 // UI Platform dropdown filter
                 if let Some(ref plat) = filter.platform {
                     if plat != "ALL" && !g.system_code.eq_ignore_ascii_case(plat) {
-                        return false;
+                        return None;
                     }
                 }
 
                 // UI Genre dropdown filter
                 if let Some(ref gen) = filter.genre {
                     if gen != "ALL" && !g.genre.to_lowercase().contains(&gen.to_lowercase()) {
-                        return false;
+                        return None;
+                    }
+                }
+
+                // UI Developer dropdown filter
+                if let Some(ref dev) = filter.developer {
+                    if dev != "ALL" {
+                        let target = dev.to_lowercase();
+                        if !g.developer.to_lowercase().contains(&target) && !g.publisher.to_lowercase().contains(&target) {
+                            return None;
+                        }
                     }
                 }
 
@@ -212,121 +328,60 @@ impl SearchEngine {
                     if dec != "ALL" {
                         let y = g.year;
                         let match_decade = match dec.as_str() {
+                            "1970s" => (1970..=1979).contains(&y),
                             "1980s" => (1980..=1989).contains(&y),
                             "1990s" => (1990..=1999).contains(&y),
                             "2000s" => (2000..=2009).contains(&y),
-                            "2010s" => (2010..=2019).contains(&y),
-                            "2020s" => y >= 2020,
+                            "2010s" => y >= 2010,
                             _ => true,
                         };
                         if !match_decade {
-                            return false;
+                            return None;
                         }
+                    }
+                }
+
+                // UI Year Range filter (da / a)
+                if let Some(min) = filter.year_from {
+                    if g.year < min {
+                        return None;
+                    }
+                }
+                if let Some(max) = filter.year_to {
+                    if g.year > max {
+                        return None;
                     }
                 }
 
                 // Favorites only filter
                 if filter.favorites_only && !g.is_favorite {
-                    return false;
+                    return None;
                 }
 
-                // ----------------------------------------------------
-                // Compound Search Query Filters
-                // ----------------------------------------------------
-
-                // Year Min / Max Range
-                if let Some(min) = parsed.year_min {
-                    if g.year < min {
-                        return false;
-                    }
-                }
-                if let Some(max) = parsed.year_max {
-                    if g.year > max {
-                        return false;
-                    }
+                if !has_query {
+                    return Some((g.clone(), 1.0));
                 }
 
-                // Required Genre (e.g. genre:shmup)
-                if let Some(ref req_g) = parsed.required_genre {
-                    if !g.genre.to_lowercase().contains(req_g) {
-                        return false;
+                // Evaluate subqueries (OR logic across branches)
+                let mut best_score = 0.0;
+                let mut matched = false;
+
+                for pq in &parsed_list {
+                    let (m, s) = Self::matches_parsed(g, pq);
+                    if m {
+                        matched = true;
+                        if s > best_score {
+                            best_score = s;
+                        }
                     }
                 }
 
-                // Excluded Genre (e.g. -genre:rpg)
-                if let Some(ref exc_g) = parsed.excluded_genre {
-                    if g.genre.to_lowercase().contains(exc_g) {
-                        return false;
-                    }
+                if matched {
+                    Some((g.clone(), best_score))
+                } else {
+                    None
                 }
-
-                // Required Developer / Publisher (e.g. dev:capcom)
-                if let Some(ref req_d) = parsed.required_dev {
-                    let d = g.developer.to_lowercase();
-                    let p = g.publisher.to_lowercase();
-                    if !d.contains(req_d) && !p.contains(req_d) {
-                        return false;
-                    }
-                }
-
-                // Excluded Developer / Publisher (e.g. -dev:capcom)
-                if let Some(ref exc_d) = parsed.excluded_dev {
-                    let d = g.developer.to_lowercase();
-                    let p = g.publisher.to_lowercase();
-                    if d.contains(exc_d) || p.contains(exc_d) {
-                        return false;
-                    }
-                }
-
-                // Required System (e.g. sys:c64)
-                if let Some(ref req_s) = parsed.required_sys {
-                    if !g.system_code.to_lowercase().contains(req_s) && !g.platform.to_lowercase().contains(req_s) {
-                        return false;
-                    }
-                }
-
-                // Excluded System (e.g. -sys:mame)
-                if let Some(ref exc_s) = parsed.excluded_sys {
-                    if g.system_code.to_lowercase().contains(exc_s) || g.platform.to_lowercase().contains(exc_s) {
-                        return false;
-                    }
-                }
-
-                // Excluded Multiplayer (e.g. -multi, -2p, single)
-                let is_multi = Self::is_multiplayer_game(g);
-                if parsed.no_multiplayer && is_multi {
-                    return false;
-                }
-                if parsed.only_multiplayer && !is_multi {
-                    return false;
-                }
-
-                // General Negative Terms (e.g. -capcom, -kart, NOT 1995, NOT c64)
-                for neg in &parsed.negative_terms {
-                    let t = g.title.to_lowercase();
-                    let d = g.developer.to_lowercase();
-                    let p = g.publisher.to_lowercase();
-                    let gen = g.genre.to_lowercase();
-                    let sys = g.system_code.to_lowercase();
-                    let plat = g.platform.to_lowercase();
-                    let y = g.year.to_string();
-
-                    if t.contains(neg) || d.contains(neg) || p.contains(neg) || gen.contains(neg) || sys.contains(neg) || plat.contains(neg) || y == *neg {
-                        return false;
-                    }
-                }
-
-                true
             })
-            .map(|g| {
-                if parsed.positive_terms.is_empty() {
-                    return (g.clone(), 1.0);
-                }
-
-                let score = Self::calculate_score(g, &parsed.positive_terms);
-                (g.clone(), score)
-            })
-            .filter(|(_, score)| parsed.positive_terms.is_empty() || *score >= 0.38)
             .collect();
 
         // Sort results
@@ -334,7 +389,7 @@ impl SearchEngine {
         let asc = filter.sort_asc;
 
         scored_games.sort_by(|(a_game, a_score), (b_game, b_score)| {
-            if !parsed.positive_terms.is_empty() {
+            if has_query {
                 // In search mode, primary order is by relevance score descending
                 let cmp = b_score.partial_cmp(a_score).unwrap_or(std::cmp::Ordering::Equal);
                 if cmp != std::cmp::Ordering::Equal {
@@ -461,12 +516,8 @@ mod tests {
         // Query: 1990..1995 Picchiaduro -Capcom
         let filter = SearchFilter {
             query: Some("1990..1995 Picchiaduro -Capcom".to_string()),
-            platform: None,
-            genre: None,
-            decade: None,
-            favorites_only: false,
-            sort_by: None,
             sort_asc: true,
+            ..Default::default()
         };
 
         let res = SearchEngine::filter_and_rank(&games, &filter);
@@ -487,12 +538,8 @@ mod tests {
         // Exclude multiplayer: -multi
         let filter = SearchFilter {
             query: Some("194 -multi".to_string()),
-            platform: None,
-            genre: None,
-            decade: None,
-            favorites_only: false,
-            sort_by: None,
             sort_asc: true,
+            ..Default::default()
         };
 
         let res = SearchEngine::filter_and_rank(&games, &filter);
@@ -511,12 +558,8 @@ mod tests {
         // Query: genre:rpg dev:nintendo 1999..2005
         let filter = SearchFilter {
             query: Some("genre:rpg dev:nintendo 1999..2005".to_string()),
-            platform: None,
-            genre: None,
-            decade: None,
-            favorites_only: false,
-            sort_by: None,
             sort_asc: true,
+            ..Default::default()
         };
 
         let res = SearchEngine::filter_and_rank(&games, &filter);

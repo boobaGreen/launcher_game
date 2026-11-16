@@ -657,7 +657,8 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            margin-top: 4px;
+            margin-top: 6px;
+            flex-wrap: wrap;
         }
 
         .controls-left {
@@ -666,6 +667,21 @@
             gap: 10px;
             font-size: 0.84rem;
             color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-label {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .select-filter {
@@ -677,10 +693,309 @@
             font-size: 0.82rem;
             outline: none;
             cursor: pointer;
+            transition: border-color 0.15s ease;
         }
 
         .select-filter:focus {
             border-color: var(--accent);
+        }
+
+        .year-input {
+            width: 65px;
+            background: #141a27;
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            text-align: center;
+            outline: none;
+        }
+
+        .year-input:focus {
+            border-color: var(--accent);
+        }
+
+        .filter-reset-btn {
+            background: rgba(248, 81, 73, 0.15);
+            border: 1px solid #f85149;
+            color: #ff7b72;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .filter-reset-btn:hover {
+            background: #f85149;
+            color: #fff;
+        }
+
+        /* Syntax Helper Bar */
+        .syntax-toggle-btn {
+            background: #1c2436;
+            border: 1px solid var(--border);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+        }
+
+        .syntax-toggle-btn:hover {
+            background: var(--accent);
+            color: #0b0f17;
+        }
+
+        .syntax-helper-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #111723;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+        }
+
+        .syntax-title {
+            color: var(--text-dim);
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .syntax-chip {
+            background: #192233;
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            color: #c9d1d9;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .syntax-chip b {
+            color: var(--accent);
+        }
+
+        .syntax-chip:hover {
+            background: var(--accent);
+            color: #0b0f17;
+        }
+
+        .syntax-chip:hover b {
+            color: #0b0f17;
+        }
+
+        .syntax-hint {
+            color: var(--text-dim);
+            font-size: 0.76rem;
+            margin-left: auto;
+        }
+
+        .syntax-hint code {
+            color: #79c0ff;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        /* ----------------------------------------------------
+           DRAWER DETTAGLIO GIOCO SELEZIONATO
+        ---------------------------------------------------- */
+        .game-detail-drawer {
+            position: fixed;
+            top: 0;
+            right: -480px;
+            width: 440px;
+            height: 100vh;
+            background: #0f1522;
+            border-left: 1px solid var(--border);
+            box-shadow: -15px 0 35px rgba(0, 0, 0, 0.75);
+            z-index: 1200;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        .game-detail-drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0b0f17;
+        }
+
+        .drawer-tag {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .drawer-close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+            transition: color 0.15s ease;
+        }
+
+        .drawer-close-btn:hover {
+            color: #fff;
+        }
+
+        .drawer-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .drawer-cover-wrapper {
+            width: 100%;
+            height: 240px;
+            background: #080c14;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .drawer-cover {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .drawer-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #fff;
+            margin: 0;
+            line-height: 1.25;
+        }
+
+        .drawer-actions-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .drawer-play-btn {
+            flex: 1;
+            background: #2ea043;
+            border: none;
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(46, 160, 67, 0.4);
+            transition: all 0.15s ease;
+        }
+
+        .drawer-play-btn:hover {
+            background: #3fb950;
+            transform: scale(1.02);
+        }
+
+        .drawer-fav-btn {
+            width: 44px;
+            height: 44px;
+            background: #161e2e;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+
+        .drawer-fav-btn:hover {
+            color: #ffc83b;
+            border-color: #ffc83b;
+        }
+
+        .drawer-fav-btn.active {
+            color: #ffc83b;
+            background: rgba(255, 200, 59, 0.15);
+            border-color: #ffc83b;
+        }
+
+        .drawer-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            background: #141b28;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .drawer-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .drawer-info-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .drawer-info-item .info-label {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .drawer-info-item .info-val {
+            font-size: 0.85rem;
+            color: #fff;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .drawer-info-item .info-val.link {
+            color: var(--accent);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .drawer-info-item .info-val.link:hover {
+            color: #fff;
         }
 
         /* ----------------------------------------------------
@@ -898,6 +1213,16 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 1.2;
+        }
+
+        .card-author {
+            font-size: 0.72rem;
+            color: var(--accent);
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card-meta-row {
@@ -1079,10 +1404,29 @@
     <main class="main-container">
         <!-- Top Search Bar -->
         <header class="top-header">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" class="search-input" placeholder="Cerca giochi (es. mario -kart, capcom NOT 1995, racing)..." oninput="handleSearchInput()">
-                <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+            <div style="display: flex; flex-direction: column; gap: 8px; flex: 1; max-width: 680px;">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" class="search-input" name="retro_search_query"
+                           placeholder="Cerca per titolo, produttore, genere, anno... (es. capcom 1993, mario -kart)"
+                           oninput="handleSearchInput()"
+                           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                           data-lpignore="true" data-form-type="other" data-bwignore="true" data-1p-ignore>
+                    <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;">✕</button>
+                    <button class="syntax-toggle-btn" onclick="toggleSyntaxHelper()" title="Mostra operatori e sintassi di ricerca">💡 Sintassi</button>
+                </div>
+
+                <!-- Barra rapida sintassi booleana (AND, OR, NOT, Range Anni) -->
+                <div class="syntax-helper-bar" id="syntaxHelperBar" style="display: none;">
+                    <span class="syntax-title">Operatori:</span>
+                    <button class="syntax-chip" onclick="appendSearchTerm(' -')"><b>-termine</b> (NOT)</button>
+                    <button class="syntax-chip" onclick="appendSearchTerm(' NOT ')"><b>NOT</b> (Senza)</button>
+                    <button class="syntax-chip" onclick="appendSearchTerm(' | ')"><b>|</b> (OR / Oppure)</button>
+                    <button class="syntax-chip" onclick="appendSearchTerm(' dev:Capcom')"><b>dev:</b></button>
+                    <button class="syntax-chip" onclick="appendSearchTerm(' genre:Picchiaduro')"><b>genre:</b></button>
+                    <button class="syntax-chip" onclick="appendSearchTerm(' 1990..1995')"><b>1990..1995</b></button>
+                    <span class="syntax-hint">💡 Es: <code>mario -kart</code> • <code>capcom NOT 1995</code></span>
+                </div>
             </div>
             <div class="header-actions">
                 <button class="action-btn" onclick="toggleFavoritesOnly()" id="favToggleBtn">
@@ -1191,17 +1535,56 @@
                         <button class="filter-pill" onclick="selectPlatform('PSX')">PlayStation (2)</button>
                     </div>
 
-                    <!-- Ordinamento & Opzioni -->
+                    <!-- Ordinamento & Opzioni Filtro Avanzate -->
                     <div class="libreria-controls-bar">
                         <div class="controls-left">
-                            <span>Ordina:</span>
-                            <select class="select-filter" id="sortSelect" onchange="handleSortChange()">
-                                <option value="title_asc">Titolo (A - Z)</option>
-                                <option value="title_desc">Titolo (Z - A)</option>
-                                <option value="year_desc">Anno (Più recente)</option>
-                                <option value="year_asc">Anno (Più classico)</option>
-                                <option value="play_desc">Più giocati</option>
-                            </select>
+                            <div class="filter-group">
+                                <span class="filter-label">Ordina:</span>
+                                <select class="select-filter" id="sortSelect" onchange="handleSortChange()">
+                                    <option value="title_asc">Titolo (A - Z)</option>
+                                    <option value="title_desc">Titolo (Z - A)</option>
+                                    <option value="year_desc">Anno (Più recente)</option>
+                                    <option value="year_asc">Anno (Più classico)</option>
+                                    <option value="play_desc">Più giocati</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <span class="filter-label">Genere:</span>
+                                <select class="select-filter" id="genreSelect" onchange="handleDropdownFilterChange()">
+                                    <option value="ALL">Tutti i Generi</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <span class="filter-label">Produttore:</span>
+                                <select class="select-filter" id="devSelect" onchange="handleDropdownFilterChange()">
+                                    <option value="ALL">Tutti i Produttori</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <span class="filter-label">Periodo:</span>
+                                <select class="select-filter" id="decadeSelect" onchange="handleDropdownFilterChange()">
+                                    <option value="ALL">Tutti gli Anni</option>
+                                    <option value="1970s">Anni '70</option>
+                                    <option value="1980s">Anni '80</option>
+                                    <option value="1990s">Anni '90</option>
+                                    <option value="2000s">Anni 2000</option>
+                                    <option value="2010s">2010 ad oggi</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <span class="filter-label">Date:</span>
+                                <input type="number" id="yearFromInput" class="year-input" placeholder="Da" min="1970" max="2026" onchange="handleDropdownFilterChange()" title="Anno da (es. 1985)">
+                                <span style="color: var(--text-dim);">-</span>
+                                <input type="number" id="yearToInput" class="year-input" placeholder="A" min="1970" max="2026" onchange="handleDropdownFilterChange()" title="Anno a (es. 1995)">
+                            </div>
+
+                            <button class="filter-reset-btn" id="resetFiltersBtn" onclick="resetAllFilters()" style="display: none;" title="Resetta tutti i filtri">
+                                ✕ Reset Filtri
+                            </button>
                         </div>
                     </div>
 
@@ -1215,6 +1598,52 @@
 
         </div>
     </main>
+
+    <!-- DRAWER SCHEDA DETTAGLIO GIOCO SELEZIONATO -->
+    <div class="game-detail-drawer" id="gameDetailDrawer">
+        <div class="drawer-header">
+            <span class="drawer-tag">SCHEDA GIOCO</span>
+            <button class="drawer-close-btn" onclick="closeGameDetails()" title="Chiudi (Esc)">✕</button>
+        </div>
+        <div class="drawer-body">
+            <div class="drawer-cover-wrapper">
+                <img class="drawer-cover" id="drawerCover" src="" alt="Copertina">
+            </div>
+            <h2 class="drawer-title" id="drawerTitle">Titolo</h2>
+
+            <div class="drawer-actions-row">
+                <button class="drawer-play-btn" id="drawerPlayBtn">▶ GIOCA ORA</button>
+                <button class="drawer-fav-btn" id="drawerFavBtn" title="Preferito">★</button>
+            </div>
+
+            <div class="drawer-info-grid">
+                <div class="drawer-info-item">
+                    <span class="info-label">Produttore / Autore:</span>
+                    <span class="info-val link" id="drawerDev" title="Filtra per questo produttore">-</span>
+                </div>
+                <div class="drawer-info-item">
+                    <span class="info-label">Console / Piattaforma:</span>
+                    <span class="info-val link" id="drawerSys" title="Filtra per questa console">-</span>
+                </div>
+                <div class="drawer-info-item">
+                    <span class="info-label">Anno di Uscita:</span>
+                    <span class="info-val" id="drawerYear">-</span>
+                </div>
+                <div class="drawer-info-item">
+                    <span class="info-label">Genere:</span>
+                    <span class="info-val link" id="drawerGenre" title="Filtra per questo genere">-</span>
+                </div>
+                <div class="drawer-info-item full">
+                    <span class="info-label">Configurazione Comandi:</span>
+                    <span class="info-val" id="drawerControls">-</span>
+                </div>
+                <div class="drawer-info-item full">
+                    <span class="info-label">Statistiche Giocatore:</span>
+                    <span class="info-val" id="drawerStats">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- MODALE: ARENA ONLINE -->
     <div class="modal-overlay" id="arenaModal" onclick="closeModalOnBackdrop(event, 'arenaModal')">
@@ -1277,7 +1706,12 @@
         let allGames = [];
         let displayedGames = [];
         let platformsData = [];
+        let developersData = [];
+        let genresData = [];
         let currentPlatform = 'ALL';
+        let currentGenre = 'ALL';
+        let currentDev = 'ALL';
+        let currentDecade = 'ALL';
         let currentSort = 'title_asc';
         let favoritesOnly = false;
         let selectedGameIndex = 0;
@@ -1294,7 +1728,7 @@
 
         // Inizializzazione
         window.addEventListener('DOMContentLoaded', async () => {
-            await loadPlatforms();
+            await Promise.all([loadPlatforms(), loadFilterOptions()]);
             await loadGames();
             setupKeyboardNav();
         });
@@ -1328,12 +1762,42 @@
             }
         }
 
+        async function loadFilterOptions() {
+            try {
+                const [devRes, genRes] = await Promise.all([
+                    fetch('/api/developers'),
+                    fetch('/api/genres')
+                ]);
+                developersData = await devRes.json();
+                genresData = await genRes.json();
+                renderFilterDropdowns();
+            } catch (err) {
+                console.error("Errore caricamento filtri opzioni:", err);
+            }
+        }
+
+        function renderFilterDropdowns() {
+            const devSelect = document.getElementById('devSelect');
+            if (devSelect && developersData.length > 0) {
+                const opts = developersData.map(d => `<option value="${escapeHtml(d.name)}">${escapeHtml(d.name)} (${d.count})</option>`).join('');
+                devSelect.innerHTML = `<option value="ALL">Tutti i Produttori</option>${opts}`;
+            }
+
+            const genSelect = document.getElementById('genreSelect');
+            if (genSelect && genresData.length > 0) {
+                const opts = genresData.map(g => `<option value="${escapeHtml(g.name)}">${escapeHtml(g.name)} (${g.count})</option>`).join('');
+                genSelect.innerHTML = `<option value="ALL">Tutti i Generi</option>${opts}`;
+            }
+        }
+
         async function loadGames() {
             try {
                 const sortParts = currentSort.split('_');
                 const sortBy = sortParts[0];
                 const sortAsc = sortParts[1] !== 'desc';
                 const queryVal = document.getElementById('searchInput').value.trim();
+                const yearFrom = document.getElementById('yearFromInput') ? document.getElementById('yearFromInput').value.trim() : '';
+                const yearTo = document.getElementById('yearToInput') ? document.getElementById('yearToInput').value.trim() : '';
 
                 const params = new URLSearchParams({
                     platform: currentPlatform,
@@ -1342,14 +1806,21 @@
                     favorites_only: favoritesOnly.toString()
                 });
 
-                if (queryVal) {
-                    params.set('query', queryVal);
-                }
+                if (currentGenre !== 'ALL') params.set('genre', currentGenre);
+                if (currentDev !== 'ALL') params.set('developer', currentDev);
+                if (currentDecade !== 'ALL') params.set('decade', currentDecade);
+                if (yearFrom) params.set('year_from', yearFrom);
+                if (yearTo) params.set('year_to', yearTo);
+                if (queryVal) params.set('query', queryVal);
+
+                const hasActiveFilter = currentPlatform !== 'ALL' || currentGenre !== 'ALL' || currentDev !== 'ALL' || currentDecade !== 'ALL' || yearFrom || yearTo || favoritesOnly || queryVal;
+                const resetBtn = document.getElementById('resetFiltersBtn');
+                if (resetBtn) resetBtn.style.display = hasActiveFilter ? 'inline-flex' : 'none';
 
                 const res = await fetch(`/api/games?${params.toString()}`);
                 displayedGames = await res.json();
 
-                if (currentPlatform === 'ALL' && !queryVal && !favoritesOnly) {
+                if (currentPlatform === 'ALL' && currentGenre === 'ALL' && currentDev === 'ALL' && currentDecade === 'ALL' && !yearFrom && !yearTo && !queryVal && !favoritesOnly) {
                     allGames = [...displayedGames];
                     setupHeroSpotlights();
                     renderFeaturedRow();
@@ -1433,6 +1904,144 @@
             }
             selectPlatform(sysCode);
             showToast(`Filtro console: ${sysCode}`);
+        }
+
+        function handleDropdownFilterChange() {
+            const genSelect = document.getElementById('genreSelect');
+            const devSelect = document.getElementById('devSelect');
+            const decSelect = document.getElementById('decadeSelect');
+
+            if (genSelect) currentGenre = genSelect.value;
+            if (devSelect) currentDev = devSelect.value;
+            if (decSelect) currentDecade = decSelect.value;
+
+            switchView('libreria');
+            loadGames();
+        }
+
+        function resetAllFilters() {
+            currentPlatform = 'ALL';
+            currentGenre = 'ALL';
+            currentDev = 'ALL';
+            currentDecade = 'ALL';
+            favoritesOnly = false;
+
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.value = '';
+            const searchClear = document.getElementById('searchClear');
+            if (searchClear) searchClear.style.display = 'none';
+
+            const genSelect = document.getElementById('genreSelect');
+            if (genSelect) genSelect.value = 'ALL';
+
+            const devSelect = document.getElementById('devSelect');
+            if (devSelect) devSelect.value = 'ALL';
+
+            const decSelect = document.getElementById('decadeSelect');
+            if (decSelect) decSelect.value = 'ALL';
+
+            const yFrom = document.getElementById('yearFromInput');
+            if (yFrom) yFrom.value = '';
+
+            const yTo = document.getElementById('yearToInput');
+            if (yTo) yTo.value = '';
+
+            const favBtn = document.getElementById('favToggleBtn');
+            if (favBtn) favBtn.classList.remove('active');
+
+            renderSidebarPlatforms();
+            renderPlatformPills();
+            loadGames();
+            showToast('Tutti i filtri sono stati reimpostati');
+        }
+
+        function filterByDev(devName) {
+            if (!devName) return;
+            const devSelect = document.getElementById('devSelect');
+            if (devSelect) {
+                devSelect.value = devName;
+                currentDev = devName;
+            }
+            switchView('libreria');
+            loadGames();
+            showToast(`Filtro produttore: ${devName}`);
+        }
+
+        function filterByGenre(genreName) {
+            if (!genreName) return;
+            currentGenre = genreName;
+            const genSelect = document.getElementById('genreSelect');
+            if (genSelect) genSelect.value = genreName;
+            switchView('libreria');
+            loadGames();
+            showToast(`Filtro genere: ${genreName}`);
+        }
+
+        function toggleSyntaxHelper() {
+            const bar = document.getElementById('syntaxHelperBar');
+            if (bar) {
+                bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
+            }
+        }
+
+        function appendSearchTerm(term) {
+            const input = document.getElementById('searchInput');
+            if (!input) return;
+            input.value = (input.value.trim() + term).trimStart();
+            input.focus();
+            const clearBtn = document.getElementById('searchClear');
+            if (clearBtn) clearBtn.style.display = 'inline-block';
+            handleSearchInput();
+        }
+
+        function openGameDetails(game) {
+            const drawer = document.getElementById('gameDetailDrawer');
+            if (!drawer || !game) return;
+
+            const coverEl = document.getElementById('drawerCover');
+            if (game.cover_url && game.cover_url.trim()) {
+                coverEl.src = game.cover_url;
+                coverEl.style.display = 'block';
+            } else {
+                coverEl.style.display = 'none';
+            }
+
+            document.getElementById('drawerTitle').innerText = game.title;
+
+            const dev = game.developer || game.publisher || 'N/D';
+            const devEl = document.getElementById('drawerDev');
+            devEl.innerText = dev;
+            devEl.onclick = () => filterByDev(dev);
+
+            const sysEl = document.getElementById('drawerSys');
+            sysEl.innerText = `${game.platform} (${game.system_code})`;
+            sysEl.onclick = () => selectPlatform(game.system_code);
+
+            document.getElementById('drawerYear').innerText = game.year;
+
+            const genreEl = document.getElementById('drawerGenre');
+            genreEl.innerText = game.genre || 'N/D';
+            genreEl.onclick = () => filterByGenre(game.genre);
+
+            document.getElementById('drawerControls').innerText = game.controls || 'Controlli standard';
+            document.getElementById('drawerStats').innerText = `Avviato ${game.play_count} volte • Ultima partita: ${game.last_played_at || 'Mai'}`;
+
+            document.getElementById('drawerPlayBtn').onclick = () => launchGame(game.id);
+
+            const favBtn = document.getElementById('drawerFavBtn');
+            favBtn.className = `drawer-fav-btn ${game.is_favorite ? 'active' : ''}`;
+            favBtn.onclick = (e) => {
+                toggleFav(e, game.id);
+                game.is_favorite = !game.is_favorite;
+                favBtn.className = `drawer-fav-btn ${game.is_favorite ? 'active' : ''}`;
+            };
+
+            drawer.classList.add('open');
+        }
+
+        function closeGameDetails() {
+            const drawer = document.getElementById('gameDetailDrawer');
+            if (drawer) drawer.classList.remove('open');
         }
 
         function filterHeroPlatform() {
@@ -1577,6 +2186,7 @@
             const isSelected = idx === selectedGameIndex;
             const favActive = g.is_favorite ? 'active' : '';
             const cover = (g.cover_url && g.cover_url.trim()) ? g.cover_url : null;
+            const author = g.developer || g.publisher || 'Arcade Classic';
 
             return `
             <div class="game-card ${isSelected ? 'selected' : ''}" data-id="${g.id}" data-idx="${idx}" onclick="selectCard(${idx})" ondblclick="launchGame(${g.id})">
@@ -1593,8 +2203,12 @@
                 </div>
                 <div class="card-info">
                     <div class="card-title" title="${escapeHtml(g.title)}">${escapeHtml(g.title)}</div>
+                    <div class="card-author" title="Produttore: ${escapeHtml(author)}">
+                        🏢 ${escapeHtml(author)}
+                    </div>
                     <div class="card-meta-row">
                         <span class="card-meta-sys" onclick="filterByPlatformTag(event, '${g.system_code}')" title="Filtra console: ${g.system_code}">${g.system_code}</span>
+                        <span>•</span>
                         <span>${g.year}</span>
                         <span class="card-meta-genre" title="${escapeHtml(g.genre)}">${escapeHtml(g.genre)}</span>
                     </div>
@@ -1607,26 +2221,27 @@
         // CASCATA RECUPERO COPERTINE LIBRETRO (USA / Europe)
         // ----------------------------------------------------
         function handleCoverError(img) {
-            const currentSrc = img.src;
-            const title = img.getAttribute('data-title') || '';
-            const sys = img.getAttribute('data-sys') || '';
+            const currentSrc = decodeURIComponent(img.src);
+            const sys = (img.getAttribute('data-sys') || '').toUpperCase();
 
-            // Se ha già provato Europe, fallisci ed elimina img per mostrare il fallback elegante
-            if (currentSrc.includes('%20(Europe).png')) {
+            // 1. Se ha già provato Europe, fallisci ed elimina img per mostrare il fallback elegante
+            if (currentSrc.includes('(Europe).png')) {
                 img.remove();
                 return;
             }
 
-            // Se ha provato USA, prova con Europe
-            if (currentSrc.includes('%20(USA).png')) {
-                img.src = currentSrc.replace('%20(USA).png', '%20(Europe).png');
+            // 2. Se ha provato USA, prova con Europe
+            if (currentSrc.includes('(USA).png')) {
+                img.src = img.src.replace('%20(USA).png', '%20(Europe).png').replace(' (USA).png', ' (Europe).png');
                 return;
             }
 
-            // Primo fallback: aggiungi (USA) per i sistemi console
-            const consoleSystems = ['GAMECUBE', 'DREAMCAST', 'N64', 'SNES', 'NES', 'PSX', 'C64'];
-            if (consoleSystems.includes(sys.toUpperCase())) {
-                img.src = currentSrc.replace('.png', '%20(USA).png');
+            // 3. Primo fallback per sistemi console
+            if (sys === 'C64') {
+                img.src = img.src.replace('.png', '%20(Europe).png');
+                return;
+            } else if (['GAMECUBE', 'DREAMCAST', 'N64', 'SNES', 'NES', 'PSX'].includes(sys)) {
+                img.src = img.src.replace('.png', '%20(USA).png');
                 return;
             }
 
@@ -1753,6 +2368,7 @@
             if (idx >= 0 && idx < displayedGames.length) {
                 selectedGameIndex = idx;
                 highlightSelectedCard();
+                openGameDetails(displayedGames[idx]);
             }
         }
 
@@ -1783,6 +2399,7 @@
                 if (e.key === 'Escape') {
                     closeModal('arenaModal');
                     closeModal('guidaModal');
+                    closeGameDetails();
                     return;
                 }
 

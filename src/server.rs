@@ -61,7 +61,10 @@ impl HttpServer {
                         query: query_params.get("query").cloned(),
                         platform: query_params.get("platform").cloned(),
                         genre: query_params.get("genre").cloned(),
+                        developer: query_params.get("developer").cloned(),
                         decade: query_params.get("decade").cloned(),
+                        year_from: query_params.get("year_from").and_then(|v| v.parse::<u16>().ok()),
+                        year_to: query_params.get("year_to").and_then(|v| v.parse::<u16>().ok()),
                         favorites_only: query_params.get("favorites_only").map_or(false, |v| v == "true"),
                         sort_by: query_params.get("sort_by").cloned(),
                         sort_asc: query_params.get("sort_asc").map_or(true, |v| v != "false"),
@@ -99,6 +102,15 @@ impl HttpServer {
                     let db = self.db.lock().unwrap();
                     let genres = db.get_genres().unwrap_or_default();
                     let json = serde_json::to_string(&genres).unwrap_or_else(|_| "[]".to_string());
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                (&Method::Get, "/api/developers") => {
+                    let db = self.db.lock().unwrap();
+                    let devs = db.get_developers().unwrap_or_default();
+                    let json = serde_json::to_string(&devs).unwrap_or_else(|_| "[]".to_string());
                     let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
                     let response = Response::from_string(json).with_header(header);
                     let _ = request.respond(response);

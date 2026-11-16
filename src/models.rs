@@ -39,11 +39,20 @@ pub struct DecadeInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeveloperInfo {
+    pub name: String,
+    pub count: usize,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SearchFilter {
     pub query: Option<String>,
     pub platform: Option<String>,
     pub genre: Option<String>,
+    pub developer: Option<String>,
     pub decade: Option<String>,
+    pub year_from: Option<u16>,
+    pub year_to: Option<u16>,
     pub favorites_only: bool,
     pub sort_by: Option<String>, // "title", "year", "play_count", "platform"
     pub sort_asc: bool,
