@@ -259,7 +259,7 @@
         /* Top Header Search & Controls */
         .top-header {
             height: 64px;
-            background: rgba(15, 20, 31, 0.85);
+            background: rgba(15, 20, 31, 0.96);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -267,7 +267,7 @@
             justify-content: space-between;
             padding: 0 24px;
             gap: 20px;
-            z-index: 5;
+            z-index: 100;
         }
 
         .search-box {
@@ -777,16 +777,16 @@
             top: calc(100% + 8px);
             left: 0;
             right: 0;
-            min-width: 520px;
-            background: #141b29;
+            min-width: 580px;
+            background: #111726;
             border: 1px solid var(--accent);
             border-radius: 10px;
-            padding: 12px 16px;
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0, 210, 180, 0.15);
+            padding: 14px 18px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(0, 210, 180, 0.25);
             z-index: 1000;
             display: none;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             animation: modalPop 0.15s ease-out;
         }
 
@@ -795,13 +795,13 @@
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 6px;
+            padding-bottom: 8px;
         }
 
         .syntax-title {
             color: var(--accent);
             font-weight: 700;
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -809,8 +809,8 @@
         .syntax-close {
             color: var(--text-dim);
             cursor: pointer;
-            font-size: 0.85rem;
-            padding: 2px 6px;
+            font-size: 0.9rem;
+            padding: 2px 7px;
             border-radius: 4px;
             transition: all 0.15s;
         }
@@ -818,6 +818,15 @@
         .syntax-close:hover {
             color: #fff;
             background: rgba(255, 255, 255, 0.1);
+        }
+
+        .syntax-section-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
         }
 
         .syntax-chips-row {
@@ -831,7 +840,7 @@
             background: #192233;
             border: 1px solid rgba(88, 166, 255, 0.3);
             color: #c9d1d9;
-            padding: 4px 9px;
+            padding: 4px 10px;
             border-radius: 6px;
             font-size: 0.76rem;
             cursor: pointer;
@@ -853,21 +862,74 @@
             color: #0b0f17;
         }
 
-        .syntax-hint {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-            background: rgba(0, 0, 0, 0.25);
-            padding: 6px 10px;
-            border-radius: 6px;
+        .syntax-examples-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .syntax-hint code {
-            color: var(--accent);
-            background: rgba(0, 210, 180, 0.1);
-            padding: 1px 5px;
+        .syntax-example-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #0d121c;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 6px;
+            padding: 7px 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .syntax-example-card:hover {
+            background: #162033;
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .syntax-pill-tag {
+            font-size: 0.67rem;
+            font-weight: 700;
+            padding: 2px 7px;
             border-radius: 4px;
+            background: rgba(88, 166, 255, 0.15);
+            color: #79c0ff;
+            text-transform: uppercase;
+            flex-shrink: 0;
+            letter-spacing: 0.4px;
+        }
+
+        .syntax-pill-tag.not {
+            background: rgba(248, 81, 73, 0.15);
+            color: #ff7b72;
+        }
+
+        .syntax-pill-tag.or {
+            background: rgba(210, 168, 255, 0.15);
+            color: #d2a8ff;
+        }
+
+        .syntax-pill-tag.filter {
+            background: rgba(0, 210, 180, 0.15);
+            color: var(--accent);
+        }
+
+        .syntax-example-code {
             font-family: monospace;
+            font-size: 0.78rem;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.45);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            flex-shrink: 0;
+        }
+
+        .syntax-example-desc {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* ----------------------------------------------------
@@ -1539,9 +1601,11 @@
                 <!-- Floating Popover Sintassi Avanzata -->
                 <div class="syntax-helper-bar" id="syntaxHelperBar" style="display: none;">
                     <div class="syntax-popover-header">
-                        <span class="syntax-title">Sintassi di Ricerca Avanzata</span>
+                        <span class="syntax-title">💡 Operatori & Sintassi di Ricerca</span>
                         <span class="syntax-close" onclick="closeSyntaxHelper(event)">✕</span>
                     </div>
+
+                    <div class="syntax-section-label">Aggiungi operatore alla ricerca:</div>
                     <div class="syntax-chips-row">
                         <button type="button" class="syntax-chip" onclick="appendSearchTerm(' -')"><b>-termine</b> (Escludi)</button>
                         <button type="button" class="syntax-chip" onclick="appendSearchTerm(' NOT ')"><b>NOT</b> (Senza)</button>
@@ -1550,8 +1614,29 @@
                         <button type="button" class="syntax-chip" onclick="appendSearchTerm(' genre:Picchiaduro')"><b>genre:</b> Genere</button>
                         <button type="button" class="syntax-chip" onclick="appendSearchTerm(' 1990..1995')"><b>1990..1995</b> Anni</button>
                     </div>
-                    <div class="syntax-hint">
-                        💡 <b>Esempi:</b> <code>mario -kart</code> • <code>capcom NOT 1995</code> • <code>dev:namco | dev:sega</code> • <code>1990..1994 genre:rpg</code>
+
+                    <div class="syntax-section-label">Esempi Pratici (Clicca per provare subito):</div>
+                    <div class="syntax-examples-list">
+                        <div class="syntax-example-card" onclick="applyExampleSearch('mario -kart')">
+                            <span class="syntax-pill-tag">Esclusione</span>
+                            <code class="syntax-example-code">mario -kart</code>
+                            <span class="syntax-example-desc">Tutti i giochi di Mario escludendo quelli con "kart"</span>
+                        </div>
+                        <div class="syntax-example-card" onclick="applyExampleSearch('capcom NOT 1995')">
+                            <span class="syntax-pill-tag not">NOT</span>
+                            <code class="syntax-example-code">capcom NOT 1995</code>
+                            <span class="syntax-example-desc">Tutti i giochi Capcom tranne quelli usciti nel 1995</span>
+                        </div>
+                        <div class="syntax-example-card" onclick="applyExampleSearch('dev:namco | dev:sega')">
+                            <span class="syntax-pill-tag or">Oppure (OR)</span>
+                            <code class="syntax-example-code">dev:namco | dev:sega</code>
+                            <span class="syntax-example-desc">Trova i giochi prodotti o da Namco oppure da Sega</span>
+                        </div>
+                        <div class="syntax-example-card" onclick="applyExampleSearch('1990..1995 genre:picchiaduro')">
+                            <span class="syntax-pill-tag filter">Filtro Misto</span>
+                            <code class="syntax-example-code">1990..1995 genre:picchiaduro</code>
+                            <span class="syntax-example-desc">Picchiaduro usciti nell'intervallo tra il 1990 e il 1995</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2154,6 +2239,18 @@
             const clearBtn = document.getElementById('searchClear');
             if (clearBtn) clearBtn.style.display = 'inline-block';
             handleSearchInput();
+        }
+
+        function applyExampleSearch(query) {
+            const input = document.getElementById('searchInput');
+            if (!input) return;
+            input.value = query;
+            input.focus();
+            const clearBtn = document.getElementById('searchClear');
+            if (clearBtn) clearBtn.style.display = 'inline-block';
+            handleSearchInput();
+            closeSyntaxHelper();
+            showToast(`🔎 Esempio applicato: "${query}"`);
         }
 
         function openGameDetails(game) {
