@@ -13,6 +13,9 @@ use db::Database;
 use server::HttpServer;
 
 fn open_app_window(url: &str) {
+    let profile_dir = r"C:\dev\RetroHubProfile";
+    let _ = std::fs::create_dir_all(profile_dir);
+
     let edge_paths = [
         r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
         r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
@@ -21,7 +24,11 @@ fn open_app_window(url: &str) {
     for path in &edge_paths {
         if Path::new(path).exists() {
             if Command::new(path)
-                .args(&[&format!("--app={}", url), "--window-size=1440,900"])
+                .args(&[
+                    &format!("--app={}", url),
+                    &format!("--user-data-dir={}", profile_dir),
+                    "--window-size=1440,900",
+                ])
                 .spawn()
                 .is_ok()
             {
