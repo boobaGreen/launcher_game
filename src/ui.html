@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RetroHub — Gaming Launcher</title>
+    <title>RetroHub â€” Gaming Launcher</title>
     <style>
         :root {
             --bg: #090c10;
@@ -582,19 +582,19 @@
     <!-- Top Bar -->
     <div class="top-bar">
         <div class="brand">
-            🕹️ Retro<span>Hub</span>
+            ðŸ•¹ï¸ Retro<span>Hub</span>
             <div class="badge-count" id="totalBadge">Caricamento...</div>
         </div>
 
         <div class="search-wrapper">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cerca per titolo, anno, autore, genere (es. street, shmup, mario)...">
+            <input type="text" id="searchInput" class="search-input" placeholder="ðŸ” Cerca per titolo, anno, autore, genere (es. street, shmup, mario)...">
             <button id="searchClear" class="search-clear">&times;</button>
         </div>
 
         <div class="top-actions">
-            <button class="action-btn" id="favFilterBtn">⭐ Preferiti</button>
+            <button class="action-btn" id="favFilterBtn">â­ Preferiti</button>
             <div class="gamepad-indicator" id="padIndicator">
-                🎮 Xbox Pad Connesso
+                ðŸŽ® Xbox Pad Connesso
             </div>
         </div>
     </div>
@@ -631,10 +631,10 @@
                         <span class="tag-info" id="heroGenre">-</span>
                         <span class="tag-info" id="heroDev">-</span>
                     </div>
-                    <div class="hero-controls" id="heroControls">🎮 Comandi Xbox Controller</div>
+                    <div class="hero-controls" id="heroControls">ðŸŽ® Comandi Xbox Controller</div>
                 </div>
                 <div class="hero-action">
-                    <button class="play-btn" id="heroPlayBtn">▶ GIOCA ORA</button>
+                    <button class="play-btn" id="heroPlayBtn">â–¶ GIOCA ORA</button>
                 </div>
             </div>
 
@@ -670,20 +670,20 @@
                     <div><strong>Sviluppatore:</strong> <span id="modalDev"></span></div>
                     <div><strong>Partite Giocate:</strong> <span id="modalPlays"></span></div>
                     <div style="margin-top: 8px;">
-                        <strong>🎮 Mappatura Comandi:</strong>
+                        <strong>ðŸŽ® Mappatura Comandi:</strong>
                         <div id="modalControls" style="color: var(--green); margin-top: 4px; font-family: monospace; font-size: 0.85rem;"></div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="action-btn" id="modalFavBtn">⭐ Preferito</button>
-                <button class="play-btn" id="modalPlayBtn">▶ Avvia Partita</button>
+                <button class="action-btn" id="modalFavBtn">â­ Preferito</button>
+                <button class="play-btn" id="modalPlayBtn">â–¶ Avvia Partita</button>
             </div>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div class="toast" id="toast">✔ Gioco avviato con successo!</div>
+    <div class="toast" id="toast">âœ” Gioco avviato con successo!</div>
 
     <script>
         let allGames = [];
@@ -795,11 +795,11 @@
                     <div class="card-cover-wrapper">
                         <img class="card-cover" src="${g.cover_url || ''}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="card-cover-fallback" style="display: none;">
-                            <div class="fallback-icon">🕹️</div>
+                            <div class="fallback-icon">ðŸ•¹ï¸</div>
                             <div class="fallback-title">${g.title}</div>
                         </div>
                         <span class="card-badge-sys">${g.system_code}</span>
-                        <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id}, ${idx})" title="Preferito">⭐</button>
+                        <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id}, ${idx})" title="Preferito">â­</button>
                     </div>
                     <div class="card-info">
                         <div class="card-title" title="${g.title}">${g.title}</div>
@@ -836,11 +836,11 @@
             document.getElementById('heroYear').innerText = game.year;
             document.getElementById('heroGenre').innerText = game.genre;
             document.getElementById('heroDev').innerText = game.developer;
-            document.getElementById('heroControls').innerText = `🎮 ${game.controls}`;
+            document.getElementById('heroControls').innerText = `ðŸŽ® ${game.controls}`;
             
             const coverEl = document.getElementById('heroCover');
             coverEl.src = game.cover_url || '';
-            coverEl.onerror = () => { coverEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="110" viewBox="0 0 80 110"><rect width="80" height="110" fill="%231a2233"/><text x="40" y="55" fill="%2358a6ff" font-family="sans-serif" font-size="24" text-anchor="middle" dominant-baseline="middle">🕹️</text></svg>'; };
+            coverEl.onerror = () => { coverEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="110" viewBox="0 0 80 110"><rect width="80" height="110" fill="%231a2233"/><text x="40" y="55" fill="%2358a6ff" font-family="sans-serif" font-size="24" text-anchor="middle" dominant-baseline="middle">ðŸ•¹ï¸</text></svg>'; };
 
             document.getElementById('heroPlayBtn').onclick = () => launchGame(game.id);
         }
@@ -855,11 +855,11 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    showToast(`✔ ${data.message}`);
+                    showToast(`âœ” ${data.message}`);
                     const g = allGames.find(x => x.id === gameId);
                     if (g) g.play_count = data.play_count;
                 } else {
-                    showToast(`❌ ${data.message}`);
+                    showToast(`âŒ ${data.message}`);
                 }
             } catch (e) {
                 showToast("Errore di connessione al launcher");
@@ -959,35 +959,63 @@
             document.getElementById('detailModal').style.display = 'none';
         });
 
-        // Gamepad Loop
+                // Universal Gamepad Loop (Xbox, PlayStation 1/2 Dual USB Adapter, Generic DirectInput)
         let lastPadTime = 0;
         function initGamepadPolling() {
-            window.addEventListener("gamepadconnected", () => {
-                document.getElementById('padIndicator').style.display = 'flex';
-                showToast("🎮 Controller Xbox collegato!");
+            window.addEventListener("gamepadconnected", (e) => {
+                const indicator = document.getElementById('padIndicator');
+                indicator.style.display = 'flex';
+                const padName = e.gamepad.id.toLowerCase();
+                if (padName.includes("ps") || padName.includes("twin") || padName.includes("playstation") || padName.includes("0810")) {
+                    indicator.innerText = "ðŸŽ® Joypad PS1 Connesso (USB Dual)";
+                    showToast("ðŸŽ® Adattatore Joypad PS1 rilevato!");
+                } else {
+                    indicator.innerText = "ðŸŽ® Controller Connesso";
+                    showToast(`ðŸŽ® Controller connesso: ${e.gamepad.id.substring(0, 24)}`);
+                }
             });
 
             function poll() {
-                const pads = navigator.getGamepads ? navigator.getGamepads() : [];
-                const pad = pads[0];
+                const rawPads = navigator.getGamepads ? navigator.getGamepads() : [];
+                // Find first active connected gamepad (Port 1 or Port 2 of PS1 adapter, or Xbox)
+                let pad = null;
+                for (let i = 0; i < rawPads.length; i++) {
+                    if (rawPads[i] && rawPads[i].connected) {
+                        pad = rawPads[i];
+                        break;
+                    }
+                }
+
                 const now = Date.now();
 
                 if (pad && (now - lastPadTime > 180)) {
-                    const up = pad.buttons[12]?.pressed || pad.axes[1] < -0.5;
-                    const down = pad.buttons[13]?.pressed || pad.axes[1] > 0.5;
-                    const left = pad.buttons[14]?.pressed || pad.axes[0] < -0.5;
-                    const right = pad.buttons[15]?.pressed || pad.axes[0] > 0.5;
+                    const isStandard = pad.mapping === "standard";
+                    const idLower = pad.id.toLowerCase();
+                    const isPs1Adapter = idLower.includes("twin") || idLower.includes("ps") || idLower.includes("0810") || !isStandard;
 
-                    const btnA = pad.buttons[0]?.pressed; // Launch
-                    const btnB = pad.buttons[1]?.pressed; // Back / Close modal
-                    const btnX = pad.buttons[2]?.pressed; // Info
-                    const btnY = pad.buttons[3]?.pressed; // Fav
-                    const btnLB = pad.buttons[4]?.pressed; // Prev platform
-                    const btnRB = pad.buttons[5]?.pressed; // Next platform
+                    // Directional inputs: support Standard Buttons (12-15), Left Analog Stick, and DirectInput Hat Switch / Axes
+                    const stickX = pad.axes[0] || 0;
+                    const stickY = pad.axes[1] || 0;
+                    const hatAxis = pad.axes[9] !== undefined ? pad.axes[9] : (pad.axes[4] !== undefined ? pad.axes[4] : null);
+
+                    const up = pad.buttons[12]?.pressed || stickY < -0.5 || (hatAxis !== null && Math.abs(hatAxis - (-1.0)) < 0.1);
+                    const down = pad.buttons[13]?.pressed || stickY > 0.5 || (hatAxis !== null && Math.abs(hatAxis - (0.14)) < 0.1);
+                    const left = pad.buttons[14]?.pressed || stickX < -0.5 || (hatAxis !== null && Math.abs(hatAxis - (0.71)) < 0.1);
+                    const right = pad.buttons[15]?.pressed || stickX > 0.5 || (hatAxis !== null && Math.abs(hatAxis - (-0.42)) < 0.1);
+
+                    // Button Mappings
+                    // Standard: 0=A/Cross, 1=B/Circle, 2=X/Square, 3=Y/Triangle
+                    // PS1 Twin USB adapter (DirectInput): 2=Cross, 1=Circle, 3=Square, 0=Triangle OR 0/1/2/3
+                    const btnConfirm = pad.buttons[0]?.pressed || (isPs1Adapter && pad.buttons[2]?.pressed); // A / Croce (Avvia)
+                    const btnBack = pad.buttons[1]?.pressed; // B / Cerchio (Indietro)
+                    const btnDetails = pad.buttons[2]?.pressed || (isPs1Adapter && pad.buttons[3]?.pressed); // X / Quadrato (Info)
+                    const btnFav = pad.buttons[3]?.pressed || (isPs1Adapter && pad.buttons[0]?.pressed); // Y / Triangolo (Preferito)
+                    const btnLB = pad.buttons[4]?.pressed || pad.buttons[6]?.pressed; // L1 / L2
+                    const btnRB = pad.buttons[5]?.pressed || pad.buttons[7]?.pressed; // R1 / R2
 
                     if (document.getElementById('detailModal').style.display === 'flex') {
-                        if (btnB) document.getElementById('detailModal').style.display = 'none';
-                        if (btnA && activeModalGame) {
+                        if (btnBack) document.getElementById('detailModal').style.display = 'none';
+                        if (btnConfirm && activeModalGame) {
                             document.getElementById('detailModal').style.display = 'none';
                             launchGame(activeModalGame.id);
                         }
@@ -1006,14 +1034,18 @@
                         } else if (up && selectedGameIndex - cols >= 0) {
                             selectCard(selectedGameIndex - cols);
                             lastPadTime = now;
-                        } else if (btnA && allGames[selectedGameIndex]) {
+                        } else if (btnConfirm && allGames[selectedGameIndex]) {
                             launchGame(allGames[selectedGameIndex].id);
                             lastPadTime = now + 400;
-                        } else if (btnX && allGames[selectedGameIndex]) {
+                        } else if (btnDetails && allGames[selectedGameIndex]) {
                             openDetailModal(allGames[selectedGameIndex]);
                             lastPadTime = now + 250;
-                        } else if (btnY && allGames[selectedGameIndex]) {
+                        } else if (btnFav && allGames[selectedGameIndex]) {
                             toggleFav({ stopPropagation: () => {} }, allGames[selectedGameIndex].id, selectedGameIndex);
+                            lastPadTime = now + 250;
+                        } else if (btnLB || btnRB) {
+                            // Cycle platform with bumpers
+                            cyclePlatform(btnRB ? 1 : -1);
                             lastPadTime = now + 250;
                         }
                     }
@@ -1022,6 +1054,17 @@
             }
             requestAnimationFrame(poll);
         }
+
+        function cyclePlatform(dir) {
+            const items = Array.from(document.querySelectorAll('#platformsList .nav-item'));
+            if (!items.length) return;
+            let curIdx = items.findIndex(el => el.classList.contains('active'));
+            if (curIdx === -1) curIdx = 0;
+            let nextIdx = (curIdx + dir + items.length) % items.length;
+            items[nextIdx].click();
+            items[nextIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
 
         function getGridCols() {
             const grid = document.getElementById('gamesGrid');
@@ -1035,3 +1078,4 @@
     </script>
 </body>
 </html>
+
