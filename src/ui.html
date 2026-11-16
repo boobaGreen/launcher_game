@@ -2334,6 +2334,19 @@
             } else if (['GAMECUBE', 'DREAMCAST', 'N64', 'SNES', 'NES', 'PSX'].includes(sys)) {
                 img.src = img.src.replace('.png', '%20(USA).png');
                 return;
+            } else if (sys === 'SCUMMVM' || sys === 'DOS') {
+                if (!currentSrc.includes('_alt_tried')) {
+                    let newSrc = img.src;
+                    if (newSrc.includes('/The%20')) {
+                        newSrc = newSrc.replace('/The%20', '/').replace('.png', ',%20The.png');
+                    } else if (newSrc.includes('%3A%20')) {
+                        newSrc = newSrc.replace('%3A%20', '_%20');
+                    }
+                    if (newSrc !== img.src) {
+                        img.src = newSrc + (newSrc.includes('?') ? '&' : '?') + '_alt_tried=1';
+                        return;
+                    }
+                }
             }
 
             // Per altri sistemi (o fallimento): rimuovi e mostra il bellissimo fallback tipografico

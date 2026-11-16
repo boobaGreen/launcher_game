@@ -231,12 +231,40 @@ impl CatalogLoader {
 
         // 3. Risoluzione generale per tutte le altre piattaforme (con suffissi regionali ottimali)
         let mut clean = title.trim();
+        // Rimuovi anno finale in parentesi es. (1991), (1995) o tag versione corti
         if let Some(open_p) = clean.rfind('(') {
             if let Some(close_p) = clean[open_p..].find(')') {
                 let inside = clean[open_p + 1..open_p + close_p].trim();
-                if inside.len() <= 12 && !inside.contains("19") && !inside.contains("20") {
+                if inside.len() <= 12 {
                     clean = clean[..open_p].trim();
                 }
+            }
+        }
+
+        // Mappe dedicate per capolavori PC MS-DOS e ScummVM
+        if sys_code.eq_ignore_ascii_case("DOS") {
+            if t_lower == "civilization" {
+                clean = "Sid Meier's Civilization";
+            } else if t_lower == "colonization" {
+                clean = "Sid Meier's Colonization";
+            } else if t_lower == "railroad tycoon" {
+                clean = "Sid Meier's Railroad Tycoon";
+            } else if t_lower.contains("dune ii") {
+                clean = "Dune II_ The Building of a Dynasty";
+            } else if t_lower.contains("commander keen 1") {
+                clean = "Commander Keen 1 - Marooned on Mars";
+            } else if t_lower.contains("commander keen 4") {
+                clean = "Commander Keen 4 - Secret of the Oracle";
+            }
+        } else if sys_code.eq_ignore_ascii_case("SCUMMVM") {
+            if t_lower.contains("broken sword") && (t_lower.contains("segreto") || t_lower.contains("shadow")) {
+                clean = "Broken Sword - The Shadow of the Templars";
+            } else if t_lower.contains("broken sword") && (t_lower.contains("profezia") || t_lower.contains("smoking")) {
+                clean = "Broken Sword II - The Smoking Mirror";
+            } else if t_lower.contains("monkey island") && t_lower.contains("secret") {
+                clean = "Secret of Monkey Island, The";
+            } else if t_lower.contains("curse of monkey island") {
+                clean = "Curse of Monkey Island, The";
             }
         }
 
