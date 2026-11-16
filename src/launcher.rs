@@ -11,49 +11,27 @@ impl Launcher {
             return Err("Target di lancio non specificato".to_string());
         }
 
-        // Check if target is a file path
         let path = Path::new(trimmed);
 
-        if trimmed.ends_with(".lnk") || trimmed.ends_with(".bat") {
-            if !path.exists() {
-                return Err(format!("File non trovato sul disco: {}", trimmed));
-            }
-            // Launch shortcut or batch via Windows shell
-            Command::new("cmd")
-                .args(["/C", "start", "", trimmed])
+        if path.exists() {
+            // Using PowerShell Start-Process handles all shortcuts (.lnk), batch files (.bat),
+            // and executables with complete immunity to apostrophes ('), ampersands (&),
+            // parentheses, and spaces.
+            let escaped = trimmed.replace('\'', "''");
+            let script = format!("Start-Process -FilePath '{}'", escaped);
+            Command::new("powershell")
+                .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
                 .spawn()
                 .map_err(|e| format!("Errore esecuzione comando: {}", e))?;
             return Ok(format!("Avviato: {}", trimmed));
         }
 
-        // Direct executable or custom launch command
-        if trimmed.contains("mame.exe") {
-            // Split command and arguments
-            let parts: Vec<&str> = trimmed.split_whitespace().collect();
-            if let Some((exe, args)) = parts.split_first() {
-                let exe_path = Path::new(exe);
-                let work_dir = exe_path.parent().unwrap_or_else(|| Path::new("."));
-                Command::new(exe)
-                    .args(args)
-                    .current_dir(work_dir)
-                    .spawn()
-                    .map_err(|e| format!("Errore esecuzione MAME: {}", e))?;
-                return Ok(format!("MAME avviato con successo: {}", trimmed));
-            }
-        }
-
-        // Generic launch via open crate
-        if path.exists() {
-            open::that(trimmed).map_err(|e| format!("Impossibile aprire il file: {}", e))?;
-            Ok(format!("Avviato con successo: {}", trimmed))
-        } else {
-            // Try running through cmd in case it's a command line with parameters
-            Command::new("cmd")
-                .args(["/C", trimmed])
-                .spawn()
-                .map_err(|e| format!("Errore lancio comando Windows: {}", e))?;
-            Ok(format!("Comando eseguito: {}", trimmed))
-        }
+        // Try running through cmd in case it's an inline command
+        Command::new("cmd")
+            .args(["/C", trimmed])
+            .spawn()
+            .map_err(|e| format!("Errore lancio comando Windows: {}", e))?;
+        Ok(format!("Comando eseguito: {}", trimmed))
     }
 }
 
