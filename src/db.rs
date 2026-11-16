@@ -89,6 +89,48 @@ impl Database {
         Ok(())
     }
 
+    pub fn upsert_games_batch(&self, games: &[Game]) -> Result<()> {
+        self.conn.execute_batch("BEGIN TRANSACTION;")?;
+        {
+            let mut stmt = self.conn.prepare(
+                "INSERT INTO games (id, title, platform, system_code, year, genre, developer, publisher, controls, launch_target, cover_url, is_favorite, play_count, last_played_at)
+                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)
+                 ON CONFLICT(id) DO UPDATE SET
+                    title = excluded.title,
+                    platform = excluded.platform,
+                    system_code = excluded.system_code,
+                    year = excluded.year,
+                    genre = excluded.genre,
+                    developer = excluded.developer,
+                    publisher = excluded.publisher,
+                    controls = excluded.controls,
+                    launch_target = excluded.launch_target,
+                    cover_url = COALESCE(excluded.cover_url, games.cover_url)"
+            )?;
+
+            for g in games {
+                let _ = stmt.execute(params![
+                    g.id,
+                    g.title,
+                    g.platform,
+                    g.system_code,
+                    g.year,
+                    g.genre,
+                    g.developer,
+                    g.publisher,
+                    g.controls,
+                    g.launch_target,
+                    g.cover_url,
+                    if g.is_favorite { 1 } else { 0 },
+                    g.play_count,
+                    g.last_played_at
+                ]);
+            }
+        }
+        self.conn.execute_batch("COMMIT;")?;
+        Ok(())
+    }
+
     pub fn get_all_games(&self) -> Result<Vec<Game>> {
         let mut stmt = self.conn.prepare(
             "SELECT id, title, platform, system_code, year, genre, developer, publisher, controls, launch_target, cover_url, is_favorite, play_count, last_played_at

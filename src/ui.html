@@ -186,9 +186,11 @@
         }
 
         .platform-item.active {
-            background: #182235;
+            background: #18263e;
             color: var(--accent);
             font-weight: 700;
+            border-left: 3px solid var(--accent);
+            box-shadow: inset 0 0 10px rgba(88, 166, 255, 0.15);
         }
 
         .platform-count {
@@ -647,6 +649,7 @@
             color: #0b0f17;
             border-color: var(--accent);
             font-weight: 800;
+            box-shadow: 0 0 12px rgba(88, 166, 255, 0.45);
         }
 
         .libreria-controls-bar {
@@ -1319,6 +1322,7 @@
                 const res = await fetch('/api/platforms');
                 platformsData = await res.json();
                 renderSidebarPlatforms();
+                renderPlatformPills();
             } catch (err) {
                 console.error("Errore caricamento piattaforme:", err);
             }
@@ -1361,8 +1365,8 @@
 
         function renderSidebarPlatforms() {
             const list = document.getElementById('platformList');
+            if (!list) return;
             const total = platformsData.reduce((acc, p) => acc + p.count, 0);
-            document.getElementById('countAll').innerText = total.toLocaleString();
 
             const itemsHtml = platformsData.map(p => {
                 const active = p.code === currentPlatform ? 'active' : '';
@@ -1378,9 +1382,25 @@
                 <div class="platforms-title">Piattaforme (${platformsData.length})</div>
                 <button class="platform-item ${currentPlatform === 'ALL' ? 'active' : ''}" onclick="selectPlatform('ALL')">
                     <span>Tutte le Piattaforme</span>
-                    <span class="platform-count">${total.toLocaleString()}</span>
+                    <span class="platform-count" id="countAll">${total.toLocaleString()}</span>
                 </button>
                 ${itemsHtml}
+            `;
+        }
+
+        function renderPlatformPills() {
+            const bar = document.getElementById('filterPillsBar');
+            if (!bar) return;
+            const total = platformsData.reduce((acc, p) => acc + p.count, 0);
+
+            const pillsHtml = platformsData.map(p => {
+                const active = p.code === currentPlatform ? 'active' : '';
+                return `<button class="filter-pill ${active}" onclick="selectPlatform('${p.code}')">${p.name} (${p.count})</button>`;
+            }).join('');
+
+            bar.innerHTML = `
+                <button class="filter-pill ${currentPlatform === 'ALL' ? 'active' : ''}" onclick="selectPlatform('ALL')">Tutti (${total.toLocaleString()})</button>
+                ${pillsHtml}
             `;
         }
 
@@ -1396,16 +1416,12 @@
             const searchInput = document.getElementById('searchInput');
             if (searchInput && searchInput.value.trim() !== '') {
                 searchInput.value = '';
-                document.getElementById('searchClear').style.display = 'none';
+                const searchClear = document.getElementById('searchClear');
+                if (searchClear) searchClear.style.display = 'none';
             }
 
             renderSidebarPlatforms();
-
-            // Aggiorna pillole nella libreria
-            document.querySelectorAll('.filter-pill').forEach(pill => {
-                const clickAttr = pill.getAttribute('onclick') || '';
-                pill.classList.toggle('active', clickAttr.includes(`'${currentPlatform}'`));
-            });
+            renderPlatformPills();
 
             switchView('libreria');
             loadGames();

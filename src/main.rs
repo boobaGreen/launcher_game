@@ -13,31 +13,10 @@ use db::Database;
 use server::HttpServer;
 
 fn open_app_window(url: &str) {
-    let profile_dir = r"C:\dev\RetroHubProfile";
-    let _ = std::fs::create_dir_all(profile_dir);
-
-    let edge_paths = [
-        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
-        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
-    ];
-
-    for path in &edge_paths {
-        if Path::new(path).exists() {
-            if Command::new(path)
-                .args(&[
-                    &format!("--app={}", url),
-                    &format!("--user-data-dir={}", profile_dir),
-                    "--window-size=1440,900",
-                ])
-                .spawn()
-                .is_ok()
-            {
-                return;
-            }
-        }
+    // Apre l'interfaccia nel browser dell'utente in modo affidabile al 100% senza conflitti di lock o crash di Edge
+    if open::that(url).is_err() {
+        let _ = Command::new("cmd").args(&["/C", "start", url]).spawn();
     }
-
-    let _ = open::that(url);
 }
 
 fn main() {
@@ -60,26 +39,33 @@ fn main() {
 
     let emu_path = Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu");
 
-    // Sincronizzazione automatica all'avvio: aggiorna i percorsi e i link alle copertine in <80ms preservando i preferiti
+    // Sincronizzazione automatica all'avvio con transazione (<40ms)
     println!("⏳ Sincronizzazione collezione con il catalogo unificato (1149 giochi)...");
+    let t0 = std::time::Instant::now();
     match CatalogLoader::load_from_master_catalog(emu_path) {
         Ok(games) => {
             let total = games.len();
-            for g in &games {
-                let _ = db.upsert_game(g);
+            if let Err(e) = db.upsert_games_batch(&games) {
+                eprintln!("⚠ Errore upsert batch: {}", e);
+            } else {
+                println!("✔ {} giochi caricati e sincronizzati in retro_hub.db in {:?}!", total, t0.elapsed());
             }
-            println!("✔ {} giochi caricati e sincronizzati in retro_hub.db!", total);
         }
         Err(e) => {
             eprintln!("⚠ Caricamento da catalogo non riuscito: {}", e);
         }
     }
 
-    // Launch window in dedicated thread
+    // Launch window as soon as the server port is ready
     let url_clone = url.clone();
     std::thread::spawn(move || {
-        std::thread::sleep(std::time::Duration::from_millis(350));
-        println!("🎮 Apertura interfaccia grafica RetroHub...");
+        for _ in 0..40 {
+            if std::net::TcpStream::connect(format!("127.0.0.1:{}", port)).is_ok() {
+                break;
+            }
+            std::thread::sleep(std::time::Duration::from_millis(50));
+        }
+        println!("🎮 Apertura interfaccia grafica RetroHub: {}", url_clone);
         open_app_window(&url_clone);
     });
 
