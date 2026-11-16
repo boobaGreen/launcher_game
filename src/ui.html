@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RetroHub "” Gaming Launcher</title>
+    <title>RetroHub - Gaming Launcher</title>
     <style>
         :root {
             --bg: #090c10;
@@ -581,20 +581,21 @@
 
     <!-- Top Bar -->
     <div class="top-bar">
-        <div class="brand">
-            🕹️ï¸ Retro<span>Hub</span>
-            <div class="badge-count" id="totalBadge">Caricamento...</div>
+        <div class="brand" style="display:flex; align-items:center; gap:8px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4" fill="rgba(88,166,255,0.4)"/><path d="M12 11v6"/><path d="M6 17h12l2 4H4l2-4z" fill="rgba(88,166,255,0.2)"/></svg>
+            <span style="font-size:1.15rem; font-weight:800; color:#fff;">Retro<span style="color:var(--accent);">Hub</span></span>
+            <div class="badge-count" id="totalBadge">-</div>
         </div>
 
         <div class="search-wrapper">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cerca o filtra: es. 1985..1992 shmup -capcom -multi | genre:rpg dev:nintendo...">
+            <input type="search" id="searchInput" class="search-input" placeholder="Cerca giochi, generi o anni..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-bwignore="true" data-1p-ignore="true" data-form-type="other" name="retrohub_search_bar">
             <button id="searchClear" class="search-clear">&times;</button>
         </div>
 
         <div class="top-actions">
             <button class="action-btn" id="manualBtn" style="background: rgba(46, 160, 67, 0.15); border-color: var(--green); color: #fff;" onclick="openManualModal()">📖 Guida & Info</button>
             <button class="action-btn" id="onlineArenaBtn" style="background: rgba(88, 166, 255, 0.15); border-color: var(--accent); color: var(--accent);" onclick="openOnlineArena()">🌐 Arena Online</button>
-            <button class="action-btn" id="favFilterBtn">⭐ Preferiti</button>
+            <button class="action-btn" id="favFilterBtn">★ Preferiti</button>
             <div class="gamepad-indicator" id="padIndicator">
                 🎮 Xbox Pad Connesso
             </div>
@@ -679,7 +680,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="action-btn" id="modalFavBtn">⭐ Preferito</button>
+                <button class="action-btn" id="modalFavBtn">★ Preferito</button>
                 <button class="play-btn" id="modalPlayBtn">▶ Avvia Partita</button>
             </div>
         </div>
@@ -798,7 +799,7 @@
                     <div class="card-cover-wrapper">
                         <img class="card-cover" src="${g.cover_url || ''}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="card-cover-fallback" style="display: none;">
-                            <div class="fallback-icon">🕹️ï¸</div>
+                            <div class="fallback-icon">🎮</div>
                             <div class="fallback-title">${g.title}</div>
                         </div>
                         <span class="card-badge-sys">${g.system_code}</span>
@@ -843,7 +844,7 @@
             
             const coverEl = document.getElementById('heroCover');
             coverEl.src = game.cover_url || '';
-            coverEl.onerror = () => { coverEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="110" viewBox="0 0 80 110"><rect width="80" height="110" fill="%231a2233"/><text x="40" y="55" fill="%2358a6ff" font-family="sans-serif" font-size="24" text-anchor="middle" dominant-baseline="middle">🕹️ï¸</text></svg>'; };
+            coverEl.onerror = () => { coverEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="110" viewBox="0 0 80 110"><rect width="80" height="110" fill="%231a2233"/><text x="40" y="55" fill="%2358a6ff" font-family="sans-serif" font-size="24" text-anchor="middle" dominant-baseline="middle"></text></svg>'; };
 
             document.getElementById('heroPlayBtn').onclick = () => launchGame(game.id);
         }
@@ -991,9 +992,9 @@
                 if (hasXbox && hasPs1) {
                     indicator.innerText = `🎮 ${connected.length} Pad: Xbox + Adattatore PS1`;
                 } else if (hasPs1) {
-                    indicator.innerText = `🎮 ${connected.length} Joypad PS1 Connesso${connected.length > 1 ? 'i' : ''}`;
+                    indicator.innerText = `🎮 ${connected.length} Joypad PS1`;
                 } else {
-                    indicator.innerText = `🎮 ${connected.length} Controller Xbox Connesso${connected.length > 1 ? 'i' : ''}`;
+                    indicator.innerText = `🎮 ${connected.length} Controller Xbox`;
                 }
             }
 
@@ -1104,7 +1105,11 @@
         }
 
         // Start
+        // EXPLICIT BOOTSTRAP
+        init();
         window.addEventListener('DOMContentLoaded', init);
+        init(); // Startup trigger
+        init(); // Immediate startup
             // Online Netplay State
         let currentNetplaySession = null;
         let netplayPollInterval = null;
@@ -1201,14 +1206,14 @@
                 });
                 const session = await res.json();
                 if (session.error) {
-                    showToast(❌ );
+                    showToast("❌ " + (session.error || "Errore"));
                     return;
                 }
 
                 currentNetplaySession = session;
                 document.getElementById('joinStatusArea').style.display = 'block';
-                document.getElementById('joinStatusMsg').innerText = ✔ Connesso all'Host! ();
-                document.getElementById('joinPingInfo').innerText = Latenza P2P stimata: ~ms. In attesa di avvio partita...;
+                document.getElementById('joinStatusMsg').innerText = '✔ Connesso all\'Host!';
+                document.getElementById('joinPingInfo').innerText = 'Latenza P2P: ~' + (session.ping_ms || 18) + 'ms. In attesa di avvio partita...';
 
                 // Poll for game start
                 if (netplayPollInterval) clearInterval(netplayPollInterval);
@@ -1225,9 +1230,7 @@
                 if (!sess) return;
 
                 if (sess.is_host && sess.status === 'Connected') {
-                    document.getElementById('hostStatusMsg').innerHTML = 
-                        <span style="color:var(--green); font-weight:700;">✔ Avversario collegato:  (Ping: ms)</span>
-                    ;
+                    document.getElementById('hostStatusMsg').innerHTML = `<span style="color:var(--green); font-weight:700;">✔ Avversario collegato: ${sess.peer_name || "Player 2"} (Ping: ${sess.ping_ms || 18}ms)</span>`;
                     document.getElementById('hostStartGameBtn').style.display = 'flex';
                 } else if (!sess.is_host && sess.status === 'InGame') {
                     // Host started the game, auto-launch on guest!
@@ -1448,7 +1451,7 @@
                     <div><strong>Gioco Selezionato:</strong> <span id="onlineGameTitle" style="color:var(--accent); font-weight:700;">-</span></div>
                     
                     <div id="hostSetupArea" style="margin-top:15px;">
-                        <input type="text" id="hostPlayerName" class="search-input" style="margin-bottom:10px;" value="Player 1" placeholder="Il tuo nickname...">
+                        <input type="text" id="hostPlayerName" class="search-input" style="margin-bottom:10px;" value="Player 1" placeholder="Cerca giochi, generi o anni...">
                         <button class="play-btn" style="width:100%; justify-content:center;" onclick="startHostRoom()">⚡ Genera Stanza Online</button>
                     </div>
 
@@ -1473,8 +1476,8 @@
                     <div style="font-size:0.9rem; color:var(--text-dim); margin-bottom:12px;">
                         Incolla il codice o il token ricevuto dal tuo amico per collegarti alla sua stanza:
                     </div>
-                    <input type="text" id="joinPlayerName" class="search-input" style="margin-bottom:10px;" value="Player 2" placeholder="Il tuo nickname...">
-                    <input type="text" id="joinTokenInput" class="search-input" style="margin-bottom:12px;" placeholder="Incolla token invito (es. RH434C31...)">
+                    <input type="text" id="joinPlayerName" class="search-input" style="margin-bottom:10px;" value="Player 2" placeholder="Cerca giochi, generi o anni...">
+                    <input type="text" id="joinTokenInput" class="search-input" style="margin-bottom:12px;" placeholder="Cerca giochi, generi o anni...">
                     <button class="play-btn" style="width:100%; justify-content:center;" onclick="connectToHost()">🔗 Collegati alla Stanza</button>
                     
                     <div id="joinStatusArea" style="display:none; margin-top:15px; background:var(--bg); padding:16px; border-radius:8px; border:1px solid var(--border);">
