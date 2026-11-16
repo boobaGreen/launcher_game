@@ -159,7 +159,11 @@ impl HttpServer {
 
                 (&Method::Post, "/api/favorite") => {
                     let body = read_request_body(&mut request);
+                    eprintln!("Favorite API body: {:?}", body);
                     let req: Result<LaunchRequest, _> = serde_json::from_str(&body);
+                    if let Err(ref e) = req {
+                        eprintln!("Favorite JSON parse error: {}", e);
+                    }
 
                     let (status, is_fav) = match req {
                         Ok(r) => {
@@ -301,12 +305,8 @@ fn urlencoding_decode(s: &str) -> String {
 }
 
 fn read_request_body(request: &mut tiny_http::Request) -> String {
-    let len = request.body_length().unwrap_or(0);
-    if len == 0 {
-        return String::new();
-    }
-    let mut buf = vec![0u8; len];
+    let mut buf = Vec::new();
     use std::io::Read;
-    let _ = request.as_reader().read_exact(&mut buf);
+    let _ = request.as_reader().read_to_end(&mut buf);
     String::from_utf8_lossy(&buf).to_string()
 }
