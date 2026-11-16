@@ -114,8 +114,7 @@ impl HttpServer {
                 }
 
                 (&Method::Post, "/api/launch") => {
-                    let mut body = String::new();
-                    let _ = request.as_reader().read_to_string(&mut body);
+                    let body = read_request_body(&mut request);
                     let req: Result<LaunchRequest, _> = serde_json::from_str(&body);
 
                     let res = match req {
@@ -159,8 +158,7 @@ impl HttpServer {
                 }
 
                 (&Method::Post, "/api/favorite") => {
-                    let mut body = String::new();
-                    let _ = request.as_reader().read_to_string(&mut body);
+                    let body = read_request_body(&mut request);
                     let req: Result<LaunchRequest, _> = serde_json::from_str(&body);
 
                     let (status, is_fav) = match req {
@@ -180,8 +178,7 @@ impl HttpServer {
 
                 // --- NETPLAY API ---
                 (&Method::Post, "/api/netplay/create") => {
-                    let mut body = String::new();
-                    let _ = request.as_reader().read_to_string(&mut body);
+                    let body = read_request_body(&mut request);
                     let req: Result<CreateRoomReq, _> = serde_json::from_str(&body);
 
                     let resp_json = match req {
@@ -205,8 +202,7 @@ impl HttpServer {
                 }
 
                 (&Method::Post, "/api/netplay/join") => {
-                    let mut body = String::new();
-                    let _ = request.as_reader().read_to_string(&mut body);
+                    let body = read_request_body(&mut request);
                     let req: Result<JoinRoomReq, _> = serde_json::from_str(&body);
 
                     let resp_json = match req {
@@ -302,4 +298,15 @@ fn urlencoding_decode(s: &str) -> String {
         }
     }
     result
+}
+
+fn read_request_body(request: &mut tiny_http::Request) -> String {
+    let len = request.body_length().unwrap_or(0);
+    if len == 0 {
+        return String::new();
+    }
+    let mut buf = vec![0u8; len];
+    use std::io::Read;
+    let _ = request.as_reader().read_exact(&mut buf);
+    String::from_utf8_lossy(&buf).to_string()
 }

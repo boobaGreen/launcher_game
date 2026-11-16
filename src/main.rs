@@ -13,14 +13,24 @@ use db::Database;
 use server::HttpServer;
 
 fn open_app_window(url: &str) {
-    // Launch through Windows Shell to let the OS broker create a dedicated app window without lock conflicts
-    let shell_app = Command::new("cmd")
-        .args(&["/c", "start", "msedge", &format!("--app={}", url), "--window-size=1360,860"])
-        .spawn();
+    let edge_paths = [
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+    ];
 
-    if shell_app.is_err() {
-        let _ = open::that(url);
+    for path in &edge_paths {
+        if Path::new(path).exists() {
+            if Command::new(path)
+                .args(&[&format!("--app={}", url), "--window-size=1440,900"])
+                .spawn()
+                .is_ok()
+            {
+                return;
+            }
+        }
     }
+
+    let _ = open::that(url);
 }
 
 fn main() {

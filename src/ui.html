@@ -1559,11 +1559,15 @@
             showToast(`🚀 Avvio di "${title}" in corso...`);
 
             try {
-                const res = await fetch(`/api/games/${id}/launch`, { method: 'POST' });
+                const res = await fetch('/api/launch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: id })
+                });
                 const data = await res.json();
-                if (data.status === 'ok') {
+                if (data.success) {
                     showToast(`✅ "${title}" avviato con successo!`);
-                    if (g) g.play_count = (g.play_count || 0) + 1;
+                    if (g) g.play_count = data.play_count;
                 } else {
                     showToast(`❌ Errore: ${data.message || 'Impossibile avviare'}`);
                 }
@@ -1579,7 +1583,11 @@
 
         async function toggleFavDirect(id) {
             try {
-                const res = await fetch(`/api/games/${id}/favorite`, { method: 'POST' });
+                const res = await fetch('/api/favorite', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: id })
+                });
                 const data = await res.json();
                 
                 // Aggiorna stato locale
