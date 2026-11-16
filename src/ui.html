@@ -343,7 +343,7 @@
             overflow-y: auto;
             padding: 20px 20px 80px 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
             gap: 16px;
             align-content: start;
         }
@@ -375,8 +375,8 @@
             position: relative;
             width: 100%;
             aspect-ratio: 3 / 4;
-            min-height: 180px;
-            background: #151b26;
+            min-height: 190px;
+            background: radial-gradient(circle at 50% 35%, #1f293d 0%, #0d121c 100%);
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -384,14 +384,21 @@
         }
 
         .card-cover {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.2s;
-            display: block;
+            opacity: 0;
+            transition: opacity 0.25s ease, transform 0.2s ease;
+            z-index: 2;
         }
 
-        .game-card:hover .card-cover {
+        .card-cover.loaded {
+            opacity: 1;
+        }
+
+        .game-card:hover .card-cover.loaded {
             transform: scale(1.04);
         }
 
@@ -405,24 +412,17 @@
             padding: 16px 10px;
             text-align: center;
             background: radial-gradient(circle at 50% 35%, #1f293d 0%, #0d121c 100%);
+            z-index: 1;
         }
 
         .fallback-icon {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+            font-size: 3rem;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
+            transition: transform 0.2s;
         }
 
-        .fallback-title {
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: #e6edf3;
-            line-height: 1.25;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        .game-card:hover .fallback-icon {
+            transform: scale(1.12);
         }
 
         .card-badge-sys {
@@ -808,23 +808,15 @@
             grid.innerHTML = allGames.map((g, idx) => {
                 const isSelected = idx === selectedGameIndex;
                 const favActive = g.is_favorite ? 'active' : '';
-                const sysIcon = g.system_code === 'MAME' ? '🕹️' : (g.system_code === 'C64' ? '💾' : (g.system_code === 'DOS' ? '💻' : (g.system_code === 'SCUMMVM' ? '🏝️' : '🎮')));
-                const hasCover = !!(g.cover_url && g.cover_url.trim());
+                const sysIcon = g.system_code === 'MAME' ? '🕹️' : (g.system_code === 'C64' ? '💾' : (g.system_code === 'DOS' ? '💻' : (g.system_code === 'SCUMMVM' ? '🏝️' : (g.system_code === 'DREAMCAST' ? '🌀' : '🎮'))));
+                const cover = (g.cover_url && g.cover_url.trim()) ? g.cover_url : null;
                 return `
                 <div class="game-card ${isSelected ? 'selected' : ''}" data-idx="${idx}" onclick="selectCard(${idx})" ondblclick="launchGame(${g.id})">
                     <div class="card-cover-wrapper">
-                        ${hasCover ? `
-                        <img class="card-cover" src="${g.cover_url}" loading="eager" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="${g.title}">
-                        <div class="card-cover-fallback" style="display: none;">
+                        <div class="card-cover-fallback">
                             <div class="fallback-icon">${sysIcon}</div>
-                            <div class="fallback-title">${g.title}</div>
                         </div>
-                        ` : `
-                        <div class="card-cover-fallback" style="display: flex;">
-                            <div class="fallback-icon">${sysIcon}</div>
-                            <div class="fallback-title">${g.title}</div>
-                        </div>
-                        `}
+                        ${cover ? `<img class="card-cover" src="${cover}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.remove()" alt="${g.title}">` : ''}
                         <span class="card-badge-sys">${g.system_code}</span>
                         <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id}, ${idx})" title="Preferito">★</button>
                     </div>
@@ -832,7 +824,7 @@
                         <div class="card-title" title="${g.title}">${g.title}</div>
                         <div class="card-meta">
                             <span>${g.year}</span>
-                            <span style="max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${g.genre}</span>
+                            <span style="max-width: 95px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${g.genre}</span>
                         </div>
                     </div>
                 </div>

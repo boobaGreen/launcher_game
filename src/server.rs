@@ -51,7 +51,8 @@ impl HttpServer {
                 (&Method::Get, "/" | "/index.html") => {
                     let html = include_str!("ui.html");
                     let header = Header::from_bytes(&b"Content-Type"[..], &b"text/html; charset=utf-8"[..]).unwrap();
-                    let response = Response::from_string(html).with_header(header);
+                    let no_cache = Header::from_bytes(&b"Cache-Control"[..], &b"no-cache, no-store, must-revalidate"[..]).unwrap();
+                    let response = Response::from_string(html).with_header(header).with_header(no_cache);
                     let _ = request.respond(response);
                 }
 
