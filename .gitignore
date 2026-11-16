@@ -1,9 +1,6 @@
 /target
 **/*.rs.bk
-Cargo.lock
-.cache/
-thumbs/
-covers/
-*.tmp
-.DS_Store
-Thumbs.db
+*.log
+.profile/
+retro_hub.db
+retro-hub.exe

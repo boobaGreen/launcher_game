@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RetroHub â€” Gaming Launcher</title>
+    <title>RetroHub "” Gaming Launcher</title>
     <style>
         :root {
             --bg: #090c10;
@@ -582,21 +582,21 @@
     <!-- Top Bar -->
     <div class="top-bar">
         <div class="brand">
-            ðŸ•¹ï¸ Retro<span>Hub</span>
+            🕹️ï¸ Retro<span>Hub</span>
             <div class="badge-count" id="totalBadge">Caricamento...</div>
         </div>
 
         <div class="search-wrapper">
-            <input type="text" id="searchInput" class="search-input" placeholder="ðŸ” Cerca per titolo, anno, autore, genere (es. street, shmup, mario)...">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cerca o filtra: es. 1985..1992 shmup -capcom -multi | genre:rpg dev:nintendo...">
             <button id="searchClear" class="search-clear">&times;</button>
         </div>
 
         <div class="top-actions">
             <button class="action-btn" id="manualBtn" style="background: rgba(46, 160, 67, 0.15); border-color: var(--green); color: #fff;" onclick="openManualModal()">📖 Guida & Info</button>
             <button class="action-btn" id="onlineArenaBtn" style="background: rgba(88, 166, 255, 0.15); border-color: var(--accent); color: var(--accent);" onclick="openOnlineArena()">🌐 Arena Online</button>
-            <button class="action-btn" id="favFilterBtn">â­ Preferiti</button>
+            <button class="action-btn" id="favFilterBtn">⭐ Preferiti</button>
             <div class="gamepad-indicator" id="padIndicator">
-                ðŸŽ® Xbox Pad Connesso
+                🎮 Xbox Pad Connesso
             </div>
         </div>
     </div>
@@ -633,11 +633,11 @@
                         <span class="tag-info" id="heroGenre">-</span>
                         <span class="tag-info" id="heroDev">-</span>
                     </div>
-                    <div class="hero-controls" id="heroControls">ðŸŽ® Comandi Xbox Controller</div>
+                    <div class="hero-controls" id="heroControls">🎮 Comandi Xbox Controller</div>
                 </div>
                 <div class="hero-action">
                     <button class="action-btn" style="border-color: var(--accent); color: var(--accent); margin-bottom: 4px;" onclick="hostCurrentGameOnline()">🌐 Sfida Online</button>
-                    <button class="play-btn" id="heroPlayBtn">â–¶ GIOCA ORA</button>
+                    <button class="play-btn" id="heroPlayBtn">▶ GIOCA ORA</button>
                 </div>
             </div>
 
@@ -673,20 +673,20 @@
                     <div><strong>Sviluppatore:</strong> <span id="modalDev"></span></div>
                     <div><strong>Partite Giocate:</strong> <span id="modalPlays"></span></div>
                     <div style="margin-top: 8px;">
-                        <strong>ðŸŽ® Mappatura Comandi:</strong>
+                        <strong>🎮 Mappatura Comandi:</strong>
                         <div id="modalControls" style="color: var(--green); margin-top: 4px; font-family: monospace; font-size: 0.85rem;"></div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="action-btn" id="modalFavBtn">â­ Preferito</button>
-                <button class="play-btn" id="modalPlayBtn">â–¶ Avvia Partita</button>
+                <button class="action-btn" id="modalFavBtn">⭐ Preferito</button>
+                <button class="play-btn" id="modalPlayBtn">▶ Avvia Partita</button>
             </div>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div class="toast" id="toast">âœ” Gioco avviato con successo!</div>
+    <div class="toast" id="toast">✔ Gioco avviato con successo!</div>
 
     <script>
         let allGames = [];
@@ -798,11 +798,11 @@
                     <div class="card-cover-wrapper">
                         <img class="card-cover" src="${g.cover_url || ''}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="card-cover-fallback" style="display: none;">
-                            <div class="fallback-icon">ðŸ•¹ï¸</div>
+                            <div class="fallback-icon">🕹️ï¸</div>
                             <div class="fallback-title">${g.title}</div>
                         </div>
                         <span class="card-badge-sys">${g.system_code}</span>
-                        <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id}, ${idx})" title="Preferito">â­</button>
+                        <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id}, ${idx})" title="Preferito">⭐</button>
                     </div>
                     <div class="card-info">
                         <div class="card-title" title="${g.title}">${g.title}</div>
@@ -839,11 +839,11 @@
             document.getElementById('heroYear').innerText = game.year;
             document.getElementById('heroGenre').innerText = game.genre;
             document.getElementById('heroDev').innerText = game.developer;
-            document.getElementById('heroControls').innerText = `ðŸŽ® ${game.controls}`;
+            document.getElementById('heroControls').innerText = `🎮 ${game.controls}`;
             
             const coverEl = document.getElementById('heroCover');
             coverEl.src = game.cover_url || '';
-            coverEl.onerror = () => { coverEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="110" viewBox="0 0 80 110"><rect width="80" height="110" fill="%231a2233"/><text x="40" y="55" fill="%2358a6ff" font-family="sans-serif" font-size="24" text-anchor="middle" dominant-baseline="middle">ðŸ•¹ï¸</text></svg>'; };
+            coverEl.onerror = () => { coverEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="110" viewBox="0 0 80 110"><rect width="80" height="110" fill="%231a2233"/><text x="40" y="55" fill="%2358a6ff" font-family="sans-serif" font-size="24" text-anchor="middle" dominant-baseline="middle">🕹️ï¸</text></svg>'; };
 
             document.getElementById('heroPlayBtn').onclick = () => launchGame(game.id);
         }
@@ -858,7 +858,7 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    showToast(`âœ” ${data.message}`);
+                    showToast(`✔ ${data.message}`);
                     const g = allGames.find(x => x.id === gameId);
                     if (g) g.play_count = data.play_count;
                 } else {
@@ -989,17 +989,17 @@
                 });
 
                 if (hasXbox && hasPs1) {
-                    indicator.innerText = `ðŸŽ® ${connected.length} Pad: Xbox + Adattatore PS1`;
+                    indicator.innerText = `🎮 ${connected.length} Pad: Xbox + Adattatore PS1`;
                 } else if (hasPs1) {
-                    indicator.innerText = `ðŸŽ® ${connected.length} Joypad PS1 Connesso${connected.length > 1 ? 'i' : ''}`;
+                    indicator.innerText = `🎮 ${connected.length} Joypad PS1 Connesso${connected.length > 1 ? 'i' : ''}`;
                 } else {
-                    indicator.innerText = `ðŸŽ® ${connected.length} Controller Xbox Connesso${connected.length > 1 ? 'i' : ''}`;
+                    indicator.innerText = `🎮 ${connected.length} Controller Xbox Connesso${connected.length > 1 ? 'i' : ''}`;
                 }
             }
 
             window.addEventListener("gamepadconnected", (e) => {
                 updateIndicator();
-                showToast(`ðŸŽ® Connesso: ${e.gamepad.id.substring(0, 26)}`);
+                showToast(`🎮 Connesso: ${e.gamepad.id.substring(0, 26)}`);
             });
 
             window.addEventListener("gamepaddisconnected", () => {
@@ -1134,7 +1134,7 @@
         function openOnlineArena() {
             const game = allGames[selectedGameIndex] || allGames[0];
             if (game) {
-                document.getElementById('onlineGameTitle').innerText = ${game.title} ();
+                document.getElementById('onlineGameTitle').innerText = (game ? game.title : 'Partita');
             }
             document.getElementById('onlineModal').style.display = 'flex';
         }

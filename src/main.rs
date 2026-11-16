@@ -12,10 +12,31 @@ use catalog::CatalogLoader;
 use db::Database;
 use server::HttpServer;
 
+fn open_app_window(url: &str) {
+    // Launch through Windows Shell to let the OS broker create a dedicated app window without lock conflicts
+    let shell_app = Command::new("cmd")
+        .args(&["/c", "start", "msedge", &format!("--app={}", url), "--window-size=1360,860"])
+        .spawn();
+
+    if shell_app.is_err() {
+        let _ = open::that(url);
+    }
+}
+
 fn main() {
     println!("==================================================");
     println!("🕹️  RetroHub — Ultimate Retrogaming Client (Rust)");
     println!("==================================================");
+
+    let port = 39281;
+    let url = format!("http://127.0.0.1:{}", port);
+
+    // Single instance check: if RetroHub is already running, open the window and exit cleanly
+    if std::net::TcpStream::connect(format!("127.0.0.1:{}", port)).is_ok() {
+        println!("⚡ RetroHub è già attivo in background. Apertura interfaccia grafica...");
+        open_app_window(&url);
+        return;
+    }
 
     let db_path = "retro_hub.db";
     let db = Database::open(db_path).expect("Inizializzazione database fallita");
@@ -43,37 +64,12 @@ fn main() {
         println!("⚡ Avvio istantaneo: {} giochi pronti nel database locale.", count);
     }
 
-    let port = 39281;
-    let url = format!("http://127.0.0.1:{}", port);
-
     // Launch window in dedicated thread
     let url_clone = url.clone();
     std::thread::spawn(move || {
         std::thread::sleep(std::time::Duration::from_millis(350));
         println!("🎮 Apertura interfaccia grafica RetroHub...");
-
-        let edge_candidates = [
-            r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
-            r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
-        ];
-
-        let mut launched = false;
-        for exe in edge_candidates {
-            if Path::new(exe).exists() {
-                if Command::new(exe)
-                    .args([&format!("--app={}", url_clone), "--window-size=1360,860"])
-                    .spawn()
-                    .is_ok()
-                {
-                    launched = true;
-                    break;
-                }
-            }
-        }
-
-        if !launched {
-            let _ = open::that(&url_clone);
-        }
+        open_app_window(&url_clone);
     });
 
     let server = HttpServer::new(db, port);
