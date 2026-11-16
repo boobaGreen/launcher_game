@@ -1,20 +1,36 @@
 use crate::db::Database;
 use crate::launcher::Launcher;
 use crate::models::{LaunchRequest, LaunchResponse, SearchFilter};
+use crate::netplay::NetplayManager;
 use crate::search::SearchEngine;
+use serde::Deserialize;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use tiny_http::{Header, Method, Response, Server, StatusCode};
 
 pub struct HttpServer {
     db: Arc<Mutex<Database>>,
+    netplay: Arc<NetplayManager>,
     port: u16,
+}
+
+#[derive(Deserialize)]
+struct CreateRoomReq {
+    game_id: i64,
+    player_name: String,
+}
+
+#[derive(Deserialize)]
+struct JoinRoomReq {
+    token: String,
+    player_name: String,
 }
 
 impl HttpServer {
     pub fn new(db: Database, port: u16) -> Self {
         Self {
             db: Arc::new(Mutex::new(db)),
+            netplay: Arc::new(NetplayManager::new()),
             port,
         }
     }
@@ -158,6 +174,84 @@ impl HttpServer {
                     let json = format!(r#"{{"is_favorite": {}}}"#, is_fav);
                     let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
                     let response = Response::from_string(json).with_header(header).with_status_code(status);
+                    let _ = request.respond(response);
+                }
+
+                // --- NETPLAY API ---
+                (&Method::Post, "/api/netplay/create") => {
+                    let mut body = String::new();
+                    let _ = request.as_reader().read_to_string(&mut body);
+                    let req: Result<CreateRoomReq, _> = serde_json::from_str(&body);
+
+                    let resp_json = match req {
+                        Ok(r) => {
+                            let db = self.db.lock().unwrap();
+                            if let Ok(Some(game)) = db.get_game_by_id(r.game_id) {
+                                match self.netplay.create_room(game.id, game.title, game.platform, r.player_name) {
+                                    Ok(sess) => serde_json::to_string(&sess).unwrap(),
+                                    Err(e) => format!(r#"{{"error": "{}"}}"#, e),
+                                }
+                            } else {
+                                r#"{"error": "Gioco non trovato"}"#.to_string()
+                            }
+                        }
+                        Err(e) => format!(r#"{{"error": "Payload invalido: {}"}}"#, e),
+                    };
+
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp_json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                (&Method::Post, "/api/netplay/join") => {
+                    let mut body = String::new();
+                    let _ = request.as_reader().read_to_string(&mut body);
+                    let req: Result<JoinRoomReq, _> = serde_json::from_str(&body);
+
+                    let resp_json = match req {
+                        Ok(r) => match self.netplay.join_room(&r.token, r.player_name) {
+                            Ok(sess) => serde_json::to_string(&sess).unwrap(),
+                            Err(e) => format!(r#"{{"error": "{}"}}"#, e),
+                        },
+                        Err(e) => format!(r#"{{"error": "Payload invalido: {}"}}"#, e),
+                    };
+
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp_json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                (&Method::Get, "/api/netplay/status") => {
+                    let sess = self.netplay.get_session();
+                    let json = serde_json::to_string(&sess).unwrap_or_else(|_| "null".to_string());
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                (&Method::Post, "/api/netplay/start") => {
+                    let db = self.db.lock().unwrap();
+                    let sess = self.netplay.get_session();
+
+                    let res = if let Some(s) = sess {
+                        let _ = self.netplay.start_game();
+                        if let Ok(Some(game)) = db.get_game_by_id(s.game_id) {
+                            let _ = Launcher::launch(&game.launch_target);
+                        }
+                        r#"{"success": true, "message": "Partita online avviata"}"#
+                    } else {
+                        r#"{"success": false, "message": "Nessuna sessione attiva"}"#
+                    };
+
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(res).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                (&Method::Post, "/api/netplay/leave") => {
+                    self.netplay.close_room();
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(r#"{"success": true}"#).with_header(header);
                     let _ = request.respond(response);
                 }
 

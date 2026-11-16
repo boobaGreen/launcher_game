@@ -4,6 +4,7 @@ pub mod search;
 pub mod db;
 pub mod catalog;
 pub mod server;
+pub mod netplay;
 
 use std::path::Path;
 use std::process::Command;
@@ -51,7 +52,6 @@ fn main() {
         std::thread::sleep(std::time::Duration::from_millis(350));
         println!("🎮 Apertura interfaccia grafica RetroHub...");
 
-        // Launch in App mode (Native Frameless Window without browser bars)
         let edge_app = Command::new("msedge.exe")
             .args([&format!("--app={}", url_clone), "--window-size=1360,860"])
             .spawn();

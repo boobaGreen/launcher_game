@@ -592,6 +592,7 @@
         </div>
 
         <div class="top-actions">
+            <button class="action-btn" id="onlineArenaBtn" style="background: rgba(88, 166, 255, 0.15); border-color: var(--accent); color: var(--accent);" onclick="openOnlineArena()">🌐 Arena Online</button>
             <button class="action-btn" id="favFilterBtn">â­ Preferiti</button>
             <div class="gamepad-indicator" id="padIndicator">
                 ðŸŽ® Xbox Pad Connesso
@@ -634,6 +635,7 @@
                     <div class="hero-controls" id="heroControls">ðŸŽ® Comandi Xbox Controller</div>
                 </div>
                 <div class="hero-action">
+                    <button class="action-btn" style="border-color: var(--accent); color: var(--accent); margin-bottom: 4px;" onclick="hostCurrentGameOnline()">🌐 Sfida Online</button>
                     <button class="play-btn" id="heroPlayBtn">â–¶ GIOCA ORA</button>
                 </div>
             </div>
@@ -1102,8 +1104,210 @@
 
         // Start
         window.addEventListener('DOMContentLoaded', init);
-    </script>
+            // Online Netplay State
+        let currentNetplaySession = null;
+        let netplayPollInterval = null;
+
+        function openOnlineArena() {
+            const game = allGames[selectedGameIndex] || allGames[0];
+            if (game) {
+                document.getElementById('onlineGameTitle').innerText = ${game.title} ();
+            }
+            document.getElementById('onlineModal').style.display = 'flex';
+        }
+
+        function closeOnlineArena() {
+            document.getElementById('onlineModal').style.display = 'none';
+            if (netplayPollInterval) clearInterval(netplayPollInterval);
+        }
+
+        function hostCurrentGameOnline() {
+            openOnlineArena();
+            switchOnlineTab('host');
+        }
+
+        function switchOnlineTab(tab) {
+            const isHost = tab === 'host';
+            document.getElementById('hostView').style.display = isHost ? 'block' : 'none';
+            document.getElementById('joinView').style.display = isHost ? 'none' : 'block';
+            document.getElementById('tabHostBtn').style.borderBottom = isHost ? '2px solid var(--accent)' : 'none';
+            document.getElementById('tabHostBtn').style.opacity = isHost ? '1' : '0.6';
+            document.getElementById('tabJoinBtn').style.borderBottom = !isHost ? '2px solid var(--accent)' : 'none';
+            document.getElementById('tabJoinBtn').style.opacity = !isHost ? '1' : '0.6';
+        }
+
+        async function startHostRoom() {
+            const game = allGames[selectedGameIndex] || allGames[0];
+            if (!game) return;
+            const name = document.getElementById('hostPlayerName').value || "Host";
+
+            try {
+                const res = await fetch('/api/netplay/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: game.id, player_name: name })
+                });
+                const session = await res.json();
+                currentNetplaySession = session;
+
+                document.getElementById('hostSetupArea').style.display = 'none';
+                document.getElementById('hostActiveArea').style.display = 'block';
+                document.getElementById('roomCodeDisplay').innerText = session.room_code;
+
+                // Start polling room status for guest connection
+                if (netplayPollInterval) clearInterval(netplayPollInterval);
+                netplayPollInterval = setInterval(checkNetplayStatus, 800);
+            } catch (err) {
+                showToast("Errore creazione stanza online");
+            }
+        }
+
+        async function connectToHost() {
+            const token = document.getElementById('joinTokenInput').value.trim();
+            const name = document.getElementById('joinPlayerName').value || "Guest";
+            if (!token) {
+                showToast("Inserisci un token valido");
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/netplay/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token, player_name: name })
+                });
+                const session = await res.json();
+                if (session.error) {
+                    showToast(❌ );
+                    return;
+                }
+
+                currentNetplaySession = session;
+                document.getElementById('joinStatusArea').style.display = 'block';
+                document.getElementById('joinStatusMsg').innerText = ✔ Connesso all'Host! ();
+                document.getElementById('joinPingInfo').innerText = Latenza P2P stimata: ~ms. In attesa di avvio partita...;
+
+                // Poll for game start
+                if (netplayPollInterval) clearInterval(netplayPollInterval);
+                netplayPollInterval = setInterval(checkNetplayStatus, 800);
+            } catch (err) {
+                showToast("Errore connessione all'host");
+            }
+        }
+
+        async function checkNetplayStatus() {
+            try {
+                const res = await fetch('/api/netplay/status');
+                const sess = await res.json();
+                if (!sess) return;
+
+                if (sess.is_host && sess.status === 'Connected') {
+                    document.getElementById('hostStatusMsg').innerHTML = 
+                        <span style="color:var(--green); font-weight:700;">✔ Avversario collegato:  (Ping: ms)</span>
+                    ;
+                    document.getElementById('hostStartGameBtn').style.display = 'flex';
+                } else if (!sess.is_host && sess.status === 'InGame') {
+                    // Host started the game, auto-launch on guest!
+                    clearInterval(netplayPollInterval);
+                    closeOnlineArena();
+                    showToast("🚀 L'Host ha avviato la partita online! Buon divertimento!");
+                    launchGame(sess.game_id);
+                }
+            } catch (e) {}
+        }
+
+        async function triggerNetplayStart() {
+            try {
+                await fetch('/api/netplay/start', { method: 'POST' });
+                closeOnlineArena();
+                showToast("🚀 Partita online avviata su entrambi i PC!");
+            } catch (e) {
+                showToast("Errore avvio partita online");
+            }
+        }
+
+        function copyTokenToClipboard() {
+            if (currentNetplaySession && currentNetplaySession.connection_token) {
+                navigator.clipboard.writeText(currentNetplaySession.connection_token).then(() => {
+                    showToast("📋 Token invito copiato negli appunti!");
+                }).catch(() => {
+                    prompt("Copia il tuo token invito:", currentNetplaySession.connection_token);
+                });
+            }
+        }
+</script>
+    <!-- Online Arena Modal -->
+    <div class="modal-overlay" id="onlineModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>🌐 Arena Multiplayer Online P2P (Rollback Netplay)</h3>
+                <button class="action-btn" onclick="closeOnlineArena()">&times;</button>
+            </div>
+            <div style="display: flex; border-bottom: 1px solid var(--border);">
+                <button id="tabHostBtn" class="action-btn" style="flex:1; border-radius:0; border:none; border-bottom:2px solid var(--accent);" onclick="switchOnlineTab('host')">Ospita Stanza (Host)</button>
+                <button id="tabJoinBtn" class="action-btn" style="flex:1; border-radius:0; border:none; opacity:0.6;" onclick="switchOnlineTab('join')">Partecipa a Stanza (Guest)</button>
+            </div>
+            
+            <div class="modal-body" style="flex-direction: column; gap: 16px;">
+                <!-- HOST VIEW -->
+                <div id="hostView">
+                    <div style="font-size:0.9rem; color:var(--text-dim); margin-bottom:10px;">
+                        Crea una stanza privata per sfidare un amico a qualsiasi gioco arcade, MAME, NAOMI, C64 o console:
+                    </div>
+                    <div><strong>Gioco Selezionato:</strong> <span id="onlineGameTitle" style="color:var(--accent); font-weight:700;">-</span></div>
+                    
+                    <div id="hostSetupArea" style="margin-top:15px;">
+                        <input type="text" id="hostPlayerName" class="search-input" style="margin-bottom:10px;" value="Player 1" placeholder="Il tuo nickname...">
+                        <button class="play-btn" style="width:100%; justify-content:center;" onclick="startHostRoom()">⚡ Genera Stanza Online</button>
+                    </div>
+
+                    <div id="hostActiveArea" style="display:none; margin-top:15px; background:var(--bg); padding:16px; border-radius:8px; border:1px solid var(--border);">
+                        <div style="font-size:0.8rem; color:var(--text-dim);">Codice Stanza da inviare all'amico:</div>
+                        <div style="display:flex; gap:10px; align-items:center; margin:8px 0;">
+                            <div id="roomCodeDisplay" style="font-size:1.6rem; font-weight:800; color:var(--gold); letter-spacing:1px; font-family:monospace;">RH-0000</div>
+                            <button class="action-btn" onclick="copyTokenToClipboard()">📋 Copia Token Invito</button>
+                        </div>
+                        <div id="hostStatusMsg" style="color:var(--text-dim); font-size:0.85rem; display:flex; align-items:center; gap:8px;">
+                            <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--gold); animation: pulse 1.5s infinite;"></span>
+                            In attesa che l'avversario si colleghi...
+                        </div>
+                        <button id="hostStartGameBtn" class="play-btn" style="width:100%; justify-content:center; margin-top:15px; display:none;" onclick="triggerNetplayStart()">
+                            ▶ AVVIA PARTITA ONLINE (ENTRAMBI I PC)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- JOIN VIEW -->
+                <div id="joinView" style="display:none;">
+                    <div style="font-size:0.9rem; color:var(--text-dim); margin-bottom:12px;">
+                        Incolla il codice o il token ricevuto dal tuo amico per collegarti alla sua stanza:
+                    </div>
+                    <input type="text" id="joinPlayerName" class="search-input" style="margin-bottom:10px;" value="Player 2" placeholder="Il tuo nickname...">
+                    <input type="text" id="joinTokenInput" class="search-input" style="margin-bottom:12px;" placeholder="Incolla token invito (es. RH434C31...)">
+                    <button class="play-btn" style="width:100%; justify-content:center;" onclick="connectToHost()">🔗 Collegati alla Stanza</button>
+                    
+                    <div id="joinStatusArea" style="display:none; margin-top:15px; background:var(--bg); padding:16px; border-radius:8px; border:1px solid var(--border);">
+                        <div id="joinStatusMsg" style="color:var(--green); font-weight:700;">✔ Collegamento riuscito!</div>
+                        <div id="joinPingInfo" style="font-size:0.85rem; color:var(--text-dim); margin-top:4px;">In attesa che l'Host avvii il gioco...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="action-btn" onclick="closeOnlineArena()">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes pulse {
+            0% { opacity: 0.3; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0.3; transform: scale(0.9); }
+        }
+    </style>
 </body>
 </html>
+
 
 
