@@ -9,10 +9,11 @@ description = "Ultra-fast retrogaming launcher and catalog manager in Rust"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 rusqlite = { version = "0.32", features = ["bundled"] }
-strsim = "0.11" # Fuzzy string matching (Levenshtein, Jaro-Winkler)
+strsim = "0.11"
 regex = "1.10"
 walkdir = "2.5"
-open = "5.3"     # Open files and URLs natively on Windows
+open = "5.3"
+tiny_http = "0.12"
 
 [profile.release]
 opt-level = 3
