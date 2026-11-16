@@ -52,11 +52,26 @@ fn main() {
         std::thread::sleep(std::time::Duration::from_millis(350));
         println!("🎮 Apertura interfaccia grafica RetroHub...");
 
-        let edge_app = Command::new("msedge.exe")
-            .args([&format!("--app={}", url_clone), "--window-size=1360,860"])
-            .spawn();
+        let edge_candidates = [
+            r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+            r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+        ];
 
-        if edge_app.is_err() {
+        let mut launched = false;
+        for exe in edge_candidates {
+            if Path::new(exe).exists() {
+                if Command::new(exe)
+                    .args([&format!("--app={}", url_clone), "--window-size=1360,860"])
+                    .spawn()
+                    .is_ok()
+                {
+                    launched = true;
+                    break;
+                }
+            }
+        }
+
+        if !launched {
             let _ = open::that(&url_clone);
         }
     });
