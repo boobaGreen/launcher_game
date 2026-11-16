@@ -12,7 +12,14 @@ struct MameMeta {
     pub genre: String,
 }
 
+#[derive(Deserialize, Default, Clone)]
+struct DosMeta {
+    pub developer: String,
+    pub genre: String,
+}
+
 static MAME_METADATA_JSON: &str = include_str!("mame_metadata.json");
+static DOS_METADATA_JSON: &str = include_str!("dos_metadata.json");
 
 pub struct CatalogLoader;
 
@@ -31,8 +38,14 @@ impl CatalogLoader {
         let dir_cache = PreloadedDirCache::build(emu_root);
 
         // Pre-carica metadati MAME (produttori autentici, anni e generi)
+        let json_clean = MAME_METADATA_JSON.trim_start_matches('\u{feff}');
         let mame_meta_map: HashMap<String, MameMeta> =
-            serde_json::from_str(MAME_METADATA_JSON).unwrap_or_default();
+            serde_json::from_str(json_clean).unwrap_or_default();
+
+        // Pre-carica metadati MS-DOS (produttori autentici e generi)
+        let dos_clean = DOS_METADATA_JSON.trim_start_matches('\u{feff}');
+        let dos_meta_map: HashMap<String, DosMeta> =
+            serde_json::from_str(dos_clean).unwrap_or_default();
 
         // Pre-carica mappatura MAME: titolo -> nome file rom (da Catalogo Giochi MAME Arcade.html)
         let mame_catalog_path = emu_root.join("mame").join("Catalogo Giochi MAME Arcade.html");
@@ -81,6 +94,12 @@ impl CatalogLoader {
                     (dir_cache.resolve(emu_root, sys_code, &title), Self::build_cover_url(sys_code, &title))
                 }
             } else {
+                if sys_code.eq_ignore_ascii_case("DOS") {
+                    if let Some(meta) = dos_meta_map.get(&title) {
+                        dev = meta.developer.clone();
+                        genre = meta.genre.clone();
+                    }
+                }
                 (dir_cache.resolve(emu_root, sys_code, &title), Self::build_cover_url(sys_code, &title))
             };
 
@@ -355,4 +374,40 @@ fn clean_controls_text(raw: &str) -> String {
     let without_tags = Regex::new(r"<[^>]+>").unwrap().replace_all(raw, " ").to_string();
     let decoded = html_decode(&without_tags);
     decoded.replace("🎮", "").replace("&#127918;", "").split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_mame_meta_deser() {
+        let json_clean = MAME_METADATA_JSON.trim_start_matches('\u{feff}');
+        let map: HashMap<String, MameMeta> = match serde_json::from_str(json_clean) {
+            Ok(m) => m,
+            Err(e) => panic!("Deserialization failed: {}", e),
+        };
+        assert!(map.contains_key("crzrally"), "crzrally not found in mame_meta_map");
+        let meta = map.get("crzrally").unwrap();
+        assert_eq!(meta.developer, "Tecfri");
+        assert_eq!(meta.year, 1985);
+        assert_eq!(meta.genre, "Guida / Top-Down Rally");
+    }
+
+    #[test]
+    fn test_dos_meta_deser() {
+        let json_clean = DOS_METADATA_JSON.trim_start_matches('\u{feff}');
+        let map: HashMap<String, DosMeta> = match serde_json::from_str(json_clean) {
+            Ok(m) => m,
+            Err(e) => panic!("DOS Deserialization failed: {}", e),
+        };
+        assert!(map.contains_key("Civilization"));
+        let civ = map.get("Civilization").unwrap();
+        assert_eq!(civ.developer, "MicroProse / Sid Meier");
+        assert_eq!(civ.genre, "Strategia a Turni / 4X");
+
+        assert!(map.contains_key("Dune II - The Building of a Dynasty"));
+        let dune = map.get("Dune II - The Building of a Dynasty").unwrap();
+        assert_eq!(dune.developer, "Westwood Studios / Virgin");
+    }
 }

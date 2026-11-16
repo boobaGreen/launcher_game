@@ -1,0 +1,402 @@
+{
+    "Crusader - No Remorse":  {
+                                  "genre":  "Sparatutto Isometrico / Azione",
+                                  "developer":  "Origin Systems / EA"
+                              },
+    "Ultima VII - The Black Gate":  {
+                                        "genre":  "RPG Open World / Gioco di Ruolo",
+                                        "developer":  "Origin Systems / Richard Garriott"
+                                    },
+    "Speedball 2 - Brutal Deluxe":  {
+                                        "genre":  "Sport Futuristico / Azione Cyber",
+                                        "developer":  "The Bitmap Brothers"
+                                    },
+    "Desert Strike - Return to the Gulf":  {
+                                               "genre":  "Azione Elicottero Isometrica",
+                                               "developer":  "Electronic Arts"
+                                           },
+    "Halloween Harry - Alien Carnage":  {
+                                            "genre":  "Platform / Run \u0026 Gun con Jetpack",
+                                            "developer":  "Interactive Binary Illusions / Apogee"
+                                        },
+    "F-15 Strike Eagle III":  {
+                                  "genre":  "Simulatore di Volo da Combattimento",
+                                  "developer":  "MicroProse"
+                              },
+    "SimEarth - The Living Planet":  {
+                                         "genre":  "Simulazione Planetaria ed Evolutiva",
+                                         "developer":  "Maxis / Will Wright"
+                                     },
+    "Cannon Fodder":  {
+                          "genre":  "Azione Tattica Militare",
+                          "developer":  "Sensible Software"
+                      },
+    "Ultima Underworld - The Stygian Abyss":  {
+                                                  "genre":  "Action RPG 3D in Prima Persona",
+                                                  "developer":  "Blue Sky (Looking Glass) / Origin"
+                                              },
+    "Star Control II":  {
+                            "genre":  "Avventura Spaziale RPG / Combattimento",
+                            "developer":  "Toys for Bob / Accolade"
+                        },
+    "Eye of the Beholder":  {
+                                "genre":  "Dungeon Crawler / RPG D\u0026D",
+                                "developer":  "Westwood Studios / SSI"
+                            },
+    "Commander Keen 1 - Invasion of the Vorticons":  {
+                                                         "genre":  "Platform Classico",
+                                                         "developer":  "id Software / Apogee"
+                                                     },
+    "Alone in the Dark":  {
+                              "genre":  "Survival Horror 3D",
+                              "developer":  "Infogrames"
+                          },
+    "Stunt Island":  {
+                         "genre":  "Simulatore Volo e Regia Stunt",
+                         "developer":  "The Assembly Line / Disney"
+                     },
+    "Worms":  {
+                  "genre":  "Strategia e Artiglieria a Turni",
+                  "developer":  "Team17"
+              },
+    "Syndicate":  {
+                      "genre":  "Azione Tattica Cyberpunk",
+                      "developer":  "Bullfrog Productions / Peter Molyneux"
+                  },
+    "Red Baron":  {
+                      "genre":  "Simulatore di Volo Prima Guerra Mondiale",
+                      "developer":  "Dynamix / Sierra"
+                  },
+    "Micro Machines":  {
+                           "genre":  "Guida / Corse in Miniatura",
+                           "developer":  "Codemasters"
+                       },
+    "Pinball Fantasies":  {
+                              "genre":  "Flipper / Pinball Classico",
+                              "developer":  "Digital Illusions (DICE) / 21st Century"
+                          },
+    "Betrayal at Krondor":  {
+                                "genre":  "RPG / Gioco di Ruolo Fantasy",
+                                "developer":  "Dynamix / Sierra"
+                            },
+    "Hocus Pocus":  {
+                        "genre":  "Platform Magico a Scorrimento",
+                        "developer":  "Moonlite Software / Apogee"
+                    },
+    "Raptor - Call of the Shadows":  {
+                                         "genre":  "Sparatutto Verticale Sci-Fi",
+                                         "developer":  "Cygnus Studios / Apogee"
+                                     },
+    "Tyrian":  {
+                   "genre":  "Sparatutto Verticale Sci-Fi",
+                   "developer":  "Eclipse Productions / Epic"
+               },
+    "Screamer":  {
+                     "genre":  "Guida / Corsa Arcade 3D",
+                     "developer":  "Graffiti (Milestone) / Virgin"
+                 },
+    "Ultima Underworld II - Labyrinth of Worlds":  {
+                                                       "genre":  "Action RPG 3D in Prima Persona",
+                                                       "developer":  "Looking Glass Technologies / Origin"
+                                                   },
+    "Dangerous Dave in the Haunted Mansion":  {
+                                                  "genre":  "Platform / Azione",
+                                                  "developer":  "id Software / Softdisk"
+                                              },
+    "Flashback - The Quest for Identity":  {
+                                               "genre":  "Cinematic Sci-Fi Platformer",
+                                               "developer":  "Delphine Software"
+                                           },
+    "Wing Commander II - Vengeance of the Kilrathi":  {
+                                                          "genre":  "Simulatore Spaziale Cinematografico",
+                                                          "developer":  "Origin Systems / Chris Roberts"
+                                                      },
+    "Jill of the Jungle":  {
+                               "genre":  "Action Platformer Fantasy",
+                               "developer":  "Epic MegaGames / Tim Sweeney"
+                           },
+    "Comanche - Maximum Overkill":  {
+                                        "genre":  "Simulatore Elicottero Voxel",
+                                        "developer":  "NovaLogic"
+                                    },
+    "Pinball Dreams":  {
+                           "genre":  "Flipper / Pinball Classico",
+                           "developer":  "Digital Illusions (DICE) / 21st Century"
+                       },
+    "The Lost Vikings":  {
+                             "genre":  "Puzzle Platform Cooperativo",
+                             "developer":  "Silicon \u0026 Synapse (Blizzard) / Interplay"
+                         },
+    "Magic Carpet":  {
+                         "genre":  "Azione / Sparatutto 3D in Volo",
+                         "developer":  "Bullfrog Productions"
+                     },
+    "UFO - Enemy Unknown":  {
+                                "genre":  "Strategia Tattica a Turni e Gestione",
+                                "developer":  "Mythos Games / MicroProse"
+                            },
+    "Jetpack":  {
+                    "genre":  "Puzzle Platform con Jetpack",
+                    "developer":  "Adept Software"
+                },
+    "Star Wars - X-Wing":  {
+                               "genre":  "Simulatore Spaziale Star Wars",
+                               "developer":  "Totally Games / LucasArts"
+                           },
+    "Theme Park":  {
+                       "genre":  "Gestionale Parco Divertimenti",
+                       "developer":  "Bullfrog Productions / Peter Molyneux"
+                   },
+    "The Patrician":  {
+                          "genre":  "Commercio e Strategia Storica Hanse",
+                          "developer":  "Ascaron / Ascon"
+                      },
+    "Colonization":  {
+                         "genre":  "Strategia a Turni / Coloniale",
+                         "developer":  "MicroProse / Brian Reynolds"
+                     },
+    "Chip\u0027s Challenge":  {
+                                  "genre":  "Rompicapo / Puzzle Classico",
+                                  "developer":  "Epyx"
+                              },
+    "Warcraft II - Tides of Darkness":  {
+                                            "genre":  "Strategia in Tempo Reale / RTS",
+                                            "developer":  "Blizzard Entertainment"
+                                        },
+    "Caesar II":  {
+                      "genre":  "City Builder / Gestionale Storico",
+                      "developer":  "Impressions Games / Sierra"
+                  },
+    "Death Rally":  {
+                        "genre":  "Guida e Combattimento Veicolare",
+                        "developer":  "Remedy Entertainment / Apogee"
+                    },
+    "Psycho Pinball":  {
+                           "genre":  "Flipper / Pinball Arcade",
+                           "developer":  "Codemasters"
+                       },
+    "Warcraft - Orcs \u0026 Humans":  {
+                                          "genre":  "Strategia in Tempo Reale / RTS",
+                                          "developer":  "Blizzard Entertainment"
+                                      },
+    "Oxyd":  {
+                 "genre":  "Puzzle Logico con Palline",
+                 "developer":  "Dongleware"
+             },
+    "Lemmings 2 - The Tribes":  {
+                                    "genre":  "Puzzle / Rompicapo di Gruppo",
+                                    "developer":  "DMA Design / Psygnosis"
+                                },
+    "Supaplex":  {
+                     "genre":  "Puzzle / Rompicapo stile Boulder Dash",
+                     "developer":  "Digital Integration"
+                 },
+    "The Settlers II - Veni Vidi Vici":  {
+                                             "genre":  "Gestionale / Strategia Economica",
+                                             "developer":  "Blue Byte"
+                                         },
+    "The Even More Incredible Machine":  {
+                                             "genre":  "Puzzle / Reazioni a Catena Fisiche",
+                                             "developer":  "Dynamix / Sierra"
+                                         },
+    "SimCity 2000":  {
+                         "genre":  "City Builder Isometrico",
+                         "developer":  "Maxis / Will Wright"
+                     },
+    "Micro Machines 2 - Turbo Tournament":  {
+                                                "genre":  "Guida / Corse in Miniatura",
+                                                "developer":  "Codemasters / Supersonic"
+                                            },
+    "Wing Commander":  {
+                           "genre":  "Simulatore Spaziale Cinematografico",
+                           "developer":  "Origin Systems / Chris Roberts"
+                       },
+    "Earthworm Jim":  {
+                          "genre":  "Action Platformer Umoristico",
+                          "developer":  "Shiny Entertainment"
+                      },
+    "SimCity":  {
+                    "genre":  "City Builder / Gestione Cittadina",
+                    "developer":  "Maxis / Will Wright"
+                },
+    "Magic Carpet 2 - The Netherworlds":  {
+                                              "genre":  "Azione / Sparatutto 3D in Volo",
+                                              "developer":  "Bullfrog Productions"
+                                          },
+    "Populous II - Trials of the Olympian Gods":  {
+                                                      "genre":  "God Game / Strategia Divina",
+                                                      "developer":  "Bullfrog Productions / Peter Molyneux"
+                                                  },
+    "Prince of Persia 2 - The Shadow and the Flame":  {
+                                                          "genre":  "Cinematic Platformer di Precisione",
+                                                          "developer":  "Broderbund"
+                                                      },
+    "Master of Orion II - Battle at Antares":  {
+                                                   "genre":  "Strategia 4X Spaziale a Turni",
+                                                   "developer":  "SimTex / MicroProse"
+                                               },
+    "Abuse":  {
+                  "genre":  "Run \u0026 Gun / Sci-Fi Platformer",
+                  "developer":  "Crack dot Com"
+              },
+    "Descent":  {
+                    "genre":  "FPS Tunnel 3D / 6 DOF",
+                    "developer":  "Parallax Software / Interplay"
+                },
+    "The Incredible Machine 2":  {
+                                     "genre":  "Puzzle / Reazioni a Catena Fisiche",
+                                     "developer":  "Dynamix / Sierra"
+                                 },
+    "Prehistorik 2":  {
+                          "genre":  "Platform Comico Preistorico",
+                          "developer":  "Titus France"
+                      },
+    "Darklands":  {
+                      "genre":  "RPG Medievale / Gioco di Ruolo",
+                      "developer":  "MicroProse"
+                  },
+    "Star Wars - TIE Fighter":  {
+                                    "genre":  "Simulatore Spaziale Star Wars",
+                                    "developer":  "Totally Games / LucasArts"
+                                },
+    "Formula One Grand Prix - World Circuit":  {
+                                                   "genre":  "Simulazione Formula 1",
+                                                   "developer":  "MicroProse / Geoff Crammond"
+                                               },
+    "Theme Hospital":  {
+                           "genre":  "Gestionale Ospedaliero Umoristico",
+                           "developer":  "Bullfrog Productions"
+                       },
+    "Jazz Jackrabbit":  {
+                            "genre":  "Platform Veloce Run \u0026 Gun",
+                            "developer":  "Epic MegaGames / Cliff Bleszinski"
+                        },
+    "Test Drive III - The Passion":  {
+                                         "genre":  "Guida / Gran Turismo 3D",
+                                         "developer":  "Distinctive Software / Accolade"
+                                     },
+    "Syndicate Wars":  {
+                           "genre":  "Azione Tattica Cyberpunk 3D",
+                           "developer":  "Bullfrog Productions"
+                       },
+    "Railroad Tycoon":  {
+                            "genre":  "Gestionale Ferroviario / Strategia",
+                            "developer":  "MicroProse / Sid Meier"
+                        },
+    "SimFarm":  {
+                    "genre":  "Simulazione Agricola e Fattoria",
+                    "developer":  "Maxis"
+                },
+    "Humans 3 - Evolution":  {
+                                 "genre":  "Puzzle / Rompicapo Preistorico",
+                                 "developer":  "Imagitec Design"
+                             },
+    "Lands of Lore - The Throne of Chaos":  {
+                                                "genre":  "Dungeon Crawler / RPG Grafico",
+                                                "developer":  "Westwood Studios / Virgin"
+                                            },
+    "SimAnt - The Electronic Ant Colony":  {
+                                               "genre":  "Simulazione Biologica Formicaio",
+                                               "developer":  "Maxis / Will Wright"
+                                           },
+    "Eye of the Beholder II - The Legend of Darkmoon":  {
+                                                            "genre":  "Dungeon Crawler / RPG D\u0026D",
+                                                            "developer":  "Westwood Studios / SSI"
+                                                        },
+    "Ski or Die":  {
+                       "genre":  "Sport Invernali Estremi Arcade",
+                       "developer":  "Electronic Arts"
+                   },
+    "Lemmings 3D":  {
+                        "genre":  "Puzzle 3D / Rompicapo",
+                        "developer":  "Clockwork Games / Psygnosis"
+                    },
+    "Strike Commander":  {
+                             "genre":  "Simulatore Combattimento Aereo 3D",
+                             "developer":  "Origin Systems / Chris Roberts"
+                         },
+    "The Incredible Machine":  {
+                                   "genre":  "Puzzle / Reazioni a Catena Fisiche",
+                                   "developer":  "Dynamix / Sierra"
+                               },
+    "Epic Baseball":  {
+                          "genre":  "Sport / Baseball Arcade",
+                          "developer":  "Epic MegaGames"
+                      },
+    "Wing Commander - Privateer":  {
+                                       "genre":  "Simulatore Spaziale / Commercio Libero",
+                                       "developer":  "Origin Systems"
+                                   },
+    "Another World":  {
+                          "genre":  "Cinematic Sci-Fi Platformer",
+                          "developer":  "Delphine Software"
+                      },
+    "Master of Magic":  {
+                            "genre":  "Strategia a Turni / 4X Fantasy",
+                            "developer":  "SimTex / MicroProse"
+                        },
+    "Civilization":  {
+                         "genre":  "Strategia a Turni / 4X",
+                         "developer":  "MicroProse / Sid Meier"
+                     },
+    "Transport Tycoon Deluxe":  {
+                                    "genre":  "Gestionale Trasporti e Logistica",
+                                    "developer":  "Chris Sawyer / MicroProse"
+                                },
+    "Battle Chess":  {
+                         "genre":  "Scacchi Animati / Strategia",
+                         "developer":  "Interplay"
+                     },
+    "Commander Keen 4 - Secret of the Oracle":  {
+                                                    "genre":  "Platform Classico",
+                                                    "developer":  "id Software / Apogee"
+                                                },
+    "Pinball Illusions":  {
+                              "genre":  "Flipper / Pinball Classico",
+                              "developer":  "Digital Illusions (DICE) / 21st Century"
+                          },
+    "Heroes of Might and Magic":  {
+                                      "genre":  "Strategia a Turni Fantasy / RPG",
+                                      "developer":  "New World Computing"
+                                  },
+    "The Humans":  {
+                       "genre":  "Puzzle / Rompicapo Cooperativo",
+                       "developer":  "Imagitec Design"
+                   },
+    "One Must Fall 2097":  {
+                               "genre":  "Picchiaduro a Incontri con Robot",
+                               "developer":  "Diversions Publishing / Epic"
+                           },
+    "Epic Pinball":  {
+                         "genre":  "Flipper / Pinball 2D",
+                         "developer":  "Epic MegaGames / James Schmalz"
+                     },
+    "Stunts (4D Sports Driving)":  {
+                                       "genre":  "Guida / Acrobazie su Pista 3D",
+                                       "developer":  "Distinctive Software / Broderbund"
+                                   },
+    "Sensible World of Soccer":  {
+                                     "genre":  "Sport / Calcio e Carriera",
+                                     "developer":  "Sensible Software"
+                                 },
+    "Dune II - The Building of a Dynasty":  {
+                                                "genre":  "Strategia in Tempo Reale / RTS",
+                                                "developer":  "Westwood Studios / Virgin"
+                                            },
+    "Prince of Persia":  {
+                             "genre":  "Cinematic Platformer di Precisione",
+                             "developer":  "Jordan Mechner / Broderbund"
+                         },
+    "Tennis Elbow":  {
+                         "genre":  "Sport / Tennis Realistico",
+                         "developer":  "Mana Games"
+                     },
+    "Lemmings (VGA)":  {
+                           "genre":  "Puzzle / Rompicapo di Gruppo",
+                           "developer":  "DMA Design / Psygnosis"
+                       },
+    "Troddlers":  {
+                      "genre":  "Puzzle / Rompicapo d\u0027Azione",
+                      "developer":  "Atod / Psygnosis"
+                  }
+}
