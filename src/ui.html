@@ -2307,6 +2307,14 @@
             const currentSrc = decodeURIComponent(img.src);
             const sys = (img.getAttribute('data-sys') || '').toUpperCase();
 
+            // 0. Fallback MAME da endpoint locale a Libretro repository
+            if (currentSrc.includes('/api/cover/mame/')) {
+                const title = img.getAttribute('data-title') || '';
+                const clean = title.replace(/[:/*?"<>|]/g, '_').trim();
+                img.src = `https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/${encodeURIComponent(clean)}.png`;
+                return;
+            }
+
             // 1. Se ha già provato Europe, fallisci ed elimina img per mostrare il fallback elegante
             if (currentSrc.includes('(Europe).png')) {
                 img.remove();

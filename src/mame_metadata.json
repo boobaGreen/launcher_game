@@ -1,0 +1,2982 @@
+﻿{
+    "stonebal2":  {
+                      "developer":  "Art \u0026 Magic",
+                      "genre":  "Arcade Classic",
+                      "year":  1994
+                  },
+    "hotrod":  {
+                   "developer":  "Sega",
+                   "genre":  "Guida / Auto dall\u0027alto",
+                   "year":  1988
+               },
+    "offroad":  {
+                    "developer":  "Leland",
+                    "genre":  "Guida / Corsa Arcade",
+                    "year":  1989
+                },
+    "ptblank":  {
+                    "developer":  "Namco",
+                    "genre":  "Sparatutto con Pistola",
+                    "year":  1994
+                },
+    "namco50":  {
+                    "developer":  "Arcade",
+                    "genre":  "Arcade Classic",
+                    "year":  1990
+                },
+    "sente6vb":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "pprobe":  {
+                   "developer":  "Crux / Kyugo?",
+                   "genre":  "Sparatutto con Pistola",
+                   "year":  1985
+               },
+    "junglek":  {
+                    "developer":  "Taito",
+                    "genre":  "Platform Arcade",
+                    "year":  1982
+                },
+    "uccops":  {
+                   "developer":  "Irem",
+                   "genre":  "Picchiaduro a Incontri",
+                   "year":  1992
+               },
+    "goldnaxe":  {
+                     "developer":  "Sega",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1989
+                 },
+    "wakuwak7":  {
+                     "developer":  "Sunsoft",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1996
+                 },
+    "gtmr2":  {
+                  "developer":  "Kaneko",
+                  "genre":  "Guida / Top-Down Rally",
+                  "year":  1995
+              },
+    "xrally":  {
+                   "developer":  "SNK",
+                   "genre":  "Guida / Top-Down Rally",
+                   "year":  1998
+               },
+    "wh1":  {
+                "developer":  "Alpha Denshi Co.",
+                "genre":  "Picchiaduro a Incontri",
+                "year":  1992
+            },
+    "tms320c31":  {
+                      "developer":  "Arcade",
+                      "genre":  "Arcade Classic",
+                      "year":  1990
+                  },
+    "srallyc":  {
+                    "developer":  "Sega",
+                    "genre":  "Guida / Top-Down Rally",
+                    "year":  1995
+                },
+    "mutnat":  {
+                   "developer":  "SNK",
+                   "genre":  "Picchiaduro a Incontri",
+                   "year":  1992
+               },
+    "dkongjr":  {
+                    "developer":  "Nintendo",
+                    "genre":  "Platform Classico",
+                    "year":  1982
+                },
+    "punchout":  {
+                     "developer":  "Nintendo",
+                     "genre":  "Sport / Pugilato",
+                     "year":  1984
+                 },
+    "gtclassc":  {
+                     "developer":  "Incredible Technologies",
+                     "genre":  "Sport Arcade",
+                     "year":  2001
+                 },
+    "dstlk":  {
+                  "developer":  "Capcom",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1994
+              },
+    "sprcros2":  {
+                     "developer":  "Sanritsu / GM Shoji",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1986
+                 },
+    "deadconx":  {
+                     "developer":  "Taito",
+                     "genre":  "Sparatutto / Azione",
+                     "year":  1992
+                 },
+    "dkong":  {
+                  "developer":  "Nintendo",
+                  "genre":  "Platform Classico",
+                  "year":  1981
+              },
+    "lastbld2":  {
+                     "developer":  "SNK",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1998
+                 },
+    "indytemp":  {
+                     "developer":  "Atari Games",
+                     "genre":  "Labirinto Classico",
+                     "year":  1985
+                 },
+    "slyspy":  {
+                   "developer":  "Data East USA",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  1989
+               },
+    "birdtry":  {
+                    "developer":  "Data East",
+                    "genre":  "Sport Arcade",
+                    "year":  1988
+                },
+    "timeplt":  {
+                    "developer":  "Konami",
+                    "genre":  "Sparatutto / Azione",
+                    "year":  1982
+                },
+    "klax":  {
+                 "developer":  "Atari Games",
+                 "genre":  "Rompicapo / Puzzle",
+                 "year":  1990
+             },
+    "apb":  {
+                "developer":  "Atari Games",
+                "genre":  "Guida / Auto dall\u0027alto",
+                "year":  1987
+            },
+    "nspirit":  {
+                    "developer":  "Irem",
+                    "genre":  "Picchiaduro a Incontri",
+                    "year":  1988
+                },
+    "blstroid":  {
+                     "developer":  "Atari Games",
+                     "genre":  "Sparatutto / Azione",
+                     "year":  1987
+                 },
+    "vendetta2pw":  {
+                        "developer":  "Konami",
+                        "genre":  "Arcade Classic",
+                        "year":  1991
+                    },
+    "edrandy":  {
+                    "developer":  "Data East",
+                    "genre":  "Picchiaduro a Incontri",
+                    "year":  1990
+                },
+    "chasehq":  {
+                    "developer":  "Taito",
+                    "genre":  "Guida / Corsa Arcade",
+                    "year":  1988
+                },
+    "ssf2t":  {
+                  "developer":  "Capcom",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1994
+              },
+    "thundfox":  {
+                     "developer":  "Taito",
+                     "genre":  "Platform Arcade",
+                     "year":  1990
+                 },
+    "wbmlb":  {
+                  "developer":  "bootleg",
+                  "genre":  "Platform / Run \u0026 Gun",
+                  "year":  1987
+              },
+    "kviper":  {
+                   "developer":  "Konami",
+                   "genre":  "Arcade Classic",
+                   "year":  1999
+               },
+    "osman":  {
+                  "developer":  "Mitchell",
+                  "genre":  "Platform Arcade",
+                  "year":  1996
+              },
+    "sfiii3n":  {
+                    "developer":  "Capcom",
+                    "genre":  "Picchiaduro",
+                    "year":  1999
+                },
+    "tigeroad":  {
+                     "developer":  "Capcom",
+                     "genre":  "Platform Arcade",
+                     "year":  1987
+                 },
+    "drifto94":  {
+                     "developer":  "Visco",
+                     "genre":  "Guida / Corsa Arcade",
+                     "year":  1994
+                 },
+    "foodf":  {
+                  "developer":  "General Computer",
+                  "genre":  "Fighter",
+                  "year":  1982
+              },
+    "aerofgt":  {
+                    "developer":  "Video System Co.",
+                    "genre":  "Sparatutto Verticale",
+                    "year":  1992
+                },
+    "androdun":  {
+                     "developer":  "Visco",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1992
+                 },
+    "frogger":  {
+                    "developer":  "Konami",
+                    "genre":  "Labirinto Classico",
+                    "year":  1981
+                },
+    "gunforc2":  {
+                     "developer":  "Irem",
+                     "genre":  "Platform / Run \u0026 Gun",
+                     "year":  1994
+                 },
+    "altbeast":  {
+                     "developer":  "Sega",
+                     "genre":  "Platform Arcade",
+                     "year":  1988
+                 },
+    "gravitar":  {
+                     "developer":  "Atari",
+                     "genre":  "Sparatutto / Azione",
+                     "year":  1982
+                 },
+    "rbff2":  {
+                  "developer":  "SNK",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1998
+              },
+    "flicky":  {
+                   "developer":  "Sega",
+                   "genre":  "Platform Classico",
+                   "year":  1984
+               },
+    "ddragon2":  {
+                     "developer":  "Technos Japan",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1988
+                 },
+    "jjsquawk":  {
+                     "developer":  "Athena / Able",
+                     "genre":  "Platform / Run \u0026 Gun",
+                     "year":  1993
+                 },
+    "bm1stmix":  {
+                     "developer":  "Konami",
+                     "genre":  "Music Game",
+                     "year":  1997
+                 },
+    "gradius":  {
+                    "developer":  "Konami",
+                    "genre":  "Sparatutto Orizzontale",
+                    "year":  1985
+                },
+    "samsho2":  {
+                    "developer":  "SNK",
+                    "genre":  "Picchiaduro a Incontri",
+                    "year":  1994
+                },
+    "ssridersebd":  {
+                        "developer":  "Konami",
+                        "genre":  "Arcade Classic",
+                        "year":  1991
+                    },
+    "lwings":  {
+                   "developer":  "Capcom",
+                   "genre":  "Sparatutto Verticale",
+                   "year":  1986
+               },
+    "metamrph":  {
+                     "developer":  "Konami",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1993
+                 },
+    "f1dream":  {
+                    "developer":  "Capcom",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1988
+                },
+    "bsmt2000":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "wbeachvl":  {
+                     "developer":  "Playmark",
+                     "genre":  "Sport Arcade",
+                     "year":  1995
+                 },
+    "gtg2":  {
+                 "developer":  "Strata / Incredible Technologies",
+                 "genre":  "Sport Arcade",
+                 "year":  1992
+             },
+    "simpsons":  {
+                     "developer":  "Konami",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1991
+                 },
+    "trally":  {
+                   "developer":  "Alpha Denshi Co.",
+                   "genre":  "Guida / Top-Down Rally",
+                   "year":  1991
+               },
+    "bionicc":  {
+                    "developer":  "Capcom",
+                    "genre":  "Platform / Run \u0026 Gun",
+                    "year":  1987
+                },
+    "bankp":  {
+                  "developer":  "Sanritsu / Sega",
+                  "genre":  "Shooter",
+                  "year":  1984
+              },
+    "wldcourt":  {
+                     "developer":  "Namco",
+                     "genre":  "Sport / Tennis",
+                     "year":  1988
+                 },
+    "tumblep":  {
+                    "developer":  "Data East",
+                    "genre":  "Platform Classico",
+                    "year":  1991
+                },
+    "qix":  {
+                "developer":  "Taito America",
+                "genre":  "Rompicapo / Puzzle",
+                "year":  1981
+            },
+    "shocktro":  {
+                     "developer":  "Saurus",
+                     "genre":  "Shooter",
+                     "year":  1997
+                 },
+    "crgolfhi":  {
+                     "developer":  "Nasco Japan",
+                     "genre":  "Arcade Classic",
+                     "year":  1985
+                 },
+    "bublbobl":  {
+                     "developer":  "Taito",
+                     "genre":  "Platform Classico",
+                     "year":  1986
+                 },
+    "ssideki2":  {
+                     "developer":  "SNK",
+                     "genre":  "Sport / Calcio",
+                     "year":  1994
+                 },
+    "cadash":  {
+                   "developer":  "Taito",
+                   "genre":  "Platform Arcade",
+                   "year":  1989
+               },
+    "mvsc":  {
+                 "developer":  "Capcom",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1998
+             },
+    "gunsmoke":  {
+                     "developer":  "Capcom",
+                     "genre":  "Shooter",
+                     "year":  1985
+                 },
+    "bking2":  {
+                   "developer":  "Taito",
+                   "genre":  "Sport Arcade",
+                   "year":  1983
+               },
+    "samsho4":  {
+                    "developer":  "SNK",
+                    "genre":  "Picchiaduro a Incontri",
+                    "year":  1996
+                },
+    "pooyan":  {
+                   "developer":  "Konami",
+                   "genre":  "Shooter",
+                   "year":  1982
+               },
+    "votrsc01":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "mtwins":  {
+                   "developer":  "Capcom",
+                   "genre":  "Platform Arcade",
+                   "year":  1990
+               },
+    "unsquad":  {
+                    "developer":  "Capcom",
+                    "genre":  "Sparatutto Orizzontale",
+                    "year":  1989
+                },
+    "viostorm":  {
+                     "developer":  "Konami",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1993
+                 },
+    "shangon":  {
+                    "developer":  "Sega",
+                    "genre":  "Guida / Corsa Arcade",
+                    "year":  1987
+                },
+    "mystwarr":  {
+                     "developer":  "Konami",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1993
+                 },
+    "jungleh":  {
+                    "developer":  "Taito America",
+                    "genre":  "Platform Arcade",
+                    "year":  1982
+                },
+    "snowbros":  {
+                     "developer":  "Toaplan",
+                     "genre":  "Platform Classico",
+                     "year":  1990
+                 },
+    "stargate":  {
+                     "developer":  "Williams / Vid Kidz",
+                     "genre":  "Shooter",
+                     "year":  1981
+                 },
+    "blazstar":  {
+                     "developer":  "Yumekobo",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1998
+                 },
+    "outrun":  {
+                   "developer":  "Sega",
+                   "genre":  "Guida / Corsa Arcade",
+                   "year":  1986
+               },
+    "indyheat":  {
+                     "developer":  "Leland",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1991
+                 },
+    "kov":  {
+                "developer":  "IGS",
+                "genre":  "Picchiaduro a Incontri",
+                "year":  1999
+            },
+    "baddudes":  {
+                     "developer":  "Data East USA",
+                     "genre":  "Platform Arcade",
+                     "year":  1988
+                 },
+    "puchicar":  {
+                     "developer":  "Taito",
+                     "genre":  "Breakout / Rompimuro",
+                     "year":  1997
+                 },
+    "mexico86":  {
+                     "developer":  "bootleg",
+                     "genre":  "Sport / Calcio",
+                     "year":  1986
+                 },
+    "midssio":  {
+                    "developer":  "Arcade",
+                    "genre":  "Arcade Classic",
+                    "year":  1990
+                },
+    "bucky":  {
+                  "developer":  "Konami",
+                  "genre":  "Shooter",
+                  "year":  1992
+              },
+    "dirtfoxj":  {
+                     "developer":  "Namco",
+                     "genre":  "Guida / Corsa Arcade",
+                     "year":  1989
+                 },
+    "mgcrystl":  {
+                     "developer":  "Kaneko",
+                     "genre":  "Labirinto Classico",
+                     "year":  1991
+                 },
+    "punisher":  {
+                     "developer":  "Capcom",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1993
+                 },
+    "dirtdash":  {
+                     "developer":  "Namco",
+                     "genre":  "Arcade Classic",
+                     "year":  1995
+                 },
+    "kod":  {
+                "developer":  "Capcom",
+                "genre":  "Picchiaduro a Incontri",
+                "year":  1991
+            },
+    "puyopuy2":  {
+                     "developer":  "Compile",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1994
+                 },
+    "roughrac":  {
+                     "developer":  "Sega",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "gyruss":  {
+                   "developer":  "Konami",
+                   "genre":  "Shooter",
+                   "year":  1983
+               },
+    "spang":  {
+                  "developer":  "Mitchell",
+                  "genre":  "Shooter",
+                  "year":  1990
+              },
+    "firetrk":  {
+                    "developer":  "Atari",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1978
+                },
+    "sidepckt":  {
+                     "developer":  "Data East",
+                     "genre":  "Sport Arcade",
+                     "year":  1986
+                 },
+    "gforce2":  {
+                    "developer":  "Sega",
+                    "genre":  "Arcade Classic",
+                    "year":  1988
+                },
+    "dariusg":  {
+                    "developer":  "Taito",
+                    "genre":  "Sparatutto Orizzontale",
+                    "year":  1994
+                },
+    "blockout":  {
+                     "developer":  "Technos Japan / California Dreams",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1989
+                 },
+    "sci":  {
+                "developer":  "Taito",
+                "genre":  "Shooter",
+                "year":  1989
+            },
+    "pulstar":  {
+                    "developer":  "Aicom",
+                    "genre":  "Sparatutto Orizzontale",
+                    "year":  1995
+                },
+    "kungfum":  {
+                    "developer":  "Irem",
+                    "genre":  "Picchiaduro a Incontri",
+                    "year":  1984
+                },
+    "rtypeleo":  {
+                     "developer":  "Irem",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1992
+                 },
+    "arkanoid":  {
+                     "developer":  "Taito",
+                     "genre":  "Breakout / Rompimuro",
+                     "year":  1986
+                 },
+    "bigevglf":  {
+                     "developer":  "Taito America",
+                     "genre":  "Sport Arcade",
+                     "year":  1986
+                 },
+    "mpatrol":  {
+                    "developer":  "Irem",
+                    "genre":  "Shooter",
+                    "year":  1982
+                },
+    "elvactr":  {
+                    "developer":  "Taito",
+                    "genre":  "Platform Arcade",
+                    "year":  1994
+                },
+    "bnj":  {
+                "developer":  "Data East USA",
+                "genre":  "Guida / Corsa Arcade",
+                "year":  1982
+            },
+    "jumpbug":  {
+                    "developer":  "Hoei",
+                    "genre":  "Platform Arcade",
+                    "year":  1981
+                },
+    "smashtv":  {
+                    "developer":  "Williams",
+                    "genre":  "Sparatutto / Azione",
+                    "year":  1990
+                },
+    "aof2":  {
+                 "developer":  "SNK",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1994
+             },
+    "knights":  {
+                    "developer":  "Capcom",
+                    "genre":  "Picchiaduro a Incontri",
+                    "year":  1991
+                },
+    "namcoc69":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "pdrift":  {
+                   "developer":  "Sega",
+                   "genre":  "Arcade Classic",
+                   "year":  1988
+               },
+    "turfmast":  {
+                     "developer":  "Nazca",
+                     "genre":  "Sport Arcade",
+                     "year":  1996
+                 },
+    "rungun":  {
+                   "developer":  "Konami",
+                   "genre":  "Sport / Basket",
+                   "year":  1993
+               },
+    "rbisland":  {
+                     "developer":  "Taito",
+                     "genre":  "Arcade Classic",
+                     "year":  1987
+                 },
+    "amspdwy":  {
+                    "developer":  "Enerdyne Technologies",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1987
+                },
+    "m68705p5":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "mcatadv":  {
+                    "developer":  "Wintechno",
+                    "genre":  "Platform / Run \u0026 Gun",
+                    "year":  1993
+                },
+    "mhavoc":  {
+                   "developer":  "Atari",
+                   "genre":  "Shooter",
+                   "year":  1983
+               },
+    "sengoku3":  {
+                     "developer":  "Noise Factory / SNK",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  2001
+                 },
+    "mk2":  {
+                "developer":  "Midway",
+                "genre":  "Picchiaduro a Incontri",
+                "year":  1993
+            },
+    "csprint":  {
+                    "developer":  "Atari Games",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1986
+                },
+    "spyhunt":  {
+                    "developer":  "Bally Midway",
+                    "genre":  "Shooter",
+                    "year":  1983
+                },
+    "avsp":  {
+                 "developer":  "Capcom",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1994
+             },
+    "trojan":  {
+                   "developer":  "Capcom",
+                   "genre":  "Platform Arcade",
+                   "year":  1986
+               },
+    "rampage":  {
+                    "developer":  "Bally Midway",
+                    "genre":  "Platform Arcade",
+                    "year":  1986
+                },
+    "invaders":  {
+                     "developer":  "Taito / Midway",
+                     "genre":  "Sparatutto con Pistola",
+                     "year":  1978
+                 },
+    "armwar":  {
+                   "developer":  "Capcom",
+                   "genre":  "Platform Arcade",
+                   "year":  1994
+               },
+    "rthunder":  {
+                     "developer":  "Namco",
+                     "genre":  "Platform / Run \u0026 Gun",
+                     "year":  1986
+                 },
+    "preisle2":  {
+                     "developer":  "Yumekobo / Saurus",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1999
+                 },
+    "cbuster":  {
+                    "developer":  "Data East",
+                    "genre":  "Platform Arcade",
+                    "year":  1990
+                },
+    "josvolly":  {
+                     "developer":  "Allumer / Taito",
+                     "genre":  "Sport Arcade",
+                     "year":  1983
+                 },
+    "montecar":  {
+                     "developer":  "Atari",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1979
+                 },
+    "roadriot":  {
+                     "developer":  "Atari Games",
+                     "genre":  "Guida / Corsa Arcade",
+                     "year":  1991
+                 },
+    "mario":  {
+                  "developer":  "Nintendo",
+                  "genre":  "Platform Classico",
+                  "year":  1983
+              },
+    "magdrop3":  {
+                     "developer":  "Data East",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1997
+                 },
+    "hstennis":  {
+                     "developer":  "Strata / Incredible Technologies",
+                     "genre":  "Sport / Tennis",
+                     "year":  1990
+                 },
+    "1943":  {
+                 "developer":  "Capcom",
+                 "genre":  "Sparatutto Verticale",
+                 "year":  1987
+             },
+    "grdians":  {
+                    "developer":  "Winkysoft",
+                    "genre":  "Picchiaduro a Incontri",
+                    "year":  1995
+                },
+    "pspikes":  {
+                    "developer":  "Video System Co.",
+                    "genre":  "Sport Arcade",
+                    "year":  1991
+                },
+    "sinistar":  {
+                     "developer":  "Williams",
+                     "genre":  "Sparatutto / Azione",
+                     "year":  1982
+                 },
+    "chelnov":  {
+                    "developer":  "Data East",
+                    "genre":  "Platform / Run \u0026 Gun",
+                    "year":  1988
+                },
+    "darkseal":  {
+                     "developer":  "Data East",
+                     "genre":  "Labirinto Classico",
+                     "year":  1990
+                 },
+    "bjtwin":  {
+                   "developer":  "NMK",
+                   "genre":  "Platform Classico",
+                   "year":  1993
+               },
+    "marble":  {
+                   "developer":  "Atari Games",
+                   "genre":  "Labirinto Classico",
+                   "year":  1984
+               },
+    "cyberlip":  {
+                     "developer":  "SNK",
+                     "genre":  "Platform / Run \u0026 Gun",
+                     "year":  1990
+                 },
+    "progolf":  {
+                    "developer":  "Data East",
+                    "genre":  "Arcade Classic",
+                    "year":  1981
+                },
+    "liquidk":  {
+                    "developer":  "Taito",
+                    "genre":  "Platform Arcade",
+                    "year":  1990
+                },
+    "mslug3":  {
+                   "developer":  "SNK",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  2000
+               },
+    "silkworm":  {
+                     "developer":  "Tecmo",
+                     "genre":  "Shooter",
+                     "year":  1988
+                 },
+    "superbug":  {
+                     "developer":  "Atari",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1977
+                 },
+    "suratk":  {
+                   "developer":  "Konami",
+                   "genre":  "Arcade Classic",
+                   "year":  1990
+               },
+    "wow":  {
+                "developer":  "Dave Nutting Associates / Midway",
+                "genre":  "Labirinto Classico",
+                "year":  1980
+            },
+    "gtg":  {
+                "developer":  "Strata / Incredible Technologies",
+                "genre":  "Sport Arcade",
+                "year":  1990
+            },
+    "eaglshot":  {
+                     "developer":  "Sammy",
+                     "genre":  "Sport Arcade",
+                     "year":  1994
+                 },
+    "charlien":  {
+                     "developer":  "Mitchell",
+                     "genre":  "Platform / Run \u0026 Gun",
+                     "year":  1995
+                 },
+    "1941":  {
+                 "developer":  "Capcom",
+                 "genre":  "Sparatutto Verticale",
+                 "year":  1990
+             },
+    "ffight":  {
+                   "developer":  "Capcom",
+                   "genre":  "Picchiaduro a Incontri",
+                   "year":  1989
+               },
+    "majtitl2":  {
+                     "developer":  "Irem",
+                     "genre":  "Sport Arcade",
+                     "year":  1992
+                 },
+    "ghouls":  {
+                   "developer":  "Capcom",
+                   "genre":  "Platform Arcade",
+                   "year":  1988
+               },
+    "ctribe":  {
+                   "developer":  "Technos Japan",
+                   "genre":  "Picchiaduro a Incontri",
+                   "year":  1990
+               },
+    "raiden":  {
+                   "developer":  "Seibu Kaihatsu",
+                   "genre":  "Sparatutto Verticale",
+                   "year":  1990
+               },
+    "donpachi":  {
+                     "developer":  "Cave",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1995
+                 },
+    "tengai":  {
+                   "developer":  "Psikyo",
+                   "genre":  "Sparatutto Orizzontale",
+                   "year":  1996
+               },
+    "captaven":  {
+                     "developer":  "Data East",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1991
+                 },
+    "vanguard":  {
+                     "developer":  "SNK",
+                     "genre":  "Shooter",
+                     "year":  1981
+                 },
+    "thoop":  {
+                  "developer":  "Gaelco",
+                  "genre":  "Platform / Run \u0026 Gun",
+                  "year":  1992
+              },
+    "winspike":  {
+                     "developer":  "Konami",
+                     "genre":  "Sport Arcade",
+                     "year":  1997
+                 },
+    "batsugun":  {
+                     "developer":  "Toaplan",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1993
+                 },
+    "gunbird2":  {
+                     "developer":  "Psikyo",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1998
+                 },
+    "dorunrun":  {
+                     "developer":  "Universal",
+                     "genre":  "Labirinto Classico",
+                     "year":  1984
+                 },
+    "term2":  {
+                  "developer":  "Midway",
+                  "genre":  "Sparatutto con Pistola",
+                  "year":  1991
+              },
+    "robotron":  {
+                     "developer":  "Williams / Vid Kidz",
+                     "genre":  "Sparatutto / Azione",
+                     "year":  1982
+                 },
+    "esprade":  {
+                    "developer":  "Cave",
+                    "genre":  "Sparatutto Verticale",
+                    "year":  1998
+                },
+    "volfied":  {
+                    "developer":  "Taito",
+                    "genre":  "Rompicapo / Puzzle",
+                    "year":  1989
+                },
+    "marvland":  {
+                     "developer":  "Namco",
+                     "genre":  "Platform Arcade",
+                     "year":  1989
+                 },
+    "ym2608":  {
+                   "developer":  "Arcade",
+                   "genre":  "Arcade Classic",
+                   "year":  1990
+               },
+    "mspacman":  {
+                     "developer":  "Midway / General Computer",
+                     "genre":  "Labirinto Classico",
+                     "year":  1981
+                 },
+    "gt3d":  {
+                 "developer":  "Incredible Technologies",
+                 "genre":  "Sport Arcade",
+                 "year":  1995
+             },
+    "kotm2":  {
+                  "developer":  "SNK",
+                  "genre":  "Fighter",
+                  "year":  1992
+              },
+    "snowboar":  {
+                     "developer":  "Gaelco / OMK",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1997
+                 },
+    "gaia":  {
+                 "developer":  "Noise Factory",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1999
+             },
+    "hyperspt":  {
+                     "developer":  "Konami",
+                     "genre":  "Sport / Gare \u0026 Atletica",
+                     "year":  1984
+                 },
+    "gunlock":  {
+                    "developer":  "Taito",
+                    "genre":  "Sparatutto Verticale",
+                    "year":  1993
+                },
+    "bzone":  {
+                  "developer":  "Atari",
+                  "genre":  "Shooter",
+                  "year":  1980
+              },
+    "ninjamas":  {
+                     "developer":  "ADK / SNK",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1996
+                 },
+    "socbrawl":  {
+                     "developer":  "SNK",
+                     "genre":  "Sport / Calcio",
+                     "year":  1991
+                 },
+    "pang":  {
+                 "developer":  "Mitchell",
+                 "genre":  "Shooter",
+                 "year":  1989
+             },
+    "rtype":  {
+                  "developer":  "Irem",
+                  "genre":  "Sparatutto Orizzontale",
+                  "year":  1987
+              },
+    "lbowling":  {
+                     "developer":  "SNK",
+                     "genre":  "Sport Arcade",
+                     "year":  1990
+                 },
+    "bbakraid":  {
+                     "developer":  "Eighting",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1999
+                 },
+    "brubber":  {
+                    "developer":  "Data East",
+                    "genre":  "Guida / Corsa Arcade",
+                    "year":  1982
+                },
+    "lightbr":  {
+                    "developer":  "Taito",
+                    "genre":  "Labirinto Classico",
+                    "year":  1993
+                },
+    "3wonders":  {
+                     "developer":  "Capcom",
+                     "genre":  "MultiGame",
+                     "year":  1991
+                 },
+    "parodius":  {
+                     "developer":  "Konami",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1990
+                 },
+    "pbaction":  {
+                     "developer":  "Tehkan",
+                     "genre":  "Flipper Arcade",
+                     "year":  1985
+                 },
+    "crimfght":  {
+                     "developer":  "Konami",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1989
+                 },
+    "wardner":  {
+                    "developer":  "Toaplan / Taito",
+                    "genre":  "Platform Arcade",
+                    "year":  1987
+                },
+    "ncommand":  {
+                     "developer":  "Alpha Denshi Co.",
+                     "genre":  "Shooter",
+                     "year":  1992
+                 },
+    "psychic5":  {
+                     "developer":  "Jaleco / NMK",
+                     "genre":  "Platform Arcade",
+                     "year":  1987
+                 },
+    "pow":  {
+                "developer":  "SNK",
+                "genre":  "Picchiaduro a Incontri",
+                "year":  1988
+            },
+    "jcross":  {
+                   "developer":  "SNK",
+                   "genre":  "Guida / Auto dall\u0027alto",
+                   "year":  1984
+               },
+    "tugboat":  {
+                    "developer":  "Enter-Tech, Ltd.",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1982
+                },
+    "wboy":  {
+                 "developer":  "Escape",
+                 "genre":  "Platform / Run \u0026 Gun",
+                 "year":  1986
+             },
+    "raidendx":  {
+                     "developer":  "Seibu Kaihatsu",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1994
+                 },
+    "wrally":  {
+                   "developer":  "Gaelco",
+                   "genre":  "Guida / Top-Down Rally",
+                   "year":  1993
+               },
+    "crzrally":  {
+                     "developer":  "Tecfri",
+                     "genre":  "Guida / Top-Down Rally",
+                     "year":  1985
+                 },
+    "mappy":  {
+                  "developer":  "Namco",
+                  "genre":  "Platform Classico",
+                  "year":  1983
+              },
+    "kidniki":  {
+                    "developer":  "Irem",
+                    "genre":  "Platform Arcade",
+                    "year":  1986
+                },
+    "wcvol95":  {
+                    "developer":  "Data East",
+                    "genre":  "Sport Arcade",
+                    "year":  1995
+                },
+    "pcktgal":  {
+                    "developer":  "Data East",
+                    "genre":  "Sport Arcade",
+                    "year":  1987
+                },
+    "dietgo":  {
+                   "developer":  "Data East",
+                   "genre":  "Platform Classico",
+                   "year":  1992
+               },
+    "funkyjet":  {
+                     "developer":  "Mitchell",
+                     "genre":  "Platform Classico",
+                     "year":  1992
+                 },
+    "crshrace":  {
+                     "developer":  "Video System Co.",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1993
+                 },
+    "guzzler":  {
+                    "developer":  "Tehkan",
+                    "genre":  "Labirinto Classico",
+                    "year":  1983
+                },
+    "bigkarnk":  {
+                     "developer":  "Gaelco",
+                     "genre":  "Platform Arcade",
+                     "year":  1991
+                 },
+    "galaxian":  {
+                     "developer":  "Namco",
+                     "genre":  "Sparatutto con Pistola",
+                     "year":  1979
+                 },
+    "roboarmy":  {
+                     "developer":  "SNK",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1991
+                 },
+    "overtop":  {
+                    "developer":  "ADK",
+                    "genre":  "Guida / Corsa Arcade",
+                    "year":  1996
+                },
+    "gngt":  {
+                 "developer":  "Capcom",
+                 "genre":  "Platform Arcade",
+                 "year":  1985
+             },
+    "motos":  {
+                  "developer":  "Namco",
+                  "genre":  "Rompicapo / Puzzle",
+                  "year":  1985
+              },
+    "naomi":  {
+                  "developer":  "Sega",
+                  "genre":  "Arcade Classic",
+                  "year":  1998
+              },
+    "spiero":  {
+                   "developer":  "Universal",
+                   "genre":  "Labirinto Classico",
+                   "year":  1987
+               },
+    "sexyparo":  {
+                     "developer":  "Konami",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1996
+                 },
+    "ddtod":  {
+                  "developer":  "Capcom",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1993
+              },
+    "outfxies":  {
+                     "developer":  "Namco",
+                     "genre":  "Platform Arcade",
+                     "year":  1994
+                 },
+    "aburner":  {
+                    "developer":  "Sega",
+                    "genre":  "Shooter",
+                    "year":  1987
+                },
+    "growl":  {
+                  "developer":  "Taito",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1990
+              },
+    "blmbycar":  {
+                     "developer":  "ABM \u0026 Gecas",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1994
+                 },
+    "40love":  {
+                   "developer":  "Taito",
+                   "genre":  "Sport / Tennis",
+                   "year":  1984
+               },
+    "totcarn":  {
+                    "developer":  "Midway",
+                    "genre":  "Shooter",
+                    "year":  1992
+                },
+    "ssi":  {
+                "developer":  "Taito",
+                "genre":  "Sparatutto con Pistola",
+                "year":  1990
+            },
+    "dragnblz":  {
+                     "developer":  "Psikyo",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  2000
+                 },
+    "wjammers":  {
+                     "developer":  "Data East",
+                     "genre":  "Sport Arcade",
+                     "year":  1994
+                 },
+    "contra":  {
+                   "developer":  "Konami",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  1987
+               },
+    "bonzeadv":  {
+                     "developer":  "Taito",
+                     "genre":  "Platform / Run \u0026 Gun",
+                     "year":  1988
+                 },
+    "waterski":  {
+                     "developer":  "Taito",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1983
+                 },
+    "segabill":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "bloodbro":  {
+                     "developer":  "TAD",
+                     "genre":  "Shooter",
+                     "year":  1990
+                 },
+    "jvs13551":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "actfancr":  {
+                     "developer":  "Data East",
+                     "genre":  "Platform / Run \u0026 Gun",
+                     "year":  1989
+                 },
+    "gticlub2":  {
+                     "developer":  "Konami",
+                     "genre":  "Arcade Classic",
+                     "year":  2000
+                 },
+    "rpatrol":  {
+                    "developer":  "Orca",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1981
+                },
+    "hvysmsh":  {
+                    "developer":  "Data East",
+                    "genre":  "Sport Arcade",
+                    "year":  1993
+                },
+    "rygar":  {
+                  "developer":  "Tecmo",
+                  "genre":  "Platform Arcade",
+                  "year":  1986
+              },
+    "outzone":  {
+                    "developer":  "Toaplan",
+                    "genre":  "Shooter",
+                    "year":  1990
+                },
+    "sectionz":  {
+                     "developer":  "Capcom",
+                     "genre":  "Shooter",
+                     "year":  1985
+                 },
+    "cclimber":  {
+                     "developer":  "Nichibutsu",
+                     "genre":  "Platform / Scalata",
+                     "year":  1980
+                 },
+    "pbobble4":  {
+                     "developer":  "Taito",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1997
+                 },
+    "bombjack":  {
+                     "developer":  "Tehkan",
+                     "genre":  "Platform Classico",
+                     "year":  1984
+                 },
+    "amidar":  {
+                   "developer":  "Konami",
+                   "genre":  "Labirinto Classico",
+                   "year":  1982
+               },
+    "tdragon2":  {
+                     "developer":  "NMK",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1993
+                 },
+    "dotron":  {
+                   "developer":  "Bally Midway",
+                   "genre":  "Sport Arcade",
+                   "year":  1983
+               },
+    "mooncrst":  {
+                     "developer":  "Nichibutsu",
+                     "genre":  "Sparatutto con Pistola",
+                     "year":  1980
+                 },
+    "vstennis":  {
+                     "developer":  "Nintendo",
+                     "genre":  "Sport / Tennis",
+                     "year":  1984
+                 },
+    "wb3":  {
+                "developer":  "Sega / Westone",
+                "genre":  "Platform / Run \u0026 Gun",
+                "year":  1988
+            },
+    "fatfursp":  {
+                     "developer":  "SNK",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1993
+                 },
+    "roadf":  {
+                  "developer":  "Konami",
+                  "genre":  "Guida / Auto dall\u0027alto",
+                  "year":  1984
+              },
+    "samsho":  {
+                   "developer":  "SNK",
+                   "genre":  "Picchiaduro a Incontri",
+                   "year":  1993
+               },
+    "dkong3":  {
+                   "developer":  "Nintendo",
+                   "genre":  "Platform Classico",
+                   "year":  1983
+               },
+    "protenn":  {
+                    "developer":  "Data East",
+                    "genre":  "Arcade Classic",
+                    "year":  1982
+                },
+    "ssriders":  {
+                     "developer":  "Konami",
+                     "genre":  "Platform / Run \u0026 Gun",
+                     "year":  1991
+                 },
+    "tmnt":  {
+                 "developer":  "Konami",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1989
+             },
+    "compgolf":  {
+                     "developer":  "Data East",
+                     "genre":  "Sport Arcade",
+                     "year":  1986
+                 },
+    "bking":  {
+                  "developer":  "Taito",
+                  "genre":  "Sport Arcade",
+                  "year":  1982
+              },
+    "driftout":  {
+                     "developer":  "Visco",
+                     "genre":  "Guida / Corsa Arcade",
+                     "year":  1991
+                 },
+    "tpgolf":  {
+                   "developer":  "SNK",
+                   "genre":  "Sport Arcade",
+                   "year":  1990
+               },
+    "midcsd":  {
+                   "developer":  "Arcade",
+                   "genre":  "Arcade Classic",
+                   "year":  1990
+               },
+    "shdancer":  {
+                     "developer":  "Sega",
+                     "genre":  "Platform Arcade",
+                     "year":  1989
+                 },
+    "trog":  {
+                 "developer":  "Midway",
+                 "genre":  "Labirinto Classico",
+                 "year":  1990
+             },
+    "lresort":  {
+                    "developer":  "SNK",
+                    "genre":  "Sparatutto Orizzontale",
+                    "year":  1992
+                },
+    "pbobble2x":  {
+                      "developer":  "Taito",
+                      "genre":  "Arcade Classic",
+                      "year":  1995
+                  },
+    "congo":  {
+                  "developer":  "Sega",
+                  "genre":  "Platform Classico",
+                  "year":  1983
+              },
+    "popeye":  {
+                   "developer":  "Nintendo",
+                   "genre":  "Platform Classico",
+                   "year":  1982
+               },
+    "splatter":  {
+                     "developer":  "Namco",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1988
+                 },
+    "neobombe":  {
+                     "developer":  "Hudson Soft",
+                     "genre":  "Labirinto Classico",
+                     "year":  1997
+                 },
+    "bubsymphe":  {
+                      "developer":  "Taito",
+                      "genre":  "Arcade Classic",
+                      "year":  1994
+                  },
+    "virge_pci":  {
+                      "developer":  "Arcade",
+                      "genre":  "Arcade Classic",
+                      "year":  1990
+                  },
+    "nbbatman":  {
+                     "developer":  "Irem",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1993
+                 },
+    "jackal":  {
+                   "developer":  "Konami",
+                   "genre":  "Shooter",
+                   "year":  1986
+               },
+    "irobot":  {
+                   "developer":  "Atari",
+                   "genre":  "Shooter",
+                   "year":  1983
+               },
+    "madgear":  {
+                    "developer":  "Capcom",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1989
+                },
+    "neogeo":  {
+                   "developer":  "SNK",
+                   "genre":  "System",
+                   "year":  1990
+               },
+    "opengolf":  {
+                     "developer":  "Konami",
+                     "genre":  "Sport Arcade",
+                     "year":  1994
+                 },
+    "raiden2":  {
+                    "developer":  "Seibu Kaihatsu",
+                    "genre":  "Sparatutto Verticale",
+                    "year":  1993
+                },
+    "kikikai":  {
+                    "developer":  "Taito",
+                    "genre":  "Shooter",
+                    "year":  1986
+                },
+    "bking3":  {
+                   "developer":  "Taito",
+                   "genre":  "Sport Arcade",
+                   "year":  1984
+               },
+    "xmen":  {
+                 "developer":  "Konami",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1992
+             },
+    "defender":  {
+                     "developer":  "Williams",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1980
+                 },
+    "pacland":  {
+                    "developer":  "Namco",
+                    "genre":  "Platform Arcade",
+                    "year":  1984
+                },
+    "hharry":  {
+                   "developer":  "Irem",
+                   "genre":  "Platform Arcade",
+                   "year":  1990
+               },
+    "ganryu":  {
+                   "developer":  "Visco",
+                   "genre":  "Platform Arcade",
+                   "year":  1999
+               },
+    "gauntlet":  {
+                     "developer":  "Atari Games",
+                     "genre":  "Labirinto Classico",
+                     "year":  1985
+                 },
+    "minigolf":  {
+                     "developer":  "Bally/Sente",
+                     "genre":  "Sport Arcade",
+                     "year":  1985
+                 },
+    "iteagle":  {
+                    "developer":  "Incredible Technologies",
+                    "genre":  "Arcade Classic",
+                    "year":  2000
+                },
+    "samuraia":  {
+                     "developer":  "Psikyo",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1993
+                 },
+    "namco53":  {
+                    "developer":  "Arcade",
+                    "genre":  "Arcade Classic",
+                    "year":  1990
+                },
+    "pbobblen":  {
+                     "developer":  "Taito",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1994
+                 },
+    "namcoc75":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "1942":  {
+                 "developer":  "Capcom",
+                 "genre":  "Sparatutto Verticale",
+                 "year":  1984
+             },
+    "votrsc01a":  {
+                      "developer":  "Arcade",
+                      "genre":  "Arcade Classic",
+                      "year":  1990
+                  },
+    "beachspi":  {
+                     "developer":  "CRI / Sega",
+                     "genre":  "Arcade Classic",
+                     "year":  2001
+                 },
+    "prehisle":  {
+                     "developer":  "SNK",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1989
+                 },
+    "gundhara":  {
+                     "developer":  "Banpresto",
+                     "genre":  "Shooter",
+                     "year":  1995
+                 },
+    "joemacr":  {
+                    "developer":  "Data East",
+                    "genre":  "Platform Classico",
+                    "year":  1994
+                },
+    "naomi2":  {
+                   "developer":  "Sega",
+                   "genre":  "Arcade Classic",
+                   "year":  2001
+               },
+    "viewpoin":  {
+                     "developer":  "Sammy / Aicom",
+                     "genre":  "Shooter",
+                     "year":  1992
+                 },
+    "wtennis":  {
+                    "developer":  "bootleg",
+                    "genre":  "Sport / Tennis",
+                    "year":  1982
+                },
+    "speedspn":  {
+                     "developer":  "TCH",
+                     "genre":  "Sport Arcade",
+                     "year":  1994
+                 },
+    "scobra":  {
+                   "developer":  "Konami",
+                   "genre":  "Sparatutto Orizzontale",
+                   "year":  1981
+               },
+    "kof98":  {
+                  "developer":  "SNK",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1998
+              },
+    "s1945ii":  {
+                    "developer":  "Psikyo",
+                    "genre":  "Sparatutto Verticale",
+                    "year":  1997
+                },
+    "2020bb":  {
+                   "developer":  "SNK / Pallas",
+                   "genre":  "Sport / Baseball",
+                   "year":  1991
+               },
+    "cchip":  {
+                  "developer":  "Arcade",
+                  "genre":  "Arcade Classic",
+                  "year":  1990
+              },
+    "19xx":  {
+                 "developer":  "Capcom",
+                 "genre":  "Sparatutto Verticale",
+                 "year":  1996
+             },
+    "phoenix":  {
+                    "developer":  "Amstar",
+                    "genre":  "Sparatutto con Pistola",
+                    "year":  1980
+                },
+    "hng64":  {
+                  "developer":  "SNK",
+                  "genre":  "Arcade Classic",
+                  "year":  1997
+              },
+    "retofinv":  {
+                     "developer":  "Taito",
+                     "genre":  "Sparatutto con Pistola",
+                     "year":  1985
+                 },
+    "bmaster":  {
+                    "developer":  "Irem",
+                    "genre":  "Picchiaduro a Incontri",
+                    "year":  1991
+                },
+    "redlin2p":  {
+                     "developer":  "Cinematronics",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1987
+                 },
+    "pitfall2":  {
+                     "developer":  "Sega",
+                     "genre":  "Platform Arcade",
+                     "year":  1985
+                 },
+    "grchamp":  {
+                    "developer":  "Taito",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1981
+                },
+    "ga2":  {
+                "developer":  "Sega",
+                "genre":  "Picchiaduro a Incontri",
+                "year":  1992
+            },
+    "demoderb":  {
+                     "developer":  "Bally Midway",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1984
+                 },
+    "espgal":  {
+                   "developer":  "Cave",
+                   "genre":  "Sparatutto Verticale",
+                   "year":  2003
+               },
+    "penbros":  {
+                    "developer":  "Subsino",
+                    "genre":  "Platform Classico",
+                    "year":  2000
+                },
+    "galaga":  {
+                   "developer":  "Namco",
+                   "genre":  "Sparatutto con Pistola",
+                   "year":  1981
+               },
+    "astorm":  {
+                   "developer":  "Sega",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  1990
+               },
+    "opwolf":  {
+                   "developer":  "Taito",
+                   "genre":  "Sparatutto con Pistola",
+                   "year":  1987
+               },
+    "slammast":  {
+                     "developer":  "Capcom",
+                     "genre":  "Sport / Wrestling",
+                     "year":  1993
+                 },
+    "nibbler":  {
+                    "developer":  "Rock-Ola",
+                    "genre":  "Labirinto Classico",
+                    "year":  1982
+                },
+    "ldrun":  {
+                  "developer":  "Irem",
+                  "genre":  "Platform Classico",
+                  "year":  1984
+              },
+    "timescan":  {
+                     "developer":  "Sega",
+                     "genre":  "Arcade Classic",
+                     "year":  1987
+                 },
+    "vendetta":  {
+                     "developer":  "Konami",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1991
+                 },
+    "bublboblr":  {
+                      "developer":  "Taito America",
+                      "genre":  "Arcade Classic",
+                      "year":  1986
+                  },
+    "ym2413":  {
+                   "developer":  "Arcade",
+                   "genre":  "Arcade Classic",
+                   "year":  1990
+               },
+    "swcourt":  {
+                    "developer":  "Namco",
+                    "genre":  "Sport / Tennis",
+                    "year":  1992
+                },
+    "quantum":  {
+                    "developer":  "General Computer",
+                    "genre":  "Rompicapo / Puzzle",
+                    "year":  1982
+                },
+    "pbobble2":  {
+                     "developer":  "Taito",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1995
+                 },
+    "sonson":  {
+                   "developer":  "Capcom",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  1984
+               },
+    "svolleyu":  {
+                     "developer":  "V-System Co.",
+                     "genre":  "Sport Arcade",
+                     "year":  1989
+                 },
+    "hwrace":  {
+                   "developer":  "Taito",
+                   "genre":  "Guida / Auto dall\u0027alto",
+                   "year":  1983
+               },
+    "sharrier":  {
+                     "developer":  "Sega",
+                     "genre":  "Shooter",
+                     "year":  1985
+                 },
+    "crzytaxi":  {
+                     "developer":  "Sega",
+                     "genre":  "Arcade Classic",
+                     "year":  1999
+                 },
+    "mslug":  {
+                  "developer":  "Nazca",
+                  "genre":  "Platform / Run \u0026 Gun",
+                  "year":  1996
+              },
+    "xmvsf":  {
+                  "developer":  "Capcom",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1996
+              },
+    "segadimm":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "fantzone":  {
+                     "developer":  "Sega",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1986
+                 },
+    "sdtennis":  {
+                     "developer":  "Data East",
+                     "genre":  "Sport / Tennis",
+                     "year":  1983
+                 },
+    "galaga88":  {
+                     "developer":  "Namco",
+                     "genre":  "Sparatutto con Pistola",
+                     "year":  1987
+                 },
+    "commando":  {
+                     "developer":  "Capcom",
+                     "genre":  "Shooter",
+                     "year":  1985
+                 },
+    "aliens":  {
+                   "developer":  "Konami",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  1990
+               },
+    "bstars2":  {
+                    "developer":  "SNK",
+                    "genre":  "Sport / Baseball",
+                    "year":  1992
+                },
+    "ddonpach":  {
+                     "developer":  "Cave",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1997
+                 },
+    "willow":  {
+                   "developer":  "Capcom",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  1989
+               },
+    "dirtdvls":  {
+                     "developer":  "Sega",
+                     "genre":  "Arcade Classic",
+                     "year":  1998
+                 },
+    "missile":  {
+                    "developer":  "Atari",
+                    "genre":  "Sparatutto / Azione",
+                    "year":  1980
+                },
+    "alpine":  {
+                   "developer":  "Taito",
+                   "genre":  "Guida / Auto dall\u0027alto",
+                   "year":  1982
+               },
+    "nitd":  {
+                 "developer":  "Eleven / Gavaking",
+                 "genre":  "Platform Classico",
+                 "year":  2000
+             },
+    "circusc":  {
+                    "developer":  "Konami",
+                    "genre":  "Platform Arcade",
+                    "year":  1984
+                },
+    "truxton":  {
+                    "developer":  "Toaplan / Taito",
+                    "genre":  "Sparatutto Verticale",
+                    "year":  1988
+                },
+    "rambo3":  {
+                   "developer":  "Taito Europe",
+                   "genre":  "Shooter",
+                   "year":  1989
+               },
+    "xmen2pe":  {
+                    "developer":  "Konami",
+                    "genre":  "Arcade Classic",
+                    "year":  1992
+                },
+    "digdug2":  {
+                    "developer":  "Namco",
+                    "genre":  "Labirinto Classico",
+                    "year":  1985
+                },
+    "mmaze":  {
+                  "developer":  "Namco",
+                  "genre":  "Labirinto Classico",
+                  "year":  1988
+              },
+    "salamand":  {
+                     "developer":  "Konami",
+                     "genre":  "Shooter",
+                     "year":  1986
+                 },
+    "suprmrio":  {
+                     "developer":  "Nintendo",
+                     "genre":  "Platform Arcade",
+                     "year":  1986
+                 },
+    "snowbro2":  {
+                     "developer":  "Hanafram",
+                     "genre":  "Platform Classico",
+                     "year":  1994
+                 },
+    "wrally2":  {
+                    "developer":  "Gaelco",
+                    "genre":  "Guida / Top-Down Rally",
+                    "year":  1995
+                },
+    "demonwld":  {
+                     "developer":  "Toaplan",
+                     "genre":  "Platform / Run \u0026 Gun",
+                     "year":  1990
+                 },
+    "nemesis":  {
+                    "developer":  "Konami",
+                    "genre":  "Sparatutto Orizzontale",
+                    "year":  1985
+                },
+    "zaxxon":  {
+                   "developer":  "Sega",
+                   "genre":  "Shooter",
+                   "year":  1982
+               },
+    "garou":  {
+                  "developer":  "SNK",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1999
+              },
+    "maglord":  {
+                    "developer":  "Alpha Denshi Co.",
+                    "genre":  "Platform / Run \u0026 Gun",
+                    "year":  1990
+                },
+    "twincobr":  {
+                     "developer":  "Toaplan / Taito",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1987
+                 },
+    "sfa2":  {
+                 "developer":  "Capcom",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1996
+             },
+    "pleiads":  {
+                    "developer":  "Tehkan",
+                    "genre":  "Sparatutto con Pistola",
+                    "year":  1981
+                },
+    "stocker":  {
+                    "developer":  "Bally/Sente",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1984
+                },
+    "shtrider":  {
+                     "developer":  "Seibu Kaihatsu",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1985
+                 },
+    "eightman":  {
+                     "developer":  "SNK / Pallas",
+                     "genre":  "Platform Arcade",
+                     "year":  1991
+                 },
+    "elevator":  {
+                     "developer":  "Taito",
+                     "genre":  "Platform Arcade",
+                     "year":  1983
+                 },
+    "btime":  {
+                  "developer":  "Data East",
+                  "genre":  "Platform Classico",
+                  "year":  1982
+              },
+    "scramble":  {
+                     "developer":  "Konami",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1981
+                 },
+    "guwange":  {
+                    "developer":  "Cave",
+                    "genre":  "Shooter",
+                    "year":  1999
+                },
+    "batrider":  {
+                     "developer":  "Raizing / Eighting",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1998
+                 },
+    "moomesa":  {
+                    "developer":  "Konami",
+                    "genre":  "Arcade Classic",
+                    "year":  1992
+                },
+    "ddux":  {
+                 "developer":  "Sega",
+                 "genre":  "Arcade Classic",
+                 "year":  1988
+             },
+    "citycon":  {
+                    "developer":  "Jaleco",
+                    "genre":  "Platform Classico",
+                    "year":  1985
+                },
+    "twinspri":  {
+                     "developer":  "ADK / SNK",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1996
+                 },
+    "namcoc65":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "mk":  {
+               "developer":  "Midway",
+               "genre":  "Picchiaduro a Incontri",
+               "year":  1992
+           },
+    "bjourney":  {
+                     "developer":  "Alpha Denshi Co.",
+                     "genre":  "Platform Arcade",
+                     "year":  1990
+                 },
+    "bigrun":  {
+                   "developer":  "Jaleco",
+                   "genre":  "Guida / Top-Down Rally",
+                   "year":  1989
+               },
+    "scontra":  {
+                    "developer":  "Konami",
+                    "genre":  "Platform / Run \u0026 Gun",
+                    "year":  1988
+                },
+    "batcir":  {
+                   "developer":  "Capcom",
+                   "genre":  "Picchiaduro a Incontri",
+                   "year":  1997
+               },
+    "btoads":  {
+                   "developer":  "Rare / Electronic Arts",
+                   "genre":  "Picchiaduro a Incontri",
+                   "year":  1994
+               },
+    "tmnt22pu":  {
+                     "developer":  "Konami",
+                     "genre":  "Arcade Classic",
+                     "year":  1991
+                 },
+    "ppmast93":  {
+                     "developer":  "Electronic Devices S.R.L.",
+                     "genre":  "Arcade Classic",
+                     "year":  1993
+                 },
+    "mercs":  {
+                  "developer":  "Capcom",
+                  "genre":  "Shooter",
+                  "year":  1990
+              },
+    "vball":  {
+                  "developer":  "Technos Japan",
+                  "genre":  "Sport Arcade",
+                  "year":  1988
+              },
+    "gtmr":  {
+                 "developer":  "Kaneko",
+                 "genre":  "Guida / Top-Down Rally",
+                 "year":  1994
+             },
+    "skns":  {
+                 "developer":  "Kaneko",
+                 "genre":  "System",
+                 "year":  1996
+             },
+    "kamikcab":  {
+                     "developer":  "Data East",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1984
+                 },
+    "spf2t":  {
+                  "developer":  "Capcom",
+                  "genre":  "Rompicapo / Puzzle",
+                  "year":  1996
+              },
+    "badlands":  {
+                     "developer":  "Atari Games",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1989
+                 },
+    "vtenis2c":  {
+                     "developer":  "Sega",
+                     "genre":  "Arcade Classic",
+                     "year":  2001
+                 },
+    "offroadt":  {
+                     "developer":  "Leland",
+                     "genre":  "Guida / Corsa Arcade",
+                     "year":  1989
+                 },
+    "mie":  {
+                "developer":  "Arcade",
+                "genre":  "Arcade Classic",
+                "year":  1990
+            },
+    "namco54":  {
+                    "developer":  "Arcade",
+                    "genre":  "Arcade Classic",
+                    "year":  1990
+                },
+    "simpsons2p":  {
+                       "developer":  "Konami",
+                       "genre":  "Arcade Classic",
+                       "year":  1991
+                   },
+    "spinmast":  {
+                     "developer":  "Data East",
+                     "genre":  "Platform Arcade",
+                     "year":  1993
+                 },
+    "avspirit":  {
+                     "developer":  "Jaleco",
+                     "genre":  "Platform Arcade",
+                     "year":  1991
+                 },
+    "tnzs":  {
+                 "developer":  "Taito",
+                 "genre":  "Platform Arcade",
+                 "year":  1988
+             },
+    "pacmania":  {
+                     "developer":  "Namco",
+                     "genre":  "Labirinto Classico",
+                     "year":  1987
+                 },
+    "chqflag":  {
+                    "developer":  "Konami",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1988
+                },
+    "breakrev":  {
+                     "developer":  "Visco",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1998
+                 },
+    "atarisy1":  {
+                     "developer":  "Atari Games",
+                     "genre":  "Arcade Classic",
+                     "year":  1984
+                 },
+    "fixeight":  {
+                     "developer":  "Toaplan",
+                     "genre":  "Shooter",
+                     "year":  1992
+                 },
+    "whp":  {
+                "developer":  "ADK / SNK",
+                "genre":  "Picchiaduro a Incontri",
+                "year":  1995
+            },
+    "bgaregga":  {
+                     "developer":  "Raizing / Eighting",
+                     "genre":  "Arcade Classic",
+                     "year":  1996
+                 },
+    "travrusa":  {
+                     "developer":  "Irem",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1983
+                 },
+    "bonkadv":  {
+                    "developer":  "Kaneko",
+                    "genre":  "Platform Arcade",
+                    "year":  1994
+                },
+    "tutankhm":  {
+                     "developer":  "Konami",
+                     "genre":  "Labirinto Classico",
+                     "year":  1982
+                 },
+    "spiker":  {
+                   "developer":  "Bally/Sente",
+                   "genre":  "Sport Arcade",
+                   "year":  1986
+               },
+    "ninjak":  {
+                   "developer":  "Taito",
+                   "genre":  "Picchiaduro a Incontri",
+                   "year":  1990
+               },
+    "cninja":  {
+                   "developer":  "Data East",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  1991
+               },
+    "rtype2":  {
+                   "developer":  "Irem",
+                   "genre":  "Sparatutto Orizzontale",
+                   "year":  1989
+               },
+    "darius":  {
+                   "developer":  "Taito",
+                   "genre":  "Sparatutto Orizzontale",
+                   "year":  1986
+               },
+    "sgmast":  {
+                   "developer":  "Sega",
+                   "genre":  "Sport Arcade",
+                   "year":  1989
+               },
+    "gradius3":  {
+                     "developer":  "Konami",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1989
+                 },
+    "sonicwi2":  {
+                     "developer":  "Video System Co.",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1994
+                 },
+    "namco51":  {
+                    "developer":  "Arcade",
+                    "genre":  "Arcade Classic",
+                    "year":  1990
+                },
+    "varth":  {
+                  "developer":  "Capcom",
+                  "genre":  "Sparatutto Verticale",
+                  "year":  1992
+              },
+    "passsht":  {
+                    "developer":  "Sega",
+                    "genre":  "Sport / Tennis",
+                    "year":  1988
+                },
+    "uopoko":  {
+                   "developer":  "Cave",
+                   "genre":  "Rompicapo / Puzzle",
+                   "year":  1998
+               },
+    "pspikes2":  {
+                     "developer":  "Video System Co.",
+                     "genre":  "Sport Arcade",
+                     "year":  1994
+                 },
+    "imgfight":  {
+                     "developer":  "Irem",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1988
+                 },
+    "cawing":  {
+                   "developer":  "Capcom",
+                   "genre":  "Sparatutto Orizzontale",
+                   "year":  1990
+               },
+    "solomon":  {
+                    "developer":  "Tecmo",
+                    "genre":  "Labirinto Classico",
+                    "year":  1986
+                },
+    "konamigx":  {
+                     "developer":  "Konami",
+                     "genre":  "System",
+                     "year":  1994
+                 },
+    "nemo":  {
+                 "developer":  "Capcom",
+                 "genre":  "Platform Arcade",
+                 "year":  1990
+             },
+    "dynamski":  {
+                     "developer":  "Taiyo System",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1984
+                 },
+    "mikie":  {
+                  "developer":  "Konami",
+                  "genre":  "Labirinto Classico",
+                  "year":  1984
+              },
+    "ttchamp":  {
+                    "developer":  "Gamart",
+                    "genre":  "Arcade Classic",
+                    "year":  1995
+                },
+    "msword":  {
+                   "developer":  "Capcom",
+                   "genre":  "Platform Arcade",
+                   "year":  1990
+               },
+    "asteroid":  {
+                     "developer":  "Atari",
+                     "genre":  "Sparatutto / Azione",
+                     "year":  1979
+                 },
+    "crgolf":  {
+                   "developer":  "Nasco Japan",
+                   "genre":  "Sport Arcade",
+                   "year":  1984
+               },
+    "pingpong":  {
+                     "developer":  "Konami",
+                     "genre":  "Sport Arcade",
+                     "year":  1985
+                 },
+    "sslam":  {
+                  "developer":  "Playmark",
+                  "genre":  "Sport / Tennis",
+                  "year":  1993
+              },
+    "eswat":  {
+                  "developer":  "Sega",
+                  "genre":  "Platform / Run \u0026 Gun",
+                  "year":  1989
+              },
+    "radikalb":  {
+                     "developer":  "Gaelco",
+                     "genre":  "Arcade Classic",
+                     "year":  1998
+                 },
+    "dino":  {
+                 "developer":  "Capcom",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1993
+             },
+    "wwfwfest":  {
+                     "developer":  "Technos Japan",
+                     "genre":  "Sport / Wrestling",
+                     "year":  1991
+                 },
+    "zeroteam":  {
+                     "developer":  "Seibu Kaihatsu",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1993
+                 },
+    "lkage":  {
+                  "developer":  "Taito",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1984
+              },
+    "mslugx":  {
+                   "developer":  "SNK",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  1999
+               },
+    "radr":  {
+                 "developer":  "Sega",
+                 "genre":  "Guida / Top-Down Rally",
+                 "year":  1991
+             },
+    "puzzledp":  {
+                     "developer":  "Visco",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1995
+                 },
+    "ultennis":  {
+                     "developer":  "Art \u0026 Magic",
+                     "genre":  "Sport / Tennis",
+                     "year":  1993
+                 },
+    "mysticri":  {
+                     "developer":  "Irem",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1992
+                 },
+    "rodland":  {
+                    "developer":  "Jaleco",
+                    "genre":  "Platform Classico",
+                    "year":  1990
+                },
+    "zupapa":  {
+                   "developer":  "SNK",
+                   "genre":  "Platform Classico",
+                   "year":  2001
+               },
+    "sf2":  {
+                "developer":  "Capcom",
+                "genre":  "Picchiaduro a Incontri",
+                "year":  1991
+            },
+    "namcoc71":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "digdug":  {
+                   "developer":  "Namco",
+                   "genre":  "Labirinto Classico",
+                   "year":  1982
+               },
+    "columns":  {
+                    "developer":  "Sega",
+                    "genre":  "Rompicapo / Puzzle",
+                    "year":  1990
+                },
+    "rastan":  {
+                   "developer":  "Taito",
+                   "genre":  "Platform Arcade",
+                   "year":  1987
+               },
+    "sabotenb":  {
+                     "developer":  "NMK / Tecmo",
+                     "genre":  "Platform Classico",
+                     "year":  1992
+                 },
+    "lifefrce":  {
+                     "developer":  "Konami",
+                     "genre":  "Shooter",
+                     "year":  1986
+                 },
+    "dynagear":  {
+                     "developer":  "Sammy",
+                     "genre":  "Platform Arcade",
+                     "year":  1993
+                 },
+    "gberet":  {
+                   "developer":  "Konami",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  1985
+               },
+    "hotd":  {
+                 "developer":  "Sega",
+                 "genre":  "Arcade Classic",
+                 "year":  1997
+             },
+    "thunderx":  {
+                     "developer":  "Konami",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1988
+                 },
+    "gigawing":  {
+                     "developer":  "Takumi",
+                     "genre":  "Sparatutto Verticale",
+                     "year":  1999
+                 },
+    "nbajam":  {
+                   "developer":  "Midway",
+                   "genre":  "Sport / Basket",
+                   "year":  1993
+               },
+    "pacman":  {
+                   "developer":  "Namco",
+                   "genre":  "Labirinto Classico",
+                   "year":  1980
+               },
+    "orlegend":  {
+                     "developer":  "IGS",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1997
+                 },
+    "majtitle":  {
+                     "developer":  "Irem",
+                     "genre":  "Sport Arcade",
+                     "year":  1990
+                 },
+    "tail2nos":  {
+                     "developer":  "V-System Co.",
+                     "genre":  "Guida / Auto dall\u0027alto",
+                     "year":  1989
+                 },
+    "pkunwar":  {
+                    "developer":  "UPL",
+                    "genre":  "Sport Arcade",
+                    "year":  1985
+                },
+    "ddragon":  {
+                    "developer":  "Technos Japan",
+                    "genre":  "Picchiaduro a Incontri",
+                    "year":  1987
+                },
+    "lrescue":  {
+                    "developer":  "Taito",
+                    "genre":  "Labirinto Classico",
+                    "year":  1979
+                },
+    "cabal":  {
+                  "developer":  "TAD",
+                  "genre":  "Shooter",
+                  "year":  1988
+              },
+    "tantr":  {
+                  "developer":  "Sega",
+                  "genre":  "Multiplay",
+                  "year":  1992
+              },
+    "strider":  {
+                    "developer":  "Capcom",
+                    "genre":  "Platform Arcade",
+                    "year":  1989
+                },
+    "rbislande":  {
+                      "developer":  "Taito",
+                      "genre":  "Arcade Classic",
+                      "year":  1988
+                  },
+    "warofbug":  {
+                     "developer":  "Armenia / Food and Fun Corp",
+                     "genre":  "Sparatutto con Pistola",
+                     "year":  1981
+                 },
+    "xmultipl":  {
+                     "developer":  "Irem",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1989
+                 },
+    "tron":  {
+                 "developer":  "Bally Midway",
+                 "genre":  "MultiGame",
+                 "year":  1982
+             },
+    "loht":  {
+                 "developer":  "Irem",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1989
+             },
+    "captcomm":  {
+                     "developer":  "Capcom",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1991
+                 },
+    "puckman":  {
+                    "developer":  "Namco",
+                    "genre":  "Labirinto Classico",
+                    "year":  1980
+                },
+    "gngbl":  {
+                  "developer":  "bootleg",
+                  "genre":  "Arcade Classic",
+                  "year":  1985
+              },
+    "ladybug":  {
+                    "developer":  "Universal",
+                    "genre":  "Labirinto Classico",
+                    "year":  1981
+                },
+    "vigilant":  {
+                     "developer":  "Irem",
+                     "genre":  "Platform Arcade",
+                     "year":  1988
+                 },
+    "xevious":  {
+                    "developer":  "Namco",
+                    "genre":  "Sparatutto Verticale",
+                    "year":  1982
+                },
+    "pbobbl2n":  {
+                     "developer":  "Taito",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1999
+                 },
+    "shanghai":  {
+                     "developer":  "Sunsoft",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1988
+                 },
+    "ninjaw":  {
+                   "developer":  "Taito",
+                   "genre":  "Picchiaduro a Incontri",
+                   "year":  1987
+               },
+    "arabianm":  {
+                     "developer":  "Taito",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1992
+                 },
+    "miexchng":  {
+                     "developer":  "Face",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1997
+                 },
+    "qsound_hle":  {
+                       "developer":  "Arcade",
+                       "genre":  "Arcade Classic",
+                       "year":  1990
+                   },
+    "tempest":  {
+                    "developer":  "Atari",
+                    "genre":  "Sparatutto con Pistola",
+                    "year":  1980
+                },
+    "progear":  {
+                    "developer":  "Cave",
+                    "genre":  "Sparatutto Orizzontale",
+                    "year":  2001
+                },
+    "pgm":  {
+                "developer":  "IGS",
+                "genre":  "System",
+                "year":  1997
+            },
+    "gekisou":  {
+                    "developer":  "Eastern",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1985
+                },
+    "inthunt":  {
+                    "developer":  "Irem",
+                    "genre":  "Shooter",
+                    "year":  1993
+                },
+    "suprgolf":  {
+                     "developer":  "Nasco",
+                     "genre":  "Arcade Classic",
+                     "year":  1989
+                 },
+    "airbustr":  {
+                     "developer":  "Kaneko",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1990
+                 },
+    "biomtoy":  {
+                    "developer":  "Gaelco / Zeus",
+                    "genre":  "Platform / Run \u0026 Gun",
+                    "year":  1995
+                },
+    "gticlub":  {
+                    "developer":  "Konami",
+                    "genre":  "Guida / Top-Down Rally",
+                    "year":  1996
+                },
+    "dmnfrnt":  {
+                    "developer":  "IGS",
+                    "genre":  "Arcade Classic",
+                    "year":  2002
+                },
+    "mwalk":  {
+                  "developer":  "Sega",
+                  "genre":  "Arcade Classic",
+                  "year":  1990
+              },
+    "cleopatr":  {
+                     "developer":  "Taito",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1996
+                 },
+    "trackfld":  {
+                     "developer":  "Konami",
+                     "genre":  "Sport / Gare \u0026 Atletica",
+                     "year":  1983
+                 },
+    "berzerk":  {
+                    "developer":  "Stern Electronics",
+                    "genre":  "Labirinto Classico",
+                    "year":  1980
+                },
+    "neodrift":  {
+                     "developer":  "Visco",
+                     "genre":  "Guida / Corsa Arcade",
+                     "year":  1996
+                 },
+    "lupin3":  {
+                   "developer":  "Taito",
+                   "genre":  "Labirinto Classico",
+                   "year":  1980
+               },
+    "dondokod":  {
+                     "developer":  "Taito",
+                     "genre":  "Platform Classico",
+                     "year":  1989
+                 },
+    "fitegolf":  {
+                     "developer":  "SNK",
+                     "genre":  "Sport Arcade",
+                     "year":  1988
+                 },
+    "offroadc":  {
+                     "developer":  "Midway",
+                     "genre":  "Guida / Corsa Arcade",
+                     "year":  1997
+                 },
+    "umk3":  {
+                 "developer":  "Midway",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1994
+             },
+    "ddsom":  {
+                  "developer":  "Capcom",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1996
+              },
+    "blktiger":  {
+                     "developer":  "Capcom",
+                     "genre":  "Platform Arcade",
+                     "year":  1987
+                 },
+    "bagman":  {
+                   "developer":  "Valadon Automation",
+                   "genre":  "Platform Classico",
+                   "year":  1982
+               },
+    "karnov":  {
+                   "developer":  "Data East USA",
+                   "genre":  "Platform / Run \u0026 Gun",
+                   "year":  1987
+               },
+    "paperboy":  {
+                     "developer":  "Atari Games",
+                     "genre":  "Labirinto Classico",
+                     "year":  1984
+                 },
+    "boogwing":  {
+                     "developer":  "Data East",
+                     "genre":  "Shooter",
+                     "year":  1992
+                 },
+    "nrallyx":  {
+                    "developer":  "Namco",
+                    "genre":  "Guida / Top-Down Rally",
+                    "year":  1981
+                },
+    "bublbob2":  {
+                     "developer":  "Taito",
+                     "genre":  "Platform Classico",
+                     "year":  1994
+                 },
+    "dbreed":  {
+                   "developer":  "Irem",
+                   "genre":  "Sparatutto Orizzontale",
+                   "year":  1989
+               },
+    "m68705p3":  {
+                     "developer":  "Arcade",
+                     "genre":  "Arcade Classic",
+                     "year":  1990
+                 },
+    "pbobble":  {
+                    "developer":  "Taito",
+                    "genre":  "Rompicapo / Puzzle",
+                    "year":  1994
+                },
+    "tapper":  {
+                   "developer":  "Bally Midway",
+                   "genre":  "Platform Classico",
+                   "year":  1983
+               },
+    "centiped":  {
+                     "developer":  "Atari",
+                     "genre":  "Sparatutto con Pistola",
+                     "year":  1980
+                 },
+    "arabian":  {
+                    "developer":  "Sun Electronics",
+                    "genre":  "Platform Classico",
+                    "year":  1983
+                },
+    "puzzloop":  {
+                     "developer":  "Mitchell",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1998
+                 },
+    "s1945":  {
+                  "developer":  "Psikyo",
+                  "genre":  "Sparatutto Verticale",
+                  "year":  1995
+              },
+    "tmnt2":  {
+                  "developer":  "Konami",
+                  "genre":  "Picchiaduro a Incontri",
+                  "year":  1991
+              },
+    "bubblem":  {
+                    "developer":  "Taito",
+                    "genre":  "Platform Classico",
+                    "year":  1995
+                },
+    "rallybik":  {
+                     "developer":  "Toaplan / Taito",
+                     "genre":  "Guida / Top-Down Rally",
+                     "year":  1988
+                 },
+    "pulirula":  {
+                     "developer":  "Taito",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1991
+                 },
+    "toki":  {
+                 "developer":  "TAD",
+                 "genre":  "Platform / Run \u0026 Gun",
+                 "year":  1989
+             },
+    "ssprint":  {
+                    "developer":  "Atari Games",
+                    "genre":  "Guida / Auto dall\u0027alto",
+                    "year":  1986
+                },
+    "docastle":  {
+                     "developer":  "Universal",
+                     "genre":  "Platform Classico",
+                     "year":  1983
+                 },
+    "pbobble3":  {
+                     "developer":  "Taito",
+                     "genre":  "Rompicapo / Puzzle",
+                     "year":  1996
+                 },
+    "sdodgeb":  {
+                    "developer":  "Technos Japan",
+                    "genre":  "Sport Arcade",
+                    "year":  1996
+                },
+    "shinobi":  {
+                    "developer":  "Sega",
+                    "genre":  "Platform Arcade",
+                    "year":  1987
+                },
+    "tophuntr":  {
+                     "developer":  "SNK",
+                     "genre":  "Platform Arcade",
+                     "year":  1994
+                 },
+    "bbmanw":  {
+                   "developer":  "Irem",
+                   "genre":  "Labirinto Classico",
+                   "year":  1992
+               },
+    "kicknrun":  {
+                     "developer":  "Taito",
+                     "genre":  "Sport / Calcio",
+                     "year":  1986
+                 },
+    "aliensyn":  {
+                     "developer":  "Sega",
+                     "genre":  "Labirinto Classico",
+                     "year":  1987
+                 },
+    "robocop":  {
+                    "developer":  "Data East",
+                    "genre":  "Platform / Run \u0026 Gun",
+                    "year":  1988
+                },
+    "stonebal":  {
+                     "developer":  "Art \u0026 Magic",
+                     "genre":  "Sport / Calcio",
+                     "year":  1994
+                 },
+    "atetris":  {
+                    "developer":  "Atari Games",
+                    "genre":  "Rompicapo / Puzzle",
+                    "year":  1988
+                },
+    "hook":  {
+                 "developer":  "Irem",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1992
+             },
+    "pang3":  {
+                  "developer":  "Mitchell",
+                  "genre":  "Shooter",
+                  "year":  1995
+              },
+    "rallyx":  {
+                   "developer":  "Namco",
+                   "genre":  "Guida / Top-Down Rally",
+                   "year":  1980
+               },
+    "glfgreat":  {
+                     "developer":  "Konami",
+                     "genre":  "Sport Arcade",
+                     "year":  1991
+                 },
+    "f1gp2":  {
+                  "developer":  "Video System Co.",
+                  "genre":  "Guida / F1 \u0026 Pista dall\u0027alto",
+                  "year":  1992
+              },
+    "openice":  {
+                    "developer":  "Midway",
+                    "genre":  "Sport Arcade",
+                    "year":  1995
+                },
+    "choplift":  {
+                     "developer":  "Sega",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1985
+                 },
+    "mrdo":  {
+                 "developer":  "Universal",
+                 "genre":  "Labirinto Classico",
+                 "year":  1982
+             },
+    "coh3002t":  {
+                     "developer":  "Taito",
+                     "genre":  "Arcade Classic",
+                     "year":  1998
+                 },
+    "rltennis":  {
+                     "developer":  "TCH",
+                     "genre":  "Arcade Classic",
+                     "year":  1993
+                 },
+    "warriorb":  {
+                     "developer":  "Taito",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1991
+                 },
+    "sidearms":  {
+                     "developer":  "Capcom",
+                     "genre":  "Sparatutto Orizzontale",
+                     "year":  1986
+                 },
+    "asterix":  {
+                    "developer":  "Konami",
+                    "genre":  "Picchiaduro a Incontri",
+                    "year":  1992
+                },
+    "pengo":  {
+                  "developer":  "Sega",
+                  "genre":  "Labirinto Classico",
+                  "year":  1982
+              },
+    "joust":  {
+                  "developer":  "Williams",
+                  "genre":  "Platform Classico",
+                  "year":  1982
+              },
+    "thndzone":  {
+                     "developer":  "Data East",
+                     "genre":  "Shooter",
+                     "year":  1991
+                 },
+    "spelunkr":  {
+                     "developer":  "Irem",
+                     "genre":  "Platform Arcade",
+                     "year":  1985
+                 },
+    "shadfrce":  {
+                     "developer":  "Technos Japan",
+                     "genre":  "Picchiaduro a Incontri",
+                     "year":  1993
+                 },
+    "f1gp":  {
+                 "developer":  "Video System Co.",
+                 "genre":  "Guida / F1 \u0026 Pista dall\u0027alto",
+                 "year":  1991
+             },
+    "supbtime":  {
+                     "developer":  "Data East",
+                     "genre":  "Platform Classico",
+                     "year":  1990
+                 },
+    "starwars":  {
+                     "developer":  "Atari",
+                     "genre":  "Shooter",
+                     "year":  1983
+                 },
+    "vulcan":  {
+                   "developer":  "Konami",
+                   "genre":  "Sparatutto Orizzontale",
+                   "year":  1988
+               },
+    "qbert":  {
+                  "developer":  "Gottlieb",
+                  "genre":  "Platform Classico",
+                  "year":  1982
+              },
+    "vsav":  {
+                 "developer":  "Capcom",
+                 "genre":  "Picchiaduro a Incontri",
+                 "year":  1997
+             }
+}

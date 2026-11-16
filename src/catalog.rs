@@ -1,8 +1,18 @@
 use crate::models::Game;
 use regex::Regex;
+use serde::Deserialize;
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
+
+#[derive(Deserialize, Default, Clone)]
+struct MameMeta {
+    pub year: u16,
+    pub developer: String,
+    pub genre: String,
+}
+
+static MAME_METADATA_JSON: &str = include_str!("mame_metadata.json");
 
 pub struct CatalogLoader;
 
@@ -19,6 +29,10 @@ impl CatalogLoader {
 
         // Pre-build directory shortcut caches once
         let dir_cache = PreloadedDirCache::build(emu_root);
+
+        // Pre-carica metadati MAME (produttori autentici, anni e generi)
+        let mame_meta_map: HashMap<String, MameMeta> =
+            serde_json::from_str(MAME_METADATA_JSON).unwrap_or_default();
 
         // Pre-carica mappatura MAME: titolo -> nome file rom (da Catalogo Giochi MAME Arcade.html)
         let mame_catalog_path = emu_root.join("mame").join("Catalogo Giochi MAME Arcade.html");
@@ -46,23 +60,29 @@ impl CatalogLoader {
             let id: i64 = cap.get(2).map_or("0", |m| m.as_str()).parse().unwrap_or(0);
             let platform = cap.get(3).map_or("", |m| m.as_str()).trim();
             let title = html_decode(cap.get(4).map_or("", |m| m.as_str()).trim());
-            let year: u16 = cap.get(5).map_or("1990", |m| m.as_str()).trim().parse().unwrap_or(1990);
-            let genre = html_decode(cap.get(6).map_or("", |m| m.as_str()).trim());
-            let dev = html_decode(cap.get(7).map_or("", |m| m.as_str()).trim());
+            let mut year: u16 = cap.get(5).map_or("1990", |m| m.as_str()).trim().parse().unwrap_or(1990);
+            let mut genre = html_decode(cap.get(6).map_or("", |m| m.as_str()).trim());
+            let mut dev = html_decode(cap.get(7).map_or("", |m| m.as_str()).trim());
             let raw_controls = cap.get(8).map_or("", |m| m.as_str());
             let controls = clean_controls_text(raw_controls);
 
-            let launch_target = if sys_code.eq_ignore_ascii_case("MAME") {
+            let (launch_target, cover_url) = if sys_code.eq_ignore_ascii_case("MAME") {
                 let t_low = title.to_lowercase();
                 if let Some(rom) = mame_rom_map.get(&t_low) {
-                    format!("MAME:{}", rom)
+                    if let Some(meta) = mame_meta_map.get(rom) {
+                        dev = meta.developer.clone();
+                        genre = meta.genre.clone();
+                        if meta.year > 0 {
+                            year = meta.year;
+                        }
+                    }
+                    (format!("MAME:{}", rom), format!("/api/cover/mame/{}", rom))
                 } else {
-                    dir_cache.resolve(emu_root, sys_code, &title)
+                    (dir_cache.resolve(emu_root, sys_code, &title), Self::build_cover_url(sys_code, &title))
                 }
             } else {
-                dir_cache.resolve(emu_root, sys_code, &title)
+                (dir_cache.resolve(emu_root, sys_code, &title), Self::build_cover_url(sys_code, &title))
             };
-            let cover_url = Self::build_cover_url(sys_code, &title);
 
             games.push(Game {
                 id,
