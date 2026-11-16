@@ -273,7 +273,9 @@
         .search-box {
             position: relative;
             flex: 1;
-            max-width: 540px;
+            max-width: 620px;
+            display: flex;
+            align-items: center;
         }
 
         .search-icon {
@@ -284,6 +286,7 @@
             color: var(--text-dim);
             pointer-events: none;
             font-size: 1rem;
+            z-index: 2;
         }
 
         .search-input {
@@ -292,7 +295,7 @@
             background: #141b29;
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 0 38px 0 40px;
+            padding: 0 125px 0 40px;
             color: #fff;
             font-size: 0.88rem;
             outline: none;
@@ -307,7 +310,7 @@
 
         .search-clear {
             position: absolute;
-            right: 12px;
+            right: 92px;
             top: 50%;
             transform: translateY(-50%);
             background: transparent;
@@ -315,7 +318,14 @@
             color: var(--text-dim);
             cursor: pointer;
             font-size: 1rem;
+            padding: 4px;
             display: none;
+            z-index: 2;
+            transition: color 0.15s ease;
+        }
+
+        .search-clear:hover {
+            color: #fff;
         }
 
         .header-actions {
@@ -733,51 +743,97 @@
             color: #fff;
         }
 
-        /* Syntax Helper Bar */
+        /* Syntax Helper Floating Popover */
         .syntax-toggle-btn {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 28px;
             background: #1c2436;
             border: 1px solid var(--border);
             color: var(--accent);
-            padding: 6px 12px;
+            padding: 0 10px;
             border-radius: 6px;
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             font-weight: 700;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.15s ease;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .syntax-toggle-btn:hover {
+        .syntax-toggle-btn:hover, .syntax-toggle-btn.active {
             background: var(--accent);
             color: #0b0f17;
+            border-color: var(--accent);
         }
 
         .syntax-helper-bar {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            min-width: 520px;
+            background: #141b29;
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 12px 16px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0, 210, 180, 0.15);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            animation: modalPop 0.15s ease-out;
+        }
+
+        .syntax-popover-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: #111723;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 8px 12px;
-            flex-wrap: wrap;
-            font-size: 0.8rem;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 6px;
         }
 
         .syntax-title {
-            color: var(--text-dim);
+            color: var(--accent);
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-close {
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 0.85rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+
+        .syntax-close:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .syntax-chips-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .syntax-chip {
             background: #192233;
             border: 1px solid rgba(88, 166, 255, 0.3);
             color: #c9d1d9;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
+            padding: 4px 9px;
+            border-radius: 6px;
+            font-size: 0.76rem;
             cursor: pointer;
             transition: all 0.15s ease;
         }
@@ -789,6 +845,8 @@
         .syntax-chip:hover {
             background: var(--accent);
             color: #0b0f17;
+            border-color: var(--accent);
+            transform: translateY(-1px);
         }
 
         .syntax-chip:hover b {
@@ -796,16 +854,20 @@
         }
 
         .syntax-hint {
-            color: var(--text-dim);
-            font-size: 0.76rem;
-            margin-left: auto;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 6px 10px;
+            border-radius: 6px;
         }
 
         .syntax-hint code {
-            color: #79c0ff;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2px 4px;
-            border-radius: 3px;
+            color: var(--accent);
+            background: rgba(0, 210, 180, 0.1);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-family: monospace;
         }
 
         /* ----------------------------------------------------
@@ -999,18 +1061,18 @@
         }
 
         /* ----------------------------------------------------
-           CARD GRID & CARD UNIFORMI (Rapporto fisso 275px)
+           CARD GRID & CARD UNIFORMI (Rapporto fisso 285px)
         ---------------------------------------------------- */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-            grid-auto-rows: 275px; /* ALTEZZA FISSA IDENTICA PER TUTTE LE CARD */
+            grid-auto-rows: 285px; /* ALTEZZA FISSA IDENTICA PER TUTTE LE CARD */
             gap: 16px;
             padding-bottom: 80px;
         }
 
         .game-card {
-            height: 275px;
+            height: 285px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 10px;
@@ -1020,6 +1082,11 @@
             cursor: pointer;
             position: relative;
             transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .carousel-row .game-card {
+            width: 175px;
+            flex-shrink: 0;
         }
 
         .game-card:hover {
@@ -1194,51 +1261,106 @@
             text-shadow: 0 0 6px var(--accent-gold);
         }
 
-        /* Area Metadati / Testo (75px fissi) */
+        /* Area Metadati / Testo (85px fissi) */
         .card-info {
-            height: 75px; /* ALTEZZA FISSA TESTO */
-            padding: 10px 12px;
+            height: 85px; /* ALTEZZA ADEGUATA METADATI */
+            padding: 8px 12px 10px 12px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            gap: 4px;
+            justify-content: space-between;
             background: var(--bg-card);
             border-top: 1px solid rgba(255, 255, 255, 0.04);
+            overflow: hidden;
         }
 
         .card-title {
-            font-size: 0.86rem;
+            font-size: 0.88rem;
             font-weight: 700;
             color: #fff;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            line-height: 1.2;
+            line-height: 1.35;
+            padding-bottom: 3px; /* Vital: non taglia i descender (g, j, p, q, y) */
+            min-width: 0;
         }
 
         .card-author {
-            font-size: 0.72rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.74rem;
             color: var(--accent);
             font-weight: 600;
+            line-height: 1.35;
+            min-width: 0;
+        }
+
+        .card-author-icon {
+            flex-shrink: 0;
+            font-size: 0.75rem;
+            line-height: 1;
+            opacity: 0.85;
+        }
+
+        .card-author-name {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 1.35;
+            padding-bottom: 2px; /* Non taglia i descender di produttore (Toaplan, Capcom, Remedy, ecc.) */
+            min-width: 0;
         }
 
         .card-meta-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            font-size: 0.74rem;
+            gap: 5px;
+            font-size: 0.73rem;
             color: var(--text-dim);
             font-weight: 500;
+            line-height: 1.35;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .card-meta-sys {
+            color: var(--accent);
+            font-weight: 800;
+            cursor: pointer;
+            padding: 1px 4px;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+            line-height: 1.35;
+        }
+
+        .card-meta-sys:hover {
+            background: rgba(0, 210, 180, 0.2);
+            text-decoration: underline;
+        }
+
+        .card-meta-sep {
+            opacity: 0.45;
+            font-size: 0.65rem;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .card-meta-year {
+            flex-shrink: 0;
+            color: var(--text-muted);
+            line-height: 1.35;
         }
 
         .card-meta-genre {
-            max-width: 100px;
+            flex: 1;
+            min-width: 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 1.35;
+            padding-bottom: 2px; /* Non taglia i descender di genere (Sparatutto, Picchiaduro, Platform, Rally) */
         }
 
         /* ----------------------------------------------------
@@ -1404,28 +1526,33 @@
     <main class="main-container">
         <!-- Top Search Bar -->
         <header class="top-header">
-            <div style="display: flex; flex-direction: column; gap: 8px; flex: 1; max-width: 680px;">
-                <div class="search-box">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="searchInput" class="search-input" name="retro_search_query"
-                           placeholder="Cerca per titolo, produttore, genere, anno... (es. capcom 1993, mario -kart)"
-                           oninput="handleSearchInput()"
-                           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                           data-lpignore="true" data-form-type="other" data-bwignore="true" data-1p-ignore>
-                    <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;">✕</button>
-                    <button class="syntax-toggle-btn" onclick="toggleSyntaxHelper()" title="Mostra operatori e sintassi di ricerca">💡 Sintassi</button>
-                </div>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" name="retro_search_query"
+                       placeholder="Cerca per titolo, produttore, genere, anno... (es. capcom 1993, mario -kart)"
+                       oninput="handleSearchInput()"
+                       autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                       data-lpignore="true" data-form-type="other" data-bwignore="true" data-1p-ignore>
+                <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;" title="Cancella">✕</button>
+                <button class="syntax-toggle-btn" id="syntaxToggleBtn" onclick="toggleSyntaxHelper(event)" title="Mostra operatori e sintassi di ricerca">💡 Sintassi</button>
 
-                <!-- Barra rapida sintassi booleana (AND, OR, NOT, Range Anni) -->
+                <!-- Floating Popover Sintassi Avanzata -->
                 <div class="syntax-helper-bar" id="syntaxHelperBar" style="display: none;">
-                    <span class="syntax-title">Operatori:</span>
-                    <button class="syntax-chip" onclick="appendSearchTerm(' -')"><b>-termine</b> (NOT)</button>
-                    <button class="syntax-chip" onclick="appendSearchTerm(' NOT ')"><b>NOT</b> (Senza)</button>
-                    <button class="syntax-chip" onclick="appendSearchTerm(' | ')"><b>|</b> (OR / Oppure)</button>
-                    <button class="syntax-chip" onclick="appendSearchTerm(' dev:Capcom')"><b>dev:</b></button>
-                    <button class="syntax-chip" onclick="appendSearchTerm(' genre:Picchiaduro')"><b>genre:</b></button>
-                    <button class="syntax-chip" onclick="appendSearchTerm(' 1990..1995')"><b>1990..1995</b></button>
-                    <span class="syntax-hint">💡 Es: <code>mario -kart</code> • <code>capcom NOT 1995</code></span>
+                    <div class="syntax-popover-header">
+                        <span class="syntax-title">Sintassi di Ricerca Avanzata</span>
+                        <span class="syntax-close" onclick="closeSyntaxHelper(event)">✕</span>
+                    </div>
+                    <div class="syntax-chips-row">
+                        <button type="button" class="syntax-chip" onclick="appendSearchTerm(' -')"><b>-termine</b> (Escludi)</button>
+                        <button type="button" class="syntax-chip" onclick="appendSearchTerm(' NOT ')"><b>NOT</b> (Senza)</button>
+                        <button type="button" class="syntax-chip" onclick="appendSearchTerm(' | ')"><b>|</b> (OR / Oppure)</button>
+                        <button type="button" class="syntax-chip" onclick="appendSearchTerm(' dev:Capcom')"><b>dev:</b> Produttore</button>
+                        <button type="button" class="syntax-chip" onclick="appendSearchTerm(' genre:Picchiaduro')"><b>genre:</b> Genere</button>
+                        <button type="button" class="syntax-chip" onclick="appendSearchTerm(' 1990..1995')"><b>1990..1995</b> Anni</button>
+                    </div>
+                    <div class="syntax-hint">
+                        💡 <b>Esempi:</b> <code>mario -kart</code> • <code>capcom NOT 1995</code> • <code>dev:namco | dev:sega</code> • <code>1990..1994 genre:rpg</code>
+                    </div>
                 </div>
             </div>
             <div class="header-actions">
@@ -1990,12 +2117,34 @@
             showToast(`Filtro genere: ${genreName}`);
         }
 
-        function toggleSyntaxHelper() {
+        function toggleSyntaxHelper(event) {
+            if (event) event.stopPropagation();
             const bar = document.getElementById('syntaxHelperBar');
-            if (bar) {
-                bar.style.display = bar.style.display === 'none' ? 'flex' : 'none';
-            }
+            const btn = document.getElementById('syntaxToggleBtn');
+            if (!bar) return;
+            const isOpen = bar.style.display !== 'none';
+            bar.style.display = isOpen ? 'none' : 'flex';
+            if (btn) btn.classList.toggle('active', !isOpen);
         }
+
+        function closeSyntaxHelper(event) {
+            if (event) event.stopPropagation();
+            const bar = document.getElementById('syntaxHelperBar');
+            const btn = document.getElementById('syntaxToggleBtn');
+            if (bar) bar.style.display = 'none';
+            if (btn) btn.classList.remove('active');
+        }
+
+        // Click outside listener per chiudere il popover sintassi
+        document.addEventListener('click', (e) => {
+            const bar = document.getElementById('syntaxHelperBar');
+            const box = document.querySelector('.search-box');
+            if (bar && bar.style.display !== 'none') {
+                if (box && !box.contains(e.target)) {
+                    closeSyntaxHelper();
+                }
+            }
+        });
 
         function appendSearchTerm(term) {
             const input = document.getElementById('searchInput');
@@ -2270,6 +2419,8 @@
             const favActive = g.is_favorite ? 'active' : '';
             const cover = (g.cover_url && g.cover_url.trim()) ? g.cover_url : null;
             const author = g.developer || g.publisher || 'Arcade Classic';
+            const yearPart = (g.year && g.year > 0) ? `<span class="card-meta-sep">•</span><span class="card-meta-year">${g.year}</span>` : '';
+            const genreText = g.genre || '';
 
             return `
             <div class="game-card ${isSelected ? 'selected' : ''}" data-id="${g.id}" data-idx="${idx}" onclick="selectCard(${idx})" ondblclick="launchGame(${g.id})">
@@ -2287,13 +2438,14 @@
                 <div class="card-info">
                     <div class="card-title" title="${escapeHtml(g.title)}">${escapeHtml(g.title)}</div>
                     <div class="card-author" title="Produttore: ${escapeHtml(author)}">
-                        🏢 ${escapeHtml(author)}
+                        <span class="card-author-icon">🏢</span>
+                        <span class="card-author-name">${escapeHtml(author)}</span>
                     </div>
                     <div class="card-meta-row">
                         <span class="card-meta-sys" onclick="filterByPlatformTag(event, '${g.system_code}')" title="Filtra console: ${g.system_code}">${g.system_code}</span>
-                        <span>•</span>
-                        <span>${g.year}</span>
-                        <span class="card-meta-genre" title="${escapeHtml(g.genre)}">${escapeHtml(g.genre)}</span>
+                        ${yearPart}
+                        <span class="card-meta-sep">•</span>
+                        <span class="card-meta-genre" title="${escapeHtml(genreText)}">${escapeHtml(genreText)}</span>
                     </div>
                 </div>
             </div>
@@ -2438,9 +2590,14 @@
         }
 
         function launchRandomGame() {
-            if (displayedGames.length === 0) return;
+            if (displayedGames.length === 0) {
+                showToast("Nessun gioco disponibile nei filtri attuali");
+                return;
+            }
             const randIdx = Math.floor(Math.random() * displayedGames.length);
-            launchGame(displayedGames[randIdx].id);
+            const chosen = displayedGames[randIdx];
+            showToast(`🎲 Gioco Casuale (${randIdx + 1}/${displayedGames.length}): "${chosen.title}"`);
+            launchGame(chosen.id);
         }
 
         // ----------------------------------------------------
@@ -2493,6 +2650,7 @@
                 // Non intercettare se l'utente scrive nella barra di ricerca
                 if (document.activeElement === document.getElementById('searchInput')) {
                     if (e.key === 'Escape') {
+                        closeSyntaxHelper();
                         clearSearch();
                         document.getElementById('searchInput').blur();
                     }
@@ -2506,6 +2664,7 @@
                 }
 
                 if (e.key === 'Escape') {
+                    closeSyntaxHelper();
                     closeModal('arenaModal');
                     closeModal('guidaModal');
                     closeGameDetails();
