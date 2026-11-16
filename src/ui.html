@@ -1474,14 +1474,26 @@
                         </div>
                         <div class="hero-pagination">
                             <button class="hero-nav-arrow" onclick="prevHeroGame()" title="Precedente">‹</button>
+                            <button class="hero-nav-arrow" onclick="shuffleHeroSpotlights()" title="Rimescola proposte del giorno" style="font-size: 1rem;">🎲</button>
                             <button class="hero-nav-arrow" onclick="nextHeroGame()" title="Successivo">›</button>
                         </div>
                     </div>
 
-                    <!-- Riga: Riprendi a Giocare / Preferiti -->
-                    <div>
+                    <!-- Riga: Riprendi a Giocare -->
+                    <div id="recentSection" style="display: none;">
                         <div class="section-header">
-                            <h2 class="section-title">⭐ In Evidenza & Preferiti</h2>
+                            <h2 class="section-title">⏯️ Riprendi a Giocare</h2>
+                            <span class="section-action" onclick="showRecentInLibrary()">Vedi cronologia →</span>
+                        </div>
+                        <div class="carousel-row" id="recentRow">
+                            <!-- Inseriti via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Riga: I Tuoi Preferiti -->
+                    <div id="featuredSection">
+                        <div class="section-header">
+                            <h2 class="section-title">⭐ I Tuoi Preferiti</h2>
                             <span class="section-action" onclick="showFavoritesInLibrary()">Vedi tutti i preferiti →</span>
                         </div>
                         <div class="carousel-row" id="featuredRow">
@@ -1823,6 +1835,7 @@
                 if (currentPlatform === 'ALL' && currentGenre === 'ALL' && currentDev === 'ALL' && currentDecade === 'ALL' && !yearFrom && !yearTo && !queryVal && !favoritesOnly) {
                     allGames = [...displayedGames];
                     setupHeroSpotlights();
+                    renderRecentRow();
                     renderFeaturedRow();
                     renderQuickSystems();
                 }
@@ -2054,16 +2067,52 @@
         }
 
         // ----------------------------------------------------
-        // HERO SPOTLIGHT (Home)
+        // HERO SPOTLIGHT (Home - Vetrina del Giorno Quotidiana)
         // ----------------------------------------------------
-        function setupHeroSpotlights() {
-            heroGamesList = allGames.filter(g => 
-                SPOTLIGHT_IDS.some(id => g.title.toLowerCase().includes(id.toLowerCase()))
-            );
-            if (heroGamesList.length === 0 && allGames.length > 0) {
-                heroGamesList = allGames.slice(0, 8);
+        function setupHeroSpotlights(seedOverride = null) {
+            if (!allGames || allGames.length === 0) return;
+
+            // Seed giornaliero deterministico (cambia automaticamente a mezzanotte)
+            const today = new Date();
+            const dateSeed = seedOverride || (today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate());
+
+            let seed = dateSeed;
+            function pseudoRandom() {
+                seed = (seed * 9301 + 49297) % 233280;
+                return seed / 233280;
             }
+
+            // Selezione bilanciata: 1 gioco da ciascuna delle piattaforme principali
+            const targetSystems = ['MAME', 'C64', 'DOS', 'SCUMMVM', 'DREAMCAST', 'SNES', 'RECOMP', 'NAOMI', 'GAMECUBE', 'N64', 'INDIE'];
+            const picks = [];
+
+            for (const sys of targetSystems) {
+                const sysGames = allGames.filter(g => g.system_code === sys);
+                if (sysGames.length > 0) {
+                    const idx = Math.floor(pseudoRandom() * sysGames.length);
+                    picks.push(sysGames[idx]);
+                }
+                if (picks.length >= 8) break;
+            }
+
+            // Se mancano slot per arrivare a 8, prendi giochi casuali rimanenti
+            if (picks.length < 8) {
+                const remaining = allGames.filter(g => !picks.some(p => p.id === g.id));
+                while (picks.length < 8 && remaining.length > 0) {
+                    const idx = Math.floor(pseudoRandom() * remaining.length);
+                    picks.push(remaining.splice(idx, 1)[0]);
+                }
+            }
+
+            heroGamesList = picks;
+            heroCurrentIdx = 0;
             renderHero();
+        }
+
+        function shuffleHeroSpotlights() {
+            const randomSeed = Math.floor(Math.random() * 1000000);
+            setupHeroSpotlights(randomSeed);
+            showToast('🎲 Vetrina del giorno rimescolata!');
         }
 
         function renderHero() {
@@ -2071,7 +2120,7 @@
             const g = heroGamesList[heroCurrentIdx];
             if (!g) return;
 
-            document.getElementById('heroTag').innerText = `${g.system_code} • SPOTLIGHT IN EVIDENZA`;
+            document.getElementById('heroTag').innerText = `${g.system_code} • PROPOSTA DEL GIORNO (${heroCurrentIdx + 1}/${heroGamesList.length})`;
             document.getElementById('heroTitle').innerText = g.title;
             document.getElementById('heroMeta').innerHTML = `
                 <span>${g.platform}</span> • <span>${g.year}</span> • <span>${g.genre}</span> • <span>${g.developer}</span>
@@ -2121,8 +2170,42 @@
         // ----------------------------------------------------
         // SEZIONI EXTRA HOME
         // ----------------------------------------------------
+        function renderRecentRow() {
+            const sec = document.getElementById('recentSection');
+            const row = document.getElementById('recentRow');
+            if (!sec || !row) return;
+
+            const played = allGames
+                .filter(g => g.last_played_at || (g.play_count && g.play_count > 0))
+                .sort((a, b) => {
+                    if (a.last_played_at && b.last_played_at) {
+                        return b.last_played_at.localeCompare(a.last_played_at);
+                    }
+                    if (a.last_played_at) return -1;
+                    if (b.last_played_at) return 1;
+                    return (b.play_count || 0) - (a.play_count || 0);
+                })
+                .slice(0, 10);
+
+            if (played.length > 0) {
+                sec.style.display = 'block';
+                row.innerHTML = played.map(g => createCardHtml(g)).join('');
+            } else {
+                sec.style.display = 'none';
+            }
+        }
+
+        function showRecentInLibrary() {
+            switchView('libreria');
+            document.getElementById('sortSelect').value = 'play_desc';
+            currentSort = 'play_desc';
+            loadGames();
+            showToast('Ordinato per: Più giocati');
+        }
+
         function renderFeaturedRow() {
             const row = document.getElementById('featuredRow');
+            if (!row) return;
             const featured = allGames.filter(g => g.is_favorite).slice(0, 10);
             const list = featured.length > 0 ? featured : allGames.slice(0, 8);
 
@@ -2276,7 +2359,11 @@
                 const data = await res.json();
                 if (data.success) {
                     showToast(`✅ "${title}" avviato con successo!`);
-                    if (g) g.play_count = data.play_count;
+                    if (g) {
+                        g.play_count = data.play_count;
+                        g.last_played_at = new Date().toISOString();
+                    }
+                    renderRecentRow();
                 } else {
                     showToast(`❌ Errore: ${data.message || 'Impossibile avviare'}`);
                 }
@@ -2307,6 +2394,7 @@
                 };
                 allGames.forEach(updateItem);
                 displayedGames.forEach(updateItem);
+                renderFeaturedRow();
 
                 // Aggiorna pulsante sulla card se presente
                 const card = document.querySelector(`.game-card[data-id="${id}"]`);
