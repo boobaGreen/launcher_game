@@ -399,32 +399,133 @@
         /* Hero Spotlight Banner */
         .hero-banner {
             position: relative;
-            min-height: 340px;
-            border-radius: 16px;
+            min-height: 380px;
+            border-radius: 20px;
             overflow: hidden;
             background: linear-gradient(135deg, #131c2d 0%, #0a0e17 100%);
             border: 1px solid var(--border);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
             display: flex;
             align-items: center;
-            padding: 36px 40px;
+            justify-content: space-between;
+            padding: 40px 48px;
+            gap: 32px;
+        }
+
+        .hero-bg-cover-backdrop {
+            position: absolute;
+            inset: -30px;
+            background-size: cover;
+            background-position: center;
+            filter: blur(45px) brightness(0.24) saturate(1.5);
+            opacity: 0.9;
+            transition: background-image 0.6s ease-in-out;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .hero-bg-overlay {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 80% 50%, rgba(0, 210, 180, 0.12) 0%, transparent 60%),
-                        radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 50%);
+            background: radial-gradient(circle at 75% 50%, rgba(0, 210, 180, 0.16) 0%, transparent 60%),
+                        linear-gradient(to right, rgba(10, 14, 23, 0.96) 0%, rgba(10, 14, 23, 0.65) 55%, rgba(10, 14, 23, 0.88) 100%);
             pointer-events: none;
+            z-index: 2;
         }
 
         .hero-content {
             position: relative;
-            z-index: 2;
-            max-width: 650px;
+            z-index: 3;
+            max-width: 620px;
             display: flex;
             flex-direction: column;
             gap: 12px;
+        }
+
+        .hero-visual-side {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1200px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .hero-cover-wrapper {
+            position: relative;
+            width: 220px;
+            height: 310px;
+            border-radius: 16px;
+            cursor: pointer;
+            transform: rotateY(-10deg) rotateX(4deg);
+            transform-style: preserve-3d;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: -12px 18px 40px rgba(0, 0, 0, 0.75),
+                        0 0 35px rgba(0, 210, 180, 0.25);
+            animation: heroCoverFloat 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroCoverFloat {
+            0% {
+                transform: translateY(0px) rotateY(-10deg) rotateX(4deg);
+                box-shadow: -12px 18px 40px rgba(0, 0, 0, 0.75), 0 0 30px rgba(0, 210, 180, 0.2);
+            }
+            100% {
+                transform: translateY(-10px) rotateY(-5deg) rotateX(2deg);
+                box-shadow: -16px 26px 48px rgba(0, 0, 0, 0.85), 0 0 45px rgba(0, 210, 180, 0.4);
+            }
+        }
+
+        .hero-cover-wrapper:hover {
+            transform: translateY(-12px) rotateY(0deg) rotateX(0deg) scale(1.06);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9),
+                        0 0 55px var(--accent-glow);
+        }
+
+        .hero-cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: #111726;
+            display: block;
+            transition: opacity 0.3s ease;
+        }
+
+        .hero-cover-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(11, 15, 23, 0.88);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 5px 10px;
+            border-radius: 8px;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-cover-glow {
+            position: absolute;
+            inset: -4px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(0, 210, 180, 0.4), rgba(56, 189, 248, 0.1), transparent);
+            z-index: -1;
+            filter: blur(12px);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        @media (max-width: 960px) {
+            .hero-visual-side {
+                display: none;
+            }
         }
 
         .hero-tag {
@@ -1688,6 +1789,7 @@
 
                     <!-- Spotlight Hero Banner -->
                     <div class="hero-banner" id="heroBanner">
+                        <div class="hero-bg-cover-backdrop" id="heroBackdrop"></div>
                         <div class="hero-bg-overlay"></div>
                         <div class="hero-content">
                             <div class="hero-tag" id="heroTag">SPOTLIGHT IN EVIDENZA</div>
@@ -1711,6 +1813,13 @@
                                 <button class="hero-secondary-btn" onclick="switchView('libreria')">
                                     📚 Vai alla Libreria
                                 </button>
+                            </div>
+                        </div>
+                        <div class="hero-visual-side">
+                            <div class="hero-cover-wrapper" onclick="launchHeroGame()" title="Clicca per giocare subito a schermo intero">
+                                <img id="heroCoverImg" class="hero-cover-img" src="" alt="Copertina gioco" onload="this.classList.add('loaded')" onerror="handleHeroCoverError(this)">
+                                <div class="hero-cover-badge" id="heroCoverBadge">🎮 1999</div>
+                                <div class="hero-cover-glow"></div>
                             </div>
                         </div>
                         <div class="hero-pagination">
@@ -2414,6 +2523,35 @@
             const favBtn = document.getElementById('heroFavBtn');
             favBtn.innerText = g.is_favorite ? '★ Salvato nei Preferiti' : '★ Aggiungi ai Preferiti';
             favBtn.style.color = g.is_favorite ? 'var(--accent-gold)' : '#fff';
+
+            // Aggiorna copertina 3D fluttuante e sfondo cinematografico d'atmosfera
+            const cover = g.cover_url || '';
+            const heroImg = document.getElementById('heroCoverImg');
+            const heroBackdrop = document.getElementById('heroBackdrop');
+            const heroBadge = document.getElementById('heroCoverBadge');
+
+            if (heroBadge) {
+                heroBadge.innerText = `🎮 ${g.year || g.system_code}`;
+            }
+
+            if (cover) {
+                if (heroImg) {
+                    heroImg.style.display = 'block';
+                    heroImg.src = cover;
+                    heroImg.setAttribute('data-title', g.title);
+                    heroImg.setAttribute('data-sys', g.system_code);
+                }
+                if (heroBackdrop) {
+                    heroBackdrop.style.backgroundImage = `url('${cover}')`;
+                }
+            } else {
+                if (heroImg) heroImg.style.display = 'none';
+                if (heroBackdrop) heroBackdrop.style.backgroundImage = 'none';
+            }
+        }
+
+        function handleHeroCoverError(img) {
+            handleCoverError(img);
         }
 
         function nextHeroGame() {

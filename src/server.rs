@@ -47,8 +47,33 @@ impl HttpServer {
 
             let (path, query_params) = parse_url(&url);
 
+            // Servizio immagini locali generiche per file nel workspace/emu
+            if (method == Method::Get || method == Method::Head) && path.starts_with("/api/cover/file/") {
+                let sub_path = path.trim_start_matches("/api/cover/file/").trim();
+                let clean_sub = sub_path.replace("%20", " ").replace("..", "");
+                let emu_base = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu");
+                let full_path = emu_base.join(clean_sub);
+                if full_path.exists() && full_path.is_file() {
+                    if let Ok(bytes) = std::fs::read(&full_path) {
+                        let mime = if full_path.extension().map_or(false, |e| e == "jpg" || e == "jpeg") {
+                            "image/jpeg"
+                        } else {
+                            "image/png"
+                        };
+                        let header_ct = Header::from_bytes(&b"Content-Type"[..], mime.as_bytes()).unwrap();
+                        let header_cache = Header::from_bytes(&b"Cache-Control"[..], &b"public, max-age=86400"[..]).unwrap();
+                        let body = if method == Method::Head { Vec::new() } else { bytes };
+                        let response = Response::from_data(body).with_header(header_ct).with_header(header_cache);
+                        let _ = request.respond(response);
+                        continue;
+                    }
+                }
+                let _ = request.respond(Response::empty(404));
+                continue;
+            }
+
             // Servizio immagini locali MAME ad alta velocità (Flyers, Titles, Snaps)
-            if method == Method::Get && path.starts_with("/api/cover/mame/") {
+            if (method == Method::Get || method == Method::Head) && path.starts_with("/api/cover/mame/") {
                 let rom = path.trim_start_matches("/api/cover/mame/").trim();
                 let clean_rom = rom.replace(['/', '\\', '.', ':', ';'], "");
                 let emu_mame = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\mame");
@@ -71,7 +96,8 @@ impl HttpServer {
                             };
                             let header_ct = Header::from_bytes(&b"Content-Type"[..], mime.as_bytes()).unwrap();
                             let header_cache = Header::from_bytes(&b"Cache-Control"[..], &b"public, max-age=86400"[..]).unwrap();
-                            let response = Response::from_data(bytes).with_header(header_ct).with_header(header_cache);
+                            let body = if method == Method::Head { Vec::new() } else { bytes };
+                            let response = Response::from_data(body).with_header(header_ct).with_header(header_cache);
                             let _ = request.respond(response);
                             continue;
                         }
@@ -82,7 +108,7 @@ impl HttpServer {
             }
 
             // Servizio boxart locali SEGA NAOMI / ATOMISWAVE (18 boxart ad alta risoluzione su disco a 0ms)
-            if method == Method::Get && path.starts_with("/api/cover/naomi/") {
+            if (method == Method::Get || method == Method::Head) && path.starts_with("/api/cover/naomi/") {
                 let rom = path.trim_start_matches("/api/cover/naomi/").trim();
                 let clean_rom = rom.replace(['/', '\\', '.', ':', ';'], "");
                 let emu_naomi = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\NAOMI - Flycast\data\boxart");
@@ -104,7 +130,8 @@ impl HttpServer {
                             };
                             let header_ct = Header::from_bytes(&b"Content-Type"[..], mime.as_bytes()).unwrap();
                             let header_cache = Header::from_bytes(&b"Cache-Control"[..], &b"public, max-age=86400"[..]).unwrap();
-                            let response = Response::from_data(bytes).with_header(header_ct).with_header(header_cache);
+                            let body = if method == Method::Head { Vec::new() } else { bytes };
+                            let response = Response::from_data(body).with_header(header_ct).with_header(header_cache);
                             let _ = request.respond(response);
                             continue;
                         }
