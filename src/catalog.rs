@@ -31,7 +31,9 @@ fn is_mame_bios_or_hardware(title: &str, rom: &str) -> bool {
         "namco52", "namco53", "namco54", "namcoc69", "pgm", "qsound_hle", "virge_pci",
         "jvs13551", "segabill", "segadimm", "skns", "tms320c31", "konamigx", "cchip",
         "neogeo", "cvs", "decocass", "coh1000t", "coh1000w", "coh1002e", "coh1002m",
-        "taitofx1", "stvbios", "crysbios", "sys573", "aleck64", "macsbios"
+        "taitofx1", "stvbios", "crysbios", "sys573", "aleck64", "macsbios",
+        "votrsc01", "votrsc01a", "ym2608", "ym2413", "ym2151", "ym2203", "ym2610",
+        "ym2612", "ym3812", "ymf278b", "ay8910", "sn76496", "dac"
     ];
 
     if hardware_roms.contains(&r.as_str()) {
@@ -55,6 +57,11 @@ fn is_mame_bios_or_hardware(title: &str, rom: &str) -> bool {
         || t.starts_with("qsound") 
         || t.starts_with("system gx") 
         || t.contains("(c-chip)") 
+        || t.starts_with("votrax") 
+        || t.starts_with("ym2") 
+        || t.starts_with("ym3") 
+        || t.starts_with("ymf") 
+        || t.starts_with("yamaha ") 
     {
         return true;
     }
@@ -243,6 +250,15 @@ impl CatalogLoader {
             if t_lower.contains("iji") {
                 return "https://remar.se/daniel/iji/title.png".to_string();
             }
+            if t_lower.contains("an untitled story") || t_lower.contains("untitled story") {
+                return "https://static.wikitide.net/archipelagowiki/6/65/An_Untitled_Story_Cover.png".to_string();
+            }
+            if t_lower.contains("knytt stories") || t_lower.contains("knytt") {
+                return "https://images.igdb.com/igdb/image/upload/t_cover_big/co28f1.jpg".to_string();
+            }
+            if t_lower.contains("within a deep forest") {
+                return "https://images.igdb.com/igdb/image/upload/t_cover_big/co61kx.jpg".to_string();
+            }
         }
 
         // 2. Mappe dedicate per Nintendo 64
@@ -270,7 +286,7 @@ impl CatalogLoader {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Nintendo_Entertainment_System/master/Named_Boxarts/Goonies%20II,%20The%20(USA).png".to_string();
             }
             if t_lower.contains("goonies") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Nintendo_Entertainment_System/master/Named_Boxarts/Goonies,%20The%20(World)%20(Unl).png".to_string();
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Nintendo_Entertainment_System/master/Named_Boxarts/Goonies%20(Japan).png".to_string();
             }
             if t_lower.contains("gradius") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Nintendo_Entertainment_System/master/Named_Boxarts/Gradius%20(USA).png".to_string();
@@ -295,14 +311,14 @@ impl CatalogLoader {
                 return "/api/cover/mame/braveff".to_string();
             }
             if t_lower.contains("nascar") || t_lower.contains("sgnascar") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/NASCAR%20Arcade.png".to_string();
+                return "/api/cover/mame/sgnascar".to_string();
             }
         }
 
         // 5. Mappe dedicate per PlayStation
         if sys_code.eq_ignore_ascii_case("PSX") {
             if t_lower.contains("vib-ribbon") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/Sony_-_PlayStation/master/Named_Boxarts/Vib-Ribbon%20(Europe).png".to_string();
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Sony_-_PlayStation/master/Named_Boxarts/Vib-Ribbon%20(Europe)%20(En,Fr,De,Es,It).png".to_string();
             }
             if t_lower.contains("lupin") {
                 return "/api/cover/file/PSX/DuckStation/covers/Lupin%203sei%20(Japan).png".to_string();
@@ -427,7 +443,7 @@ impl CatalogLoader {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Sony_-_PlayStation/master/Named_Boxarts/Castlevania%20-%20Symphony%20of%20the%20Night%20(USA).png".to_string();
             }
             if t_lower.contains("vib-ribbon") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/Sony_-_PlayStation/master/Named_Boxarts/Vib-Ribbon%20(Europe).png".to_string();
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Sony_-_PlayStation/master/Named_Boxarts/Vib-Ribbon%20(Europe)%20(En,Fr,De,Es,It).png".to_string();
             }
             if t_lower.contains("ridge racer") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Sony_-_PlayStation/master/Named_Boxarts/Ridge%20Racer%20(USA).png".to_string();
@@ -559,6 +575,7 @@ impl CatalogLoader {
             else if t_lower.contains("formula one grand prix") { clean = "Formula One Grand Prix"; }
             else if t_lower.contains("halloween harry") || t_lower.contains("alien carnage") { clean = "Alien Carnage"; }
             else if t_lower.contains("humans 3") { clean = "Humans 3_ Evolution - Lost in Time"; }
+            else if t_lower == "humans" || t_lower == "the humans" { clean = "Humans, The"; }
         } else if sys_code.eq_ignore_ascii_case("SCUMMVM") {
             if t_lower.contains("broken sword 2.5") { clean = "Broken Sword 2.5_ The Return of the Templars"; }
             else if t_lower.contains("broken sword ii") || t_lower.contains("smoking") { clean = "Broken Sword II_ The Smoking Mirror"; }
@@ -574,6 +591,8 @@ impl CatalogLoader {
             else if t_lower.contains("king's quest vii") { clean = "King's Quest VII_ The Princeless Bride"; }
             else if t_lower.contains("colonel's bequest") { clean = "The Colonel's Bequest"; }
             else if t_lower.contains("dagger of amon ra") { clean = "The Dagger of Amon Ra"; }
+            else if t_lower.contains("discworld 2") || t_lower.contains("discworld ii") { clean = "Discworld II_ Missing Presumed...!_"; }
+            else if t_lower.contains("gabriel knight") { clean = "Gabriel Knight_ Sins of the Fathers"; }
             else if t_lower.contains("larry 5") { clean = "Leisure Suit Larry 5_ Passionate Patti Does a Little Undercover Work"; }
             else if t_lower.contains("larry 7") { clean = "Leisure Suit Larry 7_ Love for Sail!"; }
             else if t_lower.contains("monkey island 2") { clean = "Monkey Island 2_ LeChuck's Revenge"; }
@@ -596,31 +615,90 @@ impl CatalogLoader {
             else if t_lower.contains("zak mckracken") { clean = "Zak McKracken and the Alien Mindbenders"; }
             else if t_lower.contains("thimbleweed park") { clean = "Thimbleweed Park"; }
         } else if sys_code.eq_ignore_ascii_case("C64") {
-            if t_lower == "1943" { clean = "1943 - The Battle of Midway"; }
-            else if t_lower == "archon" { clean = "Archon"; }
-            else if t_lower.contains("archon ii") || t_lower.contains("adept") { clean = "Archon II - Adept"; }
-            else if t_lower.contains("bomb jack") || t_lower == "bombjack" { clean = "Bombjack"; }
-            else if t_lower == "cybernoid" { clean = "Cybernoid - The Fighting Machine"; }
-            else if t_lower.contains("ghostbusters") { clean = "Ghostbusters"; }
-            else if t_lower.contains("ghosts 'n goblins") { clean = "Ghosts 'n Goblins"; }
-            else if t_lower.contains("ghouls 'n ghosts") { clean = "Ghouls 'n Ghosts"; }
-            else if t_lower.contains("hero") || t_lower == "h.e.r.o." { clean = "H.E.R.O."; }
-            else if t_lower.contains("chopper command") { clean = "Chopper Command"; }
-            else if t_lower.contains("international karate") || t_lower.contains("ik+") { clean = "IK+ - International Karate +"; }
-            else if t_lower.contains("mutant camels") { clean = "Attack of the Mutant Camels"; }
-            else if t_lower.contains("first samurai") { clean = "First Samurai"; }
-            else if t_lower.contains("hawkeye") { clean = "Hawkeye"; }
-            else if t_lower.contains("last ninja 3") { clean = "Last Ninja 3"; }
-            else if t_lower.contains("last ninja 2") { clean = "Last Ninja 2 - Back with a Vengeance"; }
-            else if t_lower.contains("last ninja") { clean = "Last Ninja, The"; }
-            else if t_lower.contains("turrican ii") { clean = "Turrican II - The Final Fight"; }
-            else if t_lower.contains("turrican") { clean = "Turrican"; }
-            else if t_lower.contains("wasteland") { clean = "Wasteland"; }
-            else if t_lower.contains("wonder boy") { clean = "Wonder Boy"; }
-            else if t_lower.contains("zak mckracken") { clean = "Zak McKracken and the Alien Mindbenders"; }
-            else if t_lower.contains("zeta wing ii") { clean = "Zeta Wing II"; }
-            else if t_lower.contains("zeta wing") { clean = "Zeta Wing"; }
-            else if t_lower.contains("zynaps") { clean = "Zynaps"; }
+            if t_lower.contains("hero") || t_lower == "h.e.r.o." {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Atari_-_2600/master/Named_Boxarts/H.E.R.O.%20(USA).png".to_string();
+            }
+            if t_lower.contains("chopper command") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Atari_-_2600/master/Named_Boxarts/Chopper%20Command%20(USA).png".to_string();
+            }
+            if t_lower.contains("red storm rising") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/DOS/master/Named_Boxarts/Red%20Storm%20Rising.png".to_string();
+            }
+            if t_lower.contains("parasol stars") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/NEC_-_PC_Engine_-_TurboGrafx_16/master/Named_Boxarts/Parasol%20Stars%20-%20The%20Story%20of%20Bubble%20Bobble%20III%20(USA).png".to_string();
+            }
+
+            if t_lower == "1942" { clean = "1942 (Europe)"; }
+            else if t_lower == "1943" || t_lower.contains("1943") { clean = "1943 - The Battle of Midway (Europe)"; }
+            else if t_lower.contains("goonies") { clean = "Goonies, The (USA, Europe)"; }
+            else if t_lower.contains("giana sisters") { clean = "Great Giana Sisters, The (Europe)"; }
+            else if t_lower.contains("last ninja 3") { clean = "Last Ninja III, The - Real Hatred Is Timeless (Europe)"; }
+            else if t_lower.contains("last ninja 2") { clean = "Last Ninja II - Back with a Vengeance (Europe)"; }
+            else if t_lower.contains("last ninja") { clean = "Last Ninja, The (Europe)"; }
+            else if t_lower.contains("turbo outrun") || t_lower.contains("turbo out run") { clean = "Turbo Out Run (Europe)"; }
+            else if t_lower.contains("ultima iv") { clean = "Ultima IV - Quest of the Avatar (USA, Europe)"; }
+            else if t_lower.contains("ultima v") { clean = "Ultima V - Warriors of Destiny (Europe)"; }
+            else if t_lower.contains("ghosts 'n goblins") || t_lower.contains("ghosts n goblins") { clean = "Ghosts'n Goblins (Europe)"; }
+            else if t_lower.contains("ghouls 'n ghosts") || t_lower.contains("ghouls n ghosts") { clean = "Ghouls 'n' Ghosts (Europe)"; }
+            else if t_lower.contains("ik+") || t_lower.contains("international karate") { clean = "IK+ (Europe)"; }
+            else if t_lower.contains("paperboy") { clean = "Paperboy (Europe)"; }
+            else if t_lower.contains("pitstop ii") || t_lower.contains("pitstop 2") { clean = "Pitstop II (Europe)"; }
+            else if t_lower.contains("pirates!") || t_lower.contains("pirates") { clean = "Pirates! (Europe)"; }
+            else if t_lower.contains("rampage") { clean = "Rampage (Europe)"; }
+            else if t_lower.contains("river raid") { clean = "River Raid (Europe)"; }
+            else if t_lower.contains("robocop") { clean = "RoboCop (USA)"; }
+            else if t_lower.contains("summer games ii") || t_lower.contains("summer games 2") { clean = "Summer Games II (Europe) (2 sides) (b-highscores)"; }
+            else if t_lower.contains("summer games") { clean = "Summer Games (Europe)"; }
+            else if t_lower.contains("winter games") { clean = "Winter Games (Europe)"; }
+            else if t_lower.contains("world games") { clean = "World Games (Europe)"; }
+            else if t_lower.contains("california games") { clean = "California Games (Europe)"; }
+            else if t_lower.contains("zynaps") { clean = "Zynaps (Europe) (Hewson)"; }
+            else if t_lower.contains("bruce lee") { clean = "Bruce Lee (Europe)"; }
+            else if t_lower.contains("teenage mutant") || t_lower.contains("turtles") { clean = "Teenage Mutant Hero Turtles (Europe)"; }
+            else if t_lower.contains("empire strikes back") { clean = "Star Wars - Empire Strikes Back, The (Europe)"; }
+            else if t_lower.contains("star wars") { clean = "Star Wars (Europe)"; }
+            else if t_lower.contains("arkanoid") { clean = "Arkanoid (Europe)"; }
+            else if t_lower.contains("boulder dash") || t_lower.contains("boulderdash") { clean = "Boulder Dash (Europe)"; }
+            else if t_lower.contains("bubble bobble") { clean = "Bubble Bobble (Europe)"; }
+            else if t_lower.contains("commando") { clean = "Commando (Europe)"; }
+            else if t_lower.contains("defender") { clean = "Defender (USA, Europe)"; }
+            else if t_lower.contains("donkey kong") { clean = "Donkey Kong (Europe)"; }
+            else if t_lower.contains("elite") { clean = "Elite (Europe)"; }
+            else if t_lower.contains("gauntlet") { clean = "Gauntlet (Europe)"; }
+            else if t_lower.contains("green beret") { clean = "Green Beret (Europe)"; }
+            else if t_lower.contains("ikari warriors") { clean = "Ikari Warriors (Europe)"; }
+            else if t_lower.contains("impossible mission") { clean = "Impossible Mission (Europe)"; }
+            else if t_lower.contains("leaderboard") { clean = "Leaderboard (Europe)"; }
+            else if t_lower.contains("maniac mansion") { clean = "Maniac Mansion (USA, Europe)"; }
+            else if t_lower.contains("microprose soccer") { clean = "Microprose Soccer (Europe)"; }
+            else if t_lower.contains("midnight resistance") { clean = "Midnight Resistance (Europe)"; }
+            else if t_lower.contains("nebulus") { clean = "Nebulus (Europe)"; }
+            else if t_lower.contains("pang") { clean = "Pang (Europe)"; }
+            else if t_lower.contains("paradroid") { clean = "Paradroid (USA, Europe)"; }
+            else if t_lower.contains("platoon") { clean = "Platoon (Europe)"; }
+            else if t_lower.contains("prince of persia") { clean = "Prince of Persia (USA, Europe)"; }
+            else if t_lower.contains("rainbow islands") { clean = "Rainbow Islands (Europe)"; }
+            else if t_lower.contains("rick dangerous") { clean = "Rick Dangerous (Europe)"; }
+            else if t_lower.contains("silkworm") { clean = "Silkworm (Europe)"; }
+            else if t_lower.contains("space harrier") { clean = "Space Harrier (Europe)"; }
+            else if t_lower.contains("spy hunter") { clean = "Spy Hunter (Europe)"; }
+            else if t_lower.contains("spy vs spy") { clean = "Spy vs Spy (Europe)"; }
+            else if t_lower.contains("strider") { clean = "Strider (Europe)"; }
+            else if t_lower.contains("stunt car racer") { clean = "Stunt Car Racer (USA, Europe)"; }
+            else if t_lower.contains("target renegade") { clean = "Target Renegade (Europe)"; }
+            else if t_lower.contains("uridium") { clean = "Uridium (Europe)"; }
+            else if t_lower.contains("wizball") { clean = "Wizball (Europe)"; }
+            else if t_lower.contains("wonder boy") { clean = "Wonder Boy (USA, Europe)"; }
+            else if t_lower.contains("zak mckracken") { clean = "Zak McKracken and the Alien Mindbenders (USA, Europe)"; }
+            else if t_lower.contains("turrican ii") { clean = "Turrican II - The Final Fight (Europe)"; }
+            else if t_lower.contains("turrican") { clean = "Turrican (Europe)"; }
+            else if t_lower.contains("bomb jack") || t_lower == "bombjack" { clean = "Bomb Jack (Europe)"; }
+            else if t_lower.contains("cybernoid ii") { clean = "Cybernoid II (Europe)"; }
+            else if t_lower.contains("cybernoid") { clean = "Cybernoid - The Fighting Machine (Europe)"; }
+            else if t_lower.contains("archon ii") { clean = "Archon II - Adept (USA, Europe)"; }
+            else if t_lower.contains("archon") { clean = "Archon (USA, Europe)"; }
+            else if t_lower.contains("ghostbusters") { clean = "Ghostbusters (Europe)"; }
+            else if t_lower.contains("wasteland") { clean = "Wasteland (USA)"; }
             else if t_lower.contains("pig quest") { clean = "A Pig Quest"; }
             else if t_lower.contains("petscii robots") { clean = "Attack of the PETSCII Robots"; }
             else if t_lower.contains("briley witch") { clean = "Briley Witch Chronicles"; }
@@ -652,7 +730,11 @@ impl CatalogLoader {
             _ => ("MAME", "Named_Snaps", ""),
         };
 
-        let full_name = format!("{}{}", clean, suffix);
+        let full_name = if clean.ends_with(')') {
+            clean.to_string()
+        } else {
+            format!("{}{}", clean, suffix)
+        };
         let clean_title = full_name
             .replace(':', "_")
             .replace('/', "_")

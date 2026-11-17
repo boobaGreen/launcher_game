@@ -399,7 +399,10 @@
         /* Hero Spotlight Banner */
         .hero-banner {
             position: relative;
-            min-height: 380px;
+            height: 420px;
+            min-height: 420px;
+            max-height: 420px;
+            box-sizing: border-box;
             border-radius: 20px;
             overflow: hidden;
             background: linear-gradient(135deg, #131c2d 0%, #0a0e17 100%);
@@ -408,7 +411,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 40px 48px;
+            padding: 32px 48px;
             gap: 32px;
         }
 
@@ -439,12 +442,16 @@
             max-width: 620px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            justify-content: center;
+            gap: 10px;
+            flex: 1;
         }
 
         .hero-visual-side {
             position: relative;
             z-index: 3;
+            width: 240px;
+            height: 330px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -572,12 +579,19 @@
         }
 
         .hero-title {
-            font-size: 2.8rem;
+            font-size: clamp(1.8rem, 2.5vw, 2.5rem);
             font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -1px;
+            line-height: 1.15;
+            letter-spacing: -0.5px;
             color: #fff;
             text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 2.3em;
+            max-height: 2.3em;
         }
 
         .hero-meta {
@@ -591,9 +605,15 @@
 
         .hero-desc {
             font-size: 0.95rem;
-            line-height: 1.5;
+            line-height: 1.45;
             color: #cbd5e1;
-            margin-top: 4px;
+            margin-top: 2px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 2.9em;
         }
 
         .hero-controls {
@@ -606,7 +626,11 @@
             border: 1px solid rgba(251, 191, 36, 0.2);
             padding: 6px 12px;
             border-radius: 6px;
-            margin-top: 4px;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 580px;
         }
 
         .hero-buttons {
@@ -1477,6 +1501,65 @@
             text-shadow: 0 0 6px var(--accent-gold);
         }
 
+        /* Overlay Azione Gioco Rapido su Hover */
+        .card-play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 14, 23, 0.78);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            z-index: 6;
+        }
+
+        .game-card:hover .card-play-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .card-play-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #00d2b4 0%, #06b6d4 100%);
+            color: #0b0f17;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 18px;
+            font-size: 0.84rem;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 210, 180, 0.5);
+            transform: scale(0.92);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card-play-action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 22px rgba(0, 210, 180, 0.7);
+        }
+
+        .card-play-action-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: #0b0f17;
+        }
+
+        .card-play-hint {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #94a3b8;
+            letter-spacing: 0.2px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
         /* Area Metadati / Testo (85px fissi) */
         .card-info {
             height: 85px; /* ALTEZZA ADEGUATA METADATI */
@@ -1713,6 +1796,10 @@
                 <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
                 Libreria
             </button>
+            <button class="nav-btn" id="navFavorites" onclick="switchToFavoritesView()">
+                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                Preferiti
+            </button>
             <button class="nav-btn" id="navArena" onclick="openArenaModal()">
                 <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
                 Arena Online
@@ -1852,35 +1939,13 @@
                         </div>
                     </div>
 
-                    <!-- Riga: Riprendi a Giocare -->
+                    <!-- Riga: Riprendi a Giocare (visibile solo se ci sono giochi recenti avviati) -->
                     <div id="recentSection" style="display: none;">
                         <div class="section-header">
                             <h2 class="section-title">⏯️ Riprendi a Giocare</h2>
                             <span class="section-action" onclick="showRecentInLibrary()">Vedi cronologia →</span>
                         </div>
                         <div class="carousel-row" id="recentRow">
-                            <!-- Inseriti via JS -->
-                        </div>
-                    </div>
-
-                    <!-- Riga: I Tuoi Preferiti -->
-                    <div id="featuredSection">
-                        <div class="section-header">
-                            <h2 class="section-title">⭐ I Tuoi Preferiti</h2>
-                            <span class="section-action" onclick="showFavoritesInLibrary()">Vedi tutti i preferiti →</span>
-                        </div>
-                        <div class="carousel-row" id="featuredRow">
-                            <!-- Inseriti via JS -->
-                        </div>
-                    </div>
-
-                    <!-- Riga: Accesso Rapido Sistemi -->
-                    <div>
-                        <div class="section-header">
-                            <h2 class="section-title">🕹️ Accesso Rapido Sistemi</h2>
-                            <span class="section-action" onclick="switchView('libreria')">Esplora tutti →</span>
-                        </div>
-                        <div class="carousel-row" id="quickSystemsRow">
                             <!-- Inseriti via JS -->
                         </div>
                     </div>
@@ -2126,11 +2191,25 @@
             document.getElementById('viewHome').classList.toggle('active', viewName === 'home');
             document.getElementById('viewLibreria').classList.toggle('active', viewName === 'libreria');
             document.getElementById('navHome').classList.toggle('active', viewName === 'home');
-            document.getElementById('navLibreria').classList.toggle('active', viewName === 'libreria');
+            document.getElementById('navLibreria').classList.toggle('active', viewName === 'libreria' && !favoritesOnly);
+            const favNav = document.getElementById('navFavorites');
+            if (favNav) favNav.classList.toggle('active', viewName === 'libreria' && favoritesOnly);
 
             if (viewName === 'libreria') {
                 renderGrid();
             }
+        }
+
+        function switchToFavoritesView() {
+            favoritesOnly = true;
+            const favBtn = document.getElementById('favToggleBtn');
+            if (favBtn) favBtn.classList.add('primary');
+            switchView('libreria');
+            loadGames();
+        }
+
+        function showFavoritesInLibrary() {
+            switchToFavoritesView();
         }
 
         // ----------------------------------------------------
@@ -2742,6 +2821,13 @@
                     </div>
                     ${cover ? `<img class="card-cover" src="${cover}" loading="lazy" data-title="${escapeHtml(g.title)}" data-sys="${g.system_code}" onload="this.classList.add('loaded')" onerror="handleCoverError(this)" alt="${escapeHtml(g.title)}">` : ''}
                     <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id})" title="Preferito">★</button>
+                    <div class="card-play-overlay">
+                        <button class="card-play-action-btn" onclick="event.stopPropagation(); launchGame(${g.id})" title="Gioca subito (${escapeHtml(g.title)})">
+                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            GIOCA
+                        </button>
+                        <div class="card-play-hint">Doppio click per avviare</div>
+                    </div>
                 </div>
                 <div class="card-info">
                     <div class="card-title" title="${escapeHtml(g.title)}">${escapeHtml(g.title)}</div>
@@ -2962,6 +3048,8 @@
         function toggleFavoritesOnly() {
             favoritesOnly = !favoritesOnly;
             document.getElementById('favToggleBtn').classList.toggle('primary', favoritesOnly);
+            const favNav = document.getElementById('navFavorites');
+            if (favNav) favNav.classList.toggle('active', favoritesOnly);
             switchView('libreria');
             loadGames();
         }
