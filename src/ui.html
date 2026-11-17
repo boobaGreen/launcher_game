@@ -367,6 +367,89 @@
             filter: brightness(1.05);
         }
 
+        /* Pulsante Filtro Preferiti Moderno con Indicatore ON/OFF */
+        .fav-filter-btn {
+            background: rgba(251, 191, 36, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+        }
+
+        .fav-filter-btn:hover {
+            background: rgba(251, 191, 36, 0.16);
+            border-color: #fbbf24;
+            box-shadow: 0 0 14px rgba(251, 191, 36, 0.25);
+        }
+
+        .fav-filter-btn.active {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: #0b0f17;
+            border-color: #fbbf24;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.55);
+            font-weight: 900;
+            transform: scale(1.02);
+        }
+
+        .fav-status-badge {
+            font-size: 0.65rem;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.12);
+            color: #fbbf24;
+            letter-spacing: 0.5px;
+        }
+
+        .fav-filter-btn.active .fav-status-badge {
+            background: #0b0f17;
+            color: #fbbf24;
+        }
+
+        /* Banner informativo e chip filtro attivo sopra la griglia */
+        .active-favorite-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(251, 191, 36, 0.12);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            border-radius: 8px;
+            padding: 8px 14px;
+            margin-top: 4px;
+            color: #fde68a;
+            font-size: 0.85rem;
+            width: fit-content;
+        }
+
+        .active-favorite-chip b {
+            color: #fff;
+        }
+
+        .chip-dismiss-btn {
+            background: rgba(11, 15, 23, 0.6);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            border-radius: 12px;
+            padding: 3px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .chip-dismiss-btn:hover {
+            background: #fbbf24;
+            color: #0b0f17;
+        }
+
         /* ----------------------------------------------------
            VIEWS (Home vs Libreria)
         ---------------------------------------------------- */
@@ -1788,13 +1871,9 @@
         </div>
 
         <nav class="sidebar-nav">
-            <button class="nav-btn active" id="navHome" onclick="switchView('home')">
+            <button class="nav-btn active" id="navHome" onclick="selectHome()">
                 <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                 Home
-            </button>
-            <button class="nav-btn" id="navLibreria" onclick="switchView('libreria')">
-                <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
-                Libreria
             </button>
             <button class="nav-btn" id="navFavorites" onclick="switchToFavoritesView()">
                 <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
@@ -1885,8 +1964,10 @@
                 </div>
             </div>
             <div class="header-actions">
-                <button class="action-btn" onclick="toggleFavoritesOnly()" id="favToggleBtn">
-                    ★ Preferiti
+                <button class="fav-filter-btn" onclick="toggleFavoritesOnly()" id="favToggleBtn" title="Attiva o disattiva il filtro Solo Preferiti">
+                    <span class="fav-star">★</span>
+                    <span id="favBtnLabel">Preferiti</span>
+                    <span class="fav-status-badge" id="favStatusBadge">OFF</span>
                 </button>
                 <button class="action-btn primary" onclick="launchRandomGame()">
                     🎲 Gioco Casuale
@@ -1897,11 +1978,11 @@
         <!-- Scrollable Content -->
         <div class="content-scroll">
 
-            <!-- VISTA 1: HOME (Stile RecompLauncher) -->
-            <section class="view-section active" id="viewHome">
-                <div class="home-container">
+            <!-- VISTA UNICA RETROHUB (Home & Catalogo Completo) -->
+            <section class="view-section active" id="viewLibreria">
+                <div class="libreria-container">
 
-                    <!-- Spotlight Hero Banner -->
+                    <!-- Spotlight Hero Banner (visibile nella Home generale) -->
                     <div class="hero-banner" id="heroBanner">
                         <div class="hero-bg-cover-backdrop" id="heroBackdrop"></div>
                         <div class="hero-bg-overlay"></div>
@@ -1924,8 +2005,8 @@
                                 <button class="hero-secondary-btn" id="heroFavBtn" onclick="toggleHeroFavorite()">
                                     ★ Preferito
                                 </button>
-                                <button class="hero-secondary-btn" onclick="switchView('libreria')">
-                                    📚 Vai alla Libreria
+                                <button class="hero-secondary-btn" onclick="scrollToCatalog()">
+                                    📚 Sfoglia Catalogo ↓
                                 </button>
                             </div>
                         </div>
@@ -1943,24 +2024,22 @@
                     <div id="recentSection" style="display: none;">
                         <div class="section-header">
                             <h2 class="section-title">⏯️ Riprendi a Giocare</h2>
-                            <span class="section-action" onclick="showRecentInLibrary()">Vedi cronologia →</span>
+                            <span class="section-action" onclick="scrollToCatalog()">Sfoglia catalogo →</span>
                         </div>
                         <div class="carousel-row" id="recentRow">
                             <!-- Inseriti via JS -->
                         </div>
                     </div>
 
-                </div>
-            </section>
-
-            <!-- VISTA 2: LIBRERIA (Stile RecompLauncher Libreria) -->
-            <section class="view-section" id="viewLibreria">
-                <div class="libreria-container">
-                    
                     <div class="libreria-header">
                         <div class="libreria-title-row">
-                            <h1 class="libreria-title">Libreria</h1>
-                            <span class="libreria-subtitle" id="libreriaCounter">1.149 giochi trovati</span>
+                            <h1 class="libreria-title" id="pageMainTitle">Tutti i Giochi</h1>
+                            <span class="libreria-subtitle" id="libreriaCounter">1.114 giochi trovati</span>
+                        </div>
+                        <!-- Chip indicatore visivo chiaro Solo Preferiti -->
+                        <div class="active-favorite-chip" id="activeFavoriteChip" style="display: none;">
+                            <span>⭐ Filtro attivo: Mostra solo i <b>Preferiti</b></span>
+                            <button class="chip-dismiss-btn" onclick="toggleFavoritesOnly()" title="Mostra tutti i giochi">✕ Mostra Tutti</button>
                         </div>
                     </div>
 
@@ -2184,32 +2263,121 @@
         });
 
         // ----------------------------------------------------
-        // SWITCH VIEW (Home vs Libreria)
+        // VISIBILITÀ HERO SPOTLIGHT & NAVIGAZIONE VISTE
         // ----------------------------------------------------
-        function switchView(viewName) {
-            currentView = viewName;
-            document.getElementById('viewHome').classList.toggle('active', viewName === 'home');
-            document.getElementById('viewLibreria').classList.toggle('active', viewName === 'libreria');
-            document.getElementById('navHome').classList.toggle('active', viewName === 'home');
-            document.getElementById('navLibreria').classList.toggle('active', viewName === 'libreria' && !favoritesOnly);
-            const favNav = document.getElementById('navFavorites');
-            if (favNav) favNav.classList.toggle('active', viewName === 'libreria' && favoritesOnly);
+        function updateHeroVisibility() {
+            const heroBanner = document.getElementById('heroBanner');
+            const recentSection = document.getElementById('recentSection');
+            const searchInput = document.getElementById('searchInput');
+            const hasSearch = searchInput && searchInput.value.trim().length > 0;
 
-            if (viewName === 'libreria') {
-                renderGrid();
+            // La Hero Spotlight è visibile nella Home generale
+            const isGeneralHome = currentPlatform === 'ALL' && !favoritesOnly && !hasSearch && currentGenre === 'ALL';
+            
+            if (heroBanner) {
+                heroBanner.style.display = isGeneralHome ? 'flex' : 'none';
             }
+            if (recentSection && recentSection.querySelector('.card')) {
+                recentSection.style.display = isGeneralHome ? 'block' : 'none';
+            }
+        }
+
+        function scrollToCatalog() {
+            const el = document.getElementById('filterPillsBar');
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function selectHome() {
+            currentPlatform = 'ALL';
+            favoritesOnly = false;
+            currentGenre = 'ALL';
+            currentDev = 'ALL';
+            currentDecade = 'ALL';
+
+            const favBtn = document.getElementById('favToggleBtn');
+            if (favBtn) favBtn.classList.remove('active');
+            const favBadge = document.getElementById('favStatusBadge');
+            if (favBadge) favBadge.innerText = 'OFF';
+            const favLabel = document.getElementById('favBtnLabel');
+            if (favLabel) favLabel.innerText = 'Preferiti';
+            const favNav = document.getElementById('navFavorites');
+            if (favNav) favNav.classList.remove('active');
+            const navHome = document.getElementById('navHome');
+            if (navHome) navHome.classList.add('active');
+
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+                const searchClear = document.getElementById('searchClear');
+                if (searchClear) searchClear.style.display = 'none';
+            }
+
+            const genSelect = document.getElementById('genreSelect');
+            if (genSelect) genSelect.value = 'ALL';
+            const devSelect = document.getElementById('devSelect');
+            if (devSelect) devSelect.value = 'ALL';
+            const decSelect = document.getElementById('decadeSelect');
+            if (decSelect) decSelect.value = 'ALL';
+
+            renderSidebarPlatforms();
+            renderPlatformPills();
+            updateHeroVisibility();
+            loadGames();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function switchToFavoritesView() {
             favoritesOnly = true;
+            currentPlatform = 'ALL';
+            currentGenre = 'ALL';
+            currentDev = 'ALL';
+            currentDecade = 'ALL';
+
             const favBtn = document.getElementById('favToggleBtn');
-            if (favBtn) favBtn.classList.add('primary');
-            switchView('libreria');
+            if (favBtn) favBtn.classList.add('active');
+            const favBadge = document.getElementById('favStatusBadge');
+            if (favBadge) favBadge.innerText = 'ON';
+            const favLabel = document.getElementById('favBtnLabel');
+            if (favLabel) favLabel.innerText = 'Solo Preferiti';
+            const favNav = document.getElementById('navFavorites');
+            if (favNav) favNav.classList.add('active');
+            const navHome = document.getElementById('navHome');
+            if (navHome) navHome.classList.remove('active');
+
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput && searchInput.value.trim() !== '') {
+                searchInput.value = '';
+                const searchClear = document.getElementById('searchClear');
+                if (searchClear) searchClear.style.display = 'none';
+            }
+
+            const genSelect = document.getElementById('genreSelect');
+            if (genSelect) genSelect.value = 'ALL';
+            const devSelect = document.getElementById('devSelect');
+            if (devSelect) devSelect.value = 'ALL';
+            const decSelect = document.getElementById('decadeSelect');
+            if (decSelect) decSelect.value = 'ALL';
+
+            renderSidebarPlatforms();
+            renderPlatformPills();
+            updateHeroVisibility();
             loadGames();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function showFavoritesInLibrary() {
             switchToFavoritesView();
+        }
+
+        function switchView(viewName) {
+            if (viewName === 'home') {
+                selectHome();
+            } else {
+                updateHeroVisibility();
+                renderGrid();
+            }
         }
 
         // ----------------------------------------------------
@@ -2292,7 +2460,34 @@
                     renderQuickSystems();
                 }
 
-                document.getElementById('libreriaCounter').innerText = `${displayedGames.length} giochi trovati`;
+                // Aggiorna indicatore visivo filtro preferiti
+                const favChip = document.getElementById('activeFavoriteChip');
+                if (favChip) {
+                    favChip.style.display = favoritesOnly ? 'inline-flex' : 'none';
+                }
+
+                // Titolo dinamico
+                const pageTitle = document.getElementById('pageMainTitle');
+                if (pageTitle) {
+                    if (favoritesOnly) {
+                        if (currentPlatform !== 'ALL') {
+                            const pObj = platformsData.find(p => p.code === currentPlatform);
+                            pageTitle.innerText = `⭐ Preferiti — ${pObj ? pObj.name : currentPlatform}`;
+                        } else {
+                            pageTitle.innerText = '⭐ I Tuoi Preferiti';
+                        }
+                    } else if (currentPlatform !== 'ALL') {
+                        const pObj = platformsData.find(p => p.code === currentPlatform);
+                        pageTitle.innerText = pObj ? pObj.name : currentPlatform;
+                    } else {
+                        pageTitle.innerText = 'Tutti i Giochi';
+                    }
+                }
+
+                const counterText = favoritesOnly 
+                    ? `${displayedGames.length} ${displayedGames.length === 1 ? 'preferito trovato' : 'preferiti trovati'}`
+                    : `${displayedGames.length} ${displayedGames.length === 1 ? 'gioco trovato' : 'giochi trovati'}`;
+                document.getElementById('libreriaCounter').innerText = counterText;
                 renderGrid();
             } catch (err) {
                 console.error("Errore caricamento giochi:", err);
@@ -2305,7 +2500,7 @@
             const total = platformsData.reduce((acc, p) => acc + p.count, 0);
 
             const itemsHtml = platformsData.map(p => {
-                const active = p.code === currentPlatform ? 'active' : '';
+                const active = (p.code === currentPlatform && !favoritesOnly) ? 'active' : '';
                 return `
                 <button class="platform-item ${active}" onclick="selectPlatform('${p.code}')">
                     <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${p.name}</span>
@@ -2316,7 +2511,7 @@
 
             list.innerHTML = `
                 <div class="platforms-title">Piattaforme (${platformsData.length})</div>
-                <button class="platform-item ${currentPlatform === 'ALL' ? 'active' : ''}" onclick="selectPlatform('ALL')">
+                <button class="platform-item ${currentPlatform === 'ALL' && !favoritesOnly ? 'active' : ''}" onclick="selectPlatform('ALL')">
                     <span>Tutte le Piattaforme</span>
                     <span class="platform-count" id="countAll">${total.toLocaleString()}</span>
                 </button>
@@ -2330,12 +2525,12 @@
             const total = platformsData.reduce((acc, p) => acc + p.count, 0);
 
             const pillsHtml = platformsData.map(p => {
-                const active = p.code === currentPlatform ? 'active' : '';
+                const active = (p.code === currentPlatform && !favoritesOnly) ? 'active' : '';
                 return `<button class="filter-pill ${active}" onclick="selectPlatform('${p.code}')">${p.name} (${p.count})</button>`;
             }).join('');
 
             bar.innerHTML = `
-                <button class="filter-pill ${currentPlatform === 'ALL' ? 'active' : ''}" onclick="selectPlatform('ALL')">Tutti (${total.toLocaleString()})</button>
+                <button class="filter-pill ${currentPlatform === 'ALL' && !favoritesOnly ? 'active' : ''}" onclick="selectPlatform('ALL')">Tutti (${total.toLocaleString()})</button>
                 ${pillsHtml}
             `;
         }
@@ -2348,6 +2543,23 @@
                 currentPlatform = sysCode;
             }
 
+            // RESET FILTRI: quando si seleziona una piattaforma, disattiva SEMPRE il filtro preferiti!
+            favoritesOnly = false;
+            currentGenre = 'ALL';
+            currentDev = 'ALL';
+            currentDecade = 'ALL';
+
+            const favBtn = document.getElementById('favToggleBtn');
+            if (favBtn) favBtn.classList.remove('active');
+            const favBadge = document.getElementById('favStatusBadge');
+            if (favBadge) favBadge.innerText = 'OFF';
+            const favLabel = document.getElementById('favBtnLabel');
+            if (favLabel) favLabel.innerText = 'Preferiti';
+            const favNav = document.getElementById('navFavorites');
+            if (favNav) favNav.classList.remove('active');
+            const navHome = document.getElementById('navHome');
+            if (navHome) navHome.classList.toggle('active', currentPlatform === 'ALL');
+
             // Svuota eventuale testo di ricerca per evitare filtri vuoti
             const searchInput = document.getElementById('searchInput');
             if (searchInput && searchInput.value.trim() !== '') {
@@ -2356,11 +2568,18 @@
                 if (searchClear) searchClear.style.display = 'none';
             }
 
+            const genSelect = document.getElementById('genreSelect');
+            if (genSelect) genSelect.value = 'ALL';
+            const devSelect = document.getElementById('devSelect');
+            if (devSelect) devSelect.value = 'ALL';
+            const decSelect = document.getElementById('decadeSelect');
+            if (decSelect) decSelect.value = 'ALL';
+
             renderSidebarPlatforms();
             renderPlatformPills();
-
-            switchView('libreria');
+            updateHeroVisibility();
             loadGames();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function filterByPlatformTag(event, sysCode) {
@@ -3047,10 +3266,18 @@
 
         function toggleFavoritesOnly() {
             favoritesOnly = !favoritesOnly;
-            document.getElementById('favToggleBtn').classList.toggle('primary', favoritesOnly);
+            const favBtn = document.getElementById('favToggleBtn');
+            if (favBtn) favBtn.classList.toggle('active', favoritesOnly);
+            const favBadge = document.getElementById('favStatusBadge');
+            if (favBadge) favBadge.innerText = favoritesOnly ? 'ON' : 'OFF';
+            const favLabel = document.getElementById('favBtnLabel');
+            if (favLabel) favLabel.innerText = favoritesOnly ? 'Solo Preferiti' : 'Preferiti';
             const favNav = document.getElementById('navFavorites');
-            if (favNav) favNav.classList.toggle('active', favoritesOnly);
-            switchView('libreria');
+            if (favNav) favNav.classList.toggle('active', favoritesOnly && currentPlatform === 'ALL');
+            const navHome = document.getElementById('navHome');
+            if (navHome) navHome.classList.toggle('active', !favoritesOnly && currentPlatform === 'ALL');
+            
+            updateHeroVisibility();
             loadGames();
         }
 
@@ -3074,9 +3301,7 @@
 
             clearTimeout(searchDebounce);
             searchDebounce = setTimeout(() => {
-                if (val.trim() && currentView !== 'libreria') {
-                    switchView('libreria');
-                }
+                updateHeroVisibility();
                 loadGames();
             }, 250);
         }
@@ -3084,6 +3309,7 @@
         function clearSearch() {
             document.getElementById('searchInput').value = '';
             document.getElementById('searchClear').style.display = 'none';
+            updateHeroVisibility();
             loadGames();
         }
 
