@@ -620,6 +620,18 @@ impl CatalogLoader {
             else if t_lower.contains("zak mckracken") { clean = "Zak McKracken and the Alien Mindbenders"; }
             else if t_lower.contains("thimbleweed park") { clean = "Thimbleweed Park"; }
         } else if sys_code.eq_ignore_ascii_case("C64") {
+            let c64_dir = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\covers\c64");
+            if c64_dir.exists() {
+                let slug = title.to_lowercase()
+                    .replace([':', '-', '\'', '\"', '!', '?', ',', '.', '(', ')'], " ");
+                let clean_slug = slug.split_whitespace().collect::<Vec<_>>().join("_");
+                for ext in &["png", "jpg", "gif", "webp"] {
+                    let file_name = format!("{}.{}", clean_slug, ext);
+                    if c64_dir.join(&file_name).exists() {
+                        return format!("/api/cover/file/covers/c64/{}", file_name);
+                    }
+                }
+            }
             if t_lower == "bal8tro" || t_lower.contains("bal8tro") {
                 return "/api/cover/file/covers/c64/bal8tro.gif".to_string();
             }
