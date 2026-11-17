@@ -323,6 +323,26 @@ impl CatalogLoader {
             if t_lower.contains("lupin") {
                 return "/api/cover/file/PSX/DuckStation/covers/Lupin%203sei%20(Japan).png".to_string();
             }
+            let psx_dir = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\covers\psx");
+            let clean_p = if let Some(open) = title.rfind('(') {
+                if let Some(close) = title[open..].find(')') {
+                    if title[open + 1..open + close].trim().len() <= 16 {
+                        title[..open].trim()
+                    } else { title.trim() }
+                } else { title.trim() }
+            } else { title.trim() };
+            let slug = clean_p.to_lowercase()
+                .replace([':', '-', '\'', '\"', '!', '?', ',', '.', '(', ')'], " ");
+            let clean_slug = slug.split_whitespace().collect::<Vec<_>>().join("_");
+            let alt_slug = clean_slug.replace("_s_", "s_");
+            for s in &[&clean_slug, &alt_slug] {
+                for ext in &["png", "jpg", "jpeg", "webp"] {
+                    let file_name = format!("{}.{}", s, ext);
+                    if psx_dir.join(&file_name).exists() {
+                        return format!("/api/cover/file/covers/psx/{}", file_name);
+                    }
+                }
+            }
         }
 
         // 6. Mappe dedicate per Sega Dreamcast
@@ -452,10 +472,10 @@ impl CatalogLoader {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Sony_-_PlayStation/master/Named_Boxarts/Silhouette%20Mirage%20(USA).png".to_string();
             }
             if t_lower.contains("outrunners") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/OutRunners.png".to_string();
+                return "/api/cover/file/covers/recomp/outrunners.png".to_string();
             }
             if t_lower.contains("outrun") || t_lower.contains("out run") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Out%20Run.png".to_string();
+                return "/api/cover/file/covers/recomp/outrun.png".to_string();
             }
             if t_lower.contains("daytona usa") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Dreamcast/master/Named_Boxarts/Daytona%20USA%20(USA).png".to_string();
@@ -466,14 +486,14 @@ impl CatalogLoader {
             if t_lower.contains("metal slug") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Metal%20Slug%20-%20Super%20Vehicle-001.png".to_string();
             }
-            if t_lower.contains("turtles in time") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Teenage%20Mutant%20Ninja%20Turtles%20-%20Turtles%20in%20Time.png".to_string();
+            if t_lower.contains("turtles in time") || t_lower.contains("tmnt") {
+                return "/api/cover/file/covers/recomp/tmnt_turtles_in_time.png".to_string();
             }
             if t_lower.contains("initial d") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Naomi/main/Named_Boxarts/Initial%20D%20Arcade%20Stage%20Ver.%203%20(GDL-0023).png".to_string();
+                return "/api/cover/file/covers/recomp/initial_d_arcade_stage_3.png".to_string();
             }
             if t_lower.contains("dig dug") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Dig%20Dug.png".to_string();
+                return "/api/cover/file/covers/recomp/dig_dug.png".to_string();
             }
             if t_lower.contains("emergency call ambulance") {
                 return "/api/cover/file/covers/emergency_call.png".to_string();
@@ -482,34 +502,34 @@ impl CatalogLoader {
                 return "/api/cover/file/covers/forza_horizon.jpg".to_string();
             }
             if t_lower.contains("fighting layer") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Fighting%20Layer.png".to_string();
+                return "/api/cover/file/covers/recomp/fighting_layer.png".to_string();
             }
             if t_lower.contains("in the hunt") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/In%20The%20Hunt.png".to_string();
+                return "/api/cover/file/covers/recomp/in_the_hunt.png".to_string();
             }
             if t_lower.contains("mortal kombat") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Mortal%20Kombat.png".to_string();
+                return "/api/cover/file/covers/recomp/mortal_kombat.png".to_string();
             }
             if t_lower.contains("nba jam") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/NBA%20Jam%20TE.png".to_string();
+                return "/api/cover/file/covers/recomp/nba_jam.png".to_string();
             }
             if t_lower.contains("neo drift out") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Neo%20Drift%20Out%20-%20New%20Technology.png".to_string();
             }
             if t_lower.contains("rolling thunder") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Rolling%20Thunder.png".to_string();
+                return "/api/cover/file/covers/recomp/rolling_thunder.png".to_string();
             }
             if t_lower.contains("segasonic") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/SegaSonic%20The%20Hedgehog.png".to_string();
+                return "/api/cover/file/covers/recomp/segasonic_the_hedgehog.png".to_string();
             }
             if t_lower.contains("silent scope") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Silent%20Scope.png".to_string();
+                return "/api/cover/file/covers/recomp/silent_scope.png".to_string();
             }
             if t_lower.contains("spikeout") {
                 return "/api/cover/file/covers/spikeout.png".to_string();
             }
             if t_lower.contains("super hang-on") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Super%20Hang-On.png".to_string();
+                return "/api/cover/file/covers/recomp/super_hang_on.png".to_string();
             }
             if t_lower.contains("king of fighters '98") || t_lower.contains("kof '98") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/The%20King%20of%20Fighters%20'98%20-%20The%20Slugfest%20_%20King%20of%20Fighters%20'98%20-%20dream%20match%20never%20ends.png".to_string();
@@ -518,13 +538,13 @@ impl CatalogLoader {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Vs.%20Super%20Mario%20Bros..png".to_string();
             }
             if t_lower.contains("virtua nba") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Virtua%20NBA.png".to_string();
+                return "/api/cover/file/covers/recomp/virtua_nba.png".to_string();
             }
             if t_lower.contains("virtua tennis") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Dreamcast/master/Named_Boxarts/Virtua%20Tennis%20(USA).png".to_string();
             }
             if t_lower.contains("world rally") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/World%20Rally.png".to_string();
+                return "/api/cover/file/covers/recomp/world_rally.png".to_string();
             }
         }
 
@@ -543,7 +563,13 @@ impl CatalogLoader {
         // Mappe dedicate per capolavori PC MS-DOS, ScummVM e Commodore 64
         if sys_code.eq_ignore_ascii_case("DOS") {
             if t_lower.contains("epic baseball") {
-                return "/api/cover/file/covers/epic_baseball.jpg".to_string();
+                return "/api/cover/file/covers/dos/epic_baseball.jpg".to_string();
+            }
+            if t_lower.contains("simcity") {
+                return "/api/cover/file/covers/dos/simcity.png".to_string();
+            }
+            if t_lower.contains("stunts") {
+                return "/api/cover/file/covers/dos/stunts.png".to_string();
             }
             if t_lower == "civilization" { clean = "Sid Meier's Civilization"; }
             else if t_lower == "colonization" { clean = "Sid Meier's Colonization"; }
@@ -563,13 +589,11 @@ impl CatalogLoader {
             else if t_lower.contains("prince of persia 2") { clean = "Prince of Persia 2 - The Shadow and The Flame"; }
             else if t_lower.contains("settlers ii") { clean = "Settlers II, The (Gold Edition)"; }
             else if t_lower.contains("simant") { clean = "SimAnt_ The Electronic Ant Colony"; }
-            else if t_lower == "simcity" { clean = "SimCity"; }
             else if t_lower.contains("simearth") { clean = "SimEarth_ The Living Planet"; }
             else if t_lower.contains("speedball 2") { clean = "Speedball 2_ Brutal Deluxe"; }
             else if t_lower.contains("tie fighter") { clean = "Star Wars_ TIE Fighter (Collector's CD-ROM)"; }
             else if t_lower.contains("x-wing") { clean = "Star Wars_ X-Wing"; }
             else if t_lower.contains("strike commander") { clean = "Strike Commander (CD-ROM Edition)"; }
-            else if t_lower == "stunts" { clean = "Stunts"; }
             else if t_lower.contains("test drive iii") { clean = "Test Drive III the passion"; }
             else if t_lower.contains("ufo") { clean = "UFO Enemy Unknown"; }
             else if t_lower.contains("ultima underworld ii") { clean = "Ultima Underworld 2 - Labyrinth of Worlds"; }
@@ -582,11 +606,25 @@ impl CatalogLoader {
             else if t_lower.contains("humans 3") { clean = "Humans 3_ Evolution_ Lost in Time"; }
             else if t_lower == "humans" || t_lower == "the humans" { clean = "Humans 1 and 2"; }
         } else if sys_code.eq_ignore_ascii_case("SCUMMVM") {
+            if t_lower.contains("future wars") {
+                return "/api/cover/file/covers/scummvm/future_wars.png".to_string();
+            }
+            if t_lower.contains("escape from monkey island") {
+                return "/api/cover/file/covers/scummvm/escape_from_monkey_island.png".to_string();
+            }
+            if t_lower.contains("discworld") && !t_lower.contains("discworld 2") && !t_lower.contains("discworld ii") {
+                return "/api/cover/file/covers/scummvm/discworld.png".to_string();
+            }
+            if t_lower.contains("larry 7") {
+                return "/api/cover/file/covers/scummvm/leisure_suit_larry_7.jpg".to_string();
+            }
+            if t_lower.contains("space quest iv") || t_lower.contains("space quest 4") {
+                return "/api/cover/file/covers/scummvm/space_quest_iv.png".to_string();
+            }
             if t_lower.contains("broken sword 2.5") { clean = "Broken Sword 2.5"; }
             else if t_lower.contains("broken sword ii") || t_lower.contains("smoking") { clean = "Broken Sword II_ The Smoking Mirror"; }
             else if t_lower.contains("broken sword") { clean = "Broken Sword_ The Shadow of the Templars"; }
             else if t_lower.contains("elvira ii") { clean = "Elvira II_ The Jaws of Cerberus"; }
-            else if t_lower.contains("future wars") { clean = "Future Wars_ Time Travellers"; }
             else if t_lower.contains("gobliins 2") { clean = "Gobliins 2"; }
             else if t_lower.contains("goblins quest 3") { clean = "Goblins Quest 3"; }
             else if t_lower.contains("last crusade") { clean = "Indiana Jones and the Last Crusade"; }
@@ -597,20 +635,16 @@ impl CatalogLoader {
             else if t_lower.contains("colonel's bequest") { clean = "Laura Bow 1_ The Colonels Bequest"; }
             else if t_lower.contains("dagger of amon ra") { clean = "Laura Bow 2_ The Dagger of Amon Ra"; }
             else if t_lower.contains("discworld 2") || t_lower.contains("discworld ii") { clean = "Discworld II_ Missing Presumed...!_"; }
-            else if t_lower.contains("discworld") { clean = "Discworld"; }
             else if t_lower.contains("gabriel knight") { clean = "Gabriel Knight_ Sins of the Fathers"; }
             else if t_lower.contains("larry 5") { clean = "Leisure Suit Larry 5"; }
-            else if t_lower.contains("larry 7") { clean = "Leisure Suit Larry 7_ Love for Sail!"; }
             else if t_lower.contains("monkey island 2") { clean = "Monkey Island 2_ LeChuck's Revenge"; }
             else if t_lower.contains("secret of monkey island") { clean = "Secret of Monkey Island, The"; }
             else if t_lower.contains("curse of monkey island") { clean = "Curse of Monkey Island, The"; }
-            else if t_lower.contains("escape from monkey island") { clean = "Escape from Monkey Island"; }
             else if t_lower.contains("myst") { clean = "Myst"; }
             else if t_lower.contains("operation stealth") { clean = "Operation Stealth"; }
             else if t_lower.contains("quest for glory") { clean = "Quest for Glory 1_ So You Want to Be a Hero"; }
             else if t_lower.contains("sam & max") || t_lower.contains("sam and max") { clean = "Sam _ Max Hit the Road"; }
             else if t_lower.contains("simon the sorcerer ii") { clean = "Simon the Sorcerer II_ The Lion, the Wizard and the Wardrobe"; }
-            else if t_lower.contains("space quest iv") { clean = "Space Quest IV_ Roger Wilco and the Time Rippers"; }
             else if t_lower.contains("space quest v") { clean = "Space Quest V"; }
             else if t_lower.contains("kyrandia 2") { clean = "The Legend of Kyrandia_ Book Two_ The Hand of Fate"; }
             else if t_lower.contains("kyrandia 3") { clean = "The Legend of Kyrandia_ Book Three_ Malcolms Revenge"; }
@@ -623,12 +657,18 @@ impl CatalogLoader {
             let c64_dir = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\covers\c64");
             if c64_dir.exists() {
                 let slug = title.to_lowercase()
-                    .replace([':', '-', '\'', '\"', '!', '?', ',', '.', '(', ')'], " ");
+                    .replace([':', '-', '\'', '\"', '!', '?', ',', '.', '(', ')', '+'], " ")
+                    .replace("&", "and");
                 let clean_slug = slug.split_whitespace().collect::<Vec<_>>().join("_");
-                for ext in &["png", "jpg", "gif", "webp"] {
-                    let file_name = format!("{}.{}", clean_slug, ext);
-                    if c64_dir.join(&file_name).exists() {
-                        return format!("/api/cover/file/covers/c64/{}", file_name);
+                let alt1 = clean_slug.replace("_and_", "_");
+                let alt2 = clean_slug.replace("_s_", "s_");
+                let alt3 = clean_slug.replace("_and_", "_").replace("_s_", "s_");
+                for s in &[&clean_slug, &alt1, &alt2, &alt3] {
+                    for ext in &["png", "jpg", "jpeg", "gif", "webp"] {
+                        let file_name = format!("{}.{}", s, ext);
+                        if c64_dir.join(&file_name).exists() {
+                            return format!("/api/cover/file/covers/c64/{}", file_name);
+                        }
                     }
                 }
             }

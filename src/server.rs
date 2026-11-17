@@ -57,6 +57,10 @@ impl HttpServer {
                     if let Ok(bytes) = std::fs::read(&full_path) {
                         let mime = if full_path.extension().map_or(false, |e| e == "jpg" || e == "jpeg") {
                             "image/jpeg"
+                        } else if full_path.extension().map_or(false, |e| e == "gif") {
+                            "image/gif"
+                        } else if full_path.extension().map_or(false, |e| e == "webp") {
+                            "image/webp"
                         } else {
                             "image/png"
                         };
