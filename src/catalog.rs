@@ -896,22 +896,99 @@ impl PreloadedDirCache {
     }
 
     fn resolve(&self, emu_root: &Path, sys_code: &str, title: &str) -> String {
-        let title_clean = title.to_lowercase().replace([':', '-', '\'', '\"'], " ");
-        let words: Vec<&str> = title_clean.split_whitespace().collect();
+        let t_norm = title.to_lowercase();
+        // Special overrides for games with localized / completely different directory names
+        if sys_code.eq_ignore_ascii_case("SCUMMVM") {
+            if t_norm.contains("broken sword") {
+                if t_norm.contains("2.5") || t_norm.contains("ritorno") {
+                    let p = emu_root.join("ScummVM").join("games").join("Broken Sword 2.5 - The Return of the Templars (2008)").join("Gioca.lnk");
+                    if p.exists() { return p.to_string_lossy().to_string(); }
+                } else if t_norm.contains(" ii") || t_norm.contains("profezia") || t_norm.contains("smoking") {
+                    let p = emu_root.join("ScummVM").join("games").join("Broken Sword II - The Smoking Mirror (1997)").join("Gioca.lnk");
+                    if p.exists() { return p.to_string_lossy().to_string(); }
+                } else {
+                    let p = emu_root.join("ScummVM").join("games").join("Broken Sword - The Shadow of the Templars (1996)").join("Gioca.lnk");
+                    if p.exists() { return p.to_string_lossy().to_string(); }
+                }
+            } else if t_norm.contains("touche") || t_norm.contains("quinto moschettiere") {
+                let p = emu_root.join("ScummVM").join("games").join("Touche - The Adventures of the Fifth Musketeer (1995)").join("Gioca.lnk");
+                if p.exists() { return p.to_string_lossy().to_string(); }
+            }
+        }
+
+        let title_tokens = normalize_and_tokenize(title);
 
         if let Some(list) = self.cache_by_sys.get(sys_code) {
-            // Pass 1: Prefer exact word count match (eliminates collisions like "MediEvil" matching "MediEvil 2")
+            let mut best_match: Option<(i32, String)> = None;
+
             for (name, lnk_path) in list {
-                let name_words: Vec<&str> = name.split_whitespace().filter(|&w| w != "gioca" && w != "-").collect();
-                if words.iter().all(|w| name_words.contains(w)) && name_words.len() == words.len() {
-                    return lnk_path.clone();
+                let name_tokens = normalize_and_tokenize(name);
+                if name_tokens.is_empty() || title_tokens.is_empty() {
+                    continue;
+                }
+
+                // Isolate single-digit sequel numbers (e.g. "2", "3", "4", but ignoring years like "2000" or "99")
+                let title_nums: Vec<&String> = title_tokens.iter().filter(|t| t.len() == 1 && t.chars().all(|c| c.is_ascii_digit())).collect();
+                let name_nums: Vec<&String> = name_tokens.iter().filter(|t| t.len() == 1 && t.chars().all(|c| c.is_ascii_digit())).collect();
+
+                // If candidate name has a sequel number that does NOT appear in title, reject it
+                // (e.g. title "MediEvil" must not match "MediEvil 2", "Crash Bandicoot" must not match "Crash Bandicoot 2")
+                if name_nums.iter().any(|num| !title_nums.contains(num)) {
+                    continue;
+                }
+
+                // If title has a sequel number and candidate also has one, make sure they match
+                if !title_nums.is_empty() && !name_nums.is_empty() {
+                    if !title_nums.iter().any(|num| name_nums.contains(num)) {
+                        continue;
+                    }
+                }
+
+                let overlap = name_tokens.iter().filter(|w| title_tokens.contains(w)).count();
+                if overlap == 0 {
+                    continue;
+                }
+
+                let mut score = 0;
+                // Exact token match
+                if title_tokens == name_tokens {
+                    score = 1000 + (overlap as i32) * 10;
+                }
+                // All name tokens are present in title (e.g. "donkey kong country 2" in "donkey kong country 2 diddys kong quest")
+                else if name_tokens.iter().all(|w| title_tokens.contains(w)) {
+                    let bonus = if !name_nums.is_empty() { 50 } else { 0 };
+                    score = 600 + bonus + (overlap as i32) * 10;
+                }
+                // All title tokens are present in name
+                else if title_tokens.iter().all(|w| name_tokens.contains(w)) {
+                    score = 500 + (overlap as i32) * 10;
+                }
+                // Strong overlap: at least 2 tokens and covers most of name
+                else if overlap >= 2 && overlap >= name_tokens.len().saturating_sub(1) {
+                    score = 300 + (overlap as i32) * 10;
+                }
+                // Moderate overlap: at least 2 tokens and covers most of title
+                else if overlap >= 2 && overlap >= title_tokens.len().saturating_sub(1) {
+                    score = 200 + (overlap as i32) * 10;
+                }
+                // Single token match only if both are single-token
+                else if overlap == 1 && title_tokens.len() == 1 && name_tokens.len() == 1 {
+                    score = 100;
+                }
+
+                if score > 0 {
+                    if let Some((best_score, _)) = &best_match {
+                        if score > *best_score {
+                            best_match = Some((score, lnk_path.clone()));
+                        }
+                    } else {
+                        best_match = Some((score, lnk_path.clone()));
+                    }
                 }
             }
-            // Pass 2: Substring match
-            for (name, lnk_path) in list {
-                if words.iter().all(|w| name.contains(w)) {
-                    return lnk_path.clone();
-                }
+
+            if let Some((_, path)) = best_match {
+                return path;
             }
         }
 
@@ -921,20 +998,100 @@ impl PreloadedDirCache {
             "MAME" => emu_root.join("Avvia MAME - Arcade.lnk").to_string_lossy().to_string(),
             "NAOMI" | "ATOMISWAVE" => emu_root.join("Avvia Sega NAOMI Arcade - Flycast.lnk").to_string_lossy().to_string(),
             "HIKARU" => emu_root.join("Hikaru - DEmul").join("demul.exe").to_string_lossy().to_string(),
-            "HYPSEUS" => emu_root.join("Avvia LaserDisc - Hypseus Singe.lnk").to_string_lossy().to_string(),
+            "HYPSEUS" => {
+                let lnk = emu_root.join("Avvia LaserDisc - Hypseus Singe.lnk");
+                if lnk.exists() {
+                    lnk.to_string_lossy().to_string()
+                } else {
+                    emu_root.join("Hypseus Singe").join("hypseus.exe").to_string_lossy().to_string()
+                }
+            },
             "DOS" => emu_root.join("Avvia DOS - DOSBox.lnk").to_string_lossy().to_string(),
             "SCUMMVM" => emu_root.join("Avvia ScummVM - Avventure Grafiche.lnk").to_string_lossy().to_string(),
             "SNES" => emu_root.join("Avvia Super Nintendo - Snes9x.lnk").to_string_lossy().to_string(),
             "INDIE" => emu_root.join("LocoMalito & Indie").to_string_lossy().to_string(),
             "RECOMP" => emu_root.join("Recomp Library").to_string_lossy().to_string(),
-            "N64" => emu_root.join("Avvia Nintendo 64.lnk").to_string_lossy().to_string(),
+            "N64" => {
+                let n64_rmg = emu_root.join("Avvia Nintendo 64 - RMG.lnk");
+                if n64_rmg.exists() {
+                    n64_rmg.to_string_lossy().to_string()
+                } else {
+                    emu_root.join("Avvia Nintendo 64.lnk").to_string_lossy().to_string()
+                }
+            },
             "GAMECUBE" => emu_root.join("Avvia GameCube - Dolphin.lnk").to_string_lossy().to_string(),
             "DREAMCAST" => emu_root.join("Avvia Dreamcast - Flycast.lnk").to_string_lossy().to_string(),
-            "PSX" => emu_root.join("Avvia PlayStation - DuckStation.lnk").to_string_lossy().to_string(),
+            "PSX" => {
+                let psx_lnk = emu_root.join("Avvia PSX - DuckStation.lnk");
+                if psx_lnk.exists() {
+                    psx_lnk.to_string_lossy().to_string()
+                } else {
+                    emu_root.join("Avvia PlayStation - DuckStation.lnk").to_string_lossy().to_string()
+                }
+            },
             "NES" => emu_root.join("Avvia NES - Mesen.lnk").to_string_lossy().to_string(),
             _ => emu_root.to_string_lossy().to_string(),
         }
     }
+}
+
+fn normalize_and_tokenize(text: &str) -> Vec<String> {
+    let decoded = html_decode(text).to_lowercase();
+    let unaccented: String = decoded.chars().map(|c| match c {
+        'à' | 'á' | 'â' | 'ã' | 'ä' => 'a',
+        'è' | 'é' | 'ê' | 'ë' => 'e',
+        'ì' | 'í' | 'î' | 'ï' => 'i',
+        'ò' | 'ó' | 'ô' | 'õ' | 'ö' => 'o',
+        'ù' | 'ú' | 'û' | 'ü' => 'u',
+        other => other,
+    }).collect();
+
+    // Replace "naomi 2" or "naomi2" so the arcade board hardware version 2 is not treated as a game sequel number
+    let unaccented = unaccented.replace("naomi 2", "naomi").replace("naomi2", "naomi");
+
+    // 1. Strip apostrophes so "dragon's" -> "dragons", "diddy's" -> "diddys"
+    let without_apostrophes = unaccented.replace(['\'', '’', '`'], "");
+
+    // 2. Replace all punctuation with spaces so tokens like "ii:", "(2)", "iv)" become surrounded by spaces
+    let spaced_punct = without_apostrophes.replace(
+        [':', '-', '\"', '!', '?', ',', '.', '(', ')', '[', ']', ';', '_', '/', '\\', '&', '+'],
+        " "
+    );
+
+    // 3. Standalone roman numerals to arabic
+    let padded = format!(" {} ", spaced_punct);
+    let roman_map = [
+        (" viii ", " 8 "),
+        (" vii ", " 7 "),
+        (" vi ", " 6 "),
+        (" iv ", " 4 "),
+        (" iii ", " 3 "),
+        (" ii ", " 2 "),
+        (" ix ", " 9 "),
+        (" x ", " 10 "),
+    ];
+    let mut mapped = padded;
+    for (rom, num) in roman_map {
+        mapped = mapped.replace(rom, num);
+    }
+
+    let stopwords = [
+        "gioca", "arcade", "naomi", "atomiswave", "the", "of", "and", "in", "a", "an",
+        "il", "lo", "la", "i", "gli", "le", "del", "dei", "della", "delle", "de", "di", "da",
+        "set", "ver", "version", "edition", "ultimate", "talkie", "fan", "dub", "ita", "eng",
+        "japan", "usa", "europe", "world", "ju", "enhanced", "legend"
+    ];
+
+    mapped.split_whitespace()
+        .filter(|w| {
+            // skip 4-digit years like 1991, 1996, 2008 (except games literally titled 1942, 1943, 1941)
+            if w.len() == 4 && w.chars().all(|c| c.is_ascii_digit()) && *w != "1942" && *w != "1943" && *w != "1941" {
+                return false;
+            }
+            !stopwords.contains(w)
+        })
+        .map(|w| w.to_string())
+        .collect()
 }
 
 fn html_decode(s: &str) -> String {
@@ -984,5 +1141,63 @@ mod tests {
         assert!(map.contains_key("Dune II - The Building of a Dynasty"));
         let dune = map.get("Dune II - The Building of a Dynasty").unwrap();
         assert_eq!(dune.developer, "Westwood Studios / Virgin");
+    }
+
+    #[test]
+    fn test_normalize_and_tokenize() {
+        let t1 = normalize_and_tokenize("The Legend of Zelda: Ocarina of Time");
+        assert_eq!(t1, vec!["zelda", "ocarina", "time"]);
+
+        let t2 = normalize_and_tokenize("Border Down ( bdrdown )");
+        assert!(t2.contains(&"border".to_string()));
+        assert!(t2.contains(&"down".to_string()));
+
+        let t3 = normalize_and_tokenize("Dragon's Lair II: Time Warp (Enhanced)");
+        assert_eq!(t3, vec!["dragons", "lair", "2", "time", "warp"]);
+
+        let t4 = normalize_and_tokenize("Donkey Kong Country 2: Diddy's Kong Quest");
+        assert_eq!(t4, vec!["donkey", "kong", "country", "2", "diddys", "kong", "quest"]);
+    }
+
+    #[test]
+    fn test_preloaded_resolve() {
+        let mut map = HashMap::new();
+        map.insert(
+            "NAOMI".to_string(),
+            vec![
+                ("gioca - border down (arcade naomi)".to_string(), "C:\\emu\\NAOMI\\Gioca - Border Down (arcade Naomi).lnk".to_string()),
+                ("gioca - castle of shikigami 2 (arcade naomi)".to_string(), "C:\\emu\\NAOMI\\Gioca - Castle of Shikigami 2 (arcade Naomi).lnk".to_string()),
+            ]
+        );
+        map.insert(
+            "N64".to_string(),
+            vec![
+                ("gioca - zelda - ocarina of time".to_string(), "C:\\emu\\N64\\Gioca - Zelda - Ocarina of Time.lnk".to_string()),
+                ("gioca - zelda - majoras mask".to_string(), "C:\\emu\\N64\\Gioca - Zelda - Majoras Mask.lnk".to_string()),
+            ]
+        );
+        map.insert(
+            "SNES".to_string(),
+            vec![
+                ("gioca - donkey kong country".to_string(), "C:\\emu\\SNES\\Gioca - Donkey Kong Country.lnk".to_string()),
+                ("gioca - donkey kong country 2".to_string(), "C:\\emu\\SNES\\Gioca - Donkey Kong Country 2.lnk".to_string()),
+                ("gioca - donkey kong country 3".to_string(), "C:\\emu\\SNES\\Gioca - Donkey Kong Country 3.lnk".to_string()),
+            ]
+        );
+
+        let cache = PreloadedDirCache { cache_by_sys: map };
+        let emu_root = Path::new("C:\\emu");
+
+        let p1 = cache.resolve(emu_root, "NAOMI", "Border Down ( bdrdown )");
+        assert_eq!(p1, "C:\\emu\\NAOMI\\Gioca - Border Down (arcade Naomi).lnk");
+
+        let p2 = cache.resolve(emu_root, "N64", "The Legend of Zelda: Ocarina of Time");
+        assert_eq!(p2, "C:\\emu\\N64\\Gioca - Zelda - Ocarina of Time.lnk");
+
+        let p3 = cache.resolve(emu_root, "SNES", "Donkey Kong Country 2: Diddy's Kong Quest");
+        assert_eq!(p3, "C:\\emu\\SNES\\Gioca - Donkey Kong Country 2.lnk");
+
+        let p4 = cache.resolve(emu_root, "SNES", "Donkey Kong Country");
+        assert_eq!(p4, "C:\\emu\\SNES\\Gioca - Donkey Kong Country.lnk");
     }
 }
