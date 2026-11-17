@@ -2093,6 +2093,8 @@
 
                     <div class="syntax-section-label">Aggiungi operatore alla ricerca:</div>
                     <div class="syntax-chips-row">
+                        <button type="button" class="syntax-chip" onclick="appendSearchTerm(' &quot;termine&quot;')"><b>&quot;esatto&quot;</b> (Virgolette)</button>
+                        <button type="button" class="syntax-chip" onclick="appendSearchTerm(' title:termine')"><b>title:</b> Nel Titolo</button>
                         <button type="button" class="syntax-chip" onclick="appendSearchTerm(' -')"><b>-termine</b> (Escludi)</button>
                         <button type="button" class="syntax-chip" onclick="appendSearchTerm(' NOT ')"><b>NOT</b> (Senza)</button>
                         <button type="button" class="syntax-chip" onclick="appendSearchTerm(' | ')"><b>|</b> (OR / Oppure)</button>
@@ -2103,6 +2105,11 @@
 
                     <div class="syntax-section-label">Esempi Pratici (Clicca per provare subito):</div>
                     <div class="syntax-examples-list">
+                        <div class="syntax-example-card" onclick="applyExampleSearch('&quot;lupin&quot;')">
+                            <span class="syntax-pill-tag" style="background: rgba(0, 210, 180, 0.2); color: var(--accent);">Frase Esatta</span>
+                            <code class="syntax-example-code">"lupin"</code>
+                            <span class="syntax-example-desc">Solo giochi con la parola esatta "lupin" (escludendo "lupo" o simili)</span>
+                        </div>
                         <div class="syntax-example-card" onclick="applyExampleSearch('mario -kart')">
                             <span class="syntax-pill-tag">Esclusione</span>
                             <code class="syntax-example-code">mario -kart</code>
@@ -2417,12 +2424,14 @@
                     <li><code>/</code> : Focus immediato sulla barra di ricerca</li>
                     <li><code>ESC</code> : Chiude modali o svuota la ricerca</li>
                 </ul>
-                <p style="margin-top: 10px;"><strong>🔍 Ricerca Avanzata con Operatore NOT:</strong></p>
-                <p style="font-size: 0.85rem; color: #94a3b8;">
-                    Puoi cercare su più campi contemporaneamente ed escludere termini con <code>-</code> o <code>NOT</code>:<br>
-                    • <code>mario -kart</code> (Trova Mario escludendo i giochi di kart)<br>
-                    • <code>capcom NOT 1995</code> (Trova Capcom escludendo il 1995)<br>
-                    • <code>arcade racing</code> (Trova giochi di corse arcade)
+                <p style="margin-top: 10px;"><strong>🔍 Ricerca Avanzata, Frasi Esatte e Operatori:</strong></p>
+                <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.5;">
+                    • <code>"lupin"</code> : Cerca la <b>parola o frase esatta</b> escludendo varianti o parole simili (es. esclude Lupo Alberto)<br>
+                    • <code>title:lupin</code> : Cerca specificamente nel titolo del gioco<br>
+                    • <code>mario -kart</code> : Esclude i giochi che contengono un termine (es. no kart)<br>
+                    • <code>capcom NOT 1995</code> : Operatore NOT equivalente a <code>-</code><br>
+                    • <code>1990..1995 genre:picchiaduro</code> : Filtra per intervallo di anni e genere<br>
+                    • <code>dev:namco | dev:sega</code> : Operatore OR (oppure)
                 </p>
             </div>
         </div>

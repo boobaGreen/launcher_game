@@ -4,6 +4,7 @@ use strsim::jaro_winkler;
 #[derive(Debug, Clone, Default)]
 pub struct ParsedQuery {
     pub positive_terms: Vec<String>,
+    pub exact_terms: Vec<String>,
     pub negative_terms: Vec<String>,
     pub year_min: Option<u16>,
     pub year_max: Option<u16>,
@@ -13,6 +14,7 @@ pub struct ParsedQuery {
     pub excluded_dev: Option<String>,
     pub required_sys: Option<String>,
     pub excluded_sys: Option<String>,
+    pub required_title: Option<String>,
     pub no_multiplayer: bool,
     pub only_multiplayer: bool,
 }
@@ -20,36 +22,80 @@ pub struct ParsedQuery {
 pub struct SearchEngine;
 
 impl SearchEngine {
+    /// Tokenizes query string into terms preserving quoted phrases e.g. "lupin" or 'super mario'
+    pub fn tokenize(raw: &str) -> Vec<String> {
+        let mut tokens = Vec::new();
+        let mut current = String::new();
+        let mut in_quotes = false;
+        let mut quote_char = '"';
+
+        for c in raw.chars() {
+            if (c == '"' || c == '\'') && !in_quotes {
+                in_quotes = true;
+                quote_char = c;
+                current.push(c);
+            } else if in_quotes && c == quote_char {
+                in_quotes = false;
+                current.push(c);
+            } else if c.is_whitespace() && !in_quotes {
+                if !current.is_empty() {
+                    tokens.push(current);
+                    current = String::new();
+                }
+            } else {
+                current.push(c);
+            }
+        }
+        if !current.is_empty() {
+            tokens.push(current);
+        }
+        tokens
+    }
+
     /// Parses a raw user query string into structured compound criteria.
     pub fn parse_query(raw: &str) -> ParsedQuery {
         let mut pq = ParsedQuery::default();
-        let tokens: Vec<&str> = raw.split_whitespace().collect();
+        let tokens = Self::tokenize(raw);
         let mut i = 0;
 
         while i < tokens.len() {
-            let token = tokens[i];
+            let token = &tokens[i];
             let lower = token.to_lowercase();
 
             // Support standalone 'NOT', 'SENZA', '!' as prefix keyword for the next token
             if (lower == "not" || lower == "senza" || lower == "!") && i + 1 < tokens.len() {
                 i += 1;
-                let next_lower = tokens[i].to_lowercase();
-                Self::add_negative_clause(&mut pq, &next_lower);
+                let next_token = &tokens[i];
+                let next_clean = next_token.trim_matches(|c| c == '"' || c == '\'').to_lowercase();
+                Self::add_negative_clause(&mut pq, &next_clean);
                 i += 1;
                 continue;
             }
 
             // 1. Check for exclusions with '-' or '!' prefix
             if lower.starts_with('-') || lower.starts_with('!') {
-                let neg = &lower[1..];
-                if !neg.is_empty() {
-                    Self::add_negative_clause(&mut pq, neg);
+                let neg = &token[1..];
+                let neg_clean = neg.trim_matches(|c| c == '"' || c == '\'').to_lowercase();
+                if !neg_clean.is_empty() {
+                    Self::add_negative_clause(&mut pq, &neg_clean);
                 }
                 i += 1;
                 continue;
             }
 
-            // 2. Year range: e.g. "1985..1992" or "1985-1992" or "year:1985..1992"
+            // 2. Exact quoted term: "lupin" or 'super mario'
+            if (lower.starts_with('"') && lower.ends_with('"') && lower.len() >= 2)
+                || (lower.starts_with('\'') && lower.ends_with('\'') && lower.len() >= 2)
+            {
+                let exact = token[1..token.len() - 1].trim().to_lowercase();
+                if !exact.is_empty() {
+                    pq.exact_terms.push(exact);
+                }
+                i += 1;
+                continue;
+            }
+
+            // 3. Year range: e.g. "1985..1992" or "1985-1992" or "year:1985..1992"
             let year_target = lower.strip_prefix("year:")
                 .or_else(|| lower.strip_prefix("anno:"))
                 .unwrap_or(&lower);
@@ -91,12 +137,26 @@ impl SearchEngine {
                 }
             }
 
-            // 3. Field prefixes: genre:, dev:, sys:
+            // 4. Field prefixes: title:, exact:, genre:, dev:, sys:
+            if let Some(val) = lower.strip_prefix("title:")
+                .or_else(|| lower.strip_prefix("titolo:"))
+                .or_else(|| lower.strip_prefix("t:"))
+                .or_else(|| lower.strip_prefix("exact:"))
+            {
+                let clean_val = val.trim_matches(|c| c == '"' || c == '\'').trim();
+                if !clean_val.is_empty() {
+                    pq.required_title = Some(clean_val.to_string());
+                }
+                i += 1;
+                continue;
+            }
+
             if let Some(val) = lower.strip_prefix("genre:")
                 .or_else(|| lower.strip_prefix("genere:"))
                 .or_else(|| lower.strip_prefix("g:"))
             {
-                pq.required_genre = Some(val.to_string());
+                let clean_val = val.trim_matches(|c| c == '"' || c == '\'').trim();
+                pq.required_genre = Some(clean_val.to_string());
                 i += 1;
                 continue;
             }
@@ -106,7 +166,8 @@ impl SearchEngine {
                 .or_else(|| lower.strip_prefix("autore:"))
                 .or_else(|| lower.strip_prefix("pub:"))
             {
-                pq.required_dev = Some(val.to_string());
+                let clean_val = val.trim_matches(|c| c == '"' || c == '\'').trim();
+                pq.required_dev = Some(clean_val.to_string());
                 i += 1;
                 continue;
             }
@@ -115,12 +176,13 @@ impl SearchEngine {
                 .or_else(|| lower.strip_prefix("platform:"))
                 .or_else(|| lower.strip_prefix("p:"))
             {
-                pq.required_sys = Some(val.to_string());
+                let clean_val = val.trim_matches(|c| c == '"' || c == '\'').trim();
+                pq.required_sys = Some(clean_val.to_string());
                 i += 1;
                 continue;
             }
 
-            // 4. Multiplayer / Singleplayer flags
+            // 5. Multiplayer / Singleplayer flags
             if lower == "single" || lower == "singleplayer" || lower == "1p" {
                 pq.no_multiplayer = true;
                 i += 1;
@@ -132,8 +194,11 @@ impl SearchEngine {
                 continue;
             }
 
-            // 5. Default positive keyword (multi-field search)
-            pq.positive_terms.push(lower);
+            // 6. Default positive keyword (multi-field search)
+            let clean_pos = lower.trim_matches(|c| c == '"' || c == '\'').trim();
+            if !clean_pos.is_empty() {
+                pq.positive_terms.push(clean_pos.to_string());
+            }
             i += 1;
         }
 
@@ -262,6 +327,27 @@ impl SearchEngine {
             let y = g.year.to_string();
 
             if t.contains(neg) || d.contains(neg) || p.contains(neg) || gen.contains(neg) || sys.contains(neg) || plat.contains(neg) || y == *neg {
+                return (false, 0.0);
+            }
+        }
+
+        // Exact Terms from Quotes e.g. "lupin"
+        for exact in &parsed.exact_terms {
+            let t = g.title.to_lowercase();
+            let d = g.developer.to_lowercase();
+            let p = g.publisher.to_lowercase();
+            let gen = g.genre.to_lowercase();
+            let sys = g.system_code.to_lowercase();
+            let plat = g.platform.to_lowercase();
+
+            if !t.contains(exact) && !d.contains(exact) && !p.contains(exact) && !gen.contains(exact) && !sys.contains(exact) && !plat.contains(exact) {
+                return (false, 0.0);
+            }
+        }
+
+        // Required Title e.g. title:lupin or exact:lupin
+        if let Some(ref req_t) = parsed.required_title {
+            if !g.title.to_lowercase().contains(req_t) {
                 return (false, 0.0);
             }
         }
@@ -445,9 +531,13 @@ impl SearchEngine {
                 } else if word.starts_with(token) {
                     token_max = token_max.max(0.9);
                 } else {
-                    let sim = jaro_winkler(word, token);
-                    if sim > 0.70 {
-                        token_max = token_max.max(sim * 0.85);
+                    // Only perform fuzzy matching if the word and token are reasonably long (>= 4 chars)
+                    // and similarity is high (>= 0.90) to avoid matching unrelated words like 'lupo' and 'lupin'
+                    if token.len() >= 4 && word.len() >= 4 {
+                        let sim = jaro_winkler(word, token);
+                        if sim >= 0.90 {
+                            token_max = token_max.max(sim * 0.85);
+                        }
                     }
                 }
             }
@@ -565,5 +655,44 @@ mod tests {
         let res = SearchEngine::filter_and_rank(&games, &filter);
         assert_eq!(res.len(), 1);
         assert_eq!(res[0].id, 1); // Zelda Majora
+    }
+
+    #[test]
+    fn test_exact_quotes_and_fuzzy_separation() {
+        let games = vec![
+            dummy_game(1, "Lupin Sansei - Pandora no Isan", "NES", 1987, "Platform", "Namco", "1P"),
+            dummy_game(2, "Lupo Alberto: The Videogame", "C64", 1990, "Platform", "Idea", "1P"),
+        ];
+
+        // Search "lupin" with quotes must match ONLY Lupin
+        let filter_quoted = SearchFilter {
+            query: Some("\"lupin\"".to_string()),
+            sort_asc: true,
+            ..Default::default()
+        };
+        let res1 = SearchEngine::filter_and_rank(&games, &filter_quoted);
+        assert_eq!(res1.len(), 1);
+        assert_eq!(res1[0].id, 1);
+        assert_eq!(res1[0].title, "Lupin Sansei - Pandora no Isan");
+
+        // Search lupin without quotes should also NOT match Lupo Alberto
+        let filter_unquoted = SearchFilter {
+            query: Some("lupin".to_string()),
+            sort_asc: true,
+            ..Default::default()
+        };
+        let res2 = SearchEngine::filter_and_rank(&games, &filter_unquoted);
+        assert_eq!(res2.len(), 1);
+        assert_eq!(res2[0].id, 1);
+
+        // Search exact title: title:lupin
+        let filter_title = SearchFilter {
+            query: Some("title:lupin".to_string()),
+            sort_asc: true,
+            ..Default::default()
+        };
+        let res3 = SearchEngine::filter_and_rank(&games, &filter_title);
+        assert_eq!(res3.len(), 1);
+        assert_eq!(res3[0].id, 1);
     }
 }
