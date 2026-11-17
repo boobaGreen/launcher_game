@@ -2678,8 +2678,6 @@
                     allGames = [...displayedGames];
                     setupHeroSpotlights();
                     renderRecentRow();
-                    renderFeaturedRow();
-                    renderQuickSystems();
                 }
 
                 // Aggiorna indicatore visivo filtro preferiti
@@ -3201,6 +3199,7 @@
 
         function renderQuickSystems() {
             const row = document.getElementById('quickSystemsRow');
+            if (!row) return;
             const popular = ['MAME', 'C64', 'DOS', 'SCUMMVM', 'DREAMCAST', 'GAMECUBE', 'RECOMP', 'SNES'];
             
             row.innerHTML = popular.map(code => {

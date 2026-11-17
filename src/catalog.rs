@@ -224,31 +224,31 @@ impl CatalogLoader {
             }
 
             if t_lower.contains("the curse of issyos") || t_lower.contains("curse of issyos") {
-                return "https://locomalito.com/images/covers/the-curse-of-issyos.jpg".to_string();
+                return "/api/cover/file/covers/the-curse-of-issyos.jpg".to_string();
             }
             if t_lower.contains("darkula") {
-                return "https://locomalito.com/images/covers/darkula.jpg".to_string();
+                return "/api/cover/file/covers/darkula.jpg".to_string();
             }
             if t_lower.contains("l'abbaye") || t_lower.contains("abbaye des morts") {
-                return "https://locomalito.com/images/covers/l-abbaye-des-morts.jpg".to_string();
+                return "/api/cover/file/covers/l-abbaye-des-morts.jpg".to_string();
             }
             if t_lower.contains("8bit killer") {
-                return "https://locomalito.com/images/covers/8bit-killer.jpg".to_string();
+                return "/api/cover/file/covers/8bit-killer.jpg".to_string();
             }
             if t_lower.contains("i, robot") {
-                return "https://locomalito.com/images/covers/i-robot-remastered.jpg".to_string();
+                return "/api/cover/file/covers/i-robot-remastered.jpg".to_string();
             }
             if t_lower.contains("am2r") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Game_Boy/master/Named_Boxarts/Metroid%20II%20-%20Return%20of%20Samus%20(USA,%20Europe).png".to_string();
+                return "/api/cover/file/covers/am2r.jpg".to_string();
             }
             if t_lower.contains("streets of rage") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Mega_Drive_-_Genesis/master/Named_Boxarts/Streets%20of%20Rage%202%20(USA).png".to_string();
             }
             if t_lower.contains("hero core") {
-                return "https://remar.se/daniel/herocore/logo.png".to_string();
+                return "/api/cover/file/covers/hero_core.png".to_string();
             }
             if t_lower.contains("iji") {
-                return "https://remar.se/daniel/iji/title.png".to_string();
+                return "/api/cover/file/covers/iji.jpg".to_string();
             }
             if t_lower.contains("an untitled story") || t_lower.contains("untitled story") {
                 return "https://static.wikitide.net/archipelagowiki/6/65/An_Untitled_Story_Cover.png".to_string();
@@ -328,7 +328,7 @@ impl CatalogLoader {
         // 6. Mappe dedicate per Sega Dreamcast
         if sys_code.eq_ignore_ascii_case("DREAMCAST") {
             if t_lower.contains("virtua tennis 2") || t_lower.contains("tennis 2k2") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Dreamcast/master/Named_Boxarts/Tennis%202K2%20(USA).png".to_string();
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Dreamcast/master/Named_Boxarts/Virtua%20Tennis%202%20-%20Sega%20Professional%20Tennis%20(Europe)%20(En,Fr,De,Es).png".to_string();
             }
         }
 
@@ -344,7 +344,7 @@ impl CatalogLoader {
                 return "/api/cover/file/SNES/cover_lupin.png".to_string();
             }
             if t_lower.contains("super drift out") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Super_Nintendo_Entertainment_System/master/Named_Boxarts/Super%20Drift%20Out%20-%20World%20Rally%20Championship%20(Japan).png".to_string();
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Super_Nintendo_Entertainment_System/master/Named_Boxarts/Super%20Drift%20Out%20-%20World%20Rally%20Championships%20(Japan)%20(En).png".to_string();
             }
             if t_lower.contains("mario rpg") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Super_Nintendo_Entertainment_System/master/Named_Boxarts/Super%20Mario%20RPG%20-%20Legend%20of%20the%20Seven%20Stars%20(USA).png".to_string();
@@ -476,7 +476,10 @@ impl CatalogLoader {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Dig%20Dug.png".to_string();
             }
             if t_lower.contains("emergency call ambulance") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Emergency%20Call%20Ambulance.png".to_string();
+                return "/api/cover/file/covers/emergency_call.png".to_string();
+            }
+            if t_lower.contains("forza horizon") {
+                return "/api/cover/file/covers/forza_horizon.jpg".to_string();
             }
             if t_lower.contains("fighting layer") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Fighting%20Layer.png".to_string();
@@ -503,7 +506,7 @@ impl CatalogLoader {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Silent%20Scope.png".to_string();
             }
             if t_lower.contains("spikeout") {
-                return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Spikeout%20(Digital%20Battle%20Online).png".to_string();
+                return "/api/cover/file/covers/spikeout.png".to_string();
             }
             if t_lower.contains("super hang-on") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Super%20Hang-On.png".to_string();
@@ -539,6 +542,9 @@ impl CatalogLoader {
 
         // Mappe dedicate per capolavori PC MS-DOS, ScummVM e Commodore 64
         if sys_code.eq_ignore_ascii_case("DOS") {
+            if t_lower.contains("epic baseball") {
+                return "/api/cover/file/covers/epic_baseball.jpg".to_string();
+            }
             if t_lower == "civilization" { clean = "Sid Meier's Civilization"; }
             else if t_lower == "colonization" { clean = "Sid Meier's Colonization"; }
             else if t_lower == "railroad tycoon" { clean = "Sid Meier's Railroad Tycoon"; }
@@ -571,29 +577,29 @@ impl CatalogLoader {
             else if t_lower.contains("warcraft") { clean = "WarCraft - Orcs and Humans"; }
             else if t_lower.contains("privateer") { clean = "Wing Commander Privateer"; }
             else if t_lower.contains("wing commander ii") { clean = "Wing Commander II_ Vengeance of the Kilrathi"; }
-            else if t_lower.contains("epic baseball") { clean = "Epic Baseball"; }
-            else if t_lower.contains("formula one grand prix") { clean = "Formula One Grand Prix"; }
+            else if t_lower.contains("formula one grand prix") { clean = "World Circuit"; }
             else if t_lower.contains("halloween harry") || t_lower.contains("alien carnage") { clean = "Alien Carnage"; }
-            else if t_lower.contains("humans 3") { clean = "Humans 3_ Evolution - Lost in Time"; }
-            else if t_lower == "humans" || t_lower == "the humans" { clean = "Humans, The"; }
+            else if t_lower.contains("humans 3") { clean = "Humans 3_ Evolution_ Lost in Time"; }
+            else if t_lower == "humans" || t_lower == "the humans" { clean = "Humans 1 and 2"; }
         } else if sys_code.eq_ignore_ascii_case("SCUMMVM") {
-            if t_lower.contains("broken sword 2.5") { clean = "Broken Sword 2.5_ The Return of the Templars"; }
+            if t_lower.contains("broken sword 2.5") { clean = "Broken Sword 2.5"; }
             else if t_lower.contains("broken sword ii") || t_lower.contains("smoking") { clean = "Broken Sword II_ The Smoking Mirror"; }
             else if t_lower.contains("broken sword") { clean = "Broken Sword_ The Shadow of the Templars"; }
             else if t_lower.contains("elvira ii") { clean = "Elvira II_ The Jaws of Cerberus"; }
             else if t_lower.contains("future wars") { clean = "Future Wars_ Time Travellers"; }
-            else if t_lower.contains("gobliins 2") { clean = "Gobliins 2_ The Prince Buffoon"; }
+            else if t_lower.contains("gobliins 2") { clean = "Gobliins 2"; }
             else if t_lower.contains("goblins quest 3") { clean = "Goblins Quest 3"; }
             else if t_lower.contains("last crusade") { clean = "Indiana Jones and the Last Crusade"; }
-            else if t_lower.contains("king's quest i") { clean = "King's Quest I_ Quest for the Crown"; }
+            else if t_lower.contains("king's quest i") { clean = "King's Quest I (SCI remake)"; }
             else if t_lower.contains("king's quest v") { clean = "King's Quest V_ Absence Makes the Heart Go Yonder!"; }
             else if t_lower.contains("king's quest vi") { clean = "King's Quest VI_ Heir Today, Gone Tomorrow"; }
             else if t_lower.contains("king's quest vii") { clean = "King's Quest VII_ The Princeless Bride"; }
-            else if t_lower.contains("colonel's bequest") { clean = "The Colonel's Bequest"; }
-            else if t_lower.contains("dagger of amon ra") { clean = "The Dagger of Amon Ra"; }
+            else if t_lower.contains("colonel's bequest") { clean = "Laura Bow 1_ The Colonels Bequest"; }
+            else if t_lower.contains("dagger of amon ra") { clean = "Laura Bow 2_ The Dagger of Amon Ra"; }
             else if t_lower.contains("discworld 2") || t_lower.contains("discworld ii") { clean = "Discworld II_ Missing Presumed...!_"; }
+            else if t_lower.contains("discworld") { clean = "Discworld"; }
             else if t_lower.contains("gabriel knight") { clean = "Gabriel Knight_ Sins of the Fathers"; }
-            else if t_lower.contains("larry 5") { clean = "Leisure Suit Larry 5_ Passionate Patti Does a Little Undercover Work"; }
+            else if t_lower.contains("larry 5") { clean = "Leisure Suit Larry 5"; }
             else if t_lower.contains("larry 7") { clean = "Leisure Suit Larry 7_ Love for Sail!"; }
             else if t_lower.contains("monkey island 2") { clean = "Monkey Island 2_ LeChuck's Revenge"; }
             else if t_lower.contains("secret of monkey island") { clean = "Secret of Monkey Island, The"; }
@@ -601,12 +607,11 @@ impl CatalogLoader {
             else if t_lower.contains("escape from monkey island") { clean = "Escape from Monkey Island"; }
             else if t_lower.contains("myst") { clean = "Myst"; }
             else if t_lower.contains("operation stealth") { clean = "Operation Stealth"; }
-            else if t_lower.contains("quest for glory i") { clean = "Quest for Glory I_ So You Want to Be a Hero"; }
-            else if t_lower.contains("quest for glory iii") { clean = "Quest for Glory III_ Wages of War"; }
+            else if t_lower.contains("quest for glory") { clean = "Quest for Glory 1_ So You Want to Be a Hero"; }
             else if t_lower.contains("sam & max") || t_lower.contains("sam and max") { clean = "Sam _ Max Hit the Road"; }
             else if t_lower.contains("simon the sorcerer ii") { clean = "Simon the Sorcerer II_ The Lion, the Wizard and the Wardrobe"; }
             else if t_lower.contains("space quest iv") { clean = "Space Quest IV_ Roger Wilco and the Time Rippers"; }
-            else if t_lower.contains("space quest v") { clean = "Space Quest V_ Roger Wilco in the Next Mutation"; }
+            else if t_lower.contains("space quest v") { clean = "Space Quest V"; }
             else if t_lower.contains("kyrandia 2") { clean = "The Legend of Kyrandia_ Book Two_ The Hand of Fate"; }
             else if t_lower.contains("kyrandia 3") { clean = "The Legend of Kyrandia_ Book Three_ Malcolms Revenge"; }
             else if t_lower.contains("kyrandia") { clean = "The Legend of Kyrandia_ Book One"; }
@@ -615,8 +620,80 @@ impl CatalogLoader {
             else if t_lower.contains("zak mckracken") { clean = "Zak McKracken and the Alien Mindbenders"; }
             else if t_lower.contains("thimbleweed park") { clean = "Thimbleweed Park"; }
         } else if sys_code.eq_ignore_ascii_case("C64") {
-            if t_lower.contains("hero") || t_lower == "h.e.r.o." {
+            if t_lower == "bal8tro" || t_lower.contains("bal8tro") {
+                return "/api/cover/file/covers/c64/bal8tro.gif".to_string();
+            }
+            if t_lower == "hero" || t_lower == "h.e.r.o." {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Atari_-_2600/master/Named_Boxarts/H.E.R.O.%20(USA).png".to_string();
+            }
+            if t_lower.contains("advanced action movie simulator") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Advanced%20Action%20Movie%20Simulator%20(2001)(Cadaver)(PD).png".to_string();
+            }
+            if t_lower.contains("assembloids") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Assembloids%20(2012)(Bevilacqua%2C%20S.)%5Bcr%20LXT%5D%5Bt%20%2B2%5D.png".to_string();
+            }
+            if t_lower.contains("barnsley badger") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Barnsley%20Badger%20(2016)(Psytronik)%5Bcr%20ONS%5D.png".to_string();
+            }
+            if t_lower.contains("bobsled") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Bobsled%20(1983)(General%20Masters%20Corporation).png".to_string();
+            }
+            if t_lower.contains("bomberland") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Bomberland%20(2013)(RGCD)%5Bcr%20ONS%5D.png".to_string();
+            }
+            if t_lower.contains("burnin' rubber") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Burnin'%20Rubber%20(1983)(Colosoftware).png".to_string();
+            }
+            if t_lower.contains("caren and the tangled tentacles") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Caren%20and%20the%20Tangled%20Tentacles%20(2015)(Wendt%2C%20Martin)(de-en)(PD).png".to_string();
+            }
+            if t_lower.contains("cliff hanger") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Cliff%20Hanger%20(1984)(New%20Generation%20Software)%5Bcr%20Bert%5D.png".to_string();
+            }
+            if t_lower == "creatures" {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Creatures%20(Europe)%20(The%20Hits%202%20Compilation).png".to_string();
+            }
+            if t_lower.contains("creatures ii") || t_lower.contains("creatures 2") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Creatures%20II%20-%20Torture%20Trouble%20(USA%2C%20Europe).png".to_string();
+            }
+            if t_lower.contains("first samurai") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/First%20Samurai%20(USA).png".to_string();
+            }
+            if t_lower.contains("flappy bird") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Flappy%20Bird%20(2013)(Kaminski%2C%20Mikolaj)(PD)%5Bcr%20LXT%5D.png".to_string();
+            }
+            if t_lower.contains("gridlock") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Gridlock%20(1986)(Electrical%20Software).png".to_string();
+            }
+            if t_lower.contains("gridrunner") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Gridrunner%20(USA%2C%20Europe).png".to_string();
+            }
+            if t_lower.contains("guns 'n' ghosts") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Snaps/Guns%20'n'%20Ghosts%20(2013)(RGCD%20%26%20Psytronik)%5Bcr%20LXT%20-%20Hackersoft%5D.png".to_string();
+            }
+            if t_lower.contains("hawkeye") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Hawkeye%20(Europe)%20(Thalamus%20Hits%201986-1988%20Compilation).png".to_string();
+            }
+            if t_lower.contains("katakis") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Katakis%20(USA%2C%20Europe).png".to_string();
+            }
+            if t_lower.contains("lords of chaos") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Lords%20of%20Chaos%20(USA%2C%20Europe).png".to_string();
+            }
+            if t_lower.contains("matrix") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Matrix%20(Europe).png".to_string();
+            }
+            if t_lower.contains("montezuma's revenge") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Montezuma's%20Revenge%20(USA%2C%20Europe).png".to_string();
+            }
+            if t_lower.contains("planet x2") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Planet%20X2%20(USA%2C%20Europe).png".to_string();
+            }
+            if t_lower.contains("space rogue") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Space%20Rogue%20(USA%2C%20Europe).png".to_string();
+            }
+            if t_lower.contains("wizard of wor") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_64/master/Named_Boxarts/Wizard%20of%20Wor%20(Japan)%20(MAX).png".to_string();
             }
             if t_lower.contains("chopper command") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Atari_-_2600/master/Named_Boxarts/Chopper%20Command%20(USA).png".to_string();
@@ -811,6 +888,14 @@ impl PreloadedDirCache {
         let words: Vec<&str> = title_clean.split_whitespace().collect();
 
         if let Some(list) = self.cache_by_sys.get(sys_code) {
+            // Pass 1: Prefer exact word count match (eliminates collisions like "MediEvil" matching "MediEvil 2")
+            for (name, lnk_path) in list {
+                let name_words: Vec<&str> = name.split_whitespace().filter(|&w| w != "gioca" && w != "-").collect();
+                if words.iter().all(|w| name_words.contains(w)) && name_words.len() == words.len() {
+                    return lnk_path.clone();
+                }
+            }
+            // Pass 2: Substring match
             for (name, lnk_path) in list {
                 if words.iter().all(|w| name.contains(w)) {
                     return lnk_path.clone();
