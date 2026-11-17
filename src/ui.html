@@ -1969,6 +1969,46 @@
         .toast.show {
             transform: translateX(-50%) translateY(0);
             opacity: 1;
+            pointer-events: auto;
+        }
+
+        .toast-confirm-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .toast-action-btn {
+            padding: 5px 13px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.15s ease;
+        }
+
+        .toast-action-btn.danger {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: #ef4444;
+            color: #fca5a5;
+        }
+
+        .toast-action-btn.danger:hover {
+            background: #ef4444;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+        }
+
+        .toast-action-btn.cancel {
+            background: #1e293b;
+            border-color: #475569;
+            color: #cbd5e1;
+        }
+
+        .toast-action-btn.cancel:hover {
+            background: #334155;
+            color: #fff;
         }
     </style>
 </head>
@@ -3822,9 +3862,61 @@
             const target = playlists.find(p => p.id === id);
             if (!target) return;
 
-            if (!confirm(`Sei sicuro di voler eliminare la playlist "${target.name}"?`)) {
-                return;
+            showConfirmToast(
+                `🗑️ Eliminare la playlist "<b>${escapeHtml(target.name)}</b>"?`,
+                () => executeDeletePlaylist(id)
+            );
+        }
+
+        let toastConfirmAction = null;
+        function showConfirmToast(msgHtml, onConfirm) {
+            const t = document.getElementById('toastNotification');
+            if (!t) return;
+            toastConfirmAction = onConfirm;
+
+            t.innerHTML = `
+                <div class="toast-confirm-row">
+                    <span>${msgHtml}</span>
+                    <button class="toast-action-btn danger" onclick="confirmToastAction()">🗑️ Elimina</button>
+                    <button class="toast-action-btn cancel" onclick="dismissToast()">Annulla</button>
+                </div>
+            `;
+            t.classList.add('show');
+
+            if (toastTimeoutId) {
+                clearTimeout(toastTimeoutId);
             }
+            toastTimeoutId = setTimeout(() => {
+                dismissToast();
+            }, 8000);
+        }
+
+        function confirmToastAction() {
+            if (toastConfirmAction) {
+                const action = toastConfirmAction;
+                toastConfirmAction = null;
+                action();
+            } else {
+                dismissToast();
+            }
+        }
+
+        function dismissToast() {
+            const t = document.getElementById('toastNotification');
+            if (t) {
+                t.classList.remove('show');
+            }
+            toastConfirmAction = null;
+            if (toastTimeoutId) {
+                clearTimeout(toastTimeoutId);
+                toastTimeoutId = null;
+            }
+        }
+
+        function executeDeletePlaylist(id) {
+            const playlists = getStoredPlaylists();
+            const target = playlists.find(p => p.id === id);
+            const targetName = target ? target.name : '';
 
             const updated = playlists.filter(p => p.id !== id);
             saveStoredPlaylists(updated);
@@ -3838,7 +3930,8 @@
             } else {
                 renderPlaylistsSidebar();
             }
-            showToast(`Playlist "${target.name}" eliminata`);
+            dismissToast();
+            showToast(`Playlist "${targetName}" eliminata`);
         }
 
         // ----------------------------------------------------
