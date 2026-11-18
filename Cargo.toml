@@ -15,6 +15,7 @@ walkdir = "2.5"
 open = "5.3"
 tiny_http = "0.12"
 rand = "0.8"
+reqwest = { version = "0.13.5", features = ["blocking"] }
 
 [profile.release]
 opt-level = 3
