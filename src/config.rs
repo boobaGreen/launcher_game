@@ -29,8 +29,9 @@ pub struct PerformanceConfig {
     pub cache_size_mb: usize,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub enum CpuLevel {
+    #[default]
     Low,
     Medium,
     High,
@@ -43,8 +44,9 @@ pub struct UIConfig {
     pub show_previews: bool,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub enum Theme {
+    #[default]
     Dark,
     Light,
     System,
@@ -57,8 +59,9 @@ pub struct MultiMonitorConfig {
     pub primary_display: usize,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub enum Layout {
+    #[default]
     Auto,
     Custom,
 }
@@ -112,4 +115,21 @@ fn retrohub_json() -> String {
   }
 }
 "#.to_string()
+}
+
+// Helper per ottenere il percorso emulatore
+impl RetroHubConfig {
+    pub fn get_emulator_path(&self, name: &str) -> Option<&str> {
+        match name {
+            "MAME" => self.emulator_paths.mame.as_deref(),
+            "GLUIZ" => self.emulator_paths.gluiz.as_deref(),
+            "RETROARCH" => self.emulator_paths.retroarch.as_deref(),
+            "SNES9X" => self.emulator_paths.snes9x.as_deref(),
+            "FCEUX" => self.emulator_paths.fceux.as_deref(),
+            "PROJECT64" => self.emulator_paths.project64.as_deref(),
+            "VICE" => self.emulator_paths.vice.as_deref(),
+            "FLYCAST" => self.emulator_paths.flycast.as_deref(),
+            _ => None,
+        }
+    }
 }
