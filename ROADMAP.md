@@ -94,14 +94,14 @@ Questa roadmap definisce le priorità concordate per l'evoluzione di **RetroHub*
 - [x] **Spostamento Smart:** Sposta ROM trovate nella struttura corretta RetroHub
 
 ### **4.4 Download On-Demand per Immagini**
-- [ ] **Mirror Libretro CDN:** Copertine boxart automatiche su richiesta
-- [ ] **Mirror IGDB/WikiTide:** Copertine per giochi Indie/ScummVM
-- [ ] **Cache Immagini:** 150x210px in cache locale, fallback grafico stilizzato
+- [x] **Mirror Libretro CDN:** Copertine boxart automatiche su richiesta
+- [x] **Mirror IGDB/WikiTide:** Copertine per giochi Indie/ScummVM
+- [x] **Cache Immagini:** 150x210px in cache locale, fallback grafico stilizzato
 
 ### **4.5 Download On-Demand per ROM**
-- [ ] **Database CDN:** URL download per ROM legittime (Abandonware, Internet Archive)
-- [ ] **Formato JSON:** `{ "id": 123, "rom_sha1": "abc123", "download_url": "https://..." }`
-- [ ] **Download Progress:** Barra avanzamento con verifica integrità SHA1
+- [x] **Database CDN:** URL download per ROM legittime (Abandonware, Internet Archive)
+- [x] **Formato JSON:** `{ "id": 123, "rom_sha1": "abc123", "download_url": "https://..." }`
+- [x] **Download Progress:** Barra avanzamento con verifica integrità SHA1
 
 ### **4.6 Prompt Post-Gioco**
 - [ ] **Finestra DiALOG:** "Mantieni o Cancella ROM?" con pulsanti [TENERE] [CANCELLARE]
