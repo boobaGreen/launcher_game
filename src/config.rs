@@ -68,11 +68,13 @@ impl RetroHubConfig {
         let config_path = PathBuf::from("retrohub.json");
         if config_path.exists() {
             if let Ok(content) = std::fs::read_to_string(&config_path) {
-                serde_json::from_str(&content).unwrap_or_default()
+                serde_json::from_str(&content).unwrap_or_else(|_| Self::default())
             } else {
                 Self::default()
             }
         } else {
+            // Crea config di default se non esiste
+            Self::create_default_config();
             Self::default()
         }
     }
@@ -82,4 +84,32 @@ impl RetroHubConfig {
         let json = serde_json::to_string_pretty(self)?;
         std::fs::write(config_path, json)
     }
+    
+    fn create_default_config() {
+        let default_config = retrohub_json();
+        let _ = std::fs::write("retrohub.json", default_config);
+    }
+}
+
+fn retrohub_json() -> String {
+    r#"
+{
+  "performance": {
+    "lazy_load_covers": true,
+    "window_persistence": true,
+    "cpu_optimization": "low",
+    "cache_size_mb": 100
+  },
+  "multi_monitor": {
+    "enabled": false,
+    "layout": "auto",
+    "primary_display": 0
+  },
+  "ui": {
+    "theme": "dark",
+    "compact_mode": false,
+    "show_previews": true
+  }
+}
+"#.to_string()
 }
