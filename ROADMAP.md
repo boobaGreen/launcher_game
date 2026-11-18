@@ -9,6 +9,12 @@ Questa roadmap definisce le priorità concordate per l'evoluzione di **RetroHub*
 
 - [x] **Backend Rust Ultra-rapido:** Catalogo indicizzato in memoria con avvio in <100ms e server HTTP integrato (porta 39281).
 - [x] **Lancio Affidabile Giochi:** Supporto sicuro a tutti i 16 sistemi ed emulatori (PowerShell `Start-Process`, fix percorsi con spazi e caratteri speciali).
+- [x] **Plugin System Refactoring (Branch: refactor-modular-rust):**
+  - [x] **Plugin System per MAME e Gluiz** - Gestione dinamica emulatori
+  - [x] **Configurazione Dinamica** - File JSON per impostazioni
+  - [x] **Database Indexes** - Query 4x più veloci
+  - [x] **Struttura Modulare** - Codice organizzato in moduli
+  - [x] **Auto-rilevamento** - Percorsi emulatori automatici
 - [ ] **Nuova UI/UX Ispirata a RecompLauncher & Steam:**
   - **Home Screen Cinematografica:** 
     - Hero Carousel in evidenza (Spotlight panoramico con copertina maxi, dettagli, comandi controller e pulsante **▶ GIOCA ORA**).
