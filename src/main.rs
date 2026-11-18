@@ -13,6 +13,7 @@ pub mod netplay;
 pub mod lobby;
 pub mod library_config;
 pub mod platform_wizard;
+pub mod rom_scanner;
 
 use std::path::Path;
 use std::process::Command;
