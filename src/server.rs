@@ -9,6 +9,7 @@ use std::collections::HashMap;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use tiny_http::{Header, Method, Response, Server, StatusCode};
+use crate::library_config::LibraryConfig;
 
 pub struct HttpServer {
     db: Arc<Mutex<Database>>,
