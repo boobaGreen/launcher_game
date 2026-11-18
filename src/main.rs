@@ -12,6 +12,7 @@ pub mod server;
 pub mod netplay;
 pub mod lobby;
 pub mod library_config;
+pub mod platform_wizard;
 
 use std::path::Path;
 use std::process::Command;
