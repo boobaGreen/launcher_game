@@ -70,12 +70,11 @@ impl EmulatorPlugin for MamePlugin {
         let mame_exe = self.mame_path.as_ref()
             .ok_or("MAME non installato")?;
 
-        let rom_name = game.launch_target.strip_extension()
-            .unwrap_or(&game.launch_target);
+        let rom_name = game.launch_target.clone();
 
         let args = vec![
             "-video", "bgfx",
-            rom_name,
+            &rom_name,
         ];
 
         Command::new(mame_exe)
