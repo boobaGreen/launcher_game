@@ -47,12 +47,6 @@ Questa roadmap definisce le priorità concordate per l'evoluzione di **RetroHub*
     - **DuckStation** (PlayStation 1)
     - **Dolphin** (GameCube)
     - **MAME / RetroArch**
-  - Integrazione parametri da riga di comando per emulatori con netplay nativo:
-    - **Flycast** (Dreamcast / Naomi / Atomiswave)
-    - **Snes9x** (Super Nintendo)
-    - **DuckStation** (PlayStation 1)
-    - **Dolphin** (GameCube)
-    - **MAME / RetroArch**
 
 ---
 
