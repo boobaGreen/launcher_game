@@ -79,9 +79,9 @@ Questa roadmap definisce le priorità concordate per l'evoluzione di **RetroHub*
 *Obiettivo: Esperienza utente raffinata con selezione piattaforme, download intelligente e gestione ROM.*
 
 ### **4.1 Selezione Piattaforme all'Inizio**
-- [ ] **Wizard Setup Iniziale:** All'avvio, mostra elenco 16+ piattaforme con checkbox
-- [ ] **Salvataggio Scelte:** Impostazioni salvate in `retrohub.json` (platform_whitelist)
-- [ ] **UI Dinamica:** Sidebar e filtri mostrano solo le piattaforme selezionate
+- [x] **Wizard Setup Iniziale:** All'avvio, mostra elenco 16+ piattaforme con checkbox
+- [x] **Salvataggio Scelte:** Impostazioni salvate in `retrohub.json` (platform_whitelist)
+- [x] **UI Dinamica:** Sidebar e filtri mostrano solo le piattaforme selezionate
 
 ### **4.2 Catalogo Completo Locali**
 - [ ] **Visualizza Tutti i Giochi:** Database centrale con info cover tags per tutte le 1.149 voci
