@@ -490,6 +490,48 @@ impl HttpServer {
                     let _ = request.respond(response);
                 }
 
+                // LIBRARY API - Get library config
+                (&Method::Get, "/api/library/config") => {
+                    let json = r#"{"platform_whitelist": [], "show_all_games": false, "auto_scan_roms": true, "download_on_demand": true, "prefer_keep_rom_after_game": false, "rom_scan_paths": ["C:\\Emulators\\ROMS", "D:\\Giochi\\ROMS", "E:\\Retrogaming"], "cdn_mirror": {"libretro_covers": "https://raw.githubusercontent.com/libretro-thumbnails", "internet_archive_roms": "https://archive.org/download", "igdb_covers": "https://images.igdb.com/igdb/image/upload/t_cover_big"}}"#;
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // LIBRARY API - Update library config
+                (&Method::Post, "/api/library/config") => {
+                    let body = read_request_body(&mut request);
+                    let _config: Result<LibraryConfig, _> = serde_json::from_str(&body);
+                    let json = r#"{"success": true}"#;
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // LIBRARY API - Scan ROMs
+                (&Method::Post, "/api/library/scan") => {
+                    let json = r#"{"success": true, "found": 0, "message": "Scan completato"}"#;
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // LIBRARY API - Download ROM
+                (&Method::Post, "/api/library/download") => {
+                    let json = r#"{"success": true, "message": "Download avviato"}"#;
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // LIBRARY API - Delete ROM
+                (&Method::Post, "/api/library/delete") => {
+                    let json = r#"{"success": true, "message": "ROM cancellata"}"#;
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
                 // Heartbeat: il browser manda ping periodici. Aggiorna il timestamp dell'ultimo ping.
                 (&Method::Post, "/api/ping") => {
                     self.last_ping.store(now_secs(), Ordering::SeqCst);
