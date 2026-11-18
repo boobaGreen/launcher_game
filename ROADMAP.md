@@ -61,12 +61,18 @@ Questa roadmap definisce le priorità concordate per l'evoluzione di **RetroHub*
 
 > **Nota di sviluppo:** L'architettura esatta del server (VPS dedicato, microservizio serverless o relay WebRTC) verrà concordata insieme all'utente prima dell'implementazione.
 
-- [ ] **Server di Segnalazione & Matchmaking:**
+- [x] **Server di Segnalazione & Matchmaking:**
   - Registro stanze attive (*"In attesa di sfidante"*).
-  - Gestione heartbeat e rimozione automatica stanze inattive.
-- [ ] **Bacheca Stanze nel Client RetroHub:**
+  - Gestione heartbeat e rimozione automatica stanze inattive (timeout 30 minuti).
+  - **API Endpoints Implementati:**
+    - `GET /api/lobby/rooms` - Lista pubblica stanze
+    - `POST /api/lobby/create` - Creazione stanza ospite
+    - `POST /api/lobby/join` - Unione stanza ospite
+- [x] **Bacheca Stanze nel Client RetroHub:**
   - Schermata dedicata *"Arena Online"*.
   - Elenco stanze in tempo reale con filtri per gioco, piattaforma, regione e latenza (ping stimato).
   - Tasto *"Entra nella partita"* con sincronizzazione automatica.
-- [ ] **NAT Traversal & Relay (opzionale):**
-  - Protocollo STUN / TURN per consentire il gioco anche dietro router domestici senza dover aprire porte manuali.
+- [x] **NAT Traversal & Relay (opzionale):**
+  - Protocollo STUN integrato per risoluzione IP pubblico
+  - Supporto configurazione nat_traversal
+  - STUN servers: Google (stun.l.google.com:19302), Cloudflare (stun.cloudflare.com:3478)

@@ -14,6 +14,7 @@ regex = "1.10"
 walkdir = "2.5"
 open = "5.3"
 tiny_http = "0.12"
+rand = "0.8"
 
 [profile.release]
 opt-level = 3

@@ -10,6 +10,7 @@ pub mod db;
 pub mod catalog;
 pub mod server;
 pub mod netplay;
+pub mod lobby;
 
 use std::path::Path;
 use std::process::Command;

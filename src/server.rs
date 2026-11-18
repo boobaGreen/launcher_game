@@ -1,9 +1,10 @@
 use crate::db::Database;
 use crate::launcher::Launcher;
+use crate::lobby::{LobbyManager, LobbyRoom};
 use crate::models::{LaunchRequest, LaunchResponse, SearchFilter};
 use crate::netplay::NetplayManager;
 use crate::search::SearchEngine;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
@@ -12,9 +13,22 @@ use tiny_http::{Header, Method, Response, Server, StatusCode};
 pub struct HttpServer {
     db: Arc<Mutex<Database>>,
     netplay: Arc<NetplayManager>,
+    lobby: Arc<LobbyManager>,
     port: u16,
     shutdown: Arc<AtomicBool>,
     last_ping: Arc<AtomicU64>,
+}
+
+#[derive(Serialize)]
+struct LobbyRoomInfo {
+    id: String,
+    game_title: String,
+    platform: String,
+    host_name: String,
+    player_count: u8,
+    max_players: u8,
+    ping_ms: u64,
+    region: String,
 }
 
 impl HttpServer {
@@ -40,6 +54,7 @@ impl HttpServer {
         Self {
             db: Arc::new(Mutex::new(db)),
             netplay: Arc::new(NetplayManager::new()),
+            lobby: Arc::new(LobbyManager::new()),
             port,
             shutdown: Arc::new(AtomicBool::new(false)),
             last_ping: Arc::new(AtomicU64::new(0)),
@@ -390,6 +405,87 @@ impl HttpServer {
                     self.netplay.close_room();
                     let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
                     let response = Response::from_string(r#"{"success": true}"#).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // LOBBY API - List public rooms
+                (&Method::Get, "/api/lobby/rooms") => {
+                    self.lobby.cleanup_expired();
+                    let rooms = self.lobby.list_rooms();
+                    let room_infos: Vec<LobbyRoomInfo> = rooms
+                        .into_iter()
+                        .map(|r| LobbyRoomInfo {
+                            id: r.id,
+                            game_title: r.game_title,
+                            platform: r.platform,
+                            host_name: r.host_name,
+                            player_count: r.player_count,
+                            max_players: r.max_players,
+                            ping_ms: r.ping_ms,
+                            region: r.region,
+                        })
+                        .collect();
+                    let json = serde_json::to_string(&room_infos).unwrap_or_else(|_| "[]".to_string());
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // LOBBY API - Create room (host)
+                (&Method::Post, "/api/lobby/create") => {
+                    let body = read_request_body(&mut request);
+                    let req: Result<CreateRoomReq, _> = serde_json::from_str(&body);
+                    
+                    let resp_json = match req {
+                        Ok(r) => {
+                            let db = self.db.lock().unwrap();
+                            if let Ok(Some(game)) = db.get_game_by_id(r.game_id) {
+                                let ping = r.player_name.len() as u64 * 10;
+                                let room_id = self.lobby.create_room(
+                                    game.id,
+                                    game.title.clone(),
+                                    game.platform.clone(),
+                                    r.player_name,
+                                    "127.0.0.1".to_string(),
+                                    self.port,
+                                    ping,
+                                );
+                                serde_json::to_string(&serde_json::json!({
+                                    "success": true,
+                                    "room_id": room_id,
+                                    "game_title": game.title,
+                                    "platform": game.platform
+                                })).unwrap_or_else(|_| r#"{"error": "JSON encode fallito"}"#.to_string())
+                            } else {
+                                r#"{"error": "Gioco non trovato"}"#.to_string()
+                            }
+                        }
+                        Err(e) => format!(r#"{{"error": "Payload invalido: {0}"}}"#, e),
+                    };
+                    
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp_json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // LOBBY API - Join room (guest)
+                (&Method::Post, "/api/lobby/join") => {
+                    let body = read_request_body(&mut request);
+                    let req: Result<JoinRoomReq, _> = serde_json::from_str(&body);
+                    
+                    let resp_json = match req {
+                        Ok(r) => match self.lobby.join_room(&r.token, r.player_name) {
+                            Ok((_, connection_token)) => serde_json::to_string(&serde_json::json!({
+                                "success": true,
+                                "connection_token": connection_token
+                            })).unwrap_or_else(|_| r#"{"error": "JSON encode fallito"}"#.to_string()),
+                            Err(e) => format!(r#"{{"error": "{0}"}}"#, e),
+                        },
+                        Err(e) => format!(r#"{{"error": "Payload invalido: {0}"}}"#, e),
+                    };
+                    
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp_json).with_header(header);
                     let _ = request.respond(response);
                 }
 
