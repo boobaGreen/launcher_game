@@ -104,11 +104,11 @@ Questa roadmap definisce le priorità concordate per l'evoluzione di **RetroHub*
 - [x] **Download Progress:** Barra avanzamento con verifica integrità SHA1
 
 ### **4.6 Prompt Post-Gioco**
-- [ ] **Finestra DiALOG:** "Mantieni o Cancella ROM?" con pulsanti [TENERE] [CANCELLARE]
-- [ ] **Imposta Predefinita:** Opzione globale "Tieni sempre" in configurazione
-- [ ] **Cronologia:** File scaricati apposta eliminare appesano disco
+- [x] **Finestra DiALOG:** "Mantieni o Cancella ROM?" con pulsanti [TENERE] [CANCELLARE]
+- [x] **Imposta Predefinita:** Opzione globale "Tieni sempre" in configurazione
+- [x] **Cronologia:** File scaricati apposta eliminare appesano disco
 
 ### **4.7 Gestione Libreria Utente**
-- [ ] **Pagina "La Mia Libreria":** Solo giochi con ROM scaricata o preferiti
-- [ ] **Pulsante "Aggiorna":** Ricerca nuove ROM in cartelle configurati
-- [ ] **Statistiche:** Quanti giochi giocabili, spazio totale, ultimi download
+- [x] **Pagina "La Mia Libreria":** Solo giochi con ROM scaricata o preferiti
+- [x] **Pulsante "Aggiorna":** Ricerca nuove ROM in cartelle configurati
+- [x] **Statistiche:** Quanti giochi giocabili, spazio totale, ultimi download
