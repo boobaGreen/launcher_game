@@ -47,6 +47,7 @@ Questa roadmap definisce le priorità concordate per l'evoluzione di **RetroHub*
     - **DuckStation** (PlayStation 1)
     - **Dolphin** (GameCube)
     - **MAME / RetroArch**
+    - **Daphne** (LaserDisc)
 
 ---
 
@@ -70,3 +71,44 @@ Questa roadmap definisce le priorità concordate per l'evoluzione di **RetroHub*
   - Protocollo STUN integrato per risoluzione IP pubblico
   - Supporto configurazione nat_traversal
   - STUN servers: Google (stun.l.google.com:19302), Cloudflare (stun.cloudflare.com:3478)
+
+---
+
+## 📌 FASE 4: Personalizzazione Libreria & Download On-Demand (Prossima Fase)
+
+*Obiettivo: Esperienza utente raffinata con selezione piattaforme, download intelligente e gestione ROM.*
+
+### **4.1 Selezione Piattaforme all'Inizio**
+- [ ] **Wizard Setup Iniziale:** All'avvio, mostra elenco 16+ piattaforme con checkbox
+- [ ] **Salvataggio Scelte:** Impostazioni salvate in `retrohub.json` (platform_whitelist)
+- [ ] **UI Dinamica:** Sidebar e filtri mostrano solo le piattaforme selezionate
+
+### **4.2 Catalogo Completo Locali**
+- [ ] **Visualizza Tutti i Giochi:** Database centrale con info cover tags per tutte le 1.149 voci
+- [ ] **Filtro Piattaforme:** Mostra solo le piattaforme scelte, con impostazione "Mostra Tutte"
+- [ ] **Cerca con Tags:** Anno genere sviluppatore con ricerca fuzzy Jaro-Winkler
+
+### **4.3 QWizard Auto-Rilevamento ROM**
+- [ ] **Scansione Automatica:** Cerca ROM esistenti in C:\Users\*, D:\Emulators, E:\ROMS
+- [ ] **Mappatura Piattaforme:** Identifica file per estensione nome cartella
+- [ ] **Spostamento Smart:** Sposta ROM trovate nella struttura corretta RetroHub
+
+### **4.4 Download On-Demand per Immagini**
+- [ ] **Mirror Libretro CDN:** Copertine boxart automatiche su richiesta
+- [ ] **Mirror IGDB/WikiTide:** Copertine per giochi Indie/ScummVM
+- [ ] **Cache Immagini:** 150x210px in cache locale, fallback grafico stilizzato
+
+### **4.5 Download On-Demand per ROM**
+- [ ] **Database CDN:** URL download per ROM legittime (Abandonware, Internet Archive)
+- [ ] **Formato JSON:** `{ "id": 123, "rom_sha1": "abc123", "download_url": "https://..." }`
+- [ ] **Download Progress:** Barra avanzamento con verifica integrità SHA1
+
+### **4.6 Prompt Post-Gioco**
+- [ ] **Finestra DiALOG:** "Mantieni o Cancella ROM?" con pulsanti [TENERE] [CANCELLARE]
+- [ ] **Imposta Predefinita:** Opzione globale "Tieni sempre" in configurazione
+- [ ] **Cronologia:** File scaricati apposta eliminare appesano disco
+
+### **4.7 Gestione Libreria Utente**
+- [ ] **Pagina "La Mia Libreria":** Solo giochi con ROM scaricata o preferiti
+- [ ] **Pulsante "Aggiorna":** Ricerca nuove ROM in cartelle configurati
+- [ ] **Statistiche:** Quanti giochi giocabili, spazio totale, ultimi download

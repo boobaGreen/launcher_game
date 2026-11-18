@@ -14,8 +14,9 @@
 4. [Motore di Ricerca Fuzzy & Filtri Multi-Tag](#4-motore-di-ricerca-fuzzy--filtri-multi-tag)
 5. [Configurazione Controller (Xbox & Adattatore USB PS1)](#5-configurazione-controller-xbox--adattatore-usb-ps1)
 6. [Guida al Gioco Online Multiplayer (P2P Netplay)](#6-guida-al-gioco-online-multiplayer-p2p-netplay)
-7. [Architettura Tecnica del Codice Rust](#7-architettura-tecnica-del-codice-rust)
-8. [Risoluzione Problemi & Domande Frequenti (FAQ)](#8-risoluzione-problemi--domande-frequenti-faq)
+7. [Personalizzazione Libreria & Download On-Demand](#7-personalizzazione-libreria--download-on-demand)
+8. [Architettura Tecnica del Codice Rust](#8-architettura-tecnica-del-codice-rust)
+9. [Risoluzione Problemi & Domande Frequenti (FAQ)](#9-risoluzione-problemi--domande-frequenti-faq)
 
 ---
 
@@ -28,6 +29,47 @@
 - **Avvio Istantaneo (< 50 millisecondi)**: Nessun tempo di caricamento, consumo di CPU pari allo 0% in idle e memoria RAM inferiore a 25 MB.
 - **Esperienza Console da Salotto**: Finestra nativa senza barre del browser (frameless), completamente navigabile tramite controller da divano.
 - **Copertine & Boxart Automatiche**: Integrazione diretta con il CDN ufficiale Libretro per visualizzare poster 2D/3D in alta definizione con fallback grafico stilizzato.
+
+---
+
+## 7. Personalizzazione Libreria & Download On-Demand
+
+### 7.1 Selezione Piattaforme all'Inizio
+All'avvio iniziale, RetroHub mostra una schermata di benvenuto con l'elenco completo delle piattaforme supportate (16+). Puoi selezionare solo le piattaforme che ti interessano.
+
+### 7.2 Visualizza Tutti i Giochi
+- Il catalogo centrale contiene le informazioni di tutti i 1.149 titoli (copertine, tags, metadata).
+- Puoi navigare l'intera libreria o filtrarla per le piattaforme selezionate.
+- Usa il pulsante "Mostra Tutte" per visualizzare tutti i titoli.
+
+### 7.3 QWizard Auto-Rilevamento ROM
+RetroHub può individuare automaticamente le ROM esistenti sul tuo PC:
+- Scansione delle cartelle comuni (C:\EMULATORS, D:\ROMS, E:\Giochi)
+- Mappatura intelligente per estensione e nome file
+- Spostamento automatico nella struttura corretta
+
+### 7.4 Download On-Demand per Immagini
+- **Copertine automatiche**: CDN Libretro per boxart 2D/3D
+- **Fallback grafico**: Poster stilizzati quando le copertine non sono disponibili
+- **Cache locale**: Immagini salvate per accesso offline
+
+### 7.5 Download On-Demand per ROM
+Quando clicchi "Gioca" su un gioco senza ROM:
+1. Viene mostrato un link sicuro per il download
+2. OPPURE scarica automaticamente da fonti legittime
+3. Verifica SHA1 per integrità file
+
+### 7.6 Prompt Post-Gioco
+Dopo aver giocato, appare una finestra:
+```
+Vuoi mantenere la ROM?
+[TENERE LA ROM]    [CANCELLARE]
+```
+
+### 7.7 Gestione Libreria Utente
+- **Pagina "La Mia Libreria"**: Filtra per ROM presenti e preferiti
+- **Pulsante "Aggiorna"**: Ricerca nuove ROM nelle cartelle
+- **Statistiche**: Numero giochi giocabili, spazio totale occupato
 
 ---
 

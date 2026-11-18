@@ -11,6 +11,7 @@ mod flycast;
 mod dolphin;
 mod vice;
 mod duckstation;
+mod daphne;
 
 pub fn load_plugins() -> PluginManager {
     let mut manager = PluginManager::new();
@@ -23,5 +24,6 @@ pub fn load_plugins() -> PluginManager {
     manager.register(Box::new(dolphin::DolphinPlugin::new()));
     manager.register(Box::new(vice::VicePlugin::new()));
     manager.register(Box::new(duckstation::DuckStationPlugin::new()));
+    manager.register(Box::new(daphne::DaphnePlugin::new()));
     manager
 }
