@@ -86,6 +86,15 @@ fn main() {
 
     let emu_path = Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu");
     
+    // Salva configurazione se non esiste
+    if !Path::new("retrohub.json").exists() {
+        if let Err(e) = RetroHubConfig::default().save() {
+            eprintln!("⚠ Errore salvatura configurazione: {}", e);
+        } else {
+            println!("✅ Configurazione iniziale creata in retrohub.json");
+        }
+    }
+    
     // Load plugins
     let plugins = load_plugins();
     println!("🔌 Plugin caricati: MAME, Gluiz");

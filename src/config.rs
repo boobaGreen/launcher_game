@@ -7,6 +7,48 @@ pub struct RetroHubConfig {
     pub performance: PerformanceConfig,
     pub ui: UIConfig,
     pub multi_monitor: MultiMonitorConfig,
+    pub netplay: NetplayConfig,
+    pub server: ServerConfig,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NetplayConfig {
+    pub enable_stun: bool,
+    pub stun_servers: Vec<String>,
+    pub nat_traversal: bool,
+    pub max_ping_ms: u64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ServerConfig {
+    pub port: u16,
+    pub emu_root: String,
+    pub browser_fallback: bool,
+}
+
+impl Default for NetplayConfig {
+    fn default() -> Self {
+        Self {
+            enable_stun: true,
+            stun_servers: vec![
+                "stun.l.google.com:19302".to_string(),
+                "stun1.l.google.com:19302".to_string(),
+                "stun.cloudflare.com:3478".to_string(),
+            ],
+            nat_traversal: true,
+            max_ping_ms: 200,
+        }
+    }
+}
+
+impl Default for ServerConfig {
+    fn default() -> Self {
+        Self {
+            port: 39281,
+            emu_root: "C:\\Users\\ClaudioDall'Ara\\Desktop\\Clod\\emu".to_string(),
+            browser_fallback: true,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]

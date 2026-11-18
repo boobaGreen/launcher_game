@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::net::{SocketAddr, UdpSocket};
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+use std::io::{self, Read};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum RoomStatus {
@@ -26,11 +27,16 @@ pub struct NetplaySession {
     pub status: RoomStatus,
     pub ping_ms: Option<u64>,
     pub local_netplay_port: u16,
+    pub public_ip: Option<String>,
+    pub nat_traversal: bool,
 }
 
 pub struct NetplayManager {
     session: Arc<Mutex<Option<NetplaySession>>>,
     socket: Arc<Mutex<Option<UdpSocket>>>,
+    stun_servers: Vec<String>,
+    enable_stun: bool,
+    enable_nat_traversal: bool,
 }
 
 impl NetplayManager {
@@ -38,17 +44,33 @@ impl NetplayManager {
         Self {
             session: Arc::new(Mutex::new(None)),
             socket: Arc::new(Mutex::new(None)),
+            stun_servers: vec![
+                "stun.l.google.com:19302".to_string(),
+                "stun1.l.google.com:19302".to_string(),
+                "stun.cloudflare.com:3478".to_string(),
+            ],
+            enable_stun: true,
+            enable_nat_traversal: true,
         }
     }
 
-    /// Creates a new Netplay Room as Host.
+    pub fn with_stun_config(mut self, stun_servers: Vec<String>, enable_nat: bool) -> Self {
+        self.stun_servers = stun_servers;
+        self.enable_nat_traversal = enable_nat;
+        self
+    }
+
     pub fn create_room(&self, game_id: i64, game_title: String, platform: String, player_name: String) -> Result<NetplaySession, String> {
         let port = allocate_free_udp_port().unwrap_or(19864);
         let socket = UdpSocket::bind(format!("0.0.0.0:{}", port))
             .map_err(|e| format!("Impossibile associare socket UDP su porta {}: {}", port, e))?;
         socket.set_nonblocking(true).map_err(|e| e.to_string())?;
 
-        let public_ip = resolve_public_ip().unwrap_or_else(|| get_local_ip().unwrap_or_else(|| "127.0.0.1".to_string()));
+        let public_ip = if self.enable_stun {
+            resolve_public_ip_stun(&self.stun_servers).unwrap_or_else(|| get_local_ip().unwrap_or_else(|| "127.0.0.1".to_string()))
+        } else {
+            get_local_ip().unwrap_or_else(|| "127.0.0.1".to_string())
+        };
         let room_code = generate_room_code();
 
         // Token encodes: IP:PORT:GAME_ID:ROOM_CODE
@@ -68,6 +90,8 @@ impl NetplayManager {
             status: RoomStatus::WaitingForGuest,
             ping_ms: None,
             local_netplay_port: port,
+            public_ip: Some(public_ip),
+            nat_traversal: self.enable_nat_traversal,
         };
 
         *self.session.lock().unwrap() = Some(session.clone());
@@ -144,7 +168,16 @@ impl NetplayManager {
         let my_port = allocate_free_udp_port().unwrap_or(19865);
         let socket = UdpSocket::bind(format!("0.0.0.0:{}", my_port))
             .map_err(|e| format!("Impossibile creare socket UDP: {}", e))?;
-        socket.set_nonblocking(true).map_err(|e| e.to_string())?;
+        socket.set_read_timeout(Some(Duration::from_millis(2000))).ok();
+
+        // Measure real ping to host
+        let start = Instant::now();
+        socket
+            .send_to(b"RH_PING", &host_addr)
+            .map_err(|e| format!("Invio pacchetto di connessione fallito: {}", e))?;
+        let mut buf = [0u8; 4];
+        socket.recv_from(&mut buf).ok();
+        let elapsed = start.elapsed().as_millis() as u64;
 
         // Send JOIN packet to host
         let join_msg = format!("RH_JOIN:{}", guest_name);
@@ -163,8 +196,10 @@ impl NetplayManager {
             peer_name: Some("Host".to_string()),
             peer_addr: Some(host_addr.clone()),
             status: RoomStatus::Connected,
-            ping_ms: Some(20),
+            ping_ms: Some(elapsed),
             local_netplay_port: my_port,
+            public_ip: None,
+            nat_traversal: true,
         };
 
         *self.session.lock().unwrap() = Some(session.clone());
@@ -222,6 +257,69 @@ fn get_local_ip() -> Option<String> {
 fn resolve_public_ip() -> Option<String> {
     // Fast STUN resolve or local network fallback
     get_local_ip()
+}
+
+/// Resolves public IP using STUN protocol
+fn resolve_public_ip_stun(stun_servers: &[String]) -> Option<String> {
+    for server in stun_servers {
+        if let Some(ip) = try_stun_server(server) {
+            return Some(ip);
+        }
+    }
+    None
+}
+
+fn try_stun_server(server: &str) -> Option<String> {
+    let parts: Vec<&str> = server.split(':').collect();
+    if parts.len() != 2 {
+        return None;
+    }
+    let addr: SocketAddr = format!("{}:3478", parts[0]).parse().ok()?;
+    
+    let stun_socket = UdpSocket::bind("0.0.0.0:0").ok()?;
+    stun_socket.set_read_timeout(Some(Duration::from_secs(2))).ok()?;
+    stun_socket.connect(&addr).ok()?;
+    
+    // Build STUN binding request
+    let mut req = Vec::new();
+    req.extend_from_slice(&[0x00, 0x01]); // STUN BINDING REQUEST
+    req.extend_from_slice(&[0x00, 0x08]); // Length
+    req.extend_from_slice(&mut [0u8; 12]); // Transaction ID
+    req.extend_from_slice(&[0x00, 0x00, 0x00, 0x00]); // Magic cookie
+    
+    if stun_socket.send(&req).is_ok() {
+        let mut buf = [0u8; 512];
+        if let Ok((len, _)) = stun_socket.recv_from(&mut buf) {
+            // Parse XOR-MAPPED-ADDRESS (type 0x0020)
+            if len > 20 {
+                let type_val = u16::from_be_bytes([buf[2], buf[3]]);
+                if type_val == 0x0020 {
+                    let port = u16::from_be_bytes([buf[6], buf[7]]);
+                    let family = buf[8];
+                    if family == 0x01 { // IPv4
+                        let ip = format!("{}.{}.{}.{}", buf[9], buf[10], buf[11], buf[12]);
+                        return Some(format!("{}:{}", ip, port));
+                    }
+                }
+            }
+        }
+    }
+    None
+}
+
+/// Measures ping to a remote address via UDP
+fn measure_ping(addr: &str, port: u16, timeout_ms: u64) -> Option<u64> {
+    let socket = UdpSocket::bind("0.0.0.0:0").ok()?;
+    socket.set_read_timeout(Some(Duration::from_millis(timeout_ms))).ok()?;
+    
+    let dest: SocketAddr = format!("{}:{}", addr, port).parse().ok()?;
+    
+    let start = Instant::now();
+    socket.send_to(b"PING", dest).ok()?;
+    let mut buf = [0u8; 4];
+    socket.recv_from(&mut buf).ok()?;
+    let elapsed = start.elapsed().as_millis() as u64;
+    Some(elapsed)
 }
 
 fn hex_encode(bytes: &[u8]) -> String {

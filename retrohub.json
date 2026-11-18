@@ -1,0 +1,19 @@
+
+{
+  "performance": {
+    "lazy_load_covers": true,
+    "window_persistence": true,
+    "cpu_optimization": "low",
+    "cache_size_mb": 100
+  },
+  "multi_monitor": {
+    "enabled": false,
+    "layout": "auto",
+    "primary_display": 0
+  },
+  "ui": {
+    "theme": "dark",
+    "compact_mode": false,
+    "show_previews": true
+  }
+}

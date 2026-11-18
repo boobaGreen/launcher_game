@@ -1,6 +1,6 @@
 # 🕹️ RetroHub — Manuale Utente & Documentazione di Progetto
 
-**Versione:** 1.0.0 (Rust Edition)  
+**Versione:** 1.2.0 (Rust Edition)    
 **Autore:** Claudio Dall'Ara  
 **Repository GitHub:** [https://github.com/boobaGreen/launcher_game](https://github.com/boobaGreen/launcher_game)  
 **Piattaforma:** Windows 10 / 11 (x86_64)
