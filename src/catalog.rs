@@ -420,6 +420,9 @@ impl CatalogLoader {
 
         // 10. Mappe dedicate per RECOMP PC Port (Cover originali fedeli console/arcade)
         if sys_code.eq_ignore_ascii_case("RECOMP") {
+            if t_lower.contains("blue wake") || t_lower.contains("wave race") {
+                return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Nintendo_64/master/Named_Boxarts/Wave%20Race%2064%20(USA).png".to_string();
+            }
             if t_lower.contains("ocarina of time") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Nintendo_64/master/Named_Boxarts/Legend%20of%20Zelda,%20The%20-%20Ocarina%20of%20Time%20(USA).png".to_string();
             }
@@ -612,7 +615,10 @@ impl CatalogLoader {
             if t_lower.contains("escape from monkey island") {
                 return "/api/cover/file/covers/scummvm/escape_from_monkey_island.png".to_string();
             }
-            if t_lower.contains("discworld") && !t_lower.contains("discworld 2") && !t_lower.contains("discworld ii") {
+            if t_lower.contains("discworld ii") || t_lower.contains("discworld 2") {
+                return "/api/cover/file/covers/scummvm/discworld_ii.png".to_string();
+            }
+            if t_lower.contains("discworld") {
                 return "/api/cover/file/covers/scummvm/discworld.png".to_string();
             }
             if t_lower.contains("larry 7") {

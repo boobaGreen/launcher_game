@@ -3976,6 +3976,20 @@
                 toastTimeoutId = null;
             }, 3200);
         }
+
+        // Heartbeat: mantiene il server in vita mentre la finestra è aperta.
+        // Se i ping si interrompono (chiusura finestra), il server si spegne dopo un timeout.
+        let heartbeatTimer = null;
+        function startHeartbeat() {
+            function ping() {
+                try {
+                    fetch('/api/ping', { method: 'POST', keepalive: true });
+                } catch (e) {}
+            }
+            ping(); // primo ping immediato
+            heartbeatTimer = setInterval(ping, 4000);
+        }
+        window.addEventListener('load', startHeartbeat);
     </script>
 </body>
 </html>

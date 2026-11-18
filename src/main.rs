@@ -1,4 +1,9 @@
+#![windows_subsystem = "windows"]
+
 pub mod models;
+pub mod config;
+pub mod core;
+pub mod plugins;
 pub mod launcher;
 pub mod search;
 pub mod db;
@@ -8,9 +13,32 @@ pub mod netplay;
 
 use std::path::Path;
 use std::process::Command;
+use std::sync::Arc;
 use catalog::CatalogLoader;
+use config::RetroHubConfig;
 use db::Database;
+use plugins::{load_plugins, PluginManager};
 use server::HttpServer;
+
+fn is_server_alive(url: &str) -> bool {
+    // Verifica che il server esistente risponda davvero a una richiesta HTTP (non solo che la porta sia aperta)
+    use std::io::{Read, Write};
+    if let Ok(mut stream) = std::net::TcpStream::connect_timeout(
+        &"127.0.0.1:39281".parse().unwrap(),
+        std::time::Duration::from_millis(300),
+    ) {
+        let req = format!(
+            "GET /api/platforms HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n"
+        );
+        if stream.write_all(req.as_bytes()).is_ok() {
+            let mut buf = String::new();
+            if stream.read_to_string(&mut buf).is_ok() {
+                return buf.contains("200");
+            }
+        }
+    }
+    false
+}
 
 fn open_app_window(url: &str) {
     // Apre RetroHub come finestra applicativa standalone dedicata (modalità App senza barra URL o schede)
@@ -42,11 +70,12 @@ fn main() {
     println!("🕹️  RetroHub — Ultimate Retrogaming Client (Rust)");
     println!("==================================================");
 
+    let config = RetroHubConfig::load();
     let port = 39281;
     let url = format!("http://127.0.0.1:{}", port);
 
     // Single instance check: if RetroHub is already running, open the window and exit cleanly
-    if std::net::TcpStream::connect(format!("127.0.0.1:{}", port)).is_ok() {
+    if is_server_alive(&url) {
         println!("⚡ RetroHub è già attivo in background. Apertura interfaccia grafica...");
         open_app_window(&url);
         return;
@@ -56,6 +85,10 @@ fn main() {
     let db = Database::open(db_path).expect("Inizializzazione database fallita");
 
     let emu_path = Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu");
+    
+    // Load plugins
+    let plugins = load_plugins();
+    println!("🔌 Plugin caricati: MAME, Gluiz");
 
     // Sincronizzazione automatica all'avvio con transazione (<40ms)
     println!("⏳ Sincronizzazione collezione con il catalogo unificato (1149 giochi)...");
@@ -74,21 +107,23 @@ fn main() {
         }
     }
 
-    // Launch window as soon as the server port is ready
+    // Launch window in background thread as soon as server port is ready
     let url_clone = url.clone();
     std::thread::spawn(move || {
-        for _ in 0..40 {
+        for _ in 0..60 {
             if std::net::TcpStream::connect(format!("127.0.0.1:{}", port)).is_ok() {
                 break;
             }
-            std::thread::sleep(std::time::Duration::from_millis(50));
+            std::thread::sleep(std::time::Duration::from_millis(100));
         }
         println!("🎮 Apertura interfaccia grafica RetroHub: {}", url_clone);
         open_app_window(&url_clone);
     });
 
+    // Start server on main thread (blocking)
     let server = HttpServer::new(db, port);
     if let Err(e) = server.start() {
         eprintln!("❌ Errore avvio server: {}", e);
     }
+    println!("👋 RetroHub chiuso. Arrivederci!");
 }

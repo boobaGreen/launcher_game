@@ -5,6 +5,7 @@ use crate::netplay::NetplayManager;
 use crate::search::SearchEngine;
 use serde::Deserialize;
 use std::collections::HashMap;
+use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use tiny_http::{Header, Method, Response, Server, StatusCode};
 
@@ -12,6 +13,14 @@ pub struct HttpServer {
     db: Arc<Mutex<Database>>,
     netplay: Arc<NetplayManager>,
     port: u16,
+    shutdown: Arc<AtomicBool>,
+    last_ping: Arc<AtomicU64>,
+}
+
+impl HttpServer {
+    pub fn shutdown_flag(&self) -> Arc<AtomicBool> {
+        self.shutdown.clone()
+    }
 }
 
 #[derive(Deserialize)]
@@ -32,6 +41,8 @@ impl HttpServer {
             db: Arc::new(Mutex::new(db)),
             netplay: Arc::new(NetplayManager::new()),
             port,
+            shutdown: Arc::new(AtomicBool::new(false)),
+            last_ping: Arc::new(AtomicU64::new(0)),
         }
     }
 
@@ -42,8 +53,24 @@ impl HttpServer {
         println!("🚀 RetroHub UI Server in ascolto su: http://{}", addr);
 
         for mut request in server.incoming_requests() {
+            if self.shutdown.load(Ordering::SeqCst) {
+                break;
+            }
+
+            // Heartbeat timeout: se il browser non manda ping per 15 secondi (finestra chiusa), spegni il server
+            let last = self.last_ping.load(Ordering::SeqCst);
+            if last > 0 && now_secs().saturating_sub(last) > 15 {
+                break;
+            }
+
             let url = request.url().to_string();
             let method = request.method().clone();
+
+            // Reset del timer heartbeat quando arriva una richiesta reale: il client ha il focus
+            // e sta interagendo, quindi il server non deve spegnersi per timeout.
+            if method != Method::Get || !url.starts_with("/api/cover") {
+                self.last_ping.store(now_secs(), Ordering::SeqCst);
+            }
 
             let (path, query_params) = parse_url(&url);
 
@@ -366,6 +393,23 @@ impl HttpServer {
                     let _ = request.respond(response);
                 }
 
+                // Heartbeat: il browser manda ping periodici. Aggiorna il timestamp dell'ultimo ping.
+                (&Method::Post, "/api/ping") => {
+                    self.last_ping.store(now_secs(), Ordering::SeqCst);
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(r#"{"success": true}"#).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // Chiude il server quando la finestra del browser viene chiusa
+                (&Method::Post, "/api/shutdown") => {
+                    self.shutdown.store(true, Ordering::SeqCst);
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(r#"{"success": true}"#).with_header(header);
+                    let _ = request.respond(response);
+                    break;
+                }
+
                 _ => {
                     let response = Response::from_string("404 Not Found").with_status_code(StatusCode(404));
                     let _ = request.respond(response);
@@ -419,4 +463,11 @@ fn read_request_body(request: &mut tiny_http::Request) -> String {
     use std::io::Read;
     let _ = request.as_reader().read_to_end(&mut buf);
     String::from_utf8_lossy(&buf).to_string()
+}
+
+fn now_secs() -> u64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs()
 }
