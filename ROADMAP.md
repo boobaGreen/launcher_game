@@ -89,9 +89,9 @@ Questa roadmap definisce le priorità concordate per l'evoluzione di **RetroHub*
 - [ ] **Cerca con Tags:** Anno genere sviluppatore con ricerca fuzzy Jaro-Winkler
 
 ### **4.3 QWizard Auto-Rilevamento ROM**
-- [ ] **Scansione Automatica:** Cerca ROM esistenti in C:\Users\*, D:\Emulators, E:\ROMS
-- [ ] **Mappatura Piattaforme:** Identifica file per estensione nome cartella
-- [ ] **Spostamento Smart:** Sposta ROM trovate nella struttura corretta RetroHub
+- [x] **Scansione Automatica:** Cerca ROM esistenti in C:\Users\*, D:\Emulators, E:\ROMS
+- [x] **Mappatura Piattaforme:** Identifica file per estensione nome cartella
+- [x] **Spostamento Smart:** Sposta ROM trovate nella struttura corretta RetroHub
 
 ### **4.4 Download On-Demand per Immagini**
 - [ ] **Mirror Libretro CDN:** Copertine boxart automatiche su richiesta
