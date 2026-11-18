@@ -50,6 +50,18 @@ impl Database {
             "CREATE INDEX IF NOT EXISTS idx_games_title ON games(title)",
             [],
         )?;
+        self.conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_games_favorite ON games(is_favorite)",
+            [],
+        )?;
+        self.conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_games_playcount ON games(play_count DESC)",
+            [],
+        )?;
+        self.conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_games_lastplayed ON games(last_played_at DESC)",
+            [],
+        )?;
 
         Ok(())
     }
@@ -338,23 +350,16 @@ impl Database {
     }
 
     pub fn get_stats(&self) -> Result<StatsSummary> {
-        let total_games: usize =
-            self.conn
-                .query_row("SELECT COUNT(*) FROM games", [], |r| r.get(0))?;
-        let total_platforms: usize = self.conn.query_row(
-            "SELECT COUNT(DISTINCT system_code) FROM games",
+        // Ottimizzazione: query unica con tutti i dati aggregati
+        let (total_games, total_platforms, total_favorites, total_plays) = self.conn.query_row(
+            "SELECT 
+                COUNT(*) as total,
+                COUNT(DISTINCT system_code) as platforms,
+                COUNT(CASE WHEN is_favorite = 1 THEN 1 END) as favorites,
+                COALESCE(SUM(play_count), 0) as plays
+             FROM games",
             [],
-            |r| r.get(0),
-        )?;
-        let total_favorites: usize = self.conn.query_row(
-            "SELECT COUNT(*) FROM games WHERE is_favorite = 1",
-            [],
-            |r| r.get(0),
-        )?;
-        let total_plays: u32 = self.conn.query_row(
-            "SELECT COALESCE(SUM(play_count), 0) FROM games",
-            [],
-            |r| r.get(0),
+            |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?, r.get(3)?)),
         )?;
 
         // Most played
