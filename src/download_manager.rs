@@ -36,7 +36,7 @@ impl DownloadManager {
 
         let url = Self::get_rom_url(clean_name, platform);
         let client = reqwest::blocking::Client::builder()
-            .timeout(std::time::Duration::from_secs(30))
+            .timeout(std::time::Duration::from_secs(6))
             .build()
             .map_err(|e| e.to_string())?;
 
@@ -48,10 +48,10 @@ impl DownloadManager {
                     file.write_all(&bytes).map_err(|e| e.to_string())?;
                     Ok(rom_path)
                 } else {
-                    Err(format!("Server remoto ha risposto con status {}: {}", resp.status(), clean_name))
+                    Err(format!("File '{}' al momento non presente nell'archivio cloud. Puoi copiare la ROM direttamente in downloads/{}/{}.", clean_name, platform.to_lowercase(), clean_name))
                 }
             }
-            Err(e) => Err(format!("Errore connessione download ROM: {}", e)),
+            Err(_e) => Err(format!("Download cloud momentaneamente non disponibile per '{}'. Colloca il file in downloads/{}/{}.", clean_name, platform.to_lowercase(), clean_name)),
         }
     }
 

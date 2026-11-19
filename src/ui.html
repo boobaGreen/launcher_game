@@ -1839,6 +1839,263 @@
         .toast-notification.show {
             transform: translateX(-50%) translateY(0);
         }
+        /* ==========================================================================
+           NINTENDO GAME & WATCH INTEGRATED SIMULATOR CHASSIS
+           ========================================================================== */
+        .gw-handheld {
+            width: 100%;
+            max-width: 640px;
+            background: linear-gradient(135deg, #c5a059 0%, #dfba73 35%, #b38b42 70%, #876527 100%);
+            border: 4px solid #3d2d14;
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.6);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            user-select: none;
+        }
+        .gw-top-bezel {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 8px 12px 8px;
+            border-bottom: 2px solid rgba(61, 45, 20, 0.3);
+        }
+        .gw-brand {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #8b0000;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+        }
+        .gw-series {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 900;
+            color: #2b1d09;
+            letter-spacing: 3px;
+        }
+        .gw-close-btn {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.4);
+            color: #2b1d09;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .gw-close-btn:hover {
+            background: #8b0000;
+            color: #fff;
+        }
+        .gw-title-plate {
+            text-align: center;
+            margin: 8px 0 14px 0;
+        }
+        .gw-title-plate h2 {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 1.4rem;
+            color: #1a1205;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin: 0;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        .gw-game-model {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #573e16;
+            letter-spacing: 1.5px;
+        }
+        .gw-screen-bezel {
+            width: 100%;
+            background: #252422;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: inset 0 6px 14px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(255, 255, 255, 0.15);
+            border: 2px solid #141312;
+            display: flex;
+            justify-content: center;
+        }
+        .gw-lcd-screen {
+            width: 100%;
+            max-width: 480px;
+            background: #9aa486;
+            border: 2px solid #6b7558;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.35);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        .gw-lcd-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 900;
+            color: #1c2214;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed rgba(28, 34, 20, 0.3);
+            margin-bottom: 8px;
+        }
+        .gw-lcd-subbar {
+            display: flex;
+            gap: 10px;
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+        }
+        .gw-lcd-score-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .gw-score-label {
+            font-size: 0.60rem;
+            letter-spacing: 1.5px;
+            opacity: 0.8;
+        }
+        .gw-score-digits {
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+        }
+        .gw-misses-box {
+            display: flex;
+            gap: 6px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+        .gw-miss-icon {
+            opacity: 0.15;
+            transition: opacity 0.15s;
+        }
+        .gw-miss-icon.active {
+            opacity: 1;
+            color: #1c2214;
+        }
+        .gw-canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: transparent;
+            image-rendering: pixelated;
+        }
+        .gw-gameover-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(154, 164, 134, 0.88);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .gw-go-text {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 2rem;
+            color: #1c2214;
+            letter-spacing: 4px;
+        }
+        .gw-go-sub {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #333d26;
+            margin-top: 6px;
+        }
+        .gw-controls-panel {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 0 12px;
+        }
+        .gw-side-ctrls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .gw-btn-round {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a81c1c 0%, #6e0f0f 100%);
+            border: 3px solid #4a0808;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.35);
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.05s, box-shadow 0.05s;
+        }
+        .gw-btn-round:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .gw-btn-sublabel {
+            font-size: 0.65rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: #2b1d09;
+        }
+        .gw-center-system-keys {
+            display: flex;
+            gap: 16px;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(61, 45, 20, 0.3);
+        }
+        .gw-sys-key-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .gw-btn-pill {
+            background: linear-gradient(180deg, #eaeaea, #999);
+            border: 2px solid #555;
+            border-radius: 6px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            color: #111;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        }
+        .gw-btn-pill:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .gw-pill-label {
+            font-size: 0.55rem;
+            font-weight: 800;
+            color: #3d2d14;
+            letter-spacing: 1px;
+        }
+        .gw-hud-hints {
+            margin-top: 14px;
+            font-size: 0.68rem;
+            color: rgba(43, 29, 9, 0.75);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -2946,6 +3203,89 @@
             <div style="display: flex; justify-content: center; gap: 12px;">
                 <button type="button" class="btn btn-secondary" id="confirmModalCancelBtn" style="padding: 8px 20px; font-size: 0.82rem;" onclick="closeConfirmModal(false)">Annulla</button>
                 <button type="button" class="btn btn-primary" id="confirmModalOkBtn" style="padding: 8px 22px; font-size: 0.82rem;" onclick="closeConfirmModal(true)">Conferma</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODALE 11: SIMULATORE NINTENDO GAME & WATCH INTEGRATO (ZERO-BYTE / 0-CONFIG)
+         ========================================================================== -->
+    <div class="modal-backdrop" id="gameWatchModal" style="z-index: 500;">
+        <div class="modal-window" style="max-width: 660px; background: transparent; border: none; box-shadow: none; padding: 0; display: flex; justify-content: center;">
+            <div class="gw-handheld" id="gwHandheld">
+                <div class="gw-top-bezel">
+                    <span class="gw-brand">Nintendo</span>
+                    <span class="gw-series" id="gwSeriesTitle">GAME & WATCH</span>
+                    <button type="button" class="gw-close-btn" onclick="closeGameWatchSimulator()" title="Chiudi simulatore">✕</button>
+                </div>
+
+                <div class="gw-title-plate">
+                    <h2 id="gwGameTitle">BALL</h2>
+                    <span class="gw-game-model" id="gwGameModel">AC-01 • 1980</span>
+                </div>
+
+                <!-- LCD Screen Housing -->
+                <div class="gw-screen-bezel">
+                    <div class="gw-lcd-screen" id="gwLcdScreen">
+                        <!-- Top LCD Bar: Score, High Score, Game Mode, Misses -->
+                        <div class="gw-lcd-header">
+                            <div class="gw-lcd-subbar">
+                                <span class="gw-mode-tag" id="gwModeTag">GAME A</span>
+                                <span class="gw-time-tag" id="gwTimeTag">TIME 12:00</span>
+                            </div>
+                            <div class="gw-lcd-score-box">
+                                <span class="gw-score-label">SCORE</span>
+                                <span class="gw-score-digits" id="gwScoreDigits">000</span>
+                            </div>
+                            <div class="gw-misses-box">
+                                <span class="gw-miss-icon" id="gwMiss1">✕</span>
+                                <span class="gw-miss-icon" id="gwMiss2">✕</span>
+                                <span class="gw-miss-icon" id="gwMiss3">✕</span>
+                            </div>
+                        </div>
+
+                        <!-- Canvas Interactive LCD Matrix -->
+                        <canvas id="gwCanvas" width="460" height="260" class="gw-canvas"></canvas>
+
+                        <!-- Game Over overlay -->
+                        <div class="gw-gameover-overlay" id="gwGameOverOverlay" style="display: none;">
+                            <span class="gw-go-text">GAME OVER</span>
+                            <span class="gw-go-sub">Premi GAME A per ricominciare</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Handheld Bottom Controls Panel -->
+                <div class="gw-controls-panel">
+                    <div class="gw-side-ctrls left">
+                        <button type="button" class="gw-btn-round" id="gwBtnLeft" onmousedown="gwInputLeft()" ontouchstart="gwInputLeft()">◄</button>
+                        <span class="gw-btn-sublabel">LEFT</span>
+                    </div>
+
+                    <div class="gw-center-system-keys">
+                        <div class="gw-sys-key-col">
+                            <button type="button" class="gw-btn-pill" onclick="gwStartGame('A')">GAME A</button>
+                            <span class="gw-pill-label">NORMALE</span>
+                        </div>
+                        <div class="gw-sys-key-col">
+                            <button type="button" class="gw-btn-pill" onclick="gwStartGame('B')">GAME B</button>
+                            <span class="gw-pill-label">ESPERTO</span>
+                        </div>
+                        <div class="gw-sys-key-col">
+                            <button type="button" class="gw-btn-pill" id="gwAudioBtn" onclick="gwToggleSound()">AUDIO 🔊</button>
+                            <span class="gw-pill-label">PIEZO</span>
+                        </div>
+                    </div>
+
+                    <div class="gw-side-ctrls right">
+                        <button type="button" class="gw-btn-round" id="gwBtnRight" onmousedown="gwInputRight()" ontouchstart="gwInputRight()">►</button>
+                        <span class="gw-btn-sublabel">RIGHT</span>
+                    </div>
+                </div>
+
+                <div class="gw-hud-hints">
+                    Tasti: ◄ / ► o A / D • Spazio: Azione • Invio: Game A • Esc: Esci • Gamepad: D-Pad / Stick
+                </div>
             </div>
         </div>
     </div>
@@ -5059,6 +5399,12 @@
             const g = allGames.find(x => x.id === id);
             if (!g) return;
 
+            // Avvio istantaneo simulatore autentico Game & Watch integrato a zero-byte
+            if (g.system_code === 'GAMEWATCH' || g.system_code === 'LCD') {
+                openGameWatchSimulator(g);
+                return;
+            }
+
             if (activeDownloads.has(id)) {
                 // Download già in esecuzione
                 return;
@@ -5095,7 +5441,8 @@
                     }
                 }
             } catch (e) {
-                showToast(isEn ? 'Backend communication error.' : 'Errore di comunicazione col backend.');
+                console.error('Launch exception:', e);
+                showToast(isEn ? `Launch error: ${e.message || e}` : `Errore avvio: ${e.message || e}`);
             }
         }
 
@@ -6453,25 +6800,12 @@
             const descEl = document.getElementById('emuSetupDesc');
             const webBtn = document.getElementById('emuSetupWebBtn');
             const optionsBtn = document.getElementById('emuSetupOptionsBtn');
+            const autoInstallBtn = document.getElementById('emuSetupAutoInstallBtn');
 
             if (game.system_code === 'GAMEWATCH' || game.system_code === 'LCD') {
-                if (iconEl) iconEl.innerText = '📟';
-                if (titleEl) titleEl.innerText = t('emu_setup_title');
-                if (badgeEl) badgeEl.innerText = `Nintendo Game & Watch — ${game.title}`;
-                if (descEl) {
-                    descEl.innerText = (currentLang === 'en')
-                        ? `To play this Game & Watch title with full simulation, configure RetroArch (Handheld core) in Options, or launch the authentic interactive web simulator instantly in your browser.`
-                        : ((currentLang === 'es')
-                            ? `Para jugar a este título Game & Watch, configura RetroArch (core Handheld) en Opciones, o inicia el simulador interactivo web de inmediato en tu navegador.`
-                            : `Per avviare questo capolavoro Game & Watch con la simulazione fisica originale, configura RetroArch (core Handheld) nelle Opzioni, oppure gioca subito online tramite il simulatore web autentico.`);
-                }
-                if (webBtn) webBtn.style.display = 'block';
-                if (optionsBtn) {
-                    optionsBtn.className = 'btn btn-secondary';
-                    optionsBtn.style.color = 'var(--accent-cyan)';
-                    optionsBtn.style.borderColor = 'rgba(0, 243, 255, 0.35)';
-                    optionsBtn.style.background = 'rgba(255, 255, 255, 0.06)';
-                }
+                closeEmulatorSetupModal();
+                openGameWatchSimulator(game);
+                return;
             } else if (game.system_code === 'PINBALL') {
                 if (autoInstallBtn) {
                     autoInstallBtn.style.display = 'block';
@@ -6751,16 +7085,16 @@
             if (!ok) return;
 
             try {
-                await fetch('/api/factory-reset', { method: 'POST' }).catch(() => {});
+                closeSettingsModal();
                 localStorage.removeItem('retrohub_wizard_completed');
                 localStorage.removeItem('retrohub_downloaded_ids');
                 localStorage.setItem('retrohub_app_version', '0.46.0');
                 downloadedGameIds.clear();
-                closeSettingsModal();
                 showToast(isEn ? '🔄 Reset complete: restarting wizard...' : (isEs ? '🔄 Restablecimiento completo: reiniciando...' : '🔄 Reset completato: riavvio Setup Wizard...'));
                 setTimeout(() => {
                     openWizardModal(true);
-                }, 350);
+                }, 120);
+                fetch('/api/factory-reset', { method: 'POST' }).catch(() => {});
             } catch (e) {
                 console.error('Errore reset:', e);
             }
@@ -6982,6 +7316,325 @@
         function escapeHtml(str) {
             if (!str) return '';
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        // ==========================================================================
+        // SIMULATORE NINTENDO GAME & WATCH INTEGRATO A ZERO CONFIGURAZIONE
+        // ==========================================================================
+        let gwCurrentGame = null;
+        let gwAudioCtx = null;
+        let gwSoundEnabled = true;
+        let gwAnimFrame = null;
+        let gwGameState = {
+            mode: 'A', // 'A' or 'B'
+            score: 0,
+            highScore: 0,
+            misses: 0,
+            gameOver: false,
+            playerPos: 1, // 0: Left, 1: Center, 2: Right
+            items: [],
+            lastTick: 0,
+            tickInterval: 480, // ms between moves
+            subTick: 0
+        };
+
+        function initGwAudio() {
+            if (!gwAudioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) gwAudioCtx = new AudioContextClass();
+            }
+            if (gwAudioCtx && gwAudioCtx.state === 'suspended') {
+                gwAudioCtx.resume();
+            }
+        }
+
+        function playGwPiezoSound(type) {
+            if (!gwSoundEnabled) return;
+            initGwAudio();
+            if (!gwAudioCtx) return;
+            try {
+                const now = gwAudioCtx.currentTime;
+                const osc = gwAudioCtx.createOscillator();
+                const gain = gwAudioCtx.createGain();
+                osc.type = 'square';
+                osc.connect(gain);
+                gain.connect(gwAudioCtx.destination);
+
+                if (type === 'tick') {
+                    osc.frequency.setValueAtTime(4096, now);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+                    osc.start(now);
+                    osc.stop(now + 0.02);
+                } else if (type === 'catch') {
+                    osc.frequency.setValueAtTime(3200, now);
+                    osc.frequency.setValueAtTime(4096, now + 0.03);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+                    osc.start(now);
+                    osc.stop(now + 0.07);
+                } else if (type === 'miss') {
+                    osc.frequency.setValueAtTime(240, now);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.20);
+                    osc.start(now);
+                    osc.stop(now + 0.20);
+                }
+            } catch (e) {}
+        }
+
+        function gwToggleSound() {
+            gwSoundEnabled = !gwSoundEnabled;
+            const btn = document.getElementById('gwAudioBtn');
+            if (btn) btn.innerText = gwSoundEnabled ? 'AUDIO 🔊' : 'MUTE 🔇';
+            if (gwSoundEnabled) playGwPiezoSound('catch');
+        }
+
+        function openGameWatchSimulator(game) {
+            gwCurrentGame = game;
+            initGwAudio();
+
+            const modal = document.getElementById('gameWatchModal');
+            const titleEl = document.getElementById('gwGameTitle');
+            const modelEl = document.getElementById('gwGameModel');
+            if (titleEl) titleEl.innerText = game.title.replace(/Game & Watch|Nintendo/gi, '').trim().toUpperCase();
+            if (modelEl) modelEl.innerText = `${game.genre || 'LCD Handheld'} • ${game.year || 1980}`;
+
+            const savedHs = localStorage.getItem(`retrohub_gw_hs_${game.id}`);
+            gwGameState.highScore = savedHs ? parseInt(savedHs, 10) : 100;
+
+            gwStartGame('A');
+
+            if (modal) modal.classList.add('open');
+            window.addEventListener('keydown', handleGwKeyNav);
+        }
+
+        function closeGameWatchSimulator() {
+            if (gwAnimFrame) {
+                cancelAnimationFrame(gwAnimFrame);
+                gwAnimFrame = null;
+            }
+            const modal = document.getElementById('gameWatchModal');
+            if (modal) modal.classList.remove('open');
+            window.removeEventListener('keydown', handleGwKeyNav);
+        }
+
+        function gwStartGame(mode) {
+            gwGameState.mode = mode;
+            gwGameState.score = 0;
+            gwGameState.misses = 0;
+            gwGameState.gameOver = false;
+            gwGameState.playerPos = 1;
+            gwGameState.items = [];
+            gwGameState.lastTick = performance.now();
+            gwGameState.tickInterval = (mode === 'B') ? 340 : 460;
+            gwGameState.subTick = 0;
+
+            const modeTag = document.getElementById('gwModeTag');
+            if (modeTag) modeTag.innerText = `GAME ${mode}`;
+
+            const goOverlay = document.getElementById('gwGameOverOverlay');
+            if (goOverlay) goOverlay.style.display = 'none';
+
+            updateGwHeaderUI();
+            playGwPiezoSound('catch');
+
+            if (gwAnimFrame) cancelAnimationFrame(gwAnimFrame);
+            gwAnimFrame = requestAnimationFrame(gwGameLoop);
+        }
+
+        function updateGwHeaderUI() {
+            const scoreEl = document.getElementById('gwScoreDigits');
+            if (scoreEl) scoreEl.innerText = String(gwGameState.score).padStart(3, '0');
+
+            for (let i = 1; i <= 3; i++) {
+                const el = document.getElementById(`gwMiss${i}`);
+                if (el) {
+                    if (gwGameState.misses >= i) {
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+                }
+            }
+        }
+
+        function gwInputLeft() {
+            if (gwGameState.gameOver) return;
+            if (gwGameState.playerPos > 0) {
+                gwGameState.playerPos--;
+                playGwPiezoSound('tick');
+            }
+        }
+
+        function gwInputRight() {
+            if (gwGameState.gameOver) return;
+            if (gwGameState.playerPos < 2) {
+                gwGameState.playerPos++;
+                playGwPiezoSound('tick');
+            }
+        }
+
+        function handleGwKeyNav(e) {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                gwInputLeft();
+                e.preventDefault();
+            } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                gwInputRight();
+                e.preventDefault();
+            } else if (e.key === 'Enter') {
+                gwStartGame(gwGameState.mode);
+                e.preventDefault();
+            } else if (e.key === 'Escape') {
+                closeGameWatchSimulator();
+                e.preventDefault();
+            }
+        }
+
+        function gwGameLoop(timestamp) {
+            const canvas = document.getElementById('gwCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            const elapsed = timestamp - gwGameState.lastTick;
+            if (!gwGameState.gameOver && elapsed >= gwGameState.tickInterval) {
+                gwGameState.lastTick = timestamp;
+                gwGameState.subTick++;
+
+                // Generazione nuovo elemento (pallina, oggetto lanciato)
+                const spawnRate = (gwGameState.mode === 'B') ? 4 : 6;
+                if (gwGameState.subTick % spawnRate === 0) {
+                    const tracks = [0, 1, 2];
+                    const chosenTrack = tracks[Math.floor(Math.random() * tracks.length)];
+                    gwGameState.items.push({ track: chosenTrack, step: 0, maxSteps: 5 });
+                }
+
+                // Avanzamento elementi
+                for (let i = gwGameState.items.length - 1; i >= 0; i--) {
+                    const it = gwGameState.items[i];
+                    it.step++;
+
+                    playGwPiezoSound('tick');
+
+                    if (it.step === it.maxSteps) {
+                        // Controllo presa
+                        if (it.track === gwGameState.playerPos) {
+                            gwGameState.score += (gwGameState.mode === 'B' ? 2 : 1);
+                            if (gwGameState.score > gwGameState.highScore) {
+                                gwGameState.highScore = gwGameState.score;
+                                if (gwCurrentGame) {
+                                    localStorage.setItem(`retrohub_gw_hs_${gwCurrentGame.id}`, gwGameState.highScore);
+                                }
+                            }
+                            // Accelerazione progressiva stile Game & Watch
+                            gwGameState.tickInterval = Math.max(180, (gwGameState.mode === 'B' ? 340 : 460) - Math.floor(gwGameState.score / 5) * 15);
+                            playGwPiezoSound('catch');
+                            gwGameState.items.splice(i, 1);
+                            updateGwHeaderUI();
+                        } else {
+                            // Mancata presa (Miss)
+                            gwGameState.misses++;
+                            playGwPiezoSound('miss');
+                            gwGameState.items.splice(i, 1);
+                            updateGwHeaderUI();
+
+                            if (gwGameState.misses >= 3) {
+                                gwGameState.gameOver = true;
+                                const goOverlay = document.getElementById('gwGameOverOverlay');
+                                if (goOverlay) goOverlay.style.display = 'flex';
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Rendering fotogramma LCD
+            ctx.clearRect(0, 0, w, h);
+
+            // Pattern griglia segmenti LCD disattivi
+            ctx.fillStyle = 'rgba(28, 34, 20, 0.05)';
+            for (let x = 0; x < w; x += 6) {
+                ctx.fillRect(x, 0, 1, h);
+            }
+
+            // Archi e binari di gioco vintage
+            ctx.strokeStyle = 'rgba(28, 34, 20, 0.18)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(80, 70, 40, 0, Math.PI, true);
+            ctx.arc(230, 60, 45, 0, Math.PI, true);
+            ctx.arc(380, 70, 40, 0, Math.PI, true);
+            ctx.stroke();
+
+            const trackX = [80, 230, 380];
+            const stepY = [40, 80, 120, 160, 200, 225];
+
+            // Render elementi LCD in caduta
+            ctx.fillStyle = '#1c2214';
+            ctx.strokeStyle = '#1c2214';
+            for (const it of gwGameState.items) {
+                const tx = trackX[it.track];
+                const ty = stepY[Math.min(it.step, stepY.length - 1)];
+
+                ctx.beginPath();
+                ctx.arc(tx, ty, 9, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.lineWidth = 2;
+                ctx.strokeRect(tx - 11, ty - 11, 22, 22);
+            }
+
+            // Render personaggio Mr. Game & Watch
+            const px = trackX[gwGameState.playerPos];
+            const py = 220;
+
+            ctx.fillStyle = '#1c2214';
+            // Testa rotonda
+            ctx.beginPath();
+            ctx.arc(px, py - 26, 12, 0, Math.PI * 2);
+            ctx.fill();
+            // Naso sagomato Gunpei Yokoi
+            ctx.fillRect(px + (gwGameState.playerPos === 0 ? 8 : (gwGameState.playerPos === 2 ? -12 : 8)), py - 28, 6, 4);
+
+            // Corpo
+            ctx.fillRect(px - 10, py - 14, 20, 22);
+
+            // Braccia con palette di presa
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(px - 8, py - 8);
+            ctx.lineTo(px - 24, py - 18);
+            ctx.lineTo(px - 28, py - 26);
+            ctx.moveTo(px + 8, py - 8);
+            ctx.lineTo(px + 24, py - 18);
+            ctx.lineTo(px + 28, py - 26);
+            ctx.stroke();
+
+            // Gambe
+            ctx.beginPath();
+            ctx.moveTo(px - 5, py + 8);
+            ctx.lineTo(px - 12, py + 26);
+            ctx.moveTo(px + 5, py + 8);
+            ctx.lineTo(px + 12, py + 26);
+            ctx.stroke();
+
+            // Mani di presa LCD
+            ctx.fillRect(px - 34, py - 28, 12, 6);
+            ctx.fillRect(px + 22, py - 28, 12, 6);
+
+            // Linea del pavimento
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(20, py + 28);
+            ctx.lineTo(w - 20, py + 28);
+            ctx.stroke();
+
+            if (!gwGameState.gameOver) {
+                gwAnimFrame = requestAnimationFrame(gwGameLoop);
+            }
         }
     </script>
 </body>

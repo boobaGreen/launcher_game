@@ -15,6 +15,7 @@ use std::process::Command;
 static VPX_INSTALL_PROGRESS: AtomicU32 = AtomicU32::new(0);
 static VPX_INSTALL_MSG: Mutex<Option<String>> = Mutex::new(None);
 
+#[derive(Clone)]
 pub struct HttpServer {
     db: Arc<Mutex<Database>>,
     netplay: Arc<NetplayManager>,
@@ -84,27 +85,39 @@ impl HttpServer {
 
         println!("🚀 RetroHub UI Server in ascolto su: http://{}", addr);
 
-        for mut request in server.incoming_requests() {
-            if self.shutdown.load(Ordering::SeqCst) {
+        let self_arc = Arc::new(self.clone());
+
+        for request in server.incoming_requests() {
+            if self_arc.shutdown.load(Ordering::SeqCst) {
                 break;
             }
 
             // Heartbeat timeout: se il browser non manda ping per 300 secondi (5 min), spegni il server
-            let last = self.last_ping.load(Ordering::SeqCst);
+            let last = self_arc.last_ping.load(Ordering::SeqCst);
             if last > 0 && now_secs().saturating_sub(last) > 300 {
                 break;
             }
 
-            let url = request.url().to_string();
-            let method = request.method().clone();
+            let s = Arc::clone(&self_arc);
+            std::thread::spawn(move || {
+                s.handle_request(request);
+            });
+        }
 
-            // Reset del timer heartbeat quando arriva una richiesta reale: il client ha il focus
-            // e sta interagendo, quindi il server non deve spegnersi per timeout.
-            if method != Method::Get || (!url.starts_with("/api/cover") && !url.starts_with("/covers/")) {
-                self.last_ping.store(now_secs(), Ordering::SeqCst);
-            }
+        Ok(())
+    }
 
-            let (path, query_params) = parse_url(&url);
+    pub fn handle_request(&self, mut request: tiny_http::Request) {
+        let url = request.url().to_string();
+        let method = request.method().clone();
+
+        // Reset del timer heartbeat quando arriva una richiesta reale: il client ha il focus
+        // e sta interagendo, quindi il server non deve spegnersi per timeout.
+        if method != Method::Get || (!url.starts_with("/api/cover") && !url.starts_with("/covers/")) {
+            self.last_ping.store(now_secs(), Ordering::SeqCst);
+        }
+
+        let (path, query_params) = parse_url(&url);
 
             // Servizio immagini locali generiche per file nel workspace / covers / emu
             let is_cover_file = (method == Method::Get || method == Method::Head) && path.starts_with("/api/cover/file/");
@@ -165,11 +178,11 @@ impl HttpServer {
                         let body = if method == Method::Head { Vec::new() } else { bytes };
                         let response = Response::from_data(body).with_header(header_ct).with_header(header_cache);
                         let _ = request.respond(response);
-                        continue;
+                        return;
                     }
                 }
                 let _ = request.respond(Response::empty(404));
-                continue;
+                return;
             }
 
             // Servizio immagini locali MAME ad alta velocità (Flyers, Titles, Snaps)
@@ -207,12 +220,12 @@ impl HttpServer {
                             let body = if method == Method::Head { Vec::new() } else { bytes };
                             let response = Response::from_data(body).with_header(header_ct).with_header(header_cache);
                             let _ = request.respond(response);
-                            continue;
+                            return;
                         }
                     }
                 }
                 let _ = request.respond(Response::empty(404));
-                continue;
+                return;
             }
 
             // Servizio boxart locali SEGA NAOMI / ATOMISWAVE (18 boxart ad alta risoluzione su disco a 0ms)
@@ -241,12 +254,12 @@ impl HttpServer {
                             let body = if method == Method::Head { Vec::new() } else { bytes };
                             let response = Response::from_data(body).with_header(header_ct).with_header(header_cache);
                             let _ = request.respond(response);
-                            continue;
+                            return;
                         }
                     }
                 }
                 let _ = request.respond(Response::empty(404));
-                continue;
+                return;
             }
 
             match (&method, path.as_str()) {
@@ -669,7 +682,7 @@ impl HttpServer {
                         let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
                         let response = Response::from_string(resp.to_string()).with_header(header);
                         let _ = request.respond(response);
-                        continue;
+                        return;
                     }
 
                     VPX_INSTALL_PROGRESS.store(5, Ordering::SeqCst);
@@ -890,8 +903,15 @@ impl HttpServer {
 
                     let res_json = match req {
                         Ok(r) => {
-                            let db = self.db.lock().unwrap();
-                            if let Ok(Some(game)) = db.get_game_by_id(r.game_id) {
+                            let game_info = {
+                                if let Ok(db) = self.db.lock() {
+                                    db.get_game_by_id(r.game_id).ok().flatten()
+                                } else {
+                                    None
+                                }
+                            };
+
+                            if let Some(game) = game_info {
                                 let rom_name = crate::download_manager::DownloadManager::get_rom_filename(&game.title, &game.launch_target, &game.system_code);
                                 match crate::download_manager::DownloadManager::download_rom(game.id, &rom_name, &game.system_code) {
                                     Ok(path) => {
@@ -901,7 +921,9 @@ impl HttpServer {
                                         } else {
                                             path.to_string_lossy().to_string()
                                         };
-                                        let _ = db.update_launch_target(game.id, &target_str);
+                                        if let Ok(db) = self.db.lock() {
+                                            let _ = db.update_launch_target(game.id, &target_str);
+                                        }
                                         serde_json::to_string(&serde_json::json!({
                                             "success": true,
                                             "message": format!("ROM scaricata con successo per: {}", game.title),
@@ -1029,8 +1051,8 @@ impl HttpServer {
 
                 // SETTINGS API - Factory Reset (Nuovo Utente Pulito)
                 (&Method::Post, "/api/factory-reset") => {
-                    // 1. Elimina cartelle locali temporanee del launcher (MAI toccare cartelle esterne o ROM utente)
-                    let cache_dirs = ["covers", "retro_downloads", "downloads"];
+                    // 1. Elimina cartelle locali temporanee del launcher (MAI toccare cartelle esterne, copertine repo o ROM utente)
+                    let cache_dirs = ["retro_downloads", "downloads"];
                     for d in &cache_dirs {
                         let p = std::path::Path::new(d);
                         if p.exists() && p.is_dir() {
@@ -1080,7 +1102,7 @@ impl HttpServer {
                     let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
                     let response = Response::from_string(r#"{"success": true}"#).with_header(header);
                     let _ = request.respond(response);
-                    break;
+                    return;
                 }
 
                 _ => {
@@ -1088,9 +1110,6 @@ impl HttpServer {
                     let _ = request.respond(response);
                 }
             }
-        }
-
-        Ok(())
     }
 }
 

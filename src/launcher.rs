@@ -244,22 +244,34 @@ impl Launcher {
             _ => &["zip", "7z", "iso", "rom"],
         };
 
+        static SEARCH_CACHE: std::sync::Mutex<Option<std::collections::HashMap<PathBuf, Vec<(PathBuf, String, String)>>>> = std::sync::Mutex::new(None);
+        let mut guard = SEARCH_CACHE.lock().unwrap();
+        let cache = guard.get_or_insert_with(std::collections::HashMap::new);
+
         for dir in &search_dirs {
             if !dir.exists() {
                 continue;
             }
-            if let Ok(entries) = std::fs::read_dir(dir) {
-                for entry in entries.flatten() {
-                    let path = entry.path();
-                    if path.is_file() {
-                        let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
-                        if valid_extensions.contains(&ext.as_str()) {
-                            let file_name = path.file_stem().and_then(|s| s.to_str()).unwrap_or("").to_lowercase();
-                            let t_lower = game.title.to_lowercase();
-                            if file_name == t_lower || file_name.starts_with(&t_lower) || t_lower.starts_with(&file_name) {
-                                return Some(path.to_string_lossy().to_string());
-                            }
+            let entries = cache.entry(dir.to_path_buf()).or_insert_with(|| {
+                let mut list = Vec::new();
+                if let Ok(rd) = std::fs::read_dir(dir) {
+                    for entry in rd.flatten() {
+                        let p = entry.path();
+                        if p.is_file() {
+                            let ext = p.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+                            let stem = p.file_stem().and_then(|s| s.to_str()).unwrap_or("").to_lowercase();
+                            list.push((p, ext, stem));
                         }
+                    }
+                }
+                list
+            });
+
+            for (path, ext, file_name) in entries {
+                if valid_extensions.contains(&ext.as_str()) {
+                    let t_lower = game.title.to_lowercase();
+                    if file_name == &t_lower || file_name.starts_with(&t_lower) || t_lower.starts_with(file_name.as_str()) {
+                        return Some(path.to_string_lossy().to_string());
                     }
                 }
             }
@@ -277,29 +289,43 @@ impl Launcher {
         let clean_t = t_low.split('(').next().unwrap_or(&t_low).trim();
         let words: Vec<&str> = clean_t.split_whitespace().filter(|w| w.len() > 3).collect();
 
-        if let Ok(entries) = std::fs::read_dir(dir) {
-            for entry in entries.flatten() {
-                let p = entry.path();
-                let name = entry.file_name().to_string_lossy().to_lowercase();
-                if name.ends_with(".lnk") || name.ends_with(".bat") {
-                    if name.contains(clean_t) || (!words.is_empty() && words.iter().all(|w| name.contains(w))) {
-                        return Some(p.to_string_lossy().to_string());
-                    }
+        // Cache statica per scansione cartella istantanea senza ripetere letture disco ridondanti
+        static DIR_CACHE: std::sync::Mutex<Option<std::collections::HashMap<PathBuf, Vec<(PathBuf, String, bool)>>>> = std::sync::Mutex::new(None);
+        let mut guard = DIR_CACHE.lock().unwrap();
+        let cache = guard.get_or_insert_with(std::collections::HashMap::new);
+
+        let entries = cache.entry(dir.to_path_buf()).or_insert_with(|| {
+            let mut list = Vec::new();
+            if let Ok(rd) = std::fs::read_dir(dir) {
+                for e in rd.flatten() {
+                    let p = e.path();
+                    let name = e.file_name().to_string_lossy().to_lowercase();
+                    let is_dir = p.is_dir();
+                    list.push((p, name, is_dir));
                 }
-                if p.is_dir() {
-                    let dir_name = name;
-                    if dir_name.contains(clean_t) || (!words.is_empty() && words.iter().all(|w| dir_name.contains(w))) {
-                        let gioca = p.join("Gioca.lnk");
-                        if gioca.exists() {
-                            return Some(gioca.to_string_lossy().to_string());
-                        }
-                        if let Ok(sub_entries) = std::fs::read_dir(&p) {
-                            for sub in sub_entries.flatten() {
-                                let sub_p = sub.path();
-                                let ext = sub_p.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
-                                if ["chd", "cue", "iso", "bin", "pbp", "cdi", "gdi", "sfc", "z64"].contains(&ext.as_str()) {
-                                    return Some(sub_p.to_string_lossy().to_string());
-                                }
+            }
+            list
+        });
+
+        for (p, name, is_dir) in entries {
+            if name.ends_with(".lnk") || name.ends_with(".bat") {
+                if name.contains(clean_t) || (!words.is_empty() && words.iter().all(|w| name.contains(w))) {
+                    return Some(p.to_string_lossy().to_string());
+                }
+            }
+            if *is_dir {
+                let dir_name = name;
+                if dir_name.contains(clean_t) || (!words.is_empty() && words.iter().all(|w| dir_name.contains(w))) {
+                    let gioca = p.join("Gioca.lnk");
+                    if gioca.exists() {
+                        return Some(gioca.to_string_lossy().to_string());
+                    }
+                    if let Ok(sub_entries) = std::fs::read_dir(p) {
+                        for sub in sub_entries.flatten() {
+                            let sub_p = sub.path();
+                            let ext = sub_p.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+                            if ["chd", "cue", "iso", "bin", "pbp", "cdi", "gdi", "sfc", "z64"].contains(&ext.as_str()) {
+                                return Some(sub_p.to_string_lossy().to_string());
                             }
                         }
                     }
@@ -340,9 +366,15 @@ impl Launcher {
         let ext_lower = ext.to_lowercase();
 
         let relative_candidates: &[&str] = if sys_upper.contains("SNES") || ext_lower == "sfc" || ext_lower == "smc" {
-            &["SNES/snes9x-x64.exe", "SNES/snes9x.exe", "snes9x/snes9x-x64.exe", "snes9x/snes9x.exe"]
+            &["SNES/snes9x-x64.exe", "SNES/snes9x.exe", "snes9x/snes9x-x64.exe", "snes9x/snes9x.exe", "NES/Mesen/Mesen.exe"]
         } else if sys_upper.contains("NES") || ext_lower == "nes" {
             &["NES/Mesen/Mesen.exe", "NES/Mesen.exe", "NES/fceux.exe", "mesen/Mesen.exe", "fceux/fceux.exe"]
+        } else if sys_upper == "GBA" || sys_upper == "GB" || sys_upper == "GBC" || ext_lower == "gba" || ext_lower == "gb" || ext_lower == "gbc" {
+            &["NES/Mesen/Mesen.exe", "GBA/mgba.exe", "mgba/mgba.exe", "VisualBoyAdvance/VisualBoyAdvance.exe"]
+        } else if sys_upper.contains("PCENGINE") || sys_upper.contains("PCE") || sys_upper.contains("TURBOGRAFX") || ext_lower == "pce" {
+            &["NES/Mesen/Mesen.exe"]
+        } else if sys_upper.contains("MEGADRIVE") || sys_upper.contains("GENESIS") || sys_upper.contains("MASTERSYSTEM") || sys_upper.contains("GAMEGEAR") || ext_lower == "md" || ext_lower == "bin" || ext_lower == "sms" || ext_lower == "gg" {
+            &["NES/Mesen/Mesen.exe", "MegaDrive/Fusion.exe", "Genesis/Fusion.exe"]
         } else if sys_upper.contains("C64") || ext_lower == "d64" || ext_lower == "t64" || ext_lower == "prg" {
             &["C64/VICE/GTK3VICE-3.10-win64/bin/x64sc.exe", "C64/x64sc.exe", "vice/x64sc.exe", "C64/VICE/x64sc.exe"]
         } else if sys_upper.contains("DREAMCAST") || sys_upper.contains("NAOMI") || ext_lower == "cdi" || ext_lower == "gdi" {
@@ -493,7 +525,7 @@ impl Launcher {
             let rompaths = format!(r#"roms;{};{}"#, dl_mame.display(), mame_dir.join("roms").display());
 
             let script = format!(
-                r#"$p = Start-Process -FilePath ".\mame.exe" -ArgumentList '{} -skip_gameinfo -rompath "{}"' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
+                r#"$p = Start-Process -FilePath ".\mame.exe" -ArgumentList '{} -skip_gameinfo -numscreens 1 -screen auto -screen0 auto -rompath "{}"' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
                 rom.trim(),
                 rompaths.replace('\'', "''"),
                 mame_dir.display().to_string().replace('\'', "''")

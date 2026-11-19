@@ -1,6 +1,6 @@
 {
   "emulator_paths": {
-    "mame": "C:\\Users\\ClaudioDall'Ara\\Desktop\\Clod\\emu\\mame\\mame.exe",
+    "mame": null,
     "gluiz": null,
     "retroarch": null,
     "snes9x": null,
