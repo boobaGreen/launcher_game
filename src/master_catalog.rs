@@ -16,6 +16,13 @@ impl MasterCatalog {
             }
         };
 
+        // Strict safety filter: ensure zero BIOS, diagnostic, or hardware test cartridges enter the catalog
+        games.retain(|g| {
+            let t = g.title.to_lowercase();
+            let gen = g.genre.to_lowercase();
+            !t.contains("bios") && !t.contains("firmware") && !gen.contains("bios")
+        });
+
         // Reassign sequential IDs based on start_id and guarantee is_installed = false
         let mut id = start_id;
         for g in &mut games {

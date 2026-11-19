@@ -1803,16 +1803,6 @@
         <!-- Filter Sub-Bar: Switches & Tag Pills -->
         <div class="filter-sub-bar">
             <div class="filter-switches">
-                <!-- Selettore Set: Hall of Fame vs 1G1R Completo -->
-                <div class="toggle-switch-group" id="groupCatalogMode" title="Scegli tra la selezione d'élite Hall of Fame o la collezione completa 1G1R">
-                    <button id="toggleModeCurated" class="toggle-btn active" onclick="setCatalogMode('curated')" title="Visualizza solo i capolavori selezionati (Hall of Fame, senza duplicati)">
-                        <span data-i18n="mode_curated">🌟 Hall of Fame</span> (<span id="countCurated">1.734</span>)
-                    </button>
-                    <button id="toggleModeFull" class="toggle-btn" onclick="setCatalogMode('full')" title="Visualizza la collezione completa 1G1R (senza cloni, BIOS o utility non-gioco)">
-                        <span data-i18n="mode_full">📚 Collezione 1G1R</span> (<span id="countFull">1.734</span>)
-                    </button>
-                </div>
-
                 <!-- Selettore Storage: Cloud vs Scaricati -->
                 <div class="toggle-switch-group">
                     <button id="toggleAllCloud" class="toggle-btn active" onclick="setStorageFilter('all')">
@@ -3478,19 +3468,25 @@
         function initHeroSpotlight() {
             if (!allGames || allGames.length === 0) return;
 
+            // Filtro di sicurezza assoluto: nessun BIOS, firmware o file diagnostico può mai entrare nella Hero
+            const playablePool = allGames.filter(g => {
+                const t = g.title.toLowerCase();
+                return !t.includes('bios') && !t.includes('firmware') && !t.includes('diagnostic');
+            });
+
             if (heroSource === 'favorites') {
-                heroList = allGames.filter(g => g.is_favorite);
-                if (heroList.length === 0) heroList = allGames.slice(0, 8);
+                heroList = playablePool.filter(g => g.is_favorite);
+                if (heroList.length === 0) heroList = playablePool.slice(0, 8);
             } else if (heroSource === 'recent') {
-                heroList = allGames.filter(g => g.last_played_at || g.play_count > 0);
-                if (heroList.length === 0) heroList = allGames.slice(0, 8);
+                heroList = playablePool.filter(g => g.last_played_at || g.play_count > 0);
+                if (heroList.length === 0) heroList = playablePool.slice(0, 8);
             } else if (heroSource === 'custom') {
                 const coll = customCollections.find(c => c.id === activeCustomCollectionId) || customCollections[0];
-                heroList = allGames.filter(g => coll?.gameIds?.includes(g.id));
-                if (heroList.length === 0) heroList = allGames.slice(0, 8);
+                heroList = playablePool.filter(g => coll?.gameIds?.includes(g.id));
+                if (heroList.length === 0) heroList = playablePool.slice(0, 8);
             } else {
                 // 'random' (A Sorpresa / Gioco Casuale): estrae una selezione fresca e variegata
-                heroList = getShuffledRandomGames(allGames, 8);
+                heroList = getShuffledRandomGames(playablePool, 8);
             }
 
             heroIndex = 0;
@@ -3760,6 +3756,10 @@
         // 4. RENDERING GRIGLIA GIOCHI (AND LOGIC MULTI-FILTRO & ASSET 2:3)
         // --------------------------------------------------------------------------
         function gameMatchesFilters(g, isModalPreview = false, ignoreStorage = false, ignoreCatalogMode = false) {
+            // Regola d'oro: nessun BIOS, firmware o file di test hardware deve mai apparire nella libreria
+            const tLow = g.title.toLowerCase();
+            if (tLow.includes('bios') || tLow.includes('firmware') || tLow.includes('diagnostic')) return false;
+
             // 0. Catalog Mode: Hall of Fame (Curata) vs Collezione Completa (1G1R)
             if (!ignoreCatalogMode && !isModalPreview && catalogMode === 'curated') {
                 if (g.is_curated === false) return false;
@@ -3871,20 +3871,7 @@
             const grid = document.getElementById('gamesGrid');
             
             // 1. Dynamic Scope Calculation (Macro-family, platform, search query, genre, year, multiplayer, etc.)
-            const baseScopedGames = allGames.filter(g => gameMatchesFilters(g, false, true, true));
-            const scopeCuratedCount = baseScopedGames.filter(g => g.is_curated !== false).length;
-            const scopeFullCount = baseScopedGames.length;
-            
-            const countCuratedEl = document.getElementById('countCurated');
-            if (countCuratedEl) countCuratedEl.innerText = scopeCuratedCount.toLocaleString('it-IT');
-            const countFullEl = document.getElementById('countFull');
-            if (countFullEl) countFullEl.innerText = scopeFullCount.toLocaleString('it-IT');
-
-            // Apply catalog mode filter to scoped games
-            const scopedGames = baseScopedGames.filter(g => {
-                if (catalogMode === 'curated' && g.is_curated === false) return false;
-                return true;
-            });
+            const scopedGames = allGames.filter(g => gameMatchesFilters(g, false, true));
             const scopeCloudCount = scopedGames.length;
             const scopeDownCount = scopedGames.filter(g => isSandboxMode ? false : g.is_installed).length;
             
@@ -5270,17 +5257,6 @@
                 } else {
                     catTitle.innerText = t('catalog_title_all');
                 }
-            }
-
-            const curCount = document.getElementById('countCurated')?.innerText || '0';
-            const fullCount = document.getElementById('countFull')?.innerText || '0';
-            const curBtn = document.getElementById('toggleModeCurated');
-            if (curBtn) {
-                curBtn.innerHTML = `<span data-i18n="mode_curated">${t('mode_curated')}</span> (<span id="countCurated">${curCount}</span>)`;
-            }
-            const fullBtn = document.getElementById('toggleModeFull');
-            if (fullBtn) {
-                fullBtn.innerHTML = `<span data-i18n="mode_full">${t('mode_full')}</span> (<span id="countFull">${fullCount}</span>)`;
             }
 
             const cloudCount = document.getElementById('countCloud')?.innerText || '0';
