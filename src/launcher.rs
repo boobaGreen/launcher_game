@@ -9,9 +9,166 @@ impl Launcher {
         Self::launch_target_with_system(target, "")
     }
 
-    /// Launches a game model with its associated system_code for dedicated emulator resolution.
+    /// Launches a game model with dynamic auto-resolution and dedicated emulator execution.
     pub fn launch_game(game: &crate::models::Game) -> Result<String, String> {
-        Self::launch_target_with_system(&game.launch_target, &game.system_code)
+        let mut target = game.launch_target.clone();
+        if target.trim().is_empty() {
+            if let Some(resolved) = Self::auto_resolve_target(game) {
+                target = resolved;
+            } else {
+                let sys = game.system_code.to_uppercase();
+                if sys == "PINBALL" {
+                    return Err("Tavolo flipper non configurato. Configura Visual Pinball (VPX) nelle Opzioni per avviare questo tavolo.".to_string());
+                }
+                if sys == "GAMEWATCH" || sys == "LCD" {
+                    return Err("Gioco Game & Watch non configurato. Configura RetroArch (core Handheld) nelle Opzioni per avviare questo titolo.".to_string());
+                }
+                return Err(format!("ROM non trovata sul disco per '{}'. Scarica il gioco prima di avviarlo.", game.title));
+            }
+        }
+        Self::launch_target_with_system(&target, &game.system_code)
+    }
+
+    /// Tenta di risolvere automaticamente il file ROM o l'eseguibile sul disco in base a titolo e sistema.
+    pub fn auto_resolve_target(game: &crate::models::Game) -> Option<String> {
+        let sys_upper = game.system_code.to_uppercase();
+        let clean_title = game.title.replace([':', '/', '\\', '?', '*', '"', '<', '>', '|'], "").trim().to_string();
+
+        // 1. MAME / Arcade
+        if sys_upper == "MAME" || sys_upper == "ARCADE" {
+            let map_str = include_str!("mame_rom_map.json");
+            if let Ok(map) = serde_json::from_str::<std::collections::HashMap<String, String>>(map_str) {
+                if let Some(rom) = map.get(&game.title.to_lowercase()) {
+                    return Some(format!("MAME:{}", rom));
+                }
+            }
+            let candidates = [
+                PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\mame\roms").join(format!("{}.zip", clean_title)),
+                PathBuf::from("downloads/mame").join(format!("{}.zip", clean_title)),
+            ];
+            for cand in &candidates {
+                if cand.exists() {
+                    let rom = cand.file_stem().and_then(|s| s.to_str()).unwrap_or(&clean_title);
+                    return Some(format!("MAME:{}", rom));
+                }
+            }
+        }
+
+        // 2. Hypseus / Laserdisc
+        if sys_upper == "HYPSEUS" || sys_upper == "LASERDISC" || sys_upper == "DAPHNE" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Hypseus Singe");
+            let cands = [
+                base.join(format!("Gioca - {}.lnk", clean_title)),
+                base.join(format!("Avvia_{}.bat", clean_title.replace(' ', ""))),
+                base.join("Gioca.lnk"),
+            ];
+            for c in &cands {
+                if c.exists() {
+                    return Some(c.to_string_lossy().to_string());
+                }
+            }
+            if let Ok(entries) = std::fs::read_dir(&base) {
+                for entry in entries.flatten() {
+                    let name = entry.file_name().to_string_lossy().to_lowercase();
+                    let t_lower = game.title.to_lowercase();
+                    if name.ends_with(".lnk") || name.ends_with(".bat") {
+                        if name.contains(&t_lower) || t_lower.split_whitespace().any(|word| word.len() > 3 && name.contains(word)) {
+                            return Some(entry.path().to_string_lossy().to_string());
+                        }
+                    }
+                }
+            }
+        }
+
+        // 3. PC Indie & LocoMalito
+        if sys_upper == "INDIE" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\LocoMalito & Indie");
+            let cands = [
+                base.join(format!("Gioca - {}.lnk", clean_title)),
+                base.join(&clean_title).join("Gioca.lnk"),
+                base.join(&clean_title).join(format!("{}.exe", clean_title)),
+            ];
+            for c in &cands {
+                if c.exists() {
+                    return Some(c.to_string_lossy().to_string());
+                }
+            }
+            if let Ok(entries) = std::fs::read_dir(&base) {
+                for entry in entries.flatten() {
+                    let p = entry.path();
+                    if p.is_dir() {
+                        let dir_name = entry.file_name().to_string_lossy().to_lowercase();
+                        if dir_name.contains(&clean_title.to_lowercase()) {
+                            let gioca = p.join("Gioca.lnk");
+                            if gioca.exists() {
+                                return Some(gioca.to_string_lossy().to_string());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 4. PC Recomp
+        if sys_upper == "RECOMP" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Recomp Library");
+            if let Ok(entries) = std::fs::read_dir(&base) {
+                for entry in entries.flatten() {
+                    let name = entry.file_name().to_string_lossy().to_lowercase();
+                    let t_lower = game.title.to_lowercase();
+                    if name.ends_with(".lnk") && (name.contains(&t_lower) || t_lower.split_whitespace().any(|w| w.len() > 3 && name.contains(w))) {
+                        return Some(entry.path().to_string_lossy().to_string());
+                    }
+                }
+            }
+        }
+
+        // 5. Console & Computer ROMs (downloads/<platform>, emu/<platform>, roms/<platform>)
+        let search_dirs = [
+            PathBuf::from(format!("downloads/{}", game.system_code.to_lowercase())),
+            PathBuf::from(format!("downloads/{}", sys_upper.to_lowercase())),
+            PathBuf::from(format!(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\{}", game.system_code)),
+            PathBuf::from(format!(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\{}\roms", game.system_code)),
+            PathBuf::from(format!("roms/{}", game.system_code.to_lowercase())),
+        ];
+
+        let valid_extensions: &[&str] = match sys_upper.as_str() {
+            "SNES" => &["sfc", "smc", "zip"],
+            "NES" => &["nes", "zip"],
+            "N64" => &["z64", "n64", "v64", "zip"],
+            "GBA" => &["gba", "zip"],
+            "MEGADRIVE" | "GENESIS" => &["md", "bin", "gen", "zip"],
+            "PSX" | "PS1" => &["chd", "cue", "iso", "bin", "pbp"],
+            "GAMECUBE" => &["rvz", "gcm", "iso"],
+            "DREAMCAST" | "NAOMI" => &["cdi", "gdi", "chd", "zip"],
+            "C64" => &["d64", "t64", "prg", "crt", "zip"],
+            "DOS" => &["exe", "bat", "com", "conf"],
+            "SCUMMVM" => &["scummvm", "ini"],
+            _ => &["zip", "7z", "iso", "rom"],
+        };
+
+        for dir in &search_dirs {
+            if !dir.exists() {
+                continue;
+            }
+            if let Ok(entries) = std::fs::read_dir(dir) {
+                for entry in entries.flatten() {
+                    let path = entry.path();
+                    if path.is_file() {
+                        let ext = path.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+                        if valid_extensions.contains(&ext.as_str()) {
+                            let file_name = path.file_stem().and_then(|s| s.to_str()).unwrap_or("").to_lowercase();
+                            let t_lower = game.title.to_lowercase();
+                            if file_name == t_lower || file_name.starts_with(&t_lower) || t_lower.starts_with(&file_name) {
+                                return Some(path.to_string_lossy().to_string());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        None
     }
 
     /// Finds the matching emulator executable given a system_code and/or file extension.
@@ -131,9 +288,14 @@ impl Launcher {
             let mame_dir = mame_dirs.into_iter().find(|d| d.join("mame.exe").exists())
                 .unwrap_or_else(|| PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\mame"));
 
+            let dl_mame = std::env::current_dir()
+                .unwrap_or_else(|_| PathBuf::from("."))
+                .join("downloads/mame");
+            let rompaths = format!(r#"roms;{};C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\mame\roms"#, dl_mame.display());
             let cmd = format!(
-                r#"$p = Start-Process -FilePath ".\mame.exe" -ArgumentList "{} -video bgfx" -WorkingDirectory "{}" -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
+                r#"$p = Start-Process -FilePath ".\mame.exe" -ArgumentList "{} -video bgfx -rompath '{}'" -WorkingDirectory "{}" -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
                 rom.trim(),
+                rompaths,
                 mame_dir.display()
             );
             Command::new("powershell")

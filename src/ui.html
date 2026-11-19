@@ -1530,7 +1530,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">v0.43</div>
+            <div class="brand-badge">v0.44</div>
         </div>
 
         <div class="nav-search-container">
@@ -3175,11 +3175,7 @@
         let advOptMultiplayer = false;
         let currentFilteredGames = [];
 
-        let customCollections = [
-            { id: 1, name: '⭐ I Miei Preferiti Classici', gameIds: [1, 2, 3] },
-            { id: 2, name: '🕹️ Capcom Arcade 90s', gameIds: [225, 226, 227] },
-            { id: 3, name: '⚡ Recomp 60FPS Porting', gameIds: [] }
-        ];
+        let customCollections = [];
         let activeCustomCollectionId = null;
 
         // Mappa delle 12 Macro-Famiglie -> Codici Piattaforma Corrispondenti
@@ -3431,7 +3427,7 @@
             filteredPlatforms.forEach(p => {
                 const count = allGames.filter(g => matchesPlatformCode(g.system_code, p.code)).length;
                 if (count === 0 && currentMacroFamily !== 'ALL') return;
-                const isActive = (currentPlatform === p.code || (currentPlatform !== 'ALL' && matchesPlatformCode(currentPlatform, p.code)));
+                const isActive = (currentPlatform === p.code);
                 html += `
                     <div class="platform-pill ${isActive ? 'active' : ''}" onclick="selectPlatform('${p.code}')" style="${isActive ? `--accent-cyan: ${p.color};` : ''}">
                         <span>${p.name}</span>
@@ -4727,9 +4723,9 @@
         function loadCustomCollectionsFromStorage() {
             try {
                 const saved = localStorage.getItem('retrohub_custom_collections');
-                if (saved) {
+                if (saved !== null) {
                     const parsed = JSON.parse(saved);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
+                    if (Array.isArray(parsed)) {
                         customCollections = parsed;
                     }
                 }
@@ -5191,15 +5187,24 @@
         function renderCollectionsList() {
             const container = document.getElementById('collectionsListContainer');
             if (!container) return;
+            if (customCollections.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 24px 12px; color: var(--text-muted); font-size: 0.85rem;">
+                        Nessuna raccolta presente. Crea una nuova playlist qui sotto oppure usa "Salva Selezione" nel catalogo!
+                    </div>
+                `;
+                return;
+            }
             container.innerHTML = customCollections.map(c => `
                 <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:rgba(255,255,255,0.05); border:1px solid var(--border-card); border-radius:var(--radius-sm);">
-                    <div>
-                        <div style="font-weight:700; color:#fff;">${escapeHtml(c.name)}</div>
+                    <div style="flex:1; min-width:0; padding-right:12px;">
+                        <div style="font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(c.name)}</div>
                         <div style="font-size:0.75rem; color:var(--text-muted);">${c.gameIds.length} titoli inclusi</div>
                     </div>
-                    <div style="display:flex; gap:8px;">
-                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="activateCollection(${c.id})">Apri</button>
-                        <button class="btn btn-primary" style="padding:4px 10px; font-size:0.75rem;" onclick="projectCollectionOnHero(${c.id})">Vetrina</button>
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        <button class="btn btn-secondary" style="padding:4px 9px; font-size:0.75rem;" title="Mostra tutti i giochi di questa raccolta nella griglia principale" onclick="activateCollection(${c.id})">📂 Nel Catalogo</button>
+                        <button class="btn btn-primary" style="padding:4px 9px; font-size:0.75rem;" title="Mostra i giochi di questa raccolta nella rotazione della Vetrina Hero in alto" onclick="projectCollectionOnHero(${c.id})">🌟 In Vetrina</button>
+                        <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem; color:#f87171; border-color: rgba(248,113,113,0.3);" title="Elimina questa raccolta" onclick="deleteCustomCollection(${c.id})">🗑️</button>
                     </div>
                 </div>
             `).join('');
@@ -5210,21 +5215,42 @@
             if (!name) return;
             const newId = Date.now();
             const favIds = allGames.filter(g => g.is_favorite).map(g => g.id);
-            customCollections.push({ id: newId, name, gameIds: favIds.length > 0 ? favIds : [1, 2, 3] });
+            customCollections.push({ id: newId, name, gameIds: favIds.length > 0 ? favIds : [] });
             input.value = '';
+            saveCustomCollectionsToStorage();
             renderCollectionsList();
             showToast(`Raccolta "${name}" creata!`);
         }
+        function deleteCustomCollection(id) {
+            const coll = customCollections.find(c => c.id === id);
+            const collName = coll ? coll.name : 'questa raccolta';
+            showCustomConfirm(
+                'Elimina Raccolta',
+                `Sei sicuro di voler eliminare la raccolta "${collName}"? I giochi rimarranno intatti nel catalogo.`,
+                () => {
+                    customCollections = customCollections.filter(c => c.id !== id);
+                    saveCustomCollectionsToStorage();
+                    renderCollectionsList();
+                    if (activeCustomCollectionId === id) {
+                        activeCustomCollectionId = null;
+                        renderCatalog();
+                    }
+                    showToast(`Raccolta eliminata.`);
+                }
+            );
+        }
         function activateCollection(id) {
+            const coll = customCollections.find(c => c.id === id);
             activeCustomCollectionId = id;
             closeCustomCollectionsModal();
             renderCatalog();
-            showToast('Raccolta custom visualizzata nella griglia.');
+            const titleEl = document.getElementById('catalogMainTitle');
+            if (titleEl) titleEl.scrollIntoView({ behavior: 'smooth' });
+            showToast(coll ? `Raccolta "${coll.name}" visualizzata nel catalogo.` : 'Raccolta custom visualizzata nel catalogo.');
         }
         function projectCollectionOnHero(id) {
             const coll = customCollections.find(c => c.id === id);
             if (!coll) return;
-            activeCustomCollectionId = id;
             heroSource = 'custom';
             heroList = allGames.filter(g => coll.gameIds.includes(g.id));
             if (heroList.length === 0) heroList = allGames.slice(0, 8);
@@ -5232,7 +5258,8 @@
             closeCustomCollectionsModal();
             renderHeroPills();
             renderHeroSlide();
-            showToast(`Vetrina Hero impostata su raccolta: ${coll.name}`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast(`🌟 Vetrina Hero impostata sulla raccolta: ${coll.name}`);
         }
 
         // Simulatore Bot P2P per Arena (Debug & Collaudo)
@@ -5247,7 +5274,9 @@
             setTimeout(() => {
                 showToast('🚀 Avvio simulato sessione multiplayer locale!');
                 closeArenaModal();
-                const sampleGame = allGames.find(g => g.system_code === 'ARCADE' || g.system_code === 'SNES' || g.system_code === 'RECOMP');
+                const sampleGame = allGames.find(g => g.is_installed) || 
+                                   allGames.find(g => g.launch_target && g.launch_target.length > 0) || 
+                                   allGames.find(g => g.system_code === 'MAME' || g.system_code === 'SNES' || g.system_code === 'RECOMP');
                 if (sampleGame) {
                     launchGameById(sampleGame.id);
                 }
@@ -5430,7 +5459,7 @@
             try {
                 await fetch('/api/factory-reset', { method: 'POST' }).catch(() => {});
                 localStorage.clear();
-                localStorage.setItem('retrohub_app_version', '0.43.0');
+                localStorage.setItem('retrohub_app_version', '0.44.0');
                 closeSettingsModal();
                 showToast(isEn ? '🔄 Reset complete: restarting as clean new user...' : (isEs ? '🔄 Restablecimiento completo: reiniciando...' : '🔄 Reset completato: riavvio in modalità nuovo utente...'));
                 setTimeout(() => {
@@ -5619,8 +5648,8 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Se la versione salvata differisce da v0.43.0, pulizia totale dello stato per Nuovo Utente Pulito
-                const currentAppVer = '0.43.0';
+                // Controllo Versione: Se la versione salvata differisce da v0.44.0, pulizia totale dello stato per Nuovo Utente Pulito
+                const currentAppVer = '0.44.0';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.removeItem('retrohub_downloaded_ids');

@@ -1,22 +1,7 @@
 {
   "version": "1.0.0",
-  "total_platforms": 43,
+  "total_platforms": 41,
   "platforms": [
-    {
-      "code": "ARCADE",
-      "name": "Arcade (MAME / FBNeo)",
-      "category": "Arcade",
-      "manufacturer": "Various",
-      "year": 1980,
-      "color": "#f97316",
-      "icon": "🕹️",
-      "extensions": [
-        ".zip",
-        ".7z"
-      ],
-      "core": "mame2003_plus_libretro.dll",
-      "is_top_ten": true
-    },
     {
       "code": "SNES",
       "name": "Super Nintendo (SNES)",
@@ -365,21 +350,6 @@
       "is_top_ten": true
     },
     {
-      "code": "LASERDISC",
-      "name": "Laserdisc & FMV (Hypseus / Daphne)",
-      "category": "Laserdisc",
-      "manufacturer": "Cinematronics / Various",
-      "year": 1983,
-      "color": "#ec4899",
-      "icon": "📀",
-      "extensions": [
-        ".daphne",
-        ".singe"
-      ],
-      "core": "hypseus",
-      "is_top_ten": false
-    },
-    {
       "code": "PINBALL",
       "name": "Pinball & Flipper (VPX / Future)",
       "category": "Pinball",
@@ -439,7 +409,7 @@
     },
     {
       "code": "MAME",
-      "name": "MAME Arcade",
+      "name": "Arcade (MAME / FBNeo)",
       "category": "Arcade",
       "manufacturer": "Various",
       "year": 1980,
@@ -495,14 +465,15 @@
     },
     {
       "code": "HYPSEUS",
-      "name": "Laserdisc Arcade",
+      "name": "Laserdisc & FMV (Hypseus / Daphne)",
       "category": "Laserdisc",
-      "manufacturer": "Various",
+      "manufacturer": "Cinematronics / Various",
       "year": 1983,
       "color": "#ec4899",
       "icon": "📀",
       "extensions": [
-        ".daphne"
+        ".daphne",
+        ".singe"
       ],
       "core": "hypseus",
       "is_top_ten": false

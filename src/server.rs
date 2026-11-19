@@ -94,9 +94,13 @@ impl HttpServer {
             if (method == Method::Get || method == Method::Head) && path.starts_with("/api/cover/file/") {
                 let sub_path = path.trim_start_matches("/api/cover/file/").trim();
                 let clean_sub = sub_path.replace("%20", " ").replace("..", "");
-                let emu_base = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu");
-                let full_path = emu_base.join(clean_sub);
-                if full_path.exists() && full_path.is_file() {
+                let candidates = [
+                    std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu").join(&clean_sub),
+                    std::path::Path::new("covers").join(&clean_sub),
+                    std::path::Path::new(&clean_sub).to_path_buf(),
+                ];
+                let found_file = candidates.into_iter().find(|p| p.exists() && p.is_file());
+                if let Some(full_path) = found_file {
                     if let Ok(bytes) = std::fs::read(&full_path) {
                         let mime = if full_path.extension().map_or(false, |e| e == "jpg" || e == "jpeg") {
                             "image/jpeg"
@@ -104,6 +108,8 @@ impl HttpServer {
                             "image/gif"
                         } else if full_path.extension().map_or(false, |e| e == "webp") {
                             "image/webp"
+                        } else if full_path.extension().map_or(false, |e| e == "svg") {
+                            "image/svg+xml"
                         } else {
                             "image/png"
                         };
@@ -550,6 +556,13 @@ impl HttpServer {
                                 let rom_name = crate::download_manager::DownloadManager::get_rom_filename(&game.title, &game.launch_target, &game.system_code);
                                 match crate::download_manager::DownloadManager::download_rom(game.id, &rom_name, &game.system_code) {
                                     Ok(path) => {
+                                        let target_str = if game.system_code == "MAME" {
+                                            let stem = path.file_stem().and_then(|s| s.to_str()).unwrap_or(&game.title);
+                                            format!("MAME:{}", stem)
+                                        } else {
+                                            path.to_string_lossy().to_string()
+                                        };
+                                        let _ = db.update_launch_target(game.id, &target_str);
                                         serde_json::to_string(&serde_json::json!({
                                             "success": true,
                                             "message": format!("ROM scaricata con successo per: {}", game.title),
@@ -588,6 +601,7 @@ impl HttpServer {
                                 let download_path = std::path::PathBuf::from(format!("downloads/{}/{}", game.system_code.to_lowercase(), rom_name));
                                 match crate::download_manager::DownloadManager::delete_rom(&download_path) {
                                     Ok(_) => {
+                                        let _ = db.update_launch_target(game.id, "");
                                         serde_json::to_string(&serde_json::json!({
                                             "success": true,
                                             "message": format!("ROM eliminata per: {}", game.title)

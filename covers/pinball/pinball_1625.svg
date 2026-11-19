@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1d"/>
+      <stop offset="50%" stop-color="#141c2e"/>
+      <stop offset="100%" stop-color="#070a14"/>
+    </linearGradient>
+    <linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#4facfe"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#00f2fe" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="600" rx="16" fill="url(#bg)"/>
+  <circle cx="200" cy="240" r="160" fill="url(#glow)"/>
+  
+  <!-- Outer Neon Border -->
+  <rect x="12" y="12" width="376" height="576" rx="12" fill="none" stroke="url(#neon)" stroke-width="2.5" stroke-opacity="0.6"/>
+  <rect x="18" y="18" width="364" height="574" rx="8" fill="none" stroke="#00f2fe" stroke-width="0.75" stroke-opacity="0.2"/>
+
+  <!-- Top Badge -->
+  <rect x="90" y="32" width="220" height="28" rx="14" fill="#00f2fe" fill-opacity="0.15" stroke="#00f2fe" stroke-width="1.5"/>
+  <text x="200" y="51" fill="#00f2fe" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" letter-spacing="3" text-anchor="middle">★ PINBALL CLASSIC ★</text>
+
+  <!-- Center Pinball Art Graphic -->
+  <g transform="translate(200, 230)" filter="url(#shadow)">
+    <!-- Pinball Backglass Outer Box -->
+    <rect x="-90" y="-90" width="180" height="150" rx="10" fill="#0f172a" stroke="#00f2fe" stroke-width="3"/>
+    <!-- Translit display grid -->
+    <rect x="-80" y="-80" width="160" height="90" rx="6" fill="#1e293b"/>
+    <circle cx="-50" cy="-35" r="14" fill="#f59e0b" fill-opacity="0.8"/>
+    <circle cx="0" cy="-35" r="18" fill="#ec4899" fill-opacity="0.8"/>
+    <circle cx="50" cy="-35" r="14" fill="#10b981" fill-opacity="0.8"/>
+    <!-- Bumpers -->
+    <circle cx="-35" cy="15" r="10" fill="#38bdf8" stroke="#fff" stroke-width="2"/>
+    <circle cx="35" cy="15" r="10" fill="#38bdf8" stroke="#fff" stroke-width="2"/>
+    <circle cx="0" cy="38" r="12" fill="#ef4444" stroke="#fff" stroke-width="2"/>
+    <!-- Flippers -->
+    <line x1="-50" y1="100" x2="-10" y2="115" stroke="#fbbf24" stroke-width="8" stroke-linecap="round"/>
+    <line x1="50" y1="100" x2="10" y2="115" stroke="#fbbf24" stroke-width="8" stroke-linecap="round"/>
+    <!-- Silver Ball -->
+    <circle cx="2" cy="75" r="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+  </g>
+
+  <!-- Title & Meta -->
+  <text x="200" y="440" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="900" text-anchor="middle" letter-spacing="0.5">
+    Creature from the Black 
+  </text>
+  <text x="200" y="470" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="800" text-anchor="middle" fill-opacity="0.9">
+    Lagoon
+  </text>
+
+  <!-- Manufacturer & Year Tag -->
+  <rect x="60" y="515" width="280" height="36" rx="18" fill="#000" fill-opacity="0.5" stroke="#334155" stroke-width="1"/>
+  <text x="200" y="538" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" text-anchor="middle" letter-spacing="1">
+    BALLY • 1992
+  </text>
+</svg>

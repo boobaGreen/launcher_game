@@ -249,6 +249,14 @@ impl Database {
         Ok(new_count)
     }
 
+    pub fn update_launch_target(&self, id: i64, target: &str) -> Result<()> {
+        self.conn.execute(
+            "UPDATE games SET launch_target = ?1 WHERE id = ?2",
+            params![target, id],
+        )?;
+        Ok(())
+    }
+
     pub fn get_platforms(&self) -> Result<Vec<PlatformInfo>> {
         let mut stmt = self.conn.prepare(
             "SELECT system_code, platform, COUNT(*) as cnt FROM games GROUP BY system_code ORDER BY cnt DESC",
