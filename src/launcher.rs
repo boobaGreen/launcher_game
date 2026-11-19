@@ -93,6 +93,33 @@ impl Launcher {
             }
         }
 
+        // Avvio nativo PC Recompilations con working directory dedicata
+        if let Some(rest) = trimmed.strip_prefix("recomp://") {
+            let recomp_roots = [
+                PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Recomp ROMs"),
+                PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\recomp"),
+                PathBuf::from("roms/recomp"),
+                PathBuf::from("recomp"),
+            ];
+            for root in &recomp_roots {
+                let full = root.join(rest);
+                if full.exists() {
+                    let dir = full.parent().unwrap_or(Path::new("."));
+                    let escaped = full.to_string_lossy().replace('\'', "''");
+                    let dir_escaped = dir.to_string_lossy().replace('\'', "''");
+                    let script = format!(
+                        r#"$p = Start-Process -FilePath '{}' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
+                        escaped, dir_escaped
+                    );
+                    Command::new("powershell")
+                        .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
+                        .spawn()
+                        .map_err(|e| format!("Errore lancio Recomp: {}", e))?;
+                    return Ok(format!("Avviato Recomp: {}", full.display()));
+                }
+            }
+        }
+
         // Avvio nativo MAME con BGFX renderer e attivazione finestra in primo piano
         if let Some(rom) = trimmed.strip_prefix("MAME:") {
             let mame_dirs = [

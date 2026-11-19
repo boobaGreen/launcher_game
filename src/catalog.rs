@@ -230,6 +230,8 @@ impl CatalogLoader {
                 else if t_lower.contains("la-mulana") { Some("230700") }
                 else if t_lower.contains("maldita castilla") || t_lower.contains("cursed castilla") { Some("534290") }
                 else if t_lower.contains("hydorah") { Some("628800") }
+                else if t_lower.contains("will of the wisps") { Some("1057090") }
+                else if t_lower.contains("blind forest") || t_lower.contains("ori") { Some("387290") }
                 else { None };
 
             if let Some(app_id) = steam_app {

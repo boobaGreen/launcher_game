@@ -118,6 +118,23 @@ Come Batocera e RetroBat (e con il supporto esclusivo per i port nativi PC e tit
 
 ---
 
+## 📌 FASE 6: Universal Scraper & Database Harvester (Post-Lancio / Fase Finale 🌐)
+*Obiettivo: Automatizzare al 100% l'arricchimento di metadati e cover per ROM locali, librerie digitali PC e progetti Recomp.*
+
+### **6.1 Scraper Automatico per Console Storiche (No-Intro & Redump)**
+- Calcolo hash SHA-1 / CRC32 in background per le ROM presenti sul disco.
+- Interrogazione asincrona multi-provider: Libretro Open Thumbnails, ScreenScraper.fr e IGDB API con caching locale automatico.
+- Download automatico delle boxart 3D, screenshot in-game, loghi wheel e manuali PDF.
+
+### **6.2 Auto-Discovery Locale di Steam & GOG (PC Indie)**
+- Rilevamento automatico dell'installazione locale di Steam (`libraryfolders.vdf` e file `appmanifest_*.acf`) e del Registro GOG Galaxy su Windows.
+- Importazione con un click di tutti i giochi Indie posseduti sul PC, con risoluzione immediata dell'eseguibile primario e applicazione delle copertine verticali ufficiali Steam 600x900 px.
+
+### **6.3 Recomp Asset Hash Verifier**
+- Motore di verifica automatica basato su `copie-verificate-sha256.json`: controlla la presenza dei file ROM estratti e valida l'integrità dei dati prima del lancio nativo.
+
+---
+
 ## 📊 Matrice di Avanzamento e Priorità Operativa
 
 ```mermaid

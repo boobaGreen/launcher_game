@@ -227,6 +227,44 @@ impl MasterCatalog {
             }
         }
 
+        // ==========================================
+        // PC RECOMPILATIONS - Built-in Manifest
+        // ==========================================
+        static RECOMP_JSON: &str = include_str!("recomp_manifest.json");
+        if let Ok(val) = serde_json::from_str::<serde_json::Value>(RECOMP_JSON) {
+            if let Some(arr) = val.get("recomps").and_then(|g| g.as_array()) {
+                for item in arr {
+                    let title = item.get("title").and_then(|v| v.as_str()).unwrap_or("PC Recomp");
+                    let dev = item.get("developer").and_then(|v| v.as_str()).unwrap_or("Various");
+                    let genre = item.get("genre").and_then(|v| v.as_str()).unwrap_or("Action");
+                    let year = item.get("year").and_then(|v| v.as_u64()).unwrap_or(1998) as u16;
+                    let controls = item.get("controls").and_then(|v| v.as_str()).unwrap_or("Gamepad Xbox / Tastiera");
+                    let cover = item.get("cover_url").and_then(|v| v.as_str()).map(|s| s.to_string());
+                    let exe_name = item.get("exe_name").and_then(|v| v.as_str()).unwrap_or("");
+                    let orig_sys = item.get("original_system").and_then(|v| v.as_str()).unwrap_or("ARCADE");
+
+                    games.push(Game {
+                        id,
+                        title: title.to_string(),
+                        platform: format!("PC Recomp ({})", orig_sys),
+                        system_code: "RECOMP".to_string(),
+                        year,
+                        genre: genre.to_string(),
+                        developer: dev.to_string(),
+                        publisher: dev.to_string(),
+                        controls: controls.to_string(),
+                        launch_target: format!("recomp://{}", exe_name),
+                        cover_url: cover,
+                        is_favorite: false,
+                        play_count: 0,
+                        last_played_at: None,
+                        is_installed: false,
+                    });
+                    id += 1;
+                }
+            }
+        }
+
         games
     }
 }
