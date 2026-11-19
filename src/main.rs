@@ -19,11 +19,10 @@ pub mod master_catalog;
 
 use std::path::Path;
 use std::process::Command;
-use std::sync::Arc;
 use catalog::CatalogLoader;
 use config::RetroHubConfig;
 use db::Database;
-use plugins::{load_plugins, PluginManager};
+use plugins::load_plugins;
 use server::HttpServer;
 
 fn is_server_alive(_url: &str) -> bool {
@@ -112,7 +111,7 @@ fn main() {
     }
     
     // Load plugins
-    let plugins = load_plugins();
+    let _plugins = load_plugins();
     println!("🔌 Plugin caricati: MAME, Gluiz");
 
     // Sincronizzazione catalogo: se emu_root è vuoto (Modalità Vergine), popola la libreria on-demand cloud da zero

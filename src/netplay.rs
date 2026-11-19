@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 use std::net::{SocketAddr, UdpSocket};
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
-use std::io::{self, Read};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum RoomStatus {
@@ -254,6 +253,7 @@ fn get_local_ip() -> Option<String> {
     socket.local_addr().ok().map(|a| a.ip().to_string())
 }
 
+#[allow(dead_code)]
 fn resolve_public_ip() -> Option<String> {
     // Fast STUN resolve or local network fallback
     get_local_ip()
@@ -308,6 +308,7 @@ fn try_stun_server(server: &str) -> Option<String> {
 }
 
 /// Measures ping to a remote address via UDP
+#[allow(dead_code)]
 fn measure_ping(addr: &str, port: u16, timeout_ms: u64) -> Option<u64> {
     let socket = UdpSocket::bind("0.0.0.0:0").ok()?;
     socket.set_read_timeout(Some(Duration::from_millis(timeout_ms))).ok()?;

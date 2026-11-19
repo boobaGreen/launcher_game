@@ -1,5 +1,6 @@
 use rusqlite::Connection;
 
+#[allow(dead_code)]
 struct GameInfo {
     title: String,
     platform: String,

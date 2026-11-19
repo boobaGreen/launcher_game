@@ -3,7 +3,7 @@ use regex::Regex;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 #[derive(Deserialize, Default, Clone)]
 struct MameMeta {

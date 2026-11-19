@@ -1,4 +1,3 @@
-use crate::models::Game;
 use crate::netplay::NetplaySession;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -30,14 +29,14 @@ pub enum LobbyStatus {
 
 pub struct LobbyManager {
     rooms: Arc<Mutex<HashMap<String, LobbyRoom>>>,
-    heartbeat_interval: Duration,
+    _heartbeat_interval: Duration,
 }
 
 impl LobbyManager {
     pub fn new() -> Self {
         Self {
             rooms: Arc::new(Mutex::new(HashMap::new())),
-            heartbeat_interval: Duration::from_secs(30),
+            _heartbeat_interval: Duration::from_secs(30),
         }
     }
 
@@ -96,7 +95,7 @@ impl LobbyManager {
             
             room.player_count += 1;
             let connection_token = format!("RH{}", hex_encode(format!("{}:{}:0:{}", room.host_addr, room.port, room_id).as_bytes()));
-            let session = NetplaySession {
+            let _session = NetplaySession {
                 room_code: room_id.to_string(),
                 connection_token: connection_token.clone(),
                 game_id: room.game_id,

@@ -1407,7 +1407,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">WIN v3.0</div>
+            <div class="brand-badge">WIN v3.7</div>
         </div>
 
         <div class="nav-search-container">
@@ -1419,24 +1419,24 @@
         <div class="nav-actions">
             <button class="btn btn-secondary" id="advFilterBtn" onclick="openAdvSearchModal()" title="Filtri Avanzati di Ricerca (Anno, Genere, Sviluppatore)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-                <span>Filtri</span>
+                <span id="navFiltersLabel">Filtri</span>
                 <span id="advFilterBadge" style="display:none; background:var(--accent-cyan); color:#000; font-size:0.65rem; font-weight:800; padding:1px 6px; border-radius:10px; margin-left:4px;">0</span>
             </button>
             <button class="btn btn-roulette" onclick="triggerRoulette()" title="Sorprendimi con un gioco casuale! (Tasto Y su Gamepad)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="12" cy="12" r="1.5"/></svg>
-                Sorprendimi
+                <span id="navSurpriseLabel">Sorprendimi</span>
             </button>
             <button class="btn btn-secondary" onclick="openArenaModal()" title="Lobby P2P e Classifiche Online">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="14.5" y1="9.5" x2="19" y2="5"/><polyline points="15 5 19 5 19 9"/><polyline points="14 15 9 20 4 15 9 10 14 15"/><line x1="4.5" y1="9.5" x2="9" y2="5"/></svg>
-                Arena
+                <span id="navArenaLabel">Arena</span>
             </button>
             <button class="btn btn-primary" onclick="openWizardModal()" title="Configurazione Guidata Storage & Percorsi">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/></svg>
-                Setup Wizard
+                <span id="navWizardLabel">Setup Wizard</span>
             </button>
             <button class="btn btn-secondary" onclick="openSettingsModal()" title="Impostazioni, Lingua, Cache e Percorsi">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                Opzioni
+                <span id="navSettingsLabel">Opzioni</span>
             </button>
         </div>
     </header>
@@ -1608,10 +1608,10 @@
                             <button class="btn btn-secondary" id="heroFavBtn" onclick="toggleHeroFavorite()">
                                 ★ Preferito
                             </button>
-                            <button class="btn btn-secondary" onclick="triggerRoulette()">
+                            <button class="btn btn-secondary" id="heroRouletteBtn" onclick="triggerRoulette()">
                                 🎲 Casuale
                             </button>
-                            <button class="btn btn-secondary" onclick="openHeroGameDetails()">
+                            <button class="btn btn-secondary" id="heroDetailsBtn" onclick="openHeroGameDetails()">
                                 ℹ️ Dettagli
                             </button>
                         </div>
@@ -1687,7 +1687,7 @@
                 <button class="filter-tag-pill" onclick="filterGenre('Fighting')">Picchiaduro</button>
                 <button class="filter-tag-pill" onclick="filterGenre('Shoot')">Shmup</button>
                 <button class="filter-tag-pill" onclick="filterGenre('RPG')">RPG</button>
-                <button class="filter-tag-pill" onclick="filterGenre('ALL')">✕ Resetta Filtri</button>
+                <button class="filter-tag-pill" id="btnResetFiltersPill" onclick="filterGenre('ALL')">✕ Resetta Filtri</button>
             </div>
         </div>
     </section>
@@ -1704,7 +1704,7 @@
             <div style="display:flex; align-items:center; gap:10px;">
                 <button class="btn btn-secondary" onclick="saveCurrentViewToCollection()" title="Salva i giochi attualmente visibili come Raccolta Personalizzata">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                    Salva Selezione in Raccolta
+                    <span id="saveCollectionLabel">Salva Selezione in Raccolta</span>
                 </button>
             </div>
         </div>
@@ -1713,7 +1713,7 @@
         <div id="activeFiltersBreadcrumb" class="active-filters-strip" style="display: none;">
             <span class="active-filters-label">FILTRI ATTIVI:</span>
             <div id="activeFilterChipsContainer" class="active-filter-chips"></div>
-            <button type="button" class="btn-clear-all-chips" onclick="resetAdvSearchFilters()">✕ Azzera Tutti</button>
+            <button type="button" class="btn-clear-all-chips" id="btnClearAllChips" onclick="resetAdvSearchFilters()">✕ Azzera Tutti</button>
         </div>
 
         <div class="games-grid" id="gamesGrid">
@@ -2122,7 +2122,7 @@
 
                 <!-- Trama / Sinossi Approfondita & Storia -->
                 <div class="adv-section-card" style="margin-bottom: 14px;">
-                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;" id="detailsOverviewHeader">
                         📖 Panoramica & Storia del Titolo
                     </div>
                     <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.6; margin: 0;" id="detailsSynopsis">
@@ -2133,24 +2133,25 @@
                 <!-- Scheda Tecnica Emulazione (Risoluzione, Core, Controller) -->
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px;">
                     <div class="adv-section-card" style="padding: 10px 12px;">
-                        <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight:700;">Risoluzione & Refresh</div>
+                        <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight:700;" id="detailsTechResLabel">Risoluzione & Refresh</div>
                         <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-top: 3px;" id="detailsTechRes">256x224 • 60 FPS</div>
                     </div>
                     <div class="adv-section-card" style="padding: 10px 12px;">
-                        <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight:700;">Core / Backend</div>
+                        <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight:700;" id="detailsTechCoreLabel">Core / Backend</div>
                         <div style="font-size: 0.82rem; font-weight: 700; color: var(--accent-cyan); margin-top: 3px;" id="detailsTechCore">Libretro / Nativ</div>
                     </div>
                     <div class="adv-section-card" style="padding: 10px 12px;">
-                        <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight:700;">Configurazione Joypad</div>
+                        <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight:700;" id="detailsTechControlsLabel">Configurazione Joypad</div>
                         <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-top: 3px;" id="detailsTechControls">Standard Joypad</div>
                     </div>
                 </div>
 
                 <!-- Footer Azioni -->
                 <div style="display: flex; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
-                    <button type="button" class="btn btn-secondary" style="flex:1;" onclick="closeGameDetailsModal()">Chiudi</button>
+                    <button type="button" class="btn btn-secondary" style="flex:1;" id="detailsCloseBtn" onclick="closeGameDetailsModal()">Chiudi</button>
                     <button type="button" class="btn btn-secondary" id="detailsFavBtn" style="flex:1.2;" onclick="toggleCurrentDetailsFavorite()">★ Preferito</button>
-                    <button type="button" class="btn btn-secondary" style="flex:1.2;" onclick="addCurrentDetailsToCollection()">📁 In Raccolta</button>
+                    <button type="button" class="btn btn-secondary" id="detailsCollectionBtn" style="flex:1.2;" onclick="addCurrentDetailsToCollection()">📁 In Raccolta</button>
+                    <button type="button" class="btn btn-secondary" id="detailsRemoveBtn" style="flex:1.2; display:none; color:var(--accent-danger); border-color:rgba(255,75,75,0.4);" onclick="removeCurrentDetailsDownload()">🗑️ Rimuovi</button>
                     <button type="button" class="btn btn-primary" id="detailsPlayBtn" style="flex:1.6;" onclick="launchCurrentDetailsGame()">▶ GIOCA ORA</button>
                 </div>
             </div>
@@ -2297,6 +2298,28 @@
         let activeQuickFilter = null; // 'favorites' | 'multiplayer'
         let isSandboxMode = false;
         let isTypographicMode = false; // Mostra boxart grafiche reali; fallback tipografico su 404/errore
+        let currentLang = 'it';
+        let downloadedGameIds = new Set();
+
+        function loadDownloadedGamesFromStorage() {
+            try {
+                const raw = localStorage.getItem('retrohub_downloaded_ids');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    downloadedGameIds = new Set(parsed);
+                }
+            } catch (e) {
+                console.warn('Errore lettura download locali:', e);
+            }
+        }
+
+        function saveDownloadedGamesToStorage() {
+            try {
+                localStorage.setItem('retrohub_downloaded_ids', JSON.stringify(Array.from(downloadedGameIds)));
+            } catch (e) {
+                console.warn('Errore salvataggio download locali:', e);
+            }
+        }
 
         // Stato Filtri Avanzati Combinati (AND Logic)
         let advYearMin = 1972;
@@ -2355,6 +2378,9 @@
             setupPlatformScrollWheel();
             await loadPlatformsManifest();
             await loadGames();
+            if (currentLang !== 'it') {
+                applyLanguage(currentLang);
+            }
             setupGamepadPolling();
         });
 
@@ -2379,12 +2405,19 @@
                 const res = await fetch('/api/games');
                 if (res.ok) {
                     allGames = await res.json();
+                    if (downloadedGameIds.size > 0) {
+                        allGames.forEach(g => {
+                            if (downloadedGameIds.has(g.id)) {
+                                g.is_installed = true;
+                            }
+                        });
+                    }
                     updateCounters();
                     initHeroSpotlight();
                     renderCatalog();
                 }
             } catch (e) {
-                showToast('Errore di connessione al backend');
+                showToast(currentLang === 'en' ? 'Backend connection error' : 'Errore di connessione al backend');
             }
         }
 
@@ -2514,8 +2547,18 @@
 
         function setStorageFilter(mode) {
             storageFilter = mode;
-            document.getElementById('toggleAllCloud').classList.toggle('active', mode === 'all');
-            document.getElementById('toggleOnlyDownloaded').classList.toggle('active', mode === 'downloaded');
+            document.getElementById('toggleAllCloud')?.classList.toggle('active', mode === 'all');
+            document.getElementById('toggleOnlyDownloaded')?.classList.toggle('active', mode === 'downloaded');
+
+            const isEn = (currentLang === 'en');
+            const titleEl = document.getElementById('catalogSectionTitle');
+            if (titleEl) {
+                if (mode === 'downloaded') {
+                    titleEl.innerText = isEn ? "💾 Downloaded / Local Games" : "💾 Giochi Scaricati / Installati";
+                } else {
+                    titleEl.innerText = isEn ? "All Games" : "Tutti i Giochi";
+                }
+            }
             renderCatalog();
         }
 
@@ -2609,11 +2652,12 @@
 
             // Pulsanti Azione
             const isInstalled = isSandboxMode ? false : g.is_installed;
+            const isEn = (currentLang === 'en');
             const playBtn = document.getElementById('heroPlayBtn');
-            playBtn.innerText = isInstalled ? '▶ GIOCA ORA' : '☁️ SCARICA & GIOCA';
+            playBtn.innerText = isInstalled ? (isEn ? '▶ PLAY NOW' : '▶ GIOCA ORA') : (isEn ? '☁️ DOWNLOAD & PLAY' : '☁️ SCARICA & GIOCA');
 
             const favBtn = document.getElementById('heroFavBtn');
-            favBtn.innerText = g.is_favorite ? '★ Salvato nei Preferiti' : '★ Aggiungi ai Preferiti';
+            favBtn.innerText = g.is_favorite ? (isEn ? '★ Favorited' : '★ Salvato nei Preferiti') : (isEn ? '★ Add to Favorites' : '★ Aggiungi ai Preferiti');
             favBtn.style.color = g.is_favorite ? 'var(--accent-gold)' : '#fff';
 
             // Sfondo Cinematico Panoramico (Steam 1920x620 library_hero.jpg o cover)
@@ -2682,12 +2726,13 @@
         }
 
         function getSourceLabel(src) {
+            const isEn = (currentLang === 'en');
             switch(src) {
-                case 'favorites': return '⭐ I TUOI PREFERITI';
-                case 'recent': return '⏱️ CONTINUA A GIOCARE';
-                case 'custom': return '📁 RACCOLTA A TEMA';
+                case 'favorites': return isEn ? '⭐ YOUR FAVORITES' : '⭐ I TUOI PREFERITI';
+                case 'recent': return isEn ? '⏱️ CONTINUE PLAYING' : '⏱️ CONTINUA A GIOCARE';
+                case 'custom': return isEn ? '📁 THEMED COLLECTION' : '📁 RACCOLTA A TEMA';
                 case 'random':
-                default: return '🎲 SCOPERTA CASUALE';
+                default: return isEn ? '🎲 RANDOM DISCOVERY' : '🎲 SCOPERTA CASUALE';
             }
         }
 
@@ -2883,19 +2928,44 @@
             const filtered = allGames.filter(g => gameMatchesFilters(g, false));
             currentFilteredGames = filtered;
 
-            document.getElementById('catalogStatsBadge').innerText = `${filtered.length} giochi visibili`;
+            const isEn = (currentLang === 'en');
+            document.getElementById('catalogStatsBadge').innerText = isEn ? `${filtered.length} games visible` : `${filtered.length} giochi visibili`;
             updateAdvFilterButtonBadge();
             renderActiveFilterBreadcrumbs();
 
             if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column: 1/-1; padding: 60px; text-align: center; color: var(--text-muted);">
-                        <div style="font-size: 2.5rem; margin-bottom: 12px;">🔍</div>
-                        <div style="font-size: 1.1rem; font-weight: 700; color: #fff;">Nessun gioco trovato</div>
-                        <div style="font-size: 0.85rem; margin-top: 4px;">Prova a modificare i filtri avanzati o la barra di ricerca.</div>
-                        <button class="btn btn-secondary" style="margin-top: 14px;" onclick="resetAdvSearchFilters()">✕ Azzera Tutti i Filtri</button>
-                    </div>
-                `;
+                const isOnlyDownloaded = (storageFilter === 'downloaded' || advStorageFilter === 'downloaded');
+                if (isOnlyDownloaded) {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; padding: 60px 20px; text-align: center; color: var(--text-muted); background: rgba(0,0,0,0.25); border-radius: var(--radius-md); border: 1px dashed var(--border-card);">
+                            <div style="font-size: 2.8rem; margin-bottom: 12px;">💾</div>
+                            <div style="font-size: 1.15rem; font-weight: 800; color: #fff; margin-bottom: 6px;">
+                                ${isEn ? 'No Local Games Downloaded Yet' : 'Nessun Gioco Scaricato Localmente'}
+                            </div>
+                            <div style="font-size: 0.86rem; max-width: 500px; margin: 0 auto 16px; line-height: 1.5;">
+                                ${isEn ? 'All titles are currently streamed via Cloud On-Demand. Click any game card or detail sheet to download it for offline play, or switch back to the complete archive.' : 'Tutti i titoli sono attualmente pronti in modalità Cloud On-Demand. Clicca su un gioco o sulla scheda dettagli per scaricarlo in locale per il gioco offline, oppure torna all\'archivio completo.'}
+                            </div>
+                            <button class="btn btn-primary" onclick="setStorageFilter('all')">
+                                ${isEn ? '🔓 Show All Cloud Games' : '🔓 Mostra Tutto l\'Archivio Cloud'}
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; padding: 60px; text-align: center; color: var(--text-muted);">
+                            <div style="font-size: 2.5rem; margin-bottom: 12px;">🔍</div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: #fff;">
+                                ${isEn ? 'No games found' : 'Nessun gioco trovato'}
+                            </div>
+                            <div style="font-size: 0.85rem; margin-top: 4px;">
+                                ${isEn ? 'Try adjusting your search criteria or clearing active filters.' : 'Prova a modificare i filtri avanzati o la barra di ricerca.'}
+                            </div>
+                            <button class="btn btn-secondary" style="margin-top: 14px;" onclick="resetAdvSearchFilters()">
+                                ${isEn ? '✕ Clear All Filters' : '✕ Azzera Tutti i Filtri'}
+                            </button>
+                        </div>
+                    `;
+                }
                 return;
             }
 
@@ -2937,9 +3007,9 @@
                         </div>
 
                         <div class="card-quick-actions" onclick="event.stopPropagation();">
-                            <button class="quick-play-btn" onclick="launchGameById(${g.id})">${isInstalled ? '▶ GIOCA' : '☁️ SCARICA'}</button>
+                            <button class="quick-play-btn" onclick="launchGameById(${g.id})">${isInstalled ? (isEn ? '▶ PLAY' : '▶ GIOCA') : (isEn ? '☁️ GET' : '☁️ SCARICA')}</button>
                             <button class="quick-fav-btn ${g.is_favorite ? 'is-fav' : ''}" onclick="toggleGameFavorite(${g.id})">★</button>
-                            <button class="quick-fav-btn" style="color:var(--accent-cyan);" title="Dettagli & Screenshot" onclick="openGameDetailsModalById(${g.id})">ℹ️</button>
+                            <button class="quick-fav-btn" style="color:var(--accent-cyan);" title="${isEn ? 'Details & Screenshots' : 'Dettagli & Screenshot'}" onclick="openGameDetailsModalById(${g.id})">ℹ️</button>
                         </div>
                     </div>
                 `;
@@ -2949,11 +3019,68 @@
         // --------------------------------------------------------------------------
         // 5. AZIONI DI LANCIO & PREFERITI
         // --------------------------------------------------------------------------
+        function downloadGameOnDemand(id, andLaunchAfter = false) {
+            const g = allGames.find(x => x.id === id);
+            if (!g) return;
+
+            const isEn = (currentLang === 'en');
+            showToast(isEn ? `Downloading ${g.title}...` : `Download in corso: ${g.title}...`);
+
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 25;
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    g.is_installed = true;
+                    downloadedGameIds.add(g.id);
+                    saveDownloadedGamesToStorage();
+                    updateCounters();
+                    renderCatalog();
+                    renderHeroSlide();
+                    if (activeDetailsGame && activeDetailsGame.id === g.id) {
+                        openGameDetails(g);
+                    }
+                    showToast(isEn ? `✅ ${g.title} downloaded and ready for offline play!` : `✅ ${g.title} salvato localmente per il gioco offline!`);
+                    if (andLaunchAfter) {
+                        setTimeout(() => { launchGameById(id); }, 300);
+                    }
+                }
+            }, 200);
+        }
+
+        function removeCurrentDetailsDownload() {
+            if (!activeDetailsGame) return;
+            removeGameDownload(activeDetailsGame.id);
+        }
+
+        function removeGameDownload(id) {
+            const g = allGames.find(x => x.id === id);
+            if (!g) return;
+            const isEn = (currentLang === 'en');
+            g.is_installed = false;
+            downloadedGameIds.delete(g.id);
+            saveDownloadedGamesToStorage();
+            updateCounters();
+            renderCatalog();
+            renderHeroSlide();
+            if (activeDetailsGame && activeDetailsGame.id === g.id) {
+                openGameDetails(g);
+            }
+            showToast(isEn ? `🗑️ Local download of ${g.title} removed.` : `🗑️ Copia locale di ${g.title} rimossa.`);
+        }
+
         async function launchGameById(id) {
             const g = allGames.find(x => x.id === id);
             if (!g) return;
 
-            showToast(`Avvio in corso: ${g.title}...`);
+            const isInstalled = isSandboxMode ? false : g.is_installed;
+            if (!isInstalled) {
+                downloadGameOnDemand(id, true);
+                return;
+            }
+
+            const isEn = (currentLang === 'en');
+            showToast(isEn ? `Launching: ${g.title}...` : `Avvio in corso: ${g.title}...`);
 
             try {
                 const res = await fetch('/api/launch', {
@@ -2963,17 +3090,17 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    showToast(`Partita avviata! Buon divertimento!`);
+                    showToast(isEn ? `Game started! Have fun!` : `Partita avviata! Buon divertimento!`);
                     postGameTargetId = id;
-                    // Se scaricato temporaneamente, prepara dialog post-partita
-                    if (!g.is_installed) {
+                    const behavior = localStorage.getItem('retrohub_post_game_behavior') || 'ask';
+                    if (behavior === 'ask') {
                         setTimeout(() => { openPostGameModal(); }, 4000);
                     }
                 } else {
-                    showToast(`Errore avvio: ${data.message}`);
+                    showToast(isEn ? `Launch error: ${data.message}` : `Errore avvio: ${data.message}`);
                 }
             } catch (e) {
-                showToast('Errore di comunicazione col backend.');
+                showToast(isEn ? 'Backend communication error.' : 'Errore di comunicazione col backend.');
             }
         }
 
@@ -3559,23 +3686,24 @@
                 });
             }
 
-            if (advStorageFilter === 'downloaded') {
+            const isEn = (currentLang === 'en');
+            if (advStorageFilter === 'downloaded' || storageFilter === 'downloaded') {
                 chips.push({
-                    label: '💾 Solo Scaricati',
+                    label: isEn ? '💾 Downloaded Only' : '💾 Solo Scaricati',
                     onRemove: 'removeAdvStorageFilter()'
                 });
             }
 
             if (advOptFavorites || activeQuickFilter === 'favorites') {
                 chips.push({
-                    label: '⭐ Solo Preferiti',
+                    label: isEn ? '⭐ Favorites Only' : '⭐ Solo Preferiti',
                     onRemove: 'toggleQuickFilter("favorites")'
                 });
             }
 
             if (advOptMultiplayer || activeQuickFilter === 'multiplayer') {
                 chips.push({
-                    label: '👥 2+ Giocatori',
+                    label: isEn ? '👥 2+ Players' : '👥 2+ Giocatori',
                     onRemove: 'toggleQuickFilter("multiplayer")'
                 });
             }
@@ -3657,17 +3785,21 @@
 
             const storageBadge = document.getElementById('detailsStorageBadge');
             const isInstalled = isSandboxMode ? false : g.is_installed;
+            const isEn = (currentLang === 'en');
             storageBadge.className = isInstalled ? 'status-badge downloaded' : 'status-badge cloud';
-            storageBadge.innerText = isInstalled ? '💾 Installato su PC' : '☁️ Cloud On-Demand';
+            storageBadge.innerText = isInstalled ? (isEn ? '💾 Installed Locally' : '💾 Installato su PC') : (isEn ? '☁️ Cloud On-Demand' : '☁️ Cloud On-Demand');
 
             const favBadge = document.getElementById('detailsFavBadge');
             favBadge.style.display = g.is_favorite ? 'inline-block' : 'none';
+            favBadge.innerText = isEn ? '★ Favorite' : '★ Preferito';
 
             document.getElementById('detailsGameTitle').innerText = g.title;
             document.getElementById('detailsYear').innerText = g.year;
             document.getElementById('detailsDev').innerText = g.developer || 'N/D';
             document.getElementById('detailsGenre').innerText = g.genre;
-            document.getElementById('detailsPlayers').innerText = g.system_code === 'ARCADE' ? '👥 2P Coin-Op' : '👥 1-2 Giocatori';
+            document.getElementById('detailsPlayers').innerText = g.system_code === 'ARCADE' ? 
+                (isEn ? '👥 2P Coin-Op' : '👥 2P Coin-Op') : 
+                (isEn ? '👥 1-2 Players' : '👥 1-2 Giocatori');
 
             // Media
             switchDetailsMediaTab('boxart');
@@ -3678,15 +3810,27 @@
             // Technical Specs
             document.getElementById('detailsTechRes').innerText = getPlatformResolution(g.system_code);
             document.getElementById('detailsTechCore').innerText = getPlatformCore(g.system_code);
-            document.getElementById('detailsTechControls').innerText = g.controls || 'Standard Gamepad (D-pad + 6 Tasti)';
+            document.getElementById('detailsTechControls').innerText = g.controls || (isEn ? 'Standard Gamepad (D-pad + 6 Action Buttons)' : 'Standard Gamepad (D-pad + 6 Tasti)');
 
             // Action Buttons
             const favBtn = document.getElementById('detailsFavBtn');
-            favBtn.innerText = g.is_favorite ? '★ Salvato nei Preferiti' : '★ Aggiungi ai Preferiti';
+            favBtn.innerText = g.is_favorite ? (isEn ? '★ Saved in Favorites' : '★ Salvato nei Preferiti') : (isEn ? '★ Add to Favorites' : '★ Aggiungi ai Preferiti');
             favBtn.style.color = g.is_favorite ? 'var(--accent-gold)' : '#fff';
 
             const playBtn = document.getElementById('detailsPlayBtn');
-            playBtn.innerText = isInstalled ? '▶ GIOCA SUBITO' : '☁️ SCARICA & AVVIA';
+            playBtn.innerText = isInstalled ? (isEn ? '▶ PLAY NOW' : '▶ GIOCA SUBITO') : (isEn ? '☁️ DOWNLOAD & PLAY' : '☁️ SCARICA & AVVIA');
+
+            const removeBtn = document.getElementById('detailsRemoveBtn');
+            if (removeBtn) {
+                removeBtn.style.display = isInstalled ? 'inline-flex' : 'none';
+                removeBtn.innerText = isEn ? '🗑️ Remove' : '🗑️ Rimuovi';
+            }
+
+            const closeBtn = document.getElementById('detailsCloseBtn');
+            if (closeBtn) closeBtn.innerText = isEn ? 'Close' : 'Chiudi';
+
+            const colBtn = document.getElementById('detailsCollectionBtn');
+            if (colBtn) colBtn.innerText = isEn ? '📁 In Collection' : '📁 In Raccolta';
 
             document.getElementById('gameDetailsModal').classList.add('open');
         }
@@ -3804,9 +3948,14 @@
 
         function launchCurrentDetailsGame() {
             if (!activeDetailsGame) return;
-            const id = activeDetailsGame.id;
-            closeGameDetailsModal();
-            launchGameById(id);
+            const g = activeDetailsGame;
+            const isInstalled = isSandboxMode ? false : g.is_installed;
+            if (!isInstalled) {
+                downloadGameOnDemand(g.id, false);
+            } else {
+                closeGameDetailsModal();
+                launchGameById(g.id);
+            }
         }
 
         function addCurrentDetailsToCollection() {
@@ -4007,15 +4156,128 @@
             }
         }
 
+        function applyLanguage(lang) {
+            currentLang = lang;
+            const isEn = (lang === 'en');
+
+            // 1. Top Navbar
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.placeholder = isEn ? 
+                    "Search title, developer, year or genre (e.g. 'zelda oot')..." : 
+                    "Cerca titolo, sviluppatore, anno o genere (es. 'zelda oot')...";
+            }
+            const navFilters = document.getElementById('navFiltersLabel');
+            if (navFilters) navFilters.innerText = isEn ? "Filters" : "Filtri";
+            const navSurprise = document.getElementById('navSurpriseLabel');
+            if (navSurprise) navSurprise.innerText = isEn ? "Surprise Me" : "Sorprendimi";
+            const navArena = document.getElementById('navArenaLabel');
+            if (navArena) navArena.innerText = isEn ? "Arena" : "Arena";
+            const navWizard = document.getElementById('navWizardLabel');
+            if (navWizard) navWizard.innerText = isEn ? "Setup Wizard" : "Setup Wizard";
+            const navSettings = document.getElementById('navSettingsLabel');
+            if (navSettings) navSettings.innerText = isEn ? "Settings" : "Opzioni";
+
+            // 2. Sidebar Main Navigation
+            const sideNavAllLabel = document.querySelector('#sideNavALL .sidebar-label');
+            if (sideNavAllLabel) sideNavAllLabel.innerText = isEn ? "All Games" : "Tutti i Giochi";
+            const sideNavFavLabel = document.querySelector('#sideNavFAV .sidebar-label');
+            if (sideNavFavLabel) sideNavFavLabel.innerText = isEn ? "Your Favorites" : "I Tuoi Preferiti";
+            const sideNavCompLabel = document.querySelector('#sideNavCOMPUTER .sidebar-label');
+            if (sideNavCompLabel) sideNavCompLabel.innerText = isEn ? "Western Computers" : "Computer Occidentali";
+
+            // 3. Sub-bar Switches & Pills
+            const cloudBtn = document.getElementById('toggleAllCloud');
+            if (cloudBtn) {
+                const count = document.getElementById('countCloud')?.innerText || '0';
+                cloudBtn.innerHTML = `🔓 ${isEn ? "All Cloud Games" : "Tutto l'Archivio Cloud"} (<span id="countCloud">${count}</span>)`;
+            }
+            const downBtn = document.getElementById('toggleOnlyDownloaded');
+            if (downBtn) {
+                const count = document.getElementById('countDownloaded')?.innerText || '0';
+                downBtn.innerHTML = `💾 ${isEn ? "Downloaded Only" : "Solo Scaricati"} (<span id="countDownloaded">${count}</span>)`;
+            }
+            const pillFav = document.getElementById('pillFav');
+            if (pillFav) pillFav.innerText = isEn ? "⭐ Favorites" : "⭐ Preferiti";
+            const pillMulti = document.getElementById('pillMulti');
+            if (pillMulti) pillMulti.innerText = isEn ? "👥 2 Players (Co-op/VS)" : "👥 2 Giocatori (Co-op/VS)";
+            const btnResetFilters = document.getElementById('btnResetFiltersPill');
+            if (btnResetFilters) btnResetFilters.innerText = isEn ? "✕ Reset Filters" : "✕ Resetta Filtri";
+
+            // 4. Hero Section
+            const heroCategoryBadge = document.getElementById('heroSourcePill');
+            if (heroCategoryBadge) {
+                heroCategoryBadge.innerText = `${getSourceLabel(heroSource)} • ${heroIndex + 1}/${heroList.length}`;
+            }
+            const heroRouletteBtn = document.getElementById('heroRouletteBtn');
+            if (heroRouletteBtn) heroRouletteBtn.innerText = isEn ? "🎲 Random" : "🎲 Casuale";
+            const heroDetailsBtn = document.getElementById('heroDetailsBtn');
+            if (heroDetailsBtn) heroDetailsBtn.innerText = isEn ? "ℹ️ Details" : "ℹ️ Dettagli";
+            const heroSrcRandom = document.getElementById('heroSrcRandom');
+            if (heroSrcRandom) heroSrcRandom.innerText = isEn ? "🎲 Surprise" : "🎲 A Sorpresa";
+            const heroSrcFav = document.getElementById('heroSrcFavorites');
+            if (heroSrcFav) heroSrcFav.innerText = isEn ? "⭐ Favorites" : "⭐ Preferiti";
+            const heroSrcRec = document.getElementById('heroSrcRecent');
+            if (heroSrcRec) heroSrcRec.innerText = isEn ? "⏱️ Continue" : "⏱️ Continua";
+
+            // 5. Catalog Title & Actions
+            const catTitle = document.getElementById('catalogSectionTitle');
+            if (catTitle) {
+                if (storageFilter === 'downloaded' || advStorageFilter === 'downloaded') {
+                    catTitle.innerText = isEn ? "💾 Downloaded / Local Games" : "💾 Giochi Scaricati / Installati";
+                } else {
+                    catTitle.innerText = isEn ? "All Games" : "Tutti i Giochi";
+                }
+            }
+            const saveColLabel = document.getElementById('saveCollectionLabel');
+            if (saveColLabel) saveColLabel.innerText = isEn ? "Save View to Collection" : "Salva Selezione in Raccolta";
+            const clearAllChips = document.getElementById('btnClearAllChips');
+            if (clearAllChips) clearAllChips.innerText = isEn ? "✕ Clear All" : "✕ Azzera Tutti";
+            const activeFiltersLabel = document.querySelector('.active-filters-label');
+            if (activeFiltersLabel) activeFiltersLabel.innerText = isEn ? "ACTIVE FILTERS:" : "FILTRI ATTIVI:";
+
+            // 6. Details Modal
+            const tabBox = document.getElementById('tabMediaBoxart');
+            if (tabBox) tabBox.innerText = isEn ? "🖼️ Boxart Cover" : "🖼️ Copertina Boxart";
+            const tabSnap = document.getElementById('tabMediaSnap');
+            if (tabSnap) tabSnap.innerText = isEn ? "📸 In-Game Snap" : "📸 Screenshot In-Game";
+            const tabTitle = document.getElementById('tabMediaTitle');
+            if (tabTitle) tabTitle.innerText = isEn ? "📺 Title Screen" : "📺 Schermata Titolo";
+            const overviewHeader = document.getElementById('detailsOverviewHeader');
+            if (overviewHeader) overviewHeader.innerText = isEn ? "📖 Historical Overview & Gameplay" : "📖 Panoramica & Storia del Titolo";
+            const resLabel = document.getElementById('detailsTechResLabel');
+            if (resLabel) resLabel.innerText = isEn ? "Resolution & Framerate" : "Risoluzione & Refresh";
+            const coreLabel = document.getElementById('detailsTechCoreLabel');
+            if (coreLabel) coreLabel.innerText = isEn ? "Core / Backend Engine" : "Core / Backend";
+            const ctrlLabel = document.getElementById('detailsTechControlsLabel');
+            if (ctrlLabel) ctrlLabel.innerText = isEn ? "Gamepad Configuration" : "Configurazione Joypad";
+            const closeBtn = document.getElementById('detailsCloseBtn');
+            if (closeBtn) closeBtn.innerText = isEn ? "Close" : "Chiudi";
+            const colBtn = document.getElementById('detailsCollectionBtn');
+            if (colBtn) colBtn.innerText = isEn ? "📁 In Collection" : "📁 In Raccolta";
+
+            // Sincronizza selettore opzioni
+            const langSel = document.getElementById('settingsLanguageSelect');
+            if (langSel && langSel.value !== lang) {
+                langSel.value = lang;
+            }
+
+            renderCatalog();
+            renderHeroSlide();
+        }
+
         function onSettingsLanguageChanged() {
             const sel = document.getElementById('settingsLanguageSelect');
             if (!sel) return;
             const lang = sel.value;
             if (lang === 'en') {
-                showToast('🇬🇧 Lingua Inglese (Fase 1 Roadmap): Dizionari leggeri in attivazione progressiva.');
+                applyLanguage('en');
+                showToast('🇬🇧 Language switched to English (Phase 1 Roadmap).');
             } else if (lang === 'es') {
-                showToast('🇪🇸 Lingua Spagnola (Fase 2 Roadmap): Localizzazione pianificata.');
+                showToast('🇪🇸 Lingua Spagnola: In arrivo nella Fase 2 della Roadmap!');
+                sel.value = currentLang;
             } else {
+                applyLanguage('it');
                 showToast('🇮🇹 Lingua Italiana attiva al 100%.');
             }
         }
@@ -4030,12 +4292,13 @@
             localStorage.setItem('retrohub_hero_timer', heroTimerDuration.toString());
 
             closeSettingsModal();
-            showToast('✅ Tutte le preferenze sono state salvate!');
+            showToast(currentLang === 'en' ? '✅ All preferences saved!' : '✅ Tutte le preferenze sono state salvate!');
         }
 
         function resetSettingsToDefaults() {
             isTypographicMode = false;
             heroTimerDuration = 8000;
+            currentLang = 'it';
             localStorage.setItem('retrohub_lang', 'it');
             localStorage.setItem('retrohub_typographic', 'false');
             localStorage.setItem('retrohub_hero_timer', '8000');
@@ -4053,14 +4316,18 @@
             const postGameSel = document.getElementById('settingsPostGameBehavior');
             if (postGameSel) postGameSel.value = 'ask';
 
-            renderCatalog();
-            renderHeroSlide();
+            applyLanguage('it');
             startHeroRotation();
             showToast('Preferenze ripristinate ai valori di fabbrica.');
         }
 
         function loadSavedSettingsFromStorage() {
             try {
+                const savedLang = localStorage.getItem('retrohub_lang');
+                if (savedLang === 'en') {
+                    currentLang = 'en';
+                }
+                loadDownloadedGamesFromStorage();
                 const savedTypo = localStorage.getItem('retrohub_typographic');
                 if (savedTypo !== null) {
                     isTypographicMode = (savedTypo === 'true');

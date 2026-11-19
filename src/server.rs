@@ -1,6 +1,6 @@
 use crate::db::Database;
 use crate::launcher::Launcher;
-use crate::lobby::{LobbyManager, LobbyRoom};
+use crate::lobby::LobbyManager;
 use crate::models::{LaunchRequest, LaunchResponse, SearchFilter};
 use crate::netplay::NetplayManager;
 use crate::search::SearchEngine;
@@ -750,7 +750,6 @@ fn urlencoding_decode(s: &str) -> String {
 
 fn read_request_body(request: &mut tiny_http::Request) -> String {
     let mut buf = Vec::new();
-    use std::io::Read;
     let _ = request.as_reader().read_to_end(&mut buf);
     String::from_utf8_lossy(&buf).to_string()
 }

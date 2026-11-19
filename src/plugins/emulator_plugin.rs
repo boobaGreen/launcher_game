@@ -1,6 +1,5 @@
 use crate::models::Game;
 use std::path::PathBuf;
-use std::process::Command;
 
 pub trait EmulatorPlugin: Send + Sync {
     fn name(&self) -> &'static str;
@@ -11,6 +10,7 @@ pub trait EmulatorPlugin: Send + Sync {
     fn get_platform_name(&self) -> &'static str;
 }
 
+#[allow(dead_code)]
 pub struct EmulatorResult {
     pub success: bool,
     pub message: String,
