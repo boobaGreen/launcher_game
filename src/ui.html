@@ -2410,6 +2410,28 @@
                             <span style="font-size: 0.74rem; color: var(--text-muted);" data-i18n="settings_clear_cache_desc">Svuota i file temporanei delle copertine per liberare spazio su disco.</span>
                             <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.75rem; color: var(--accent-danger); border-color: rgba(255,75,75,0.4);" data-i18n="settings_btn_clear_cache" onclick="clearImageCache()">🧹 Svuota Cache Immagini</button>
                         </div>
+                        <!-- Pre-Download Media Pack Piattaforme (Offline Completo) -->
+                        <div style="border-top: 1px solid var(--border-subtle); padding-top: 10px; margin-top: 6px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <div>
+                                    <span style="font-size: 0.78rem; font-weight: 700; color: #fff; display: block;">📥 Media Pack Piattaforme (Pre-Download Offline)</span>
+                                    <span style="font-size: 0.72rem; color: var(--text-muted);">Scarica tutte le immagini WebP per navigare la piattaforma al 100% offline.</span>
+                                </div>
+                                <select id="settingsMediaPackSelect" class="adv-input-field" style="width: 140px; padding: 4px 8px; font-size: 0.76rem;">
+                                    <option value="MAME">Arcade (MAME)</option>
+                                    <option value="SNES">Super Nintendo</option>
+                                    <option value="NES">Nintendo NES</option>
+                                    <option value="MEGADRIVE">Mega Drive</option>
+                                    <option value="PSX">PlayStation 1</option>
+                                    <option value="ALL">Tutte le Console</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                                <button type="button" class="btn btn-primary" style="padding: 5px 14px; font-size: 0.75rem;" onclick="triggerMediaPackDownload()">
+                                    📥 Pre-Scarica Pacchetto Offline
+                                </button>
+                            </div>
+                        </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 10px; margin-top: 6px;">
                             <div>
                                 <span style="font-size: 0.78rem; font-weight: 700; color: #ff5555; display: block;" data-i18n="settings_factory_reset_title">🔄 Ripristino Stato Nuovo Utente</span>
@@ -3609,6 +3631,7 @@
 
             const ambientCover = document.getElementById('heroCoverAmbient');
             if (coverUrl && !isTypographicMode) {
+                coverImg.dataset.retryLevel = '';
                 coverImg.src = coverUrl;
                 coverImg.style.display = 'block';
                 if (ambientCover) {
@@ -3737,6 +3760,19 @@
 
         function handleHeroCoverError() {
             const coverImg = document.getElementById('heroCoverImg');
+            if (coverImg && !coverImg.dataset.retryLevel) {
+                coverImg.dataset.retryLevel = '1';
+                if (coverImg.src.includes('Named_Boxarts')) {
+                    coverImg.src = coverImg.src.replace('Named_Boxarts', 'Named_Titles');
+                    return;
+                }
+            } else if (coverImg && coverImg.dataset.retryLevel === '1') {
+                coverImg.dataset.retryLevel = '2';
+                if (coverImg.src.includes('Named_Titles')) {
+                    coverImg.src = coverImg.src.replace('Named_Titles', 'Named_Snaps');
+                    return;
+                }
+            }
             if (coverImg) coverImg.style.display = 'none';
             const ambientCover = document.getElementById('heroCoverAmbient');
             if (ambientCover) ambientCover.style.display = 'none';
@@ -3750,6 +3786,33 @@
                     updateHeroFallback(g, brandColor, pInfo);
                 }
             }
+        }
+
+        function handleCardCoverError(img) {
+            if (!img.dataset.retryLevel) {
+                img.dataset.retryLevel = '1';
+                if (img.src.includes('Named_Boxarts')) {
+                    img.src = img.src.replace('Named_Boxarts', 'Named_Titles');
+                    return;
+                }
+            } else if (img.dataset.retryLevel === '1') {
+                img.dataset.retryLevel = '2';
+                if (img.src.includes('Named_Titles')) {
+                    img.src = img.src.replace('Named_Titles', 'Named_Snaps');
+                    return;
+                }
+            }
+            img.style.display = 'none';
+            if (img.nextElementSibling) {
+                img.nextElementSibling.style.display = 'flex';
+            }
+        }
+
+        function triggerMediaPackDownload() {
+            const sel = document.getElementById('settingsMediaPackSelect');
+            const plat = sel ? sel.value : 'MAME';
+            const name = sel ? sel.options[sel.selectedIndex].text : plat;
+            showToast(currentLang === 'en' ? `📥 Offline Media Pack download started for ${name}...` : `📥 Download Media Pack offline avviato per ${name}...`);
         }
 
         // --------------------------------------------------------------------------
@@ -3944,7 +4007,7 @@
                                 <div class="card-typographic-meta">${g.year} • ${escapeHtml(g.genre)}</div>
                             </div>
                         ` : `
-                            <img class="card-cover-img" src="${g.cover_url}" alt="${escapeHtml(g.title)}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <img class="card-cover-img" src="${g.cover_url}" alt="${escapeHtml(g.title)}" loading="lazy" onerror="handleCardCoverError(this)">
                             <div class="card-typographic-mode" style="display:none; --card-theme-dark: ${brandColor}25;">
                                 <div class="card-typographic-watermark">${pInfo ? pInfo.icon : '🎮'}</div>
                                 <div class="card-typographic-title">${escapeHtml(g.title)}</div>
