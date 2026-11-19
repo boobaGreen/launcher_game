@@ -979,6 +979,52 @@
             color: var(--text-muted);
         }
 
+        .sort-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 11px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .sort-pill:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .sort-pill.active {
+            background: rgba(0, 243, 255, 0.15);
+            color: var(--accent-cyan);
+            border-color: rgba(0, 243, 255, 0.45);
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.25);
+        }
+
+        .modern-sort-select {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            color: #f8fafc;
+            font-size: 0.80rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            outline: none;
+            backdrop-filter: blur(12px);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .modern-sort-select:hover, .modern-sort-select:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px var(--accent-cyan-glow);
+        }
+        .modern-sort-select option {
+            background: #0f172a;
+            color: #fff;
+        }
+
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
@@ -1803,7 +1849,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">v0.45</div>
+            <div class="brand-badge">v0.46</div>
         </div>
 
         <div class="nav-search-container">
@@ -1931,11 +1977,27 @@
                     <span class="sidebar-count" id="sideCountSNKNEC">0</span>
                 </div>
 
+                <div class="sidebar-item" id="sideNavCOMMODORE" onclick="selectMacroFamily('COMMODORE')">
+                    <div class="sidebar-icon" style="color: #3b82f6;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    </div>
+                    <span class="sidebar-label" data-i18n="side_commodore">Commodore 8-Bit</span>
+                    <span class="sidebar-count" id="sideCountCOMMODORE">0</span>
+                </div>
+
+                <div class="sidebar-item" id="sideNavAMIGA" onclick="selectMacroFamily('AMIGA')">
+                    <div class="sidebar-icon" style="color: #f43f5e;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line><line x1="14.14" y1="4.93" x2="4.93" y2="19.07"></line></svg>
+                    </div>
+                    <span class="sidebar-label" data-i18n="side_amiga">Amiga Universe</span>
+                    <span class="sidebar-count" id="sideCountAMIGA">0</span>
+                </div>
+
                 <div class="sidebar-item" id="sideNavCOMPUTER" onclick="selectMacroFamily('COMPUTER')">
                     <div class="sidebar-icon" style="color: #10b981;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l5 5v13H5V3z"></path><rect x="8" y="3" width="8" height="5"></rect><rect x="8" y="14" width="8" height="7"></rect></svg>
                     </div>
-                    <span class="sidebar-label" data-i18n="side_computers">Computer Occidentali</span>
+                    <span class="sidebar-label" data-i18n="side_computers">PC & Home Computer</span>
                     <span class="sidebar-count" id="sideCountCOMPUTER">0</span>
                 </div>
 
@@ -2109,6 +2171,37 @@
                 <button class="btn btn-secondary" onclick="saveCurrentViewToCollection()" title="Salva i giochi attualmente visibili come Raccolta Personalizzata">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                     <span id="saveCollectionLabel" data-i18n="catalog_save_collection">Salva Selezione in Raccolta</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Barra di Controllo Rapido & Ordinamento Moderno OLED -->
+        <div class="catalog-toolbar" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; padding: 10px 14px; background: rgba(15, 23, 42, 0.45); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); backdrop-filter: blur(10px);">
+            <!-- Pillole Rapide Epoca / Decadi -->
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px;">Epoca:</span>
+                <button type="button" class="sort-pill active" id="decadePillAll" onclick="setDecadeFilter('ALL')">Tutte</button>
+                <button type="button" class="sort-pill" id="decadePill70s" onclick="setDecadeFilter('70s')">'70s Pioneers</button>
+                <button type="button" class="sort-pill" id="decadePill80s" onclick="setDecadeFilter('80s')">'80s Golden Era</button>
+                <button type="button" class="sort-pill" id="decadePill90s" onclick="setDecadeFilter('90s')">'90s 16/32-Bit</button>
+                <button type="button" class="sort-pill" id="decadePill2000s" onclick="setDecadeFilter('2000s')">2000+ Modern</button>
+            </div>
+
+            <!-- Ordinamento Dinamico & Shuffle -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Ordina per:</span>
+                <select id="modernSortSelect" class="modern-sort-select" onchange="onModernSortChange(this.value)">
+                    <option value="title_asc">🔤 Titolo (A → Z)</option>
+                    <option value="title_desc">🔤 Titolo (Z → A)</option>
+                    <option value="year_desc">📅 Anno (Più Recenti)</option>
+                    <option value="year_asc">📅 Anno (Più Storici)</option>
+                    <option value="developer_asc">🏢 Produttore / Dev (A → Z)</option>
+                    <option value="genre_asc">🏷️ Genere (A → Z)</option>
+                    <option value="rating_desc">⭐ Valutazione / Score</option>
+                    <option value="playcount_desc">🔥 Più Giocati</option>
+                </select>
+                <button type="button" class="btn btn-secondary" onclick="shuffleCatalogOrder()" title="Mischia casualmente l'ordine della vista corrente" style="padding: 6px 12px; font-size: 0.80rem; font-weight: 700; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 5px;">
+                    <span>🎲</span> <span>Shuffle</span>
                 </button>
             </div>
         </div>
@@ -2901,7 +2994,9 @@
                 "side_nintendo": "Mondo Nintendo",
                 "side_sega": "Galassia SEGA",
                 "side_sony": "Sony PlayStation",
-                "side_computers": "Computer Occidentali",
+                "side_commodore": "Commodore 8-Bit",
+                "side_amiga": "Amiga Universe",
+                "side_computers": "PC & Home Computer",
                 "side_indie": "PC Indie & Recomp",
                 "side_custom": "Raccolte Personalizzate",
                 "hero_play_now": "▶ GIOCA ORA",
@@ -3123,7 +3218,9 @@
                 "side_nintendo": "Nintendo World",
                 "side_sega": "SEGA Galaxy",
                 "side_sony": "Sony PlayStation",
-                "side_computers": "Western Computers",
+                "side_commodore": "Commodore 8-Bit",
+                "side_amiga": "Amiga Universe",
+                "side_computers": "PC & Home Computer",
                 "side_indie": "PC Indie & Recomp",
                 "side_custom": "Custom Playlists",
                 "hero_play_now": "▶ PLAY NOW",
@@ -3345,7 +3442,9 @@
                 "side_nintendo": "Mundo Nintendo",
                 "side_sega": "Galaxia SEGA",
                 "side_sony": "Sony PlayStation",
-                "side_computers": "Ordenadores Clásicos",
+                "side_commodore": "Commodore 8-Bit",
+                "side_amiga": "Universo Amiga",
+                "side_computers": "PC y Ordenadores",
                 "side_indie": "PC Indie y Recomp",
                 "side_custom": "Listas Personalizadas",
                 "hero_play_now": "▶ JUGAR AHORA",
@@ -3605,7 +3704,32 @@
         let customCollections = [];
         let activeCustomCollectionId = null;
 
-        // Mappa delle 12 Macro-Famiglie -> Codici Piattaforma Corrispondenti
+        // Stato Toolbar Ordinamento Moderno & Epoca Decadi
+        let activeDecadeFilter = 'ALL';
+        let activeCatalogSort = 'title_asc';
+        let isCatalogShuffled = false;
+
+        function setDecadeFilter(decade) {
+            activeDecadeFilter = decade;
+            document.querySelectorAll('.catalog-toolbar .sort-pill').forEach(p => p.classList.remove('active'));
+            const btn = document.getElementById(`decadePill${decade === 'ALL' ? 'All' : decade}`);
+            if (btn) btn.classList.add('active');
+            renderCatalog();
+        }
+
+        function onModernSortChange(sortVal) {
+            activeCatalogSort = sortVal;
+            isCatalogShuffled = false;
+            renderCatalog();
+        }
+
+        function shuffleCatalogOrder() {
+            isCatalogShuffled = true;
+            renderCatalog();
+            showToast('🎲 Catalogo rimescolato casualmente!');
+        }
+
+        // Mappa delle Macro-Famiglie -> Codici Piattaforma Corrispondenti
         const MACRO_FAMILY_MAP = {
             'ALL': null,
             'FAVORITES': null,
@@ -3618,7 +3742,9 @@
             'SONY': ['PSX', 'PS2', 'PSP', 'PS3', 'PSVITA'],
             'ATARI': ['ATARI2600', 'ATARI5200', 'ATARI7800', 'LYNX', 'JAGUAR', 'VECTREX', 'COLECO', 'INTELLIVISION', 'ODYSSEY2'],
             'SNKNEC': ['NEOGEO', 'NEOGEOCD', 'NGP', 'NGPC', 'PCENGINE', 'SUPERGRAFX', 'PCFX'],
-            'COMPUTER': ['C64', 'AMIGA', 'DOS', 'SCUMMVM', 'ZXSPECTRUM', 'CPC', 'BBCMICRO', 'APPLE2'],
+            'COMMODORE': ['C64', 'VIC20', 'PLUS4', 'C128', 'PET'],
+            'AMIGA': ['AMIGA', 'AMIGA1200', 'CD32'],
+            'COMPUTER': ['DOS', 'SCUMMVM', 'ZXSPECTRUM', 'CPC', 'BBCMICRO', 'APPLE2'],
             'NIPPON': ['X68000', 'MSX', 'MSX2', 'FMTOWNS', 'PC88', 'PC98'],
             'PC': ['RECOMP', 'INDIE', 'PICO8', 'TIC80']
         };
@@ -3774,7 +3900,9 @@
                 'SONY': '🎮 Sony PlayStation',
                 'ATARI': '🦅 Atari & Pioneers',
                 'SNKNEC': '⚔️ SNK & NEC Engine',
-                'COMPUTER': '💾 Home Computer Occidentali',
+                'COMMODORE': isEn ? '💾 Commodore 8-Bit (C64, VIC-20)' : (isEs ? '💾 Commodore 8-Bit (C64, VIC-20)' : '💾 Commodore 8-Bit (C64, VIC-20)'),
+                'AMIGA': isEn ? '🔴 Amiga Universe (500, 1200, CD32)' : (isEs ? '🔴 Universo Amiga (500, 1200, CD32)' : '🔴 Amiga Universe (500, 1200, CD32)'),
+                'COMPUTER': isEn ? '🖥️ PC DOS & Home Computer' : (isEs ? '🖥️ PC DOS y Ordenadores' : '🖥️ PC DOS & Home Computer'),
                 'NIPPON': '🗾 Nippon Micro Computers',
                 'PC': '⚡ PC Moderno, Recomp & Indie'
             };
@@ -4425,6 +4553,19 @@
                 }
             }
 
+            // 10. Filtro Rapido Epoca / Decade dalla Toolbar
+            if (!isModalPreview && activeDecadeFilter !== 'ALL') {
+                if (activeDecadeFilter === '70s') {
+                    if (g.year >= 1980) return false;
+                } else if (activeDecadeFilter === '80s') {
+                    if (g.year < 1980 || g.year >= 1990) return false;
+                } else if (activeDecadeFilter === '90s') {
+                    if (g.year < 1990 || g.year >= 2000) return false;
+                } else if (activeDecadeFilter === '2000s') {
+                    if (g.year < 2000) return false;
+                }
+            }
+
             return true;
         }
 
@@ -4472,6 +4613,32 @@
                 return true;
             });
             currentFilteredGames = filtered;
+
+            // 3. Ordinamento dinamico (Toolbar Modern Sort & Shuffle)
+            if (isCatalogShuffled) {
+                for (let i = filtered.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+                }
+            } else {
+                if (activeCatalogSort === 'title_asc') {
+                    filtered.sort((a, b) => a.title.localeCompare(b.title));
+                } else if (activeCatalogSort === 'title_desc') {
+                    filtered.sort((a, b) => b.title.localeCompare(a.title));
+                } else if (activeCatalogSort === 'year_desc') {
+                    filtered.sort((a, b) => (b.year || 0) - (a.year || 0) || a.title.localeCompare(b.title));
+                } else if (activeCatalogSort === 'year_asc') {
+                    filtered.sort((a, b) => (a.year || 0) - (b.year || 0) || a.title.localeCompare(b.title));
+                } else if (activeCatalogSort === 'developer_asc') {
+                    filtered.sort((a, b) => (a.developer || '').localeCompare(b.developer || '') || a.title.localeCompare(b.title));
+                } else if (activeCatalogSort === 'genre_asc') {
+                    filtered.sort((a, b) => (a.genre || '').localeCompare(b.genre || '') || a.title.localeCompare(b.title));
+                } else if (activeCatalogSort === 'rating_desc') {
+                    filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0) || a.title.localeCompare(b.title));
+                } else if (activeCatalogSort === 'playcount_desc') {
+                    filtered.sort((a, b) => (b.play_count || 0) - (a.play_count || 0) || a.title.localeCompare(b.title));
+                }
+            }
 
             const isEn = (currentLang === 'en');
             document.getElementById('catalogStatsBadge').innerText = `${filtered.length} ${t('catalog_stats_visible')}`;
@@ -6306,22 +6473,30 @@
                     optionsBtn.style.background = 'rgba(255, 255, 255, 0.06)';
                 }
             } else if (game.system_code === 'PINBALL') {
+                if (autoInstallBtn) {
+                    autoInstallBtn.style.display = 'block';
+                    autoInstallBtn.disabled = false;
+                    autoInstallBtn.style.opacity = '1';
+                    autoInstallBtn.innerHTML = `⚡ Integra Core Pinball Automaticamente (1 Clic)`;
+                }
+                const dlBtn = document.getElementById('emuSetupDownloadBtn');
+                if (dlBtn) dlBtn.style.display = 'none';
                 if (iconEl) iconEl.innerText = '🎯';
-                if (titleEl) titleEl.innerText = t('emu_setup_title');
+                if (titleEl) titleEl.innerText = '🎯 Integrazione Core Flipper';
                 if (badgeEl) badgeEl.innerText = `Visual Pinball — ${game.title}`;
                 if (descEl) {
                     descEl.innerText = (currentLang === 'en')
-                        ? `Visual Pinball X (VPinballX64.exe) is required to run this pinball table with full physics simulation. Configure its path in Options.`
+                        ? `Visual Pinball X engine is required. Integrate the core automatically with 1-click directly inside RetroHub!`
                         : ((currentLang === 'es')
-                            ? `Se requiere Visual Pinball X (VPinballX64.exe) para simular la física y los gráficos de esta mesa. Configura la ruta en Opciones.`
-                            : `È richiesto Visual Pinball X (VPinballX64.exe) per simulare la fisica e la grafica di questo tavolo. Configura il percorso nelle Opzioni.`);
+                            ? `Se requiere el motor Visual Pinball X. ¡Integra el núcleo automáticamente con 1 clic directamente dentro de RetroHub!`
+                            : `È richiesto il motore Visual Pinball X per simulare la fisica del tavolo. Puoi integrarlo automaticamente con 1 clic direttamente dentro RetroHub!`);
                 }
                 if (webBtn) webBtn.style.display = 'none';
                 if (optionsBtn) {
-                    optionsBtn.className = 'btn btn-primary';
-                    optionsBtn.style.color = '#05080e';
-                    optionsBtn.style.borderColor = 'transparent';
-                    optionsBtn.style.background = 'linear-gradient(135deg, var(--accent-cyan) 0%, #00b4d8 100%)';
+                    optionsBtn.className = 'btn btn-secondary';
+                    optionsBtn.style.color = 'var(--accent-cyan)';
+                    optionsBtn.style.borderColor = 'rgba(0, 243, 255, 0.35)';
+                    optionsBtn.style.background = 'rgba(255, 255, 255, 0.06)';
                 }
             } else {
                 if (iconEl) iconEl.innerText = '🕹️';
@@ -6385,6 +6560,71 @@
                 url = 'https://github.com/vpinball/vpinball/releases';
             }
             window.open(url, '_blank');
+        }
+
+        let vpxInstallPollTimer = null;
+        async function startAutoInstallVPX() {
+            const btn = document.getElementById('emuSetupAutoInstallBtn');
+            const progressContainer = document.getElementById('emuSetupProgressContainer');
+            const progressTitle = document.getElementById('emuSetupProgressTitle');
+            const progressPercent = document.getElementById('emuSetupProgressPercent');
+            const progressBar = document.getElementById('emuSetupProgressBar');
+            const progressSub = document.getElementById('emuSetupProgressSub');
+
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                btn.innerText = '⏳ Integrazione automatica in corso...';
+            }
+            if (progressContainer) progressContainer.style.display = 'block';
+            if (progressBar) progressBar.style.width = '8%';
+            if (progressPercent) progressPercent.innerText = '8%';
+            if (progressTitle) progressTitle.innerText = 'Download Core Visual Pinball X in corso...';
+            if (progressSub) progressSub.innerText = 'Connessione ai repository standalone...';
+
+            try {
+                await fetch('/api/emulators/install-vpx', { method: 'POST' });
+            } catch (e) {
+                console.error(e);
+            }
+
+            if (vpxInstallPollTimer) clearInterval(vpxInstallPollTimer);
+            vpxInstallPollTimer = setInterval(async () => {
+                try {
+                    const statusRes = await fetch('/api/emulators/install-status');
+                    const statusData = await statusRes.json();
+                    const pct = statusData.progress || 0;
+                    if (progressBar) progressBar.style.width = `${Math.min(pct, 100)}%`;
+                    if (progressPercent) progressPercent.innerText = `${Math.min(pct, 100)}%`;
+                    if (progressSub && statusData.message) progressSub.innerText = statusData.message;
+
+                    if (statusData.status === 'ready' || pct >= 100) {
+                        clearInterval(vpxInstallPollTimer);
+                        vpxInstallPollTimer = null;
+                        if (progressTitle) progressTitle.innerText = '✅ Visual Pinball X Integrato con Successo!';
+                        showToast('✅ Visual Pinball X integrato e configurato con successo!');
+                        setTimeout(() => {
+                            const launchId = currentSetupGameId;
+                            closeEmulatorSetupModal();
+                            if (launchId) {
+                                launchGameById(launchId);
+                            }
+                        }, 1200);
+                    } else if (statusData.status === 'error' || pct === 999) {
+                        clearInterval(vpxInstallPollTimer);
+                        vpxInstallPollTimer = null;
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.style.opacity = '1';
+                            btn.innerHTML = '⚠️ Riprova Integrazione Automatica';
+                        }
+                        if (progressTitle) progressTitle.innerText = 'Errore durante l\'integrazione';
+                        showToast('Errore durante il download o l\'estrazione dell\'emulatore');
+                    }
+                } catch (err) {
+                    console.error('Error polling install status:', err);
+                }
+            }, 800);
         }
 
         // --------------------------------------------------------------------------
@@ -6514,7 +6754,7 @@
                 await fetch('/api/factory-reset', { method: 'POST' }).catch(() => {});
                 localStorage.removeItem('retrohub_wizard_completed');
                 localStorage.removeItem('retrohub_downloaded_ids');
-                localStorage.setItem('retrohub_app_version', '0.45.0');
+                localStorage.setItem('retrohub_app_version', '0.46.0');
                 downloadedGameIds.clear();
                 closeSettingsModal();
                 showToast(isEn ? '🔄 Reset complete: restarting wizard...' : (isEs ? '🔄 Restablecimiento completo: reiniciando...' : '🔄 Reset completato: riavvio Setup Wizard...'));
@@ -6704,8 +6944,8 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Aggiornamento trasparente a v0.45.0 preservando le preferenze e raccolte dell'utente
-                const currentAppVer = '0.45.0';
+                // Controllo Versione: Aggiornamento trasparente a v0.46.0 preservando le preferenze e raccolte dell'utente
+                const currentAppVer = '0.46.0';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.setItem('retrohub_app_version', currentAppVer);

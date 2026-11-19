@@ -396,6 +396,9 @@ impl CatalogLoader {
             if t_lower.contains("link to the past") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Super_Nintendo_Entertainment_System/master/Named_Boxarts/Legend%20of%20Zelda,%20The%20-%20A%20Link%20to%20the%20Past%20(USA).png".to_string();
             }
+            if t_lower.contains("trials of mana") || t_lower.contains("seiken densetsu 3") {
+                return "/api/cover/file/covers/snes/trials_of_mana.png".to_string();
+            }
         }
 
         // 8. Mappe dedicate per Nintendo GameCube
@@ -419,6 +422,24 @@ impl CatalogLoader {
 
         // 9. Mappe dedicate per LaserDisc Arcade (Hypseus Singe)
         if sys_code.eq_ignore_ascii_case("HYPSEUS") {
+            if t_lower.contains("gp world") {
+                return "/api/cover/file/covers/laserdisc/ld_1604.png".to_string();
+            }
+            if t_lower.contains("interstellar") {
+                return "/api/cover/file/covers/laserdisc/ld_1605.png".to_string();
+            }
+            if t_lower.contains("mach 3") || t_lower.contains("mach3") {
+                return "/api/cover/file/covers/laserdisc/ld_1606.png".to_string();
+            }
+            if t_lower.contains("us vs them") || t_lower.contains("us vs. them") {
+                return "/api/cover/file/covers/laserdisc/ld_1607.png".to_string();
+            }
+            if t_lower.contains("don quix") {
+                return "/api/cover/file/covers/laserdisc/ld_1611.png".to_string();
+            }
+            if t_lower.contains("thayer") {
+                return "/api/cover/file/covers/laserdisc/ld_1612.png".to_string();
+            }
             if t_lower.contains("dragon's lair ii") || t_lower.contains("dragons lair 2") || t_lower.contains("time warp") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/Commodore_-_Amiga/master/Named_Boxarts/Dragon's%20Lair%20II%20-%20Time%20Warp.png".to_string();
             }
@@ -433,6 +454,71 @@ impl CatalogLoader {
             }
             if t_lower.contains("cliff hanger") {
                 return "https://raw.githubusercontent.com/libretro-thumbnails/MAME/master/Named_Snaps/Cliff%20Hanger.png".to_string();
+            }
+        }
+
+        // 9b. Mappe dedicate per Virtual Pinball
+        if sys_code.eq_ignore_ascii_case("PINBALL") {
+            if t_lower.contains("dracula") {
+                return "/api/cover/file/covers/pinball/pb_1641.webp".to_string();
+            }
+            if t_lower.contains("cactus") {
+                return "/api/cover/file/covers/pinball/pb_1642.webp".to_string();
+            }
+        }
+
+        // 9c. Mappe dedicate per Atari Lynx, 2600 e Intellivision
+        if sys_code.eq_ignore_ascii_case("LYNX") {
+            if t_lower.contains("blue lightning") {
+                return "/api/cover/file/covers/atari/blue_lightning.png".to_string();
+            }
+            if t_lower.contains("california games") {
+                return "/api/cover/file/covers/atari/california_games.png".to_string();
+            }
+            if t_lower.contains("chip") {
+                return "/api/cover/file/covers/atari/chips_challenge.png".to_string();
+            }
+            if t_lower.contains("slime world") || t_lower.contains("todd") {
+                return "/api/cover/file/covers/atari/slime_world.png".to_string();
+            }
+        }
+        if sys_code.eq_ignore_ascii_case("ATARI2600") {
+            if t_lower.contains("demon attack") {
+                return "/api/cover/file/covers/atari/demon_attack.png".to_string();
+            }
+        }
+        if sys_code.eq_ignore_ascii_case("INTELLIVISION") {
+            if t_lower.contains("utopia") {
+                return "/api/cover/file/covers/atari/utopia.png".to_string();
+            }
+        }
+
+        // 9d. Mappe dedicate per Game & Watch
+        if sys_code.eq_ignore_ascii_case("GAMEWATCH") {
+            if t_lower.contains("fire") && !t_lower.contains("firefighters") {
+                return "/api/cover/file/covers/gamewatch/gw_1724.jpg".to_string();
+            }
+            if t_lower.contains("helmet") {
+                return "/api/cover/file/covers/gamewatch/gw_1729.jpg".to_string();
+            }
+            if t_lower.contains("green house") {
+                return "/api/cover/file/covers/gamewatch/gw_1733.jpg".to_string();
+            }
+        }
+
+        // 9e. Mappe dedicate per Arcade (MAME / NAOMI / HIKARU)
+        if sys_code.eq_ignore_ascii_case("MAME") || sys_code.eq_ignore_ascii_case("NAOMI") || sys_code.eq_ignore_ascii_case("HIKARU") {
+            if t_lower.contains("illmatic envelope") || t_lower.contains("illvelo") {
+                return "/api/cover/file/covers/arcade/illvelo.png".to_string();
+            }
+            if t_lower.contains("puzzle & action") || t_lower.contains("tant-r") || t_lower.contains("tantr") {
+                return "/api/cover/file/covers/arcade/tantr.png".to_string();
+            }
+            if t_lower.contains("virtual-on") || t_lower.contains("virtual on") {
+                return "/api/cover/file/covers/arcade/virtual_on.png".to_string();
+            }
+            if t_lower.contains("brave firefighters") || t_lower.contains("braveff") {
+                return "/api/cover/file/covers/arcade/braveff.png".to_string();
             }
         }
 
@@ -868,14 +954,39 @@ impl CatalogLoader {
         let (repo_system, folder, suffix) = match sys_code.to_uppercase().as_str() {
             "MAME" => ("MAME", "Named_Snaps", ""),
             "C64" => ("Commodore_-_64", "Named_Boxarts", " (Europe)"),
+            "VIC20" => ("Commodore_-_VIC-20", "Named_Boxarts", ""),
+            "PLUS4" | "C16" => ("Commodore_-_Plus-4", "Named_Boxarts", ""),
+            "AMIGA" => ("Commodore_-_Amiga", "Named_Boxarts", ""),
             "SNES" => ("Nintendo_-_Super_Nintendo_Entertainment_System", "Named_Boxarts", " (USA)"),
             "NES" => ("Nintendo_-_Nintendo_Entertainment_System", "Named_Boxarts", " (USA)"),
             "N64" => ("Nintendo_-_Nintendo_64", "Named_Boxarts", " (USA)"),
             "GAMECUBE" => ("Nintendo_-_GameCube", "Named_Boxarts", " (USA)"),
+            "GBA" => ("Nintendo_-_Game_Boy_Advance", "Named_Boxarts", " (USA)"),
+            "GB" => ("Nintendo_-_Game_Boy", "Named_Boxarts", " (World)"),
+            "GBC" => ("Nintendo_-_Game_Boy_Color", "Named_Boxarts", " (USA)"),
+            "NDS" => ("Nintendo_-_Nintendo_DS", "Named_Boxarts", " (USA)"),
+            "MEGADRIVE" => ("Sega_-_Mega_Drive_-_Genesis", "Named_Boxarts", " (Europe)"),
+            "MASTERSYSTEM" => ("Sega_-_Master_System_-_Mark_III", "Named_Boxarts", " (Europe)"),
+            "GAMEGEAR" => ("Sega_-_Game_Gear", "Named_Boxarts", " (USA, Europe)"),
+            "SATURN" => ("Sega_-_Saturn", "Named_Boxarts", " (Europe)"),
             "DREAMCAST" => ("Sega_-_Dreamcast", "Named_Boxarts", " (USA)"),
             "NAOMI" => ("Sega_-_Naomi", "Named_Boxarts", ""),
             "ATOMISWAVE" => ("Atomiswave", "Named_Boxarts", ""),
             "PSX" => ("Sony_-_PlayStation", "Named_Boxarts", " (USA)"),
+            "NEOGEO" => ("SNK_-_Neo_Geo", "Named_Boxarts", ""),
+            "PCENGINE" => ("NEC_-_PC_Engine_-_TurboGrafx_16", "Named_Boxarts", " (USA)"),
+            "LYNX" => ("Atari_-_Lynx", "Named_Boxarts", " (World)"),
+            "ATARI2600" => ("Atari_-_2600", "Named_Boxarts", " (USA)"),
+            "ATARI5200" => ("Atari_-_5200", "Named_Boxarts", " (USA)"),
+            "ATARI7800" => ("Atari_-_7800", "Named_Boxarts", " (USA)"),
+            "JAGUAR" => ("Atari_-_Jaguar", "Named_Boxarts", " (World)"),
+            "INTELLIVISION" => ("Mattel_-_Intellivision", "Named_Boxarts", " (USA, Europe)"),
+            "COLECO" => ("Coleco_-_ColecoVision", "Named_Boxarts", " (USA, Europe)"),
+            "VECTREX" => ("GCE_-_Vectrex", "Named_Boxarts", " (World)"),
+            "ZXSPECTRUM" => ("Sinclair_-_ZX_Spectrum", "Named_Boxarts", ""),
+            "X68000" => ("Sharp_-_X68000", "Named_Boxarts", ""),
+            "MSX" => ("Microsoft_-_MSX", "Named_Boxarts", ""),
+            "MSX2" => ("Microsoft_-_MSX2", "Named_Boxarts", ""),
             "DOS" => ("DOS", "Named_Boxarts", ""),
             "SCUMMVM" => ("ScummVM", "Named_Boxarts", ""),
             "HIKARU" => ("MAME", "Named_Snaps", ""),

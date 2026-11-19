@@ -401,6 +401,22 @@
       "description": "Basket spettacolare su scheda Sega Model 3 a 60 FPS nativi con texture 3D filtrate e multiplayer locale a 2 giocatori.",
       "controls": "A Passaggio, X Tiro/Schiacciata, B Turbo, Y Stoppata",
       "features": ["60 FPS", "2 Players Versus", "True 3D"]
+    },
+    {
+      "id": "vibribbon_recomp",
+      "title": "Vib-Ribbon PSX Native Recomp",
+      "original_system": "PSX",
+      "developer": "NanaOn-Sha / Sony",
+      "recomp_author": "PSX Recomp Community",
+      "year": 1999,
+      "genre": "Rhythm Game / Wireframe Cult",
+      "rom_required": "vibribbon.cue",
+      "exe_name": "vibribbon.exe",
+      "source_url": "https://github.com/nanaonsha/vib-ribbon-recomp",
+      "cover_url": "/api/cover/file/covers/recomp/vib_ribbon.png",
+      "description": "Il capolavoro ritmico di Masaya Matsuura ricompilato nativo per PC: grafica vettoriale a linea bianca ad altissima risoluzione con timing a zero latenza.",
+      "controls": "D-Pad e Tasti A/B/X/Y a tempo di ritmo",
+      "features": ["Zero Latency", "High-Res Vectors", "Custom CD Audio"]
     }
   ]
 }

@@ -6,11 +6,14 @@ use crate::netplay::NetplayManager;
 use crate::search::SearchEngine;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU64, AtomicU32, Ordering};
 use std::sync::{Arc, Mutex};
 use tiny_http::{Header, Method, Response, Server, StatusCode};
 use crate::library_config::LibraryConfig;
 use std::process::Command;
+
+static VPX_INSTALL_PROGRESS: AtomicU32 = AtomicU32::new(0);
+static VPX_INSTALL_MSG: Mutex<Option<String>> = Mutex::new(None);
 
 pub struct HttpServer {
     db: Arc<Mutex<Database>>,
@@ -646,6 +649,169 @@ impl HttpServer {
                             "detected": config.find_mame().map(|p| p.to_string_lossy().to_string()),
                             "is_available": config.find_mame().is_some()
                         }
+                    });
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp.to_string()).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // EMULATOR INSTALL API - Auto-install Visual Pinball X Core (1-Click)
+                (&Method::Post, "/api/emulators/install-vpx") => {
+                    let cur = VPX_INSTALL_PROGRESS.load(Ordering::SeqCst);
+                    if cur > 0 && cur < 100 {
+                        let msg = VPX_INSTALL_MSG.lock().unwrap().clone().unwrap_or_default();
+                        let resp = serde_json::json!({
+                            "success": true,
+                            "status": "downloading",
+                            "progress": cur,
+                            "message": msg
+                        });
+                        let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                        let response = Response::from_string(resp.to_string()).with_header(header);
+                        let _ = request.respond(response);
+                        continue;
+                    }
+
+                    VPX_INSTALL_PROGRESS.store(5, Ordering::SeqCst);
+                    *VPX_INSTALL_MSG.lock().unwrap() = Some("Connessione ai repository standalone di Visual Pinball X...".into());
+
+                    std::thread::spawn(|| {
+                        let url = "https://github.com/vpinball/vpinball/releases/download/v10.8.0-2051-28dd6c3/Developer.VPinballX_GL-10.8.0-2051-28dd6c3-Release-win-x64.zip";
+                        let emu_dir = std::path::PathBuf::from("emulators").join("vpx");
+                        let _ = std::fs::create_dir_all(&emu_dir);
+                        let zip_path = std::path::PathBuf::from("emulators").join("vpx_temp.zip");
+
+                        let client = match reqwest::blocking::Client::builder().timeout(std::time::Duration::from_secs(300)).build() {
+                            Ok(c) => c,
+                            Err(e) => {
+                                VPX_INSTALL_PROGRESS.store(999, Ordering::SeqCst);
+                                *VPX_INSTALL_MSG.lock().unwrap() = Some(format!("Errore creazione client HTTP: {}", e));
+                                return;
+                            }
+                        };
+
+                        let mut resp = match client.get(url).send() {
+                            Ok(r) => r,
+                            Err(e) => {
+                                VPX_INSTALL_PROGRESS.store(999, Ordering::SeqCst);
+                                *VPX_INSTALL_MSG.lock().unwrap() = Some(format!("Errore connessione: {}", e));
+                                return;
+                            }
+                        };
+
+                        let total_size = resp.content_length().unwrap_or(39187103);
+                        let mut file = match std::fs::File::create(&zip_path) {
+                            Ok(f) => f,
+                            Err(e) => {
+                                VPX_INSTALL_PROGRESS.store(999, Ordering::SeqCst);
+                                *VPX_INSTALL_MSG.lock().unwrap() = Some(format!("Errore creazione file zip temporaneo: {}", e));
+                                return;
+                            }
+                        };
+
+                        use std::io::{Read, Write};
+                        let mut downloaded: u64 = 0;
+                        let mut buffer = [0u8; 65536];
+                        loop {
+                            match resp.read(&mut buffer) {
+                                Ok(0) => break,
+                                Ok(n) => {
+                                    if let Err(e) = file.write_all(&buffer[..n]) {
+                                        VPX_INSTALL_PROGRESS.store(999, Ordering::SeqCst);
+                                        *VPX_INSTALL_MSG.lock().unwrap() = Some(format!("Errore scrittura disco: {}", e));
+                                        return;
+                                    }
+                                    downloaded += n as u64;
+                                    let pct = 5 + (downloaded * 80 / total_size) as u32;
+                                    VPX_INSTALL_PROGRESS.store(pct.min(85), Ordering::SeqCst);
+                                    let mb_done = downloaded as f64 / 1_048_576.0;
+                                    let mb_total = total_size as f64 / 1_048_576.0;
+                                    *VPX_INSTALL_MSG.lock().unwrap() = Some(format!("Download in corso: {:.1} MB / {:.1} MB ({}%)", mb_done, mb_total, pct.min(85)));
+                                }
+                                Err(e) => {
+                                    VPX_INSTALL_PROGRESS.store(999, Ordering::SeqCst);
+                                    *VPX_INSTALL_MSG.lock().unwrap() = Some(format!("Errore download: {}", e));
+                                    return;
+                                }
+                            }
+                        }
+
+                        VPX_INSTALL_PROGRESS.store(88, Ordering::SeqCst);
+                        *VPX_INSTALL_MSG.lock().unwrap() = Some("Estrazione automatica archivio standalone in corso...".into());
+
+                        let tar_res = Command::new("tar.exe")
+                            .args(["-xf", zip_path.to_str().unwrap_or(""), "-C", emu_dir.to_str().unwrap_or("")])
+                            .output();
+
+                        let tar_failed = match &tar_res {
+                            Ok(out) => !out.status.success(),
+                            Err(_) => true,
+                        };
+
+                        if tar_failed {
+                            let ps_cmd = format!("Expand-Archive -Path '{}' -DestinationPath '{}' -Force", zip_path.display(), emu_dir.display());
+                            let _ = Command::new("powershell.exe")
+                                .args(["-NoProfile", "-NonInteractive", "-Command", &ps_cmd])
+                                .output();
+                        }
+
+                        let _ = std::fs::remove_file(&zip_path);
+
+                        let mut vpx_exe_path: Option<std::path::PathBuf> = None;
+                        for entry in walkdir::WalkDir::new(&emu_dir).into_iter().filter_map(|e| e.ok()) {
+                            let p = entry.path();
+                            if p.is_file() {
+                                if let Some(name) = p.file_name().and_then(|n| n.to_str()) {
+                                    let n_low = name.to_lowercase();
+                                    if n_low.starts_with("vpinballx") && n_low.ends_with(".exe") {
+                                        vpx_exe_path = Some(p.to_path_buf());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if let Some(exe) = vpx_exe_path {
+                            let mut config = crate::config::RetroHubConfig::load();
+                            let abs_path = std::fs::canonicalize(&exe).unwrap_or(exe);
+                            config.emulator_paths.vpx = Some(abs_path.to_string_lossy().to_string());
+                            let _ = config.save();
+                            VPX_INSTALL_PROGRESS.store(100, Ordering::SeqCst);
+                            *VPX_INSTALL_MSG.lock().unwrap() = Some("Visual Pinball X integrato e configurato con successo!".into());
+                        } else {
+                            VPX_INSTALL_PROGRESS.store(999, Ordering::SeqCst);
+                            *VPX_INSTALL_MSG.lock().unwrap() = Some("Eseguibile VPinballX non trovato nell'archivio estratto".into());
+                        }
+                    });
+
+                    let resp = serde_json::json!({
+                        "success": true,
+                        "status": "started",
+                        "progress": 5,
+                        "message": "Download avviato in background"
+                    });
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp.to_string()).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // EMULATOR INSTALL STATUS API
+                (&Method::Get, "/api/emulators/install-status") => {
+                    let progress = VPX_INSTALL_PROGRESS.load(Ordering::SeqCst);
+                    let msg = VPX_INSTALL_MSG.lock().unwrap().clone().unwrap_or_default();
+                    let status = if progress >= 100 {
+                        "ready"
+                    } else if progress == 999 {
+                        "error"
+                    } else if progress > 0 {
+                        "downloading"
+                    } else {
+                        "idle"
+                    };
+                    let resp = serde_json::json!({
+                        "progress": progress,
+                        "status": status,
+                        "message": msg
                     });
                     let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
                     let response = Response::from_string(resp.to_string()).with_header(header);

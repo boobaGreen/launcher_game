@@ -130,12 +130,100 @@ impl Launcher {
             }
         }
 
-        // 5. Console & Computer ROMs (downloads/<platform>, emu/<platform>, roms/<platform>)
+        // 5. NAOMI & Atomiswave Arcade
+        if sys_upper == "NAOMI" || sys_upper == "ATOMISWAVE" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\NAOMI - Flycast");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        }
+
+        // 6. Sony PlayStation (PSX / PS1)
+        if sys_upper == "PSX" || sys_upper == "PS1" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\PSX");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        }
+
+        // 7. Sega Dreamcast
+        if sys_upper == "DREAMCAST" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Dreamcast");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        }
+
+        // 8. Nintendo GameCube
+        if sys_upper == "GAMECUBE" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\GameCube");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        }
+
+        // 9. Sega Hikaru Arcade
+        if sys_upper == "HIKARU" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Hikaru - DEmul");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        }
+
+        // 10. ScummVM Adventure
+        if sys_upper == "SCUMMVM" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\ScummVM");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        }
+
+        // 11. PC MS-DOS
+        if sys_upper == "DOS" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\DOS\games");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+            let base_root = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\DOS");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base_root, &game.title) {
+                return Some(target);
+            }
+        }
+
+        // 12. Commodore 64 & Amiga
+        if sys_upper == "C64" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\C64");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        }
+
+        // 13. Nintendo SNES / NES / N64
+        if sys_upper == "SNES" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\SNES");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        } else if sys_upper == "NES" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\NES");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        } else if sys_upper == "N64" {
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Nintendo64");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        }
+
+        // 14. Console & Computer ROMs (downloads/<platform>, emu/<platform>, roms/<platform>)
         let search_dirs = [
             PathBuf::from(format!("downloads/{}", game.system_code.to_lowercase())),
             PathBuf::from(format!("downloads/{}", sys_upper.to_lowercase())),
             PathBuf::from(format!(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\{}", game.system_code)),
             PathBuf::from(format!(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\{}\roms", game.system_code)),
+            PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\NAOMI - Flycast\roms"),
+            PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Nintendo64\roms"),
             PathBuf::from(format!("roms/{}", game.system_code.to_lowercase())),
         ];
 
@@ -177,6 +265,47 @@ impl Launcher {
             }
         }
 
+        None
+    }
+
+    /// Cerca ricorsivamente scorciatoie .lnk o file ROM all'interno di una cartella di emulatori
+    pub fn match_lnk_or_rom_in_dir(dir: &Path, title: &str) -> Option<String> {
+        if !dir.exists() {
+            return None;
+        }
+        let t_low = title.to_lowercase();
+        let clean_t = t_low.split('(').next().unwrap_or(&t_low).trim();
+        let words: Vec<&str> = clean_t.split_whitespace().filter(|w| w.len() > 3).collect();
+
+        if let Ok(entries) = std::fs::read_dir(dir) {
+            for entry in entries.flatten() {
+                let p = entry.path();
+                let name = entry.file_name().to_string_lossy().to_lowercase();
+                if name.ends_with(".lnk") || name.ends_with(".bat") {
+                    if name.contains(clean_t) || (!words.is_empty() && words.iter().all(|w| name.contains(w))) {
+                        return Some(p.to_string_lossy().to_string());
+                    }
+                }
+                if p.is_dir() {
+                    let dir_name = name;
+                    if dir_name.contains(clean_t) || (!words.is_empty() && words.iter().all(|w| dir_name.contains(w))) {
+                        let gioca = p.join("Gioca.lnk");
+                        if gioca.exists() {
+                            return Some(gioca.to_string_lossy().to_string());
+                        }
+                        if let Ok(sub_entries) = std::fs::read_dir(&p) {
+                            for sub in sub_entries.flatten() {
+                                let sub_p = sub.path();
+                                let ext = sub_p.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+                                if ["chd", "cue", "iso", "bin", "pbp", "cdi", "gdi", "sfc", "z64"].contains(&ext.as_str()) {
+                                    return Some(sub_p.to_string_lossy().to_string());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         None
     }
 
@@ -347,7 +476,7 @@ impl Launcher {
             }
         }
 
-        // Avvio nativo MAME con BGFX renderer e attivazione finestra in primo piano
+        // Avvio nativo MAME con finestra in primo piano indipendente
         if let Some(rom) = trimmed.strip_prefix("MAME:") {
             let mame_dirs = [
                 PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\mame"),
@@ -363,17 +492,16 @@ impl Launcher {
                 .join("downloads/mame");
             let rompaths = format!(r#"roms;{};{}"#, dl_mame.display(), mame_dir.join("roms").display());
 
-            let mame_exe = mame_dir.join("mame.exe");
-            let mut cmd = Command::new(&mame_exe);
-            cmd.arg(rom.trim())
-                .arg("-video")
-                .arg("bgfx")
-                .arg("-skip_gameinfo")
-                .arg("-rompath")
-                .arg(&rompaths)
-                .current_dir(&mame_dir);
-
-            cmd.spawn().map_err(|e| format!("Errore avvio MAME: {}", e))?;
+            let script = format!(
+                r#"$p = Start-Process -FilePath ".\mame.exe" -ArgumentList '{} -skip_gameinfo -rompath "{}"' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
+                rom.trim(),
+                rompaths.replace('\'', "''"),
+                mame_dir.display().to_string().replace('\'', "''")
+            );
+            Command::new("powershell")
+                .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
+                .spawn()
+                .map_err(|e| format!("Errore avvio MAME: {}", e))?;
             return Ok(format!("Avviato MAME (ROM: {})", rom));
         }
 

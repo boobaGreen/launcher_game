@@ -1,6 +1,7 @@
 /target
 **/*.rs.bk
 *.log
+log_*.txt
 .profile/
 retro_hub.db
 retro-hub.exe
