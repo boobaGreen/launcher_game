@@ -1,6 +1,6 @@
 # 🗺️ RetroHub — Roadmap di Sviluppo Strategica
-**Versione Roadmap:** 3.0 (Target Prioritario: Windows Produzione Immediata | Architettura a 4 Binari & Clean Rebirth UI)  
-**Obiettivo:** Trasformare RetroHub nel launcher retrogaming definitivo per Windows: motore Rust a 60 FPS da soli 7 MB, enciclopedia on-demand per 200+ console, Hero Widescreen configurabile con rotazione a 5 sorgenti, 4 profili di onboarding guidato e integrazione nativa di Recomp e PC Indie/LocoMalito. *(Linux e macOS pianificati per le fasi successive al rilascio Windows).*
+**Versione Roadmap:** 3.2 (Target Prioritario: Windows Produzione Immediata | Clean Rebirth UI & Architettura Universale a 12 Macro-Famiglie)  
+**Obiettivo:** Trasformare RetroHub nel launcher retrogaming definitivo per Windows: motore Rust a 60 FPS da soli 7 MB, enciclopedia on-demand per 200+ console organizzata in 12 macro-famiglie (con Laserdisc, Pinball, Game & Watch, Computer storici e PC Recomp/Indie), Hero Widescreen cinematografica con game art attiva a 1920x620, modalità vergine da nuovo utente (zero file toccati in locale), icone vettoriali SVG minimali e simulatore P2P per l'Arena. *(Linux e macOS pianificati per le fasi successive al rilascio Windows).*
 
 ---
 
@@ -27,6 +27,10 @@
 - [x] **Handshake P2P Diretto (Rete Locale / LAN):** Connessione diretta tra Host e Guest via socket UDP.
 - [x] **Avvio Sincronizzato Emulatori Netplay:**
   - Parametri da riga di comando per Flycast, Snes9x, DuckStation, Dolphin e MAME.
+- [x] **Simulatore Bot P2P One-Click (Test Sviluppo & Collaudo):**
+  - Pulsante dedicato `[ 🤖 Simula Match con Bot P2P ]` nel modale Arena.
+  - Inietta un finto avversario virtuale (*RetroBot_99*, ping 18ms), simula handshake, countdown 3.. 2.. 1.. e lancia il gioco in prova.
+  - Incapsulato sotto il flag `ARENA_DEV_SIMULATION` (facilmente escludibile per la release finale).
 - [ ] **Dashboard Interattiva Arena Online:**
   - Schermata grafica a schede per Creazione Stanza, Unione tramite Codice e Monitoraggio Latenza (Ping RTT in tempo reale).
 - [ ] **Leaderboard Standardizzata & Hall of Fame (High Scores):**
@@ -45,110 +49,70 @@
 
 ---
 
-## 📌 FASE 4: Personalizzazione Libreria, Enciclopedia Immagini & Download ROM "On-The-Fly" (Completata 🟢)
+## 📌 FASE 4: Personalizzazione Libreria, Enciclopedia Immagini & Onboarding Vergine (In Corso 🚀)
 *Obiettivo: Nessun bisogno di riempire l'hard disk con terabyte di file: consultazione visiva al 100% dell'intero catalogo e download automatico della ROM al click.*
 
-### **4.1 Enciclopedia & Sblocco Immagini Completo per Piattaforma**
-- [x] **Modalità Catalogo Completo (Zero-Disk Footprint):**
-  - L'utente seleziona una console o piattaforma e può **sbloccare/sfogliare tutte le copertine e metadati al 100%**, anche se le ROM non sono ancora presenti sul PC.
-  - Switch rapido in UI: `[ Mostra Tutto l'Archivio ]` vs `[ Solo Giochi Scaricati ]`.
-- [x] **Risoluzione Copertine Multi-Mirror:**
-  - Download asincrono boxart ad alta risoluzione da Libretro CDN, Steam CDN e screen snapshot locali.
-  - Caching locale automatico in `cache/covers/` per consultazione offline.
+### **4.1 Modalità Vergine "Nuovo Utente" & Zero File Toccati**
+- [x] **Disconnessione Sicura delle Cartelle Locali:**
+  - Scollegamento software di `emu_root` senza mai toccare, spostare o cancellare un singolo file utente in `C:\...\emu`.
+  - Avvio pulito a 0 giochi installati / 0 MB occupati per collaudare l'esperienza reale del nuovo utente.
+- [x] **Standardizzazione Card Tipografiche Vettoriali a 0 Byte:**
+  - Eliminazione di tutte le immagini sporche, mockup temporanei o URL esterni non certificati.
+  - Visualizzazione di default con schede tipografiche eleganti nei colori ufficiali console con watermark geometrico.
+  - Caching locale in `covers/<id>.png` solo al momento dell'installazione o download effettivo.
 
 ### **4.2 Download ROM "On-The-Fly" al Click**
 - [x] **Download Trasparente al Lancio:**
-  - Se l'utente clicca **☁️ SCARICA & GIOCA** su un titolo non presente in locale, il client scarica la ROM "al volo" tramite `DownloadManager` con feedback visivo e notifica.
-  - Caching nella cartella dedicata `downloads/`.
+  - Se l'utente clicca **☁️ SCARICA & GIOCA**, il client scarica la ROM in background tramite `DownloadManager` nella cartella pulita `retro_downloads/`.
 - [x] **Avvio Immediato Post-Download:**
-  - Non appena il download termina, la ROM viene registrata come installata e l'emulatore o core di sistema si avvia istantaneamente a schermo intero.
+  - Al termine del download, la ROM viene registrata come installata e il gioco si avvia istantaneamente a schermo intero.
+- [x] **Dialog Intelligente Post-Partita (Salva-Spazio):**
+  - Prompt di chiusura integrato: `[ 💾 TIENI SUL PC ]` vs `[ 🗑️ ELIMINA PER FARE SPAZIO ]`.
 
-### **4.3 Dialog Intelligente Post-Partita (Salva-Spazio)**
-- [x] **Prompt di Chiusura e Gestione Spazio:**
-  - Finestra di dialogo modale post-partita integrata in UI:
-    ```
-    🎮 Partita Conclusa!
-    Cosa desideri fare con la ROM scaricata on-the-fly?
-    [ 💾 TIENI SUL PC ]    [ 🗑️ ELIMINA PER FARE SPAZIO ]
-    ```
-  - Rimozione sicura del file scaricato via `POST /api/library/delete` con aggiornamento immediato della libreria.
-
-### **4.4 Wizard di Onboarding & Strategie di Storage (4 Profili Utente)**
-- [ ] **Wizard Iniziale Guidato (Step-by-Step):**
-  - *Caso 1 (Nuovo Utente / Zero ROM):* Attivazione Top 5/10 Regina, zero download preventivo, eliminazione automatica a fine partita.
-  - *Caso 2 (Collezione Locale Esistente):* Auto-Discovery su cartella radice standard (`roms/<console>/`).
-  - *Caso 3 (Low Storage / Handheld):* Modalità **Placeholder Tipografici Vettoriali** (0 byte immagini a monte, boxart scaricata solo per giochi scaricati o preferiti).
-  - *Caso 4 (Full Storage / 4TB+):* Download persistente e attivazione totale delle ~200 piattaforme con interruttore ON/OFF.
-- [ ] **Sandbox di Test "Simula Nuovo Utente":**
-  - Toggle a video per testare l'esperienza da vuoto (tutti i giochi in `☁️ ON-DEMAND`) senza cancellare o alterare un singolo file reale dal disco.
+### **4.3 Wizard di Onboarding & Strategie di Storage (4 Profili Utente Reali)**
+- [x] **Caso 1: Installazione Pulita & On-Demand:** Zero byte preventivi, catalogo cloud al 100%, scarica al volo solo mentre giochi con pulizia automatica opzionale.
+- [x] **Caso 2: Collezione Esistente (Zero Spostamenti):** Scansione in sola lettura della cartella radice locale senza mai duplicare, spostare o rinominare i file dell'utente.
+- [x] **Caso 3: Low Storage / Handheld (Smart Cache):** 0 byte per le immagini all'inizio (card tipografiche vettoriali). Scarica le copertine solo per i preferiti ⭐ o giochi avviati (cache limitata 50-100 MB).
+- [x] **Caso 4: Full Pack Offline (Console Scelte):** Scalabile: permette di scaricare l'intero pack offline per le console selezionate (pochi GB per SNES/MD) o l'intero archivio per chi ha dischi grandi.
 
 ---
 
-## 📌 FASE 5: Gestione Modulare di Emulatori & Core (Standard Batocera / RetroBat 🧩)
-*Obiettivo: Adottare l'architettura modulare di Batocera e RetroBat, supportando l'intero ecosistema di oltre 200 console, arcade e computer d'epoca.*
+## 📌 FASE 5: Architettura a 12 Macro-Famiglie & Rebirth UI (In Corso 🧩)
+*Obiettivo: Supportare con dignità e chiarezza tutti i ~200 sistemi storici via Sidebar sinistra collassabile e Hero cinematografica.*
 
-### **5.1 Architettura Ibrida a Quattro Binari (Libretro + Standalone + PC Recomp + PC Indie & LocoMalito)**
-Come Batocera e RetroBat (e con il supporto esclusivo per i port nativi PC e titoli indipendenti), la gestione dei motori di gioco viene standardizzata in quattro categorie:
-1. **Piattaforme 8/16/32-bit & Computer Classici (80% dei sistemi):**
-   - Gestione unificata tramite **RetroArch Libretro Cores** (es. `snes9x_libretro.dll`, `genesis_plus_gx_libretro.dll`, `fceumm_libretro.dll`, `puae_libretro.dll`, `vice_x64sc_libretro.dll`).
-   - *Vantaggi:* Shader video CRT uniformi, configurazione controller centralizzata, savestate e rewind garantiti.
-2. **Piattaforme 3D Complesse & Arcade Speciali (Standalone Dedicati):**
-   - Esecutori dedicati ottimizzati: Dolphin (GameCube/Wii), PCSX2 (PS2), RPCS3 (PS3), DuckStation (PS1), Flycast (Dreamcast/Naomi), Model 2 Emulator, Supermodel (Model 3), Xemu (Xbox), Cemu (Wii U).
-3. **PC Recompilations & Decompilazioni Native (Terzo Binario Nativo):**
-   - Gestione nativa per porting PC a 60/144 FPS (*Ship of Harkinian, CannonBall OutRun, OpenGOAL, Mario 64 PC, Namco System 22, KOF '98 Recomp*).
-   - Doppia visibilità: compaiono sia nella sezione "PC Recomp" che nella console originale con badge `⚡ 4K RECOMP`.
-   - Verifica automatica integrità asset tramite hash SHA256 e lancio nativo diretto con supporto display Ultra-Wide.
-4. **PC Indie, LocoMalito & Fan Games Nativi (Quarto Binario Nativo):**
-   - Gestione integrata per 33+ capolavori Neo-Retro (*Maldita Castilla, Hydorah, AM2R, Streets of Rage Remake, Celeste, Hollow Knight, UFO 50, Cave Story, The Messenger*).
-   - Codice Piattaforma `pc_indie` con tag dedicati (`#locomalito`, `#fan-remake`, `#pixel-8bit`).
-   - Risoluzione intelligente del multi-EXE (ignora `unins000.exe`, `vcredist`, `dxsetup`), working directory automatica e capsule verticali Steam 600x900 CDN.
-   - Doppio modello di archiviazione: On-demand istantaneo per il freeware (2-88 MB), collegamento libreria locale per i titoli commerciali.
+### **5.1 Tassonomia Universale delle 12 Macro-Famiglie (~200 Sistemi)**
+1. **🕹️ Arcade Coin-Op:** MAME, FBNeo, Capcom CPS-1/2/3, Neo Geo MVS, Sega Naomi 1/2, Model 2/3, Hikaru, Atomiswave, Namco System.
+2. **📀 Laserdisc & FMV:** Hypseus Singe / Daphne (*Dragon's Lair*, *Space Ace*), American Laser Games, Pioneer LaserActive.
+3. **🎯 Pinball & Flipper:** Visual Pinball X (VPX), Future Pinball, Visual PinMAME, Pro Pinball.
+4. **📟 LCD & Game & Watch:** Nintendo Game & Watch (Silver, Multi-Screen, Tabletop), Tiger Handhelds, Bandai LCD, Coleco Tabletop.
+5. **🍄 Nintendo Universe:** NES, FDS, SNES, N64, 64DD, GameCube, Wii, Wii U, Game Boy, GBC, GBA, DS, 3DS, Virtual Boy.
+6. **🌀 Sega Universe:** SG-1000, Master System, Mega Drive, Sega CD, 32X, Saturn, Dreamcast, Game Gear, Nomad.
+7. **🎮 Sony PlayStation:** PlayStation (PS1/PSX), PlayStation 2, PlayStation 3, PSP, PS Vita.
+8. **🦅 Atari & Vintage Pioneers:** Atari 2600, 5200, 7800, Lynx, Jaguar, Vectrex (grafica vettoriale), ColecoVision, Intellivision, Odyssey 2.
+9. **⚔️ SNK & NEC Engine:** Neo Geo AES, Neo Geo CD, Neo Geo Pocket / Color, PC Engine / TurboGrafx-16, SuperGrafx, PC-FX.
+10. **💾 Home Computer Occidentali:** Commodore (C64, C128, Amiga 500/1200/CD32), ZX Spectrum, Amstrad CPC, BBC Micro, Apple II/Mac, MS-DOS, ScummVM.
+11. **🗾 Nippon Micro Computers:** Sharp X68000, MSX / MSX2 / Turbo-R, FM Towns / Marty, NEC PC-8801, PC-9801.
+12. **⚡ PC Moderno, Recomp & Indie:** PC Recomp 60FPS (*Zelda, Mario 64, Star Wars*), PC Indie (*LocoMalito, AM2R, Ori, Celeste, Hollow Knight*), Fantasy Consoles (PICO-8, TIC-80).
 
-### **5.2 Struttura Cartelle ROM Standardizzata & Manifest 200+ Piattaforme**
-- **Nomenclatura Standard Universale (Multiplatform Win/Linux/Mac):**
-  - Cartella radice configurabile + sottocartelle convenzionali: `roms/nes/`, `roms/snes/`, `roms/megadrive/`, `roms/psx/`, `roms/c64/`, `roms/amiga/`, `roms/mame/`, `roms/neogeo/`, ecc.
-- **File Modulare `platforms_manifest.json` (200+ Piattaforme):**
-  - Mappa per ciascuna console: codice, nome esteso, produttore, categoria, estensioni supportate, core predefinito, badge e colori sociali.
-- **Filtri di Sottosezione Metadati (Riduzione Scheletro):**
-  - Selezione per Top 50/100, edizioni in lingua italiana, generi primari o finestre temporali d'oro (`1991..1996`).
+### **5.2 Nuova Navigazione: Sidebar Sinistra Collassabile (Stile Steam / Playnite)**
+- **Rail Compatto (64px):** Icone vettoriali SVG minimali per le 12 macro-famiglie + Preferiti + Raccolte Custom. Non spreca spazio orizzontale.
+- **Drawer Espanso (260px):** Albero espandibile per famiglia con conteggio reale dei giochi per ciascuna console.
+- Risolto definitivamente il problema del taglio orizzontale ("Game Boy Advance tagliato a destra").
 
-### **5.3 Wizard di Configurazione Percorsi & Auto-Discovery**
-- Rilevamento automatico delle installazioni esistenti di RetroArch, Batocera mounts, o cartelle RetroBat su drive `C:`, `D:`, `E:`.
-- Nessun percorso personale hardcoded: tutte le directory sono relative o configurabili da interfaccia grafica in-app.
+### **5.3 Hero Spotlight Cinematografica Re-engineered**
+- **Widescreen Game Art Dinamica:** Per Steam Indie usiamo l'artwork ufficiale 1920x620 `library_hero.jpg`; per i retrogame usiamo lo snap/boxart panoramico con illuminazione console e gradiente scuro direzionale a sinistra per la massima leggibilità di testo e pulsanti.
+- **Pulsantiera delle 4 Sorgenti Reali (Addio RetroShuffle):**
+  1. 👑 *Proposta del Giorno*
+  2. ⭐ *I Tuoi Preferiti*
+  3. ⏱️ *Continua a Giocare*
+  4. 📁 *Collezione Custom* (proietta in vetrina una raccolta personale a scelta).
+- **Icone Vettoriali SVG Minimali:** Sostituzione integrale delle emoji OS ("cheap") con set geometrico ispirato a Lucide/Phosphor.
 
 ---
 
 ## 📌 FASE 6: Universal Scraper & Database Harvester (Post-Lancio / Fase Finale 🌐)
 *Obiettivo: Automatizzare al 100% l'arricchimento di metadati e cover per ROM locali, librerie digitali PC e progetti Recomp.*
 
-### **6.1 Scraper Automatico per Console Storiche (No-Intro & Redump)**
-- Calcolo hash SHA-1 / CRC32 in background per le ROM presenti sul disco.
-- Interrogazione asincrona multi-provider: Libretro Open Thumbnails, ScreenScraper.fr e IGDB API con caching locale automatico.
-- Download automatico delle boxart 3D, screenshot in-game, loghi wheel e manuali PDF.
-
-### **6.2 Auto-Discovery Locale di Steam & GOG (PC Indie)**
-- Rilevamento automatico dell'installazione locale di Steam (`libraryfolders.vdf` e file `appmanifest_*.acf`) e del Registro GOG Galaxy su Windows.
-- Importazione con un click di tutti i giochi Indie posseduti sul PC, con risoluzione immediata dell'eseguibile primario e applicazione delle copertine verticali ufficiali Steam 600x900 px.
-
-### **6.3 Recomp Asset Hash Verifier**
-- Motore di verifica automatica basato su `copie-verificate-sha256.json`: controlla la presenza dei file ROM estratti e valida l'integrità dei dati prima del lancio nativo.
-
----
-
-## 📊 Matrice di Avanzamento e Priorità Operativa
-
-```mermaid
-gantt
-    title Piano di Rilascio RetroHub Modulare
-    dateFormat  YYYY-MM-DD
-    section Fase 1
-    Core Rust & Ricerca Fuzzy       :done, 2026-10-01, 2026-11-10
-    UI Cinematografica & Gamepad   :done, 2026-11-01, 2026-11-17
-    section Fase 4 (Focus Attuale)
-    Sblocco Immagini Enciclopedia  :active, 2026-11-18, 2026-11-25
-    Download ROM On-The-Fly        :active, 2026-11-20, 2026-11-30
-    Prompt Dialog Post-Partita     :2026-11-25, 2026-12-05
-    section Fase 5 (Modularità)
-    Standardizzazione Cartelle     :2026-12-01, 2026-12-15
-    Doppio Binario Libretro/Core   :2026-12-10, 2026-12-30
-```
+- [ ] **Scraper Automatico No-Intro / Redump / ScreenScraper:** Caching locale permanente delle boxart 3D e screenshot in-game.
+- [ ] **Steam & GOG Auto-Discovery:** Rilevamento automatico delle installazioni locali PC.
+- [ ] **Recomp Asset Hash Verifier:** Validazione automatica SHA-256 dei file ROM estratti.
