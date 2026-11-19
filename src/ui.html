@@ -1466,7 +1466,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">WIN v0.39</div>
+            <div class="brand-badge">WIN v0.40</div>
         </div>
 
         <div class="nav-search-container">
@@ -4999,8 +4999,8 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Se la versione salvata differisce da v0.39.0, pulizia totale dello stato per Nuovo Utente Pulito
-                const currentAppVer = '0.39.0';
+                // Controllo Versione: Se la versione salvata differisce da v0.40.0, pulizia totale dello stato per Nuovo Utente Pulito
+                const currentAppVer = '0.40.0';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.removeItem('retrohub_downloaded_ids');
