@@ -267,6 +267,20 @@ impl HttpServer {
                     let _ = request.respond(response);
                 }
 
+                (&Method::Get, "/api/manifest/platforms") => {
+                    let json = include_str!("platforms_manifest.json");
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                (&Method::Get, "/api/manifest/indie") => {
+                    let json = include_str!("indie_manifest.json");
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
                 (&Method::Post, "/api/launch") => {
                     let body = read_request_body(&mut request);
                     let req: Result<LaunchRequest, _> = serde_json::from_str(&body);

@@ -66,6 +66,33 @@ impl Launcher {
             return Err("Target di lancio non specificato".to_string());
         }
 
+        // Avvio nativo giochi PC Indie e LocoMalito con working directory dedicata
+        if let Some(rest) = trimmed.strip_prefix("indie://") {
+            let indie_roots = [
+                PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\LocoMalito & Indie"),
+                PathBuf::from("roms/indie"),
+                PathBuf::from("emu/LocoMalito & Indie"),
+                PathBuf::from("indie"),
+            ];
+            for root in &indie_roots {
+                let full = root.join(rest);
+                if full.exists() {
+                    let dir = full.parent().unwrap_or(Path::new("."));
+                    let escaped = full.to_string_lossy().replace('\'', "''");
+                    let dir_escaped = dir.to_string_lossy().replace('\'', "''");
+                    let script = format!(
+                        r#"$p = Start-Process -FilePath '{}' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
+                        escaped, dir_escaped
+                    );
+                    Command::new("powershell")
+                        .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
+                        .spawn()
+                        .map_err(|e| format!("Errore lancio Indie: {}", e))?;
+                    return Ok(format!("Avviato gioco Indie: {}", full.display()));
+                }
+            }
+        }
+
         // Avvio nativo MAME con BGFX renderer e attivazione finestra in primo piano
         if let Some(rom) = trimmed.strip_prefix("MAME:") {
             let mame_dirs = [

@@ -189,6 +189,44 @@ impl MasterCatalog {
         add_game!("C64", "Commodore 64", "California Games", 1987, "Sport", "Epyx", c64_sub);
         add_game!("C64", "Commodore 64", "Paradroid", 1985, "Azione / Fantascienza", "Graftgold", c64_sub);
 
+        // ==========================================
+        // PC INDIE & LOCOMALITO - Built-in Manifest
+        // ==========================================
+        static INDIE_JSON: &str = include_str!("indie_manifest.json");
+        if let Ok(val) = serde_json::from_str::<serde_json::Value>(INDIE_JSON) {
+            if let Some(arr) = val.get("games").and_then(|g| g.as_array()) {
+                for item in arr {
+                    let title = item.get("title").and_then(|v| v.as_str()).unwrap_or("Indie Game");
+                    let dev = item.get("developer").and_then(|v| v.as_str()).unwrap_or("Indie Developer");
+                    let genre = item.get("genre").and_then(|v| v.as_str()).unwrap_or("Indie");
+                    let year = item.get("year").and_then(|v| v.as_u64()).unwrap_or(2010) as u16;
+                    let controls = item.get("controls").and_then(|v| v.as_str()).unwrap_or("Gamepad Xbox / Tastiera");
+                    let cover = item.get("cover_url").and_then(|v| v.as_str()).map(|s| s.to_string());
+                    let folder = item.get("folder_name").and_then(|v| v.as_str()).unwrap_or("");
+                    let primary_exe = item.get("primary_exe").and_then(|v| v.as_str()).unwrap_or("");
+
+                    games.push(Game {
+                        id,
+                        title: title.to_string(),
+                        platform: "PC Indie".to_string(),
+                        system_code: "INDIE".to_string(),
+                        year,
+                        genre: genre.to_string(),
+                        developer: dev.to_string(),
+                        publisher: dev.to_string(),
+                        controls: controls.to_string(),
+                        launch_target: format!("indie://{}/{}", folder, primary_exe),
+                        cover_url: cover,
+                        is_favorite: false,
+                        play_count: 0,
+                        last_played_at: None,
+                        is_installed: false,
+                    });
+                    id += 1;
+                }
+            }
+        }
+
         games
     }
 }
