@@ -1,6 +1,6 @@
 # 🗺️ RetroHub — Roadmap di Sviluppo Strategica
-**Versione Roadmap:** 2.0 (Architettura Modulare & On-Demand)  
-**Obiettivo:** Trasformare RetroHub in un hub retrogaming definitivo: leggero come un client Rust nativo, completo ed enciclopedico come Batocera/RetroBat, con gestione modulare di oltre 200 piattaforme e download ROM "on-the-fly".
+**Versione Roadmap:** 3.0 (Target Prioritario: Windows Produzione Immediata | Architettura a 4 Binari & Clean Rebirth UI)  
+**Obiettivo:** Trasformare RetroHub nel launcher retrogaming definitivo per Windows: motore Rust a 60 FPS da soli 7 MB, enciclopedia on-demand per 200+ console, Hero Widescreen configurabile con rotazione a 5 sorgenti, 4 profili di onboarding guidato e integrazione nativa di Recomp e PC Indie/LocoMalito. *(Linux e macOS pianificati per le fasi successive al rilascio Windows).*
 
 ---
 
