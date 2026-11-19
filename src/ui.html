@@ -1451,7 +1451,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">WIN v0.37</div>
+            <div class="brand-badge">WIN v0.38</div>
         </div>
 
         <div class="nav-search-container">
@@ -1473,10 +1473,6 @@
             <button class="btn btn-secondary" onclick="openArenaModal()" data-i18n-title="nav_arena_title" title="Lobby P2P e Classifiche Online">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="14.5" y1="9.5" x2="19" y2="5"/><polyline points="15 5 19 5 19 9"/><polyline points="14 15 9 20 4 15 9 10 14 15"/><line x1="4.5" y1="9.5" x2="9" y2="5"/></svg>
                 <span id="navArenaLabel" data-i18n="nav_arena">Arena</span>
-            </button>
-            <button class="btn btn-primary" onclick="openWizardModal()" data-i18n-title="nav_wizard_title" title="Configurazione Guidata Storage & Percorsi">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/></svg>
-                <span id="navWizardLabel" data-i18n="nav_wizard">Setup Wizard</span>
             </button>
             <button class="btn btn-secondary" onclick="openSettingsModal()" data-i18n-title="nav_settings_title" title="Impostazioni, Lingua, Cache e Percorsi">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -2254,6 +2250,13 @@
                                 <option value="always_delete" data-i18n="settings_post_delete">Elimina sempre dopo la sessione (Zero MB su disco occupati)</option>
                             </select>
                         </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 10px; margin-top: 10px;">
+                            <div>
+                                <span style="font-size: 0.78rem; font-weight: 700; color: #fff; display: block;" data-i18n="settings_reopen_wizard_title">🧙 Configurazione Guidata (Setup Wizard)</span>
+                                <span style="font-size: 0.72rem; color: var(--text-muted);" data-i18n="settings_reopen_wizard_desc">Riesegui la scelta dei 4 profili di archiviazione per riadattare RetroHub.</span>
+                            </div>
+                            <button type="button" class="btn btn-primary" style="padding: 5px 14px; font-size: 0.75rem; white-space: nowrap;" data-i18n="settings_btn_reopen_wizard" onclick="closeSettingsModal(); openWizardModal();">🧙 Riesegui Wizard</button>
+                        </div>
                     </div>
 
                     <!-- 3. Cache Boxart & Grafica -->
@@ -2451,6 +2454,9 @@
                 "settings_post_ask": "Chiedi sempre dopo ogni partita (Conserva o Elimina per fare spazio)",
                 "settings_post_keep": "Conserva sempre su disco (Modalità Collezionista)",
                 "settings_post_delete": "Elimina sempre dopo la sessione (Zero MB su disco occupati)",
+                "settings_reopen_wizard_title": "🧙 Configurazione Guidata (Setup Wizard)",
+                "settings_reopen_wizard_desc": "Riesegui la scelta dei 4 profili di archiviazione per riadattare RetroHub.",
+                "settings_btn_reopen_wizard": "🧙 Riesegui Wizard",
                 "settings_sec_cache": "🖼️ Cache Immagini & Modalità Grafica",
                 "settings_typographic_title": "Modalità Boxart Tipografica (0 Byte)",
                 "settings_typographic_desc": "Usa poster vettoriali stilizzati invece di scaricare immagini reali da internet.",
@@ -2649,6 +2655,9 @@
                 "settings_post_ask": "Always ask after each game (Keep or Delete to save space)",
                 "settings_post_keep": "Always keep on disk (Collector Mode)",
                 "settings_post_delete": "Always delete after session (Zero MB used on disk)",
+                "settings_reopen_wizard_title": "🧙 Setup Wizard (Guided Configuration)",
+                "settings_reopen_wizard_desc": "Re-run the 4 storage profiles selection to adjust RetroHub behavior.",
+                "settings_btn_reopen_wizard": "🧙 Re-run Wizard",
                 "settings_sec_cache": "🖼️ Image Cache & Graphic Mode",
                 "settings_typographic_title": "Typographic Boxart Mode (0 Byte)",
                 "settings_typographic_desc": "Use styled vector posters instead of downloading real images from the internet.",
@@ -2847,6 +2856,9 @@
                 "settings_post_ask": "Preguntar siempre tras cada partida (Conservar o Eliminar para ahorrar espacio)",
                 "settings_post_keep": "Conservar siempre en disco (Modo Coleccionista)",
                 "settings_post_delete": "Eliminar siempre tras la sesión (Cero MB ocupados en disco)",
+                "settings_reopen_wizard_title": "🧙 Asistente de Configuración (Setup Wizard)",
+                "settings_reopen_wizard_desc": "Vuelve a elegir entre los 4 perfiles de almacenamiento para adaptar RetroHub.",
+                "settings_btn_reopen_wizard": "🧙 Reabrir Asistente",
                 "settings_sec_cache": "🖼️ Caché de Imágenes y Modo Gráfico",
                 "settings_typographic_title": "Modo Portada Tipográfica (0 Bytes)",
                 "settings_typographic_desc": "Usa pósteres vectoriales estilizados en lugar de descargar imágenes de internet.",
@@ -3882,7 +3894,7 @@
                 isTypographicMode = false;
                 storageFilter = 'all';
                 currentPlatform = 'ALL';
-                showToast('Profilo 1 Applicato: Top 10 Console + Indie Freeware on-the-fly!');
+                showToast('Profilo 1 Applicato: Catalogo Cloud On-Demand attivo (0 Byte ROM a monte)!');
             } else if (selectedWizardProfileId === 2) {
                 // Caso 2: Collezione Esistente
                 isTypographicMode = false;
@@ -4963,8 +4975,8 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Se la versione salvata differisce da v0.37.0, pulizia totale dello stato per Nuovo Utente Pulito
-                const currentAppVer = '0.37.0';
+                // Controllo Versione: Se la versione salvata differisce da v0.38.0, pulizia totale dello stato per Nuovo Utente Pulito
+                const currentAppVer = '0.38.0';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.removeItem('retrohub_downloaded_ids');

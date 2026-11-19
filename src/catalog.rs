@@ -191,12 +191,15 @@ impl CatalogLoader {
         }
 
         // Integra i titoli dell'Enciclopedia Cloud on-demand per consentire la consultazione al 100%
-        let cloud_games = crate::master_catalog::MasterCatalog::get_cloud_catalog(2000);
+        let mut next_id = (games.len() as i64) + 1;
+        let cloud_games = crate::master_catalog::MasterCatalog::get_cloud_catalog(next_id);
         let existing_titles: std::collections::HashSet<String> = games.iter().map(|g| format!("{}:{}", g.system_code, g.title.to_lowercase())).collect();
 
-        for cg in cloud_games {
+        for mut cg in cloud_games {
             let key = format!("{}:{}", cg.system_code, cg.title.to_lowercase());
             if !existing_titles.contains(&key) {
+                cg.id = next_id;
+                next_id += 1;
                 games.push(cg);
             }
         }

@@ -1,19 +1,43 @@
-
 {
+  "emulator_paths": {
+    "mame": null,
+    "gluiz": null,
+    "retroarch": null,
+    "snes9x": null,
+    "fceux": null,
+    "project64": null,
+    "vice": null,
+    "flycast": null
+  },
   "performance": {
-    "lazy_load_covers": true,
-    "window_persistence": true,
-    "cpu_optimization": "low",
-    "cache_size_mb": 100
+    "lazy_load_covers": false,
+    "window_persistence": false,
+    "cpu_optimization": "Low",
+    "cache_size_mb": 0
+  },
+  "ui": {
+    "theme": "Dark",
+    "compact_mode": false,
+    "show_previews": false
   },
   "multi_monitor": {
     "enabled": false,
-    "layout": "auto",
+    "layout": "Auto",
     "primary_display": 0
   },
-  "ui": {
-    "theme": "dark",
-    "compact_mode": false,
-    "show_previews": true
+  "netplay": {
+    "enable_stun": true,
+    "stun_servers": [
+      "stun.l.google.com:19302",
+      "stun1.l.google.com:19302",
+      "stun.cloudflare.com:3478"
+    ],
+    "nat_traversal": true,
+    "max_ping_ms": 200
+  },
+  "server": {
+    "port": 39281,
+    "emu_root": "",
+    "browser_fallback": true
   }
 }
