@@ -226,6 +226,54 @@ Per far convivere i Recomp in modo perfettamente uniforme con i giochi emulati c
 
 ---
 
+## 🎮 5.2 Il Quarto Binario: PC Indie, LocoMalito & Fan Games Nativi
+
+Oltre all'emulazione storica e ai Recomp, RetroHub integra in modo nativo e omogeneo il mondo del **Neo-Retro PC, dei capolavori Indie e dei Fan Games/Remake**.
+
+### A. I Due Grandi Sottoinsiemi di Titoli PC
+Dall'analisi del catalogo reale (33 titoli censiti), emergono due categorie distinte:
+1. **Freeware & Fan Games Portatili (Download On-Demand Legale):**
+   * *LocoMalito:* Maldita Castilla, Hydorah, The Curse of Issyos, Darkula, 8bit Killer, L'Abbaye des Morts.
+   * *Fan Remakes & Classici Freeware:* AM2R (Another Metroid 2 Remake), Streets of Rage Remake v5.2, Cave Story (Doukutsu Monogatari), Spelunky Classic, Iji, Hero Core, An Untitled Story, Knytt Stories, Within a Deep Forest.
+   * *Caratteristiche:* Pesi contenuti (2.4 MB – 88 MB, eccezione SoRR 600 MB), 100% legali da distribuire, eseguibili portatili no-installer, avvio plug & play.
+2. **Capolavori Commerciali Indie (GOG / Steam / DRM-Free):**
+   * *Titoli:* Hollow Knight (7.6 GB), Celeste (1.1 GB), The Messenger (1.1 GB), Hotline Miami (1 GB), Huntdown (700 MB), Broforce (527 MB), UFO 50 (473 MB), FEZ (429 MB), Super Meat Boy (262 MB), Katana Zero (97 MB), Blazing Chrome (116 MB), VVVVVV (69 MB).
+   * *Caratteristiche:* Pesi medio-alti, soggetti a copyright commerciale; richiedono il collegamento della copia locale dell'utente o il reindirizzamento allo store ufficiale.
+
+### B. Risoluzione dei 5 Casi Limite per la Perfetta Omogeneità
+
+1. **Il Problema del Multi-EXE (Evitare i Falsi Positivi):**
+   * *Problema:* Una cartella indie contiene spesso `unins000.exe`, `vcredist_x86.exe`, `dxwebsetup.exe`, `UnityCrashHandler64.exe` o tool ausiliari (es. `SorMaker.exe` in SoRR, `DoConfig.exe` in Cave Story).
+   * *Soluzione:*
+     - **Blacklist Globale Automatica:** Ignora sempre file che contengono `unins*`, `*setup*`, `*redist*`, `*crash*`, `*dotNet*`, `*manager*`.
+     - **Manifest Curato (`indie_manifest.json`):** Mappa puntuale dell'eseguibile primario per i titoli noti (es. `Doukutsu.exe` per Cave Story, con menu secondario contestuale `[ ⚙️ Configura ]` per `DoConfig.exe`).
+     - **Working Directory Obbligatoria:** Il launcher imposta sempre `current_dir` alla cartella del gioco, condizione vitale affinché DLL, file `data.win` e salvataggi funzionino.
+
+2. **Tassonomia e Navigazione UI:**
+   * Codice Piattaforma Unificato: `pc_indie` (Colore Sociale: Viola Neon `#a371f7` o Corallo `#ff7b72`).
+   * **Tag Pills Filtrabili nella UI:**
+     - `#locomalito` (filtra la collezione completa dell'autore spagnolo)
+     - `#fan-remake` (AM2R, SoRR, Cave Story)
+     - `#commercial-indie` (Celeste, Hollow Knight, UFO 50)
+     - `#pixel-8bit` / `#pixel-16bit` (per stile visivo)
+
+3. **Boxart Standardizzate & Vertical Capsules:**
+   * Per i titoli commerciali/Steam: Utilizzo automatico della CDN ufficiale Steam Vertical Capsule (formato 2:3 a 600x900 px): `https://cdn.akamai.steamstatic.com/steam/apps/<appid>/library_600x900.jpg`.
+   * Per LocoMalito & Freeware: Boxart verticali ufficiali dell'autore o fornite localmente in `covers/pc_indie/<game_id>.webp`.
+   * Modalità Placeholder Tipografica (Caso 3 Low-Storage): Nessun download di immagini; card vettoriale gradient con nome del titolo e tag di genere.
+
+4. **On-Demand & Download Storage:**
+   * *Freeware:* Download immediato dello zip pre-estratto in `roms/indie/<Titolo>/` con barra di avanzamento e lancio istantaneo.
+   * *Commerciali Non Posseduti:* Mostrati in catalogo con metadati e recensione, ma con badge `[ 🛒 Acquista su Steam/GOG ]` e pulsante `[ 📂 Collega Cartella Locale ]` per mappare l'installazione locale dell'utente.
+
+5. **Portabilità Cross-Platform (Windows ➔ Linux / Steam Deck ➔ macOS):**
+   * Astrazione del launcher tramite `GameRunner::NativeExecutable`:
+     - **Windows:** Processo nativo diretto (`Command::new`).
+     - **Linux / Steam Deck:** Riconoscimento automatico: se esiste binario ELF nativo lancia nativo, altrimenti inoltro trasparente tramite `proton run` o `wine`.
+     - **macOS:** Binario `.app` nativo o wrapper Wine/Whisky.
+
+---
+
 ## 🌐 6. Specifiche API REST Backend (`server.rs`)
 
 | Metodo | Endpoint | Parametri | Descrizione |

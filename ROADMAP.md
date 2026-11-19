@@ -87,8 +87,8 @@
 ## 📌 FASE 5: Gestione Modulare di Emulatori & Core (Standard Batocera / RetroBat 🧩)
 *Obiettivo: Adottare l'architettura modulare di Batocera e RetroBat, supportando l'intero ecosistema di oltre 200 console, arcade e computer d'epoca.*
 
-### **5.1 Architettura Ibrida a Triplo Binario (RetroArch Core + Standalone + PC Recomp Nativo)**
-Come Batocera e RetroBat (e con il supporto esclusivo per i port nativi PC), la gestione dei motori di gioco viene standardizzata in tre categorie:
+### **5.1 Architettura Ibrida a Quattro Binari (Libretro + Standalone + PC Recomp + PC Indie & LocoMalito)**
+Come Batocera e RetroBat (e con il supporto esclusivo per i port nativi PC e titoli indipendenti), la gestione dei motori di gioco viene standardizzata in quattro categorie:
 1. **Piattaforme 8/16/32-bit & Computer Classici (80% dei sistemi):**
    - Gestione unificata tramite **RetroArch Libretro Cores** (es. `snes9x_libretro.dll`, `genesis_plus_gx_libretro.dll`, `fceumm_libretro.dll`, `puae_libretro.dll`, `vice_x64sc_libretro.dll`).
    - *Vantaggi:* Shader video CRT uniformi, configurazione controller centralizzata, savestate e rewind garantiti.
@@ -98,6 +98,11 @@ Come Batocera e RetroBat (e con il supporto esclusivo per i port nativi PC), la 
    - Gestione nativa per porting PC a 60/144 FPS (*Ship of Harkinian, CannonBall OutRun, OpenGOAL, Mario 64 PC, Namco System 22, KOF '98 Recomp*).
    - Doppia visibilità: compaiono sia nella sezione "PC Recomp" che nella console originale con badge `⚡ 4K RECOMP`.
    - Verifica automatica integrità asset tramite hash SHA256 e lancio nativo diretto con supporto display Ultra-Wide.
+4. **PC Indie, LocoMalito & Fan Games Nativi (Quarto Binario Nativo):**
+   - Gestione integrata per 33+ capolavori Neo-Retro (*Maldita Castilla, Hydorah, AM2R, Streets of Rage Remake, Celeste, Hollow Knight, UFO 50, Cave Story, The Messenger*).
+   - Codice Piattaforma `pc_indie` con tag dedicati (`#locomalito`, `#fan-remake`, `#pixel-8bit`).
+   - Risoluzione intelligente del multi-EXE (ignora `unins000.exe`, `vcredist`, `dxsetup`), working directory automatica e capsule verticali Steam 600x900 CDN.
+   - Doppio modello di archiviazione: On-demand istantaneo per il freeware (2-88 MB), collegamento libreria locale per i titoli commerciali.
 
 ### **5.2 Struttura Cartelle ROM Standardizzata & Manifest 200+ Piattaforme**
 - **Nomenclatura Standard Universale (Multiplatform Win/Linux/Mac):**
