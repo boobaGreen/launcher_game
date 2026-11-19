@@ -1451,7 +1451,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">WIN v3.7</div>
+            <div class="brand-badge">WIN v0.37</div>
         </div>
 
         <div class="nav-search-container">
@@ -3022,6 +3022,10 @@
             await loadGames();
             applyLanguage(currentLang);
             setupGamepadPolling();
+            // Primo Avvio Nuovo Utente: Se il wizard non è mai stato completato, apri automaticamente il Setup Wizard
+            if (!localStorage.getItem('retrohub_wizard_completed')) {
+                setTimeout(() => openWizardModal(), 350);
+            }
             // Keepalive Heartbeat: invia un ping periodico ogni 4 secondi per mantenere attivo il server locale
             setInterval(() => { fetch('/api/ping', { method: 'POST' }).catch(() => {}); }, 4000);
         });
@@ -3854,6 +3858,9 @@
 
         function applyWizardProfile() {
             closeWizardModal();
+            try {
+                localStorage.setItem('retrohub_wizard_completed', 'true');
+            } catch (e) {}
             if (selectedWizardProfileId === 1) {
                 // Caso 1: Nuovo Utente Puro
                 isTypographicMode = false;
@@ -4918,9 +4925,24 @@
 
         function loadSavedSettingsFromStorage() {
             try {
+                // Controllo Versione: Se la versione salvata differisce da v0.37.0, pulizia totale dello stato per Nuovo Utente Pulito
+                const currentAppVer = '0.37.0';
+                const savedVer = localStorage.getItem('retrohub_app_version');
+                if (savedVer !== currentAppVer) {
+                    localStorage.removeItem('retrohub_downloaded_ids');
+                    localStorage.removeItem('retrohub_custom_collections');
+                    localStorage.removeItem('retrohub_wizard_completed');
+                    localStorage.setItem('retrohub_app_version', currentAppVer);
+                    downloadedGameIds.clear();
+                }
+
                 const savedLang = localStorage.getItem('retrohub_lang');
                 if (savedLang === 'en') {
                     currentLang = 'en';
+                } else if (savedLang === 'es') {
+                    currentLang = 'es';
+                } else {
+                    currentLang = 'it';
                 }
                 loadDownloadedGamesFromStorage();
                 const savedTypo = localStorage.getItem('retrohub_typographic');
