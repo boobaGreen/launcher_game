@@ -10,6 +10,7 @@ use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use tiny_http::{Header, Method, Response, Server, StatusCode};
 use crate::library_config::LibraryConfig;
+use std::process::Command;
 
 pub struct HttpServer {
     db: Arc<Mutex<Database>>,
@@ -50,6 +51,18 @@ struct JoinRoomReq {
     player_name: String,
 }
 
+#[derive(Deserialize)]
+struct EmulatorConfigReq {
+    retroarch: Option<String>,
+    vpx: Option<String>,
+    mame: Option<String>,
+}
+
+#[derive(Deserialize)]
+struct WebLaunchReq {
+    game_id: i64,
+}
+
 impl HttpServer {
     pub fn new(db: Database, port: u16) -> Self {
         Self {
@@ -84,21 +97,52 @@ impl HttpServer {
 
             // Reset del timer heartbeat quando arriva una richiesta reale: il client ha il focus
             // e sta interagendo, quindi il server non deve spegnersi per timeout.
-            if method != Method::Get || !url.starts_with("/api/cover") {
+            if method != Method::Get || (!url.starts_with("/api/cover") && !url.starts_with("/covers/")) {
                 self.last_ping.store(now_secs(), Ordering::SeqCst);
             }
 
             let (path, query_params) = parse_url(&url);
 
-            // Servizio immagini locali generiche per file nel workspace/emu
-            if (method == Method::Get || method == Method::Head) && path.starts_with("/api/cover/file/") {
-                let sub_path = path.trim_start_matches("/api/cover/file/").trim();
-                let clean_sub = sub_path.replace("%20", " ").replace("..", "");
-                let candidates = [
-                    std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu").join(&clean_sub),
-                    std::path::Path::new("covers").join(&clean_sub),
-                    std::path::Path::new(&clean_sub).to_path_buf(),
-                ];
+            // Servizio immagini locali generiche per file nel workspace / covers / emu
+            let is_cover_file = (method == Method::Get || method == Method::Head) && path.starts_with("/api/cover/file/");
+            let is_direct_cover = (method == Method::Get || method == Method::Head) && path.starts_with("/covers/");
+
+            if is_cover_file || is_direct_cover {
+                let raw_sub = if is_cover_file {
+                    path.trim_start_matches("/api/cover/file/").trim()
+                } else {
+                    path.trim_start_matches("/").trim()
+                };
+                let clean_sub = raw_sub.replace("%20", " ").replace("..", "").replace('\\', "/");
+                let stripped_sub = clean_sub.trim_start_matches("covers/").trim();
+
+                let workspace_root = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\MySide\launcher_game");
+                let emu_root = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu");
+                let exe_dir = std::env::current_exe().ok().and_then(|p| p.parent().map(|d| d.to_path_buf()));
+                let cur_dir = std::env::current_dir().ok();
+
+                let mut candidates: Vec<std::path::PathBuf> = Vec::new();
+
+                // 1. Cerca nella cartella covers di launcher_game (stripped_sub es: "pinball/pb_1614.webp" o "laserdisc/ld_1120.png")
+                candidates.push(workspace_root.join("covers").join(stripped_sub));
+                // 2. Cerca nel workspace_root direttamente
+                candidates.push(workspace_root.join(&clean_sub));
+                // 3. Cerca relativo alla cartella dell'eseguibile exe_dir
+                if let Some(ref ed) = exe_dir {
+                    candidates.push(ed.join("covers").join(stripped_sub));
+                    candidates.push(ed.join(&clean_sub));
+                }
+                // 4. Cerca relativo alla cartella di esecuzione corrente
+                if let Some(ref cd) = cur_dir {
+                    candidates.push(cd.join("covers").join(stripped_sub));
+                    candidates.push(cd.join(&clean_sub));
+                    candidates.push(cd.join(stripped_sub));
+                }
+                // 5. Cerca in emu_root
+                candidates.push(emu_root.join(&clean_sub));
+                candidates.push(emu_root.join("covers").join(stripped_sub));
+                candidates.push(emu_root.join(stripped_sub));
+
                 let found_file = candidates.into_iter().find(|p| p.exists() && p.is_file());
                 if let Some(full_path) = found_file {
                     if let Ok(bytes) = std::fs::read(&full_path) {
@@ -523,6 +567,127 @@ impl HttpServer {
                     
                     let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
                     let response = Response::from_string(resp_json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // EMULATOR CONFIG API - Get emulator paths & detection status
+                (&Method::Get, "/api/config/emulators") => {
+                    let config = crate::config::RetroHubConfig::load();
+                    let resp = serde_json::json!({
+                        "retroarch": {
+                            "configured": config.emulator_paths.retroarch,
+                            "detected": config.find_retroarch().map(|p| p.to_string_lossy().to_string()),
+                            "is_available": config.find_retroarch().is_some()
+                        },
+                        "vpx": {
+                            "configured": config.emulator_paths.vpx,
+                            "detected": config.find_vpx().map(|p| p.to_string_lossy().to_string()),
+                            "is_available": config.find_vpx().is_some()
+                        },
+                        "mame": {
+                            "configured": config.emulator_paths.mame,
+                            "detected": config.find_mame().map(|p| p.to_string_lossy().to_string()),
+                            "is_available": config.find_mame().is_some()
+                        }
+                    });
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp.to_string()).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // EMULATOR CONFIG API - Save custom emulator paths
+                (&Method::Post, "/api/config/emulators") => {
+                    let body = read_request_body(&mut request);
+                    let req: Result<EmulatorConfigReq, _> = serde_json::from_str(&body);
+                    let res_json = match req {
+                        Ok(r) => {
+                            let mut config = crate::config::RetroHubConfig::load();
+                            if let Some(ra) = r.retroarch {
+                                config.emulator_paths.retroarch = if ra.trim().is_empty() { None } else { Some(ra.trim().to_string()) };
+                            }
+                            if let Some(vpx) = r.vpx {
+                                config.emulator_paths.vpx = if vpx.trim().is_empty() { None } else { Some(vpx.trim().to_string()) };
+                            }
+                            if let Some(mame) = r.mame {
+                                config.emulator_paths.mame = if mame.trim().is_empty() { None } else { Some(mame.trim().to_string()) };
+                            }
+                            let _ = config.save();
+                            serde_json::json!({ "success": true, "message": "Configurazione emulatori salvata con successo" }).to_string()
+                        }
+                        Err(e) => {
+                            serde_json::json!({ "success": false, "message": format!("JSON non valido: {}", e) }).to_string()
+                        }
+                    };
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(res_json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // EMULATOR CONFIG API - Auto-detect emulators
+                (&Method::Post, "/api/config/emulators/detect") => {
+                    let mut config = crate::config::RetroHubConfig::load();
+                    let (count, detected) = config.auto_detect_all();
+                    let resp = serde_json::json!({
+                        "success": true,
+                        "count": count,
+                        "detected": detected,
+                        "retroarch": {
+                            "configured": config.emulator_paths.retroarch,
+                            "detected": config.find_retroarch().map(|p| p.to_string_lossy().to_string()),
+                            "is_available": config.find_retroarch().is_some()
+                        },
+                        "vpx": {
+                            "configured": config.emulator_paths.vpx,
+                            "detected": config.find_vpx().map(|p| p.to_string_lossy().to_string()),
+                            "is_available": config.find_vpx().is_some()
+                        },
+                        "mame": {
+                            "configured": config.emulator_paths.mame,
+                            "detected": config.find_mame().map(|p| p.to_string_lossy().to_string()),
+                            "is_available": config.find_mame().is_some()
+                        }
+                    });
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp.to_string()).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // WEB LAUNCH API - Open authentic web simulator
+                (&Method::Post, "/api/launch/web") => {
+                    let body = read_request_body(&mut request);
+                    let req: Result<WebLaunchReq, _> = serde_json::from_str(&body);
+                    let res_json = match req {
+                        Ok(r) => {
+                            let url = match r.game_id {
+                                1720 => "https://pica-pic.com/#/donkey_kong/",
+                                1721 => "https://pica-pic.com/#/donkey_kong_jr/",
+                                1722 => "https://archive.org/details/gameandwatch",
+                                1723 => "https://archive.org/details/gameandwatch",
+                                1724 => "https://archive.org/details/gameandwatch",
+                                1725 => "https://pica-pic.com/#/parachute/",
+                                1726 => "https://pica-pic.com/#/octopus/",
+                                1727 => "https://pica-pic.com/#/chef/",
+                                1728 => "https://archive.org/details/gameandwatch",
+                                1729 => "https://archive.org/details/gameandwatch",
+                                1730 => "https://archive.org/details/gameandwatch",
+                                1731 => "https://archive.org/details/gameandwatch",
+                                1732 => "https://archive.org/details/gameandwatch",
+                                1733 => "https://archive.org/details/gameandwatch",
+                                1734 => "https://pica-pic.com/#/zelda/",
+                                _ => "https://archive.org/details/gameandwatch",
+                            };
+                            let script = format!(r#"Start-Process '{}'"#, url);
+                            let _ = Command::new("powershell")
+                                .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
+                                .spawn();
+                            serde_json::json!({ "success": true, "url": url }).to_string()
+                        }
+                        Err(e) => {
+                            serde_json::json!({ "success": false, "message": format!("Richiesta non valida: {}", e) }).to_string()
+                        }
+                    };
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(res_json).with_header(header);
                     let _ = request.respond(response);
                 }
 

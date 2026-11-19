@@ -17,11 +17,18 @@ impl Launcher {
                 target = resolved;
             } else {
                 let sys = game.system_code.to_uppercase();
+                let config = crate::config::RetroHubConfig::load();
                 if sys == "PINBALL" {
-                    return Err("Tavolo flipper non configurato. Configura Visual Pinball (VPX) nelle Opzioni per avviare questo tavolo.".to_string());
+                    if config.find_vpx().is_none() {
+                        return Err("NOT_CONFIGURED:PINBALL:Visual Pinball (VPX) non configurato. Configura il percorso di VPinballX.exe nelle Opzioni (⚙️) per giocare questo tavolo.".to_string());
+                    }
+                    return Err(format!("Tavolo flipper non trovato sul disco per '{}'. Scarica il file .vpx prima di avviarlo.", game.title));
                 }
                 if sys == "GAMEWATCH" || sys == "LCD" {
-                    return Err("Gioco Game & Watch non configurato. Configura RetroArch (core Handheld) nelle Opzioni per avviare questo titolo.".to_string());
+                    if config.find_retroarch().is_none() {
+                        return Err("NOT_CONFIGURED:GAMEWATCH:Gioco Game & Watch non configurato. Configura RetroArch (core Handheld) nelle Opzioni (⚙️) per giocare questo titolo.".to_string());
+                    }
+                    return Err(format!("ROM non trovata sul disco per '{}'. Scarica il gioco prima di avviarlo con RetroArch.", game.title));
                 }
                 return Err(format!("ROM non trovata sul disco per '{}'. Scarica il gioco prima di avviarlo.", game.title));
             }
@@ -144,6 +151,8 @@ impl Launcher {
             "C64" => &["d64", "t64", "prg", "crt", "zip"],
             "DOS" => &["exe", "bat", "com", "conf"],
             "SCUMMVM" => &["scummvm", "ini"],
+            "GAMEWATCH" | "LCD" => &["mgw", "zip", "7z"],
+            "PINBALL" => &["vpx", "fpt"],
             _ => &["zip", "7z", "iso", "rom"],
         };
 
@@ -173,6 +182,24 @@ impl Launcher {
 
     /// Finds the matching emulator executable given a system_code and/or file extension.
     fn find_matching_emulator(system_code: &str, ext: &str) -> Option<PathBuf> {
+        let config = crate::config::RetroHubConfig::load();
+        let sys_upper = system_code.to_uppercase();
+        let ext_lower = ext.to_lowercase();
+
+        // 1. RetroArch per Game & Watch / LCD Handhelds
+        if sys_upper.contains("GAMEWATCH") || sys_upper.contains("LCD") || ext_lower == "mgw" {
+            if let Some(ra) = config.find_retroarch() {
+                return Some(ra);
+            }
+        }
+
+        // 2. Visual Pinball per tavoli Flipper
+        if sys_upper.contains("PINBALL") || ext_lower == "vpx" || ext_lower == "fpt" {
+            if let Some(vpx) = config.find_vpx() {
+                return Some(vpx);
+            }
+        }
+
         let roots = [
             PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu"),
             PathBuf::from("emulators"),
@@ -221,6 +248,49 @@ impl Launcher {
         let trimmed = target.trim();
         if trimmed.is_empty() {
             return Err("Target di lancio non specificato".to_string());
+        }
+
+        // Avvio simulatore Web nel browser (es. Game & Watch o web game)
+        if trimmed.starts_with("http://") || trimmed.starts_with("https://") || trimmed.starts_with("web://") {
+            let url = trimmed.strip_prefix("web://").unwrap_or(trimmed);
+            let script = format!(r#"Start-Process '{}'"#, url.replace('\'', "''"));
+            Command::new("powershell")
+                .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
+                .spawn()
+                .map_err(|e| format!("Errore apertura browser: {}", e))?;
+            return Ok(format!("Aperto simulatore web: {}", url));
+        }
+
+        // Avvio dedicato RetroArch
+        if let Some(rest) = trimmed.strip_prefix("RETROARCH:") {
+            let config = crate::config::RetroHubConfig::load();
+            if let Some(ra_exe) = config.find_retroarch() {
+                let parts: Vec<&str> = rest.splitn(2, ':').collect();
+                let (core, rom) = if parts.len() == 2 {
+                    (parts[0], parts[1])
+                } else {
+                    ("gw", parts[0])
+                };
+                let ra_dir = ra_exe.parent().unwrap_or(Path::new("."));
+                let ra_escaped = ra_exe.to_string_lossy().replace('\'', "''");
+                let rom_escaped = rom.replace('\'', "''");
+                let core_dll = if core.ends_with(".dll") {
+                    core.to_string()
+                } else {
+                    format!("{}_libretro.dll", core)
+                };
+                let script = format!(
+                    r#"$p = Start-Process -FilePath '{}' -ArgumentList '-L "cores\{}" "{}"' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 500; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
+                    ra_escaped, core_dll, rom_escaped, ra_dir.to_string_lossy().replace('\'', "''")
+                );
+                Command::new("powershell")
+                    .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
+                    .spawn()
+                    .map_err(|e| format!("Errore avvio RetroArch: {}", e))?;
+                return Ok(format!("Avviato con RetroArch: {}", rom));
+            } else {
+                return Err("NOT_CONFIGURED:GAMEWATCH:RetroArch non configurato. Imposta il percorso dell'eseguibile RetroArch nelle Opzioni (⚙️).".to_string());
+            }
         }
 
         // Avvio nativo giochi PC Indie e LocoMalito con working directory dedicata
@@ -350,6 +420,15 @@ impl Launcher {
                     format!(r#"-b -e "{rom_escaped}""#)
                 } else if emu_escaped.to_lowercase().contains("duckstation") {
                     format!(r#"-batch "{rom_escaped}""#)
+                } else if emu_escaped.to_lowercase().contains("vpinball") {
+                    format!(r#"-play "{rom_escaped}""#)
+                } else if emu_escaped.to_lowercase().contains("retroarch") {
+                    let core_flag = if system_code.to_uppercase() == "GAMEWATCH" || system_code.to_uppercase() == "LCD" || ext == "mgw" {
+                        r#"-L "cores\gw_libretro.dll" "#
+                    } else {
+                        ""
+                    };
+                    format!(r#"{core_flag}"{rom_escaped}""#)
                 } else {
                     format!(r#""{rom_escaped}""#)
                 };

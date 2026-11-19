@@ -1,13 +1,14 @@
 {
   "emulator_paths": {
-    "mame": null,
+    "mame": "C:\\Users\\ClaudioDall'Ara\\Desktop\\Clod\\emu\\mame\\mame.exe",
     "gluiz": null,
     "retroarch": null,
     "snes9x": null,
     "fceux": null,
     "project64": null,
     "vice": null,
-    "flycast": null
+    "flycast": null,
+    "vpx": null
   },
   "performance": {
     "lazy_load_covers": false,

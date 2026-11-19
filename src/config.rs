@@ -62,6 +62,7 @@ pub struct EmulatorPaths {
     pub project64: Option<String>,
     pub vice: Option<String>,
     pub flycast: Option<String>,
+    pub vpx: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -176,7 +177,103 @@ impl RetroHubConfig {
             "PROJECT64" => self.emulator_paths.project64.as_deref(),
             "VICE" => self.emulator_paths.vice.as_deref(),
             "FLYCAST" => self.emulator_paths.flycast.as_deref(),
+            "VPX" => self.emulator_paths.vpx.as_deref(),
             _ => None,
         }
+    }
+
+    /// Cerca l'eseguibile di RetroArch sul sistema
+    pub fn find_retroarch(&self) -> Option<PathBuf> {
+        if let Some(ref p) = self.emulator_paths.retroarch {
+            let pb = PathBuf::from(p);
+            if pb.exists() {
+                return Some(pb);
+            }
+        }
+
+        let mut candidates = vec![
+            PathBuf::from(r"C:\RetroArch-Win64\retroarch.exe"),
+            PathBuf::from(r"C:\RetroArch\retroarch.exe"),
+            PathBuf::from(r"C:\Program Files\RetroArch\retroarch.exe"),
+            PathBuf::from(r"C:\Program Files (x86)\RetroArch\retroarch.exe"),
+            PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\RetroArch\retroarch.exe"),
+            PathBuf::from(r"emu\RetroArch\retroarch.exe"),
+            PathBuf::from(r"emulators\RetroArch\retroarch.exe"),
+        ];
+
+        if let Ok(appdata) = std::env::var("APPDATA") {
+            candidates.push(PathBuf::from(&appdata).join(r"RetroArch\retroarch.exe"));
+        }
+        if let Ok(localappdata) = std::env::var("LOCALAPPDATA") {
+            candidates.push(PathBuf::from(&localappdata).join(r"RetroArch\retroarch.exe"));
+        }
+
+        candidates.into_iter().find(|p| p.exists())
+    }
+
+    /// Cerca l'eseguibile di Visual Pinball (VPX) sul sistema
+    pub fn find_vpx(&self) -> Option<PathBuf> {
+        if let Some(ref p) = self.emulator_paths.vpx {
+            let pb = PathBuf::from(p);
+            if pb.exists() {
+                return Some(pb);
+            }
+        }
+
+        let candidates = [
+            PathBuf::from(r"C:\Visual Pinball\VPinballX64.exe"),
+            PathBuf::from(r"C:\Visual Pinball\VPinballX.exe"),
+            PathBuf::from(r"C:\Visual Pinball\VPinballX_GL64.exe"),
+            PathBuf::from(r"C:\vPinball\VPinballX.exe"),
+            PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Visual Pinball\VPinballX.exe"),
+            PathBuf::from(r"emu\Visual Pinball\VPinballX.exe"),
+            PathBuf::from(r"emulators\VPX\VPinballX.exe"),
+        ];
+
+        candidates.into_iter().find(|p| p.exists())
+    }
+
+    /// Cerca l'eseguibile di MAME sul sistema
+    pub fn find_mame(&self) -> Option<PathBuf> {
+        if let Some(ref p) = self.emulator_paths.mame {
+            let pb = PathBuf::from(p);
+            if pb.exists() {
+                return Some(pb);
+            }
+        }
+
+        let candidates = [
+            PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\mame\mame.exe"),
+            PathBuf::from(r"emu\mame\mame.exe"),
+            PathBuf::from(r"emulators\mame\mame.exe"),
+            PathBuf::from(r"C:\mame\mame.exe"),
+        ];
+
+        candidates.into_iter().find(|p| p.exists())
+    }
+
+    /// Auto-rileva tutti gli emulatori installati e salva i percorsi rilevati
+    pub fn auto_detect_all(&mut self) -> (usize, Vec<String>) {
+        let mut detected = Vec::new();
+
+        if let Some(p) = self.find_mame() {
+            let s = p.to_string_lossy().to_string();
+            detected.push(format!("MAME: {}", s));
+            self.emulator_paths.mame = Some(s);
+        }
+        if let Some(p) = self.find_retroarch() {
+            let s = p.to_string_lossy().to_string();
+            detected.push(format!("RetroArch: {}", s));
+            self.emulator_paths.retroarch = Some(s);
+        }
+        if let Some(p) = self.find_vpx() {
+            let s = p.to_string_lossy().to_string();
+            detected.push(format!("Visual Pinball X: {}", s));
+            self.emulator_paths.vpx = Some(s);
+        }
+
+        let count = detected.len();
+        let _ = self.save();
+        (count, detected)
     }
 }

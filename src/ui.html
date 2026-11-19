@@ -1491,6 +1491,15 @@
             animation: modalShake 0.4s ease;
         }
 
+        @keyframes emuSectionGlow {
+            0% { box-shadow: 0 0 0 rgba(0, 243, 255, 0); border-color: var(--border-card); }
+            50% { box-shadow: 0 0 26px rgba(0, 243, 255, 0.65); border-color: var(--accent-cyan); }
+            100% { box-shadow: 0 0 0 rgba(0, 243, 255, 0); border-color: var(--border-card); }
+        }
+        .highlight-glow-pulse {
+            animation: emuSectionGlow 1.6s ease-in-out 2;
+        }
+
         .modal-close-btn {
             position: absolute;
             top: 20px;
@@ -2740,12 +2749,94 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 5. Emulatori & Core Esterni (RetroArch, VPX, MAME) -->
+                    <div class="adv-section-card" id="settingsSectionEmulators">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                                <span data-i18n="settings_sec_emulators"><span>🕹️</span> Emulatori & Core di Sistema</span>
+                            </label>
+                            <button type="button" class="btn btn-secondary" style="padding: 3px 10px; font-size: 0.72rem;" onclick="detectEmulatorsAuto()" data-i18n="settings_btn_detect_emulators">🔍 Rileva Automaticamente</button>
+                        </div>
+                        <div style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+                            <span data-i18n="settings_emulators_desc">Configura i percorsi degli eseguibili per i sistemi standalone e multi-core (RetroArch per Game & Watch/LCD, Visual Pinball per Flipper).</span>
+                        </div>
+
+                        <!-- RetroArch (Game & Watch, LCD, Handhelds) -->
+                        <div style="margin-bottom: 12px; padding: 10px 12px; background: rgba(0,0,0,0.35); border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <span style="font-size: 0.78rem; font-weight: 700; color: #fff;">📟 RetroArch (Nintendo Game & Watch / LCD Handhelds)</span>
+                                <span id="settingsRetroArchBadge" class="status-badge" style="font-size: 0.68rem; padding: 2px 8px;">Verifica...</span>
+                            </div>
+                            <span style="font-size: 0.70rem; color: var(--text-muted); display: block; margin-bottom: 6px;" data-i18n="settings_ra_hint">Eseguibile retroarch.exe con core 'Handheld / Game & Watch' (gw_libretro.dll).</span>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="settingsRetroArchPath" class="adv-input-field" placeholder="Es. C:\RetroArch-Win64\retroarch.exe" style="flex:1; font-family: var(--font-mono); font-size: 0.76rem;">
+                                <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.74rem;" onclick="saveSingleEmulator('retroarch')">💾 Salva</button>
+                            </div>
+                        </div>
+
+                        <!-- Visual Pinball X (Pinball & Flipper) -->
+                        <div style="margin-bottom: 12px; padding: 10px 12px; background: rgba(0,0,0,0.35); border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <span style="font-size: 0.78rem; font-weight: 700; color: #fff;">🎯 Visual Pinball X (Tavoli Flipper VPX)</span>
+                                <span id="settingsVpxBadge" class="status-badge" style="font-size: 0.68rem; padding: 2px 8px;">Verifica...</span>
+                            </div>
+                            <span style="font-size: 0.70rem; color: var(--text-muted); display: block; margin-bottom: 6px;" data-i18n="settings_vpx_hint">Eseguibile VPinballX.exe o VPinballX64.exe per rendering tavoli flipper.</span>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="settingsVpxPath" class="adv-input-field" placeholder="Es. C:\Visual Pinball\VPinballX64.exe" style="flex:1; font-family: var(--font-mono); font-size: 0.76rem;">
+                                <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.74rem;" onclick="saveSingleEmulator('vpx')">💾 Salva</button>
+                            </div>
+                        </div>
+
+                        <!-- MAME Arcade -->
+                        <div style="padding: 10px 12px; background: rgba(0,0,0,0.35); border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <span style="font-size: 0.78rem; font-weight: 700; color: #fff;">🕹️ Arcade Coin-Op (MAME BGFX)</span>
+                                <span id="settingsMameBadge" class="status-badge downloaded" style="font-size: 0.68rem; padding: 2px 8px;">Attivo</span>
+                            </div>
+                            <span style="font-size: 0.70rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Eseguibile MAME Arcade locale ad alte prestazioni.</span>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="settingsMamePath" class="adv-input-field" placeholder="Percorso mame.exe" style="flex:1; font-family: var(--font-mono); font-size: 0.76rem;">
+                                <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.74rem;" onclick="saveSingleEmulator('mame')">💾 Salva</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Footer Azioni -->
                 <div style="display: flex; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 16px; margin-top: 18px;">
                     <button type="button" class="btn btn-secondary" style="flex:1;" data-i18n="settings_btn_reset" onclick="resetSettingsToDefaults()">Ripristina Predefiniti</button>
                     <button type="button" class="btn btn-primary" style="flex:1.4;" data-i18n="settings_btn_save" onclick="saveAndCloseSettingsModal()">Salva Preferenze</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODALE 10: CONFIGURAZIONE EMULATORE RICHIESTA (GAME & WATCH / VPX)
+         ========================================================================== -->
+    <div class="modal-backdrop" id="emulatorSetupModal" style="z-index: 340;">
+        <div class="modal-window" style="max-width: 520px; text-align: center; padding: 32px 28px; border: 1px solid var(--border-card);">
+            <div id="emuSetupIcon" style="font-size: 3rem; margin-bottom: 12px; filter: drop-shadow(0 0 16px rgba(132, 204, 22, 0.4));">📟</div>
+            <h3 id="emuSetupTitle" style="font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 6px;" data-i18n="emu_setup_title">Configurazione Emulatore Richiesta</h3>
+            <div id="emuSetupGameBadge" style="display: inline-block; font-size: 0.78rem; color: var(--accent-cyan); background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.25); border-radius: 999px; padding: 3px 14px; margin-bottom: 14px; font-weight: 700;">Nintendo Game & Watch</div>
+            <p id="emuSetupDesc" style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 22px;">
+                Per avviare questo titolo sul tuo computer è necessario configurare l'emulatore dedicato nelle Opzioni, oppure puoi giocarlo immediatamente online via simulatore web.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button type="button" class="btn btn-primary" id="emuSetupWebBtn" style="padding: 10px 16px; font-size: 0.88rem; font-weight: 700;" onclick="launchCurrentGameWebSimulator()" data-i18n="emu_setup_web_btn">
+                    🌐 Gioca Subito nel Browser (Web Simulator)
+                </button>
+                <button type="button" class="btn btn-secondary" style="padding: 9px 16px; font-size: 0.84rem; font-weight: 700; color: var(--accent-cyan); border-color: rgba(0, 243, 255, 0.35);" onclick="openSettingsModalToEmulators()" data-i18n="emu_setup_options_btn">
+                    ⚙️ Configura Percorso nelle Opzioni
+                </button>
+                <div style="display: flex; gap: 8px; margin-top: 4px;">
+                    <button type="button" class="btn btn-secondary" id="emuSetupDownloadBtn" style="flex: 1; padding: 7px 12px; font-size: 0.76rem;" onclick="openEmulatorDownloadSite()" data-i18n="emu_setup_download_btn">
+                        📥 Scarica Emulatore
+                    </button>
+                    <button type="button" class="btn btn-secondary" style="flex: 0.8; padding: 7px 12px; font-size: 0.76rem;" onclick="closeEmulatorSetupModal()">
+                        Chiudi
+                    </button>
                 </div>
             </div>
         </div>
@@ -2921,6 +3012,15 @@
                 "settings_gamepad_listening": "In ascolto su porta USB / XInput",
                 "settings_btn_reset": "Ripristina Predefiniti",
                 "settings_btn_save": "Salva Preferenze",
+                "settings_sec_emulators": "🕹️ Emulatori & Core di Sistema",
+                "settings_btn_detect_emulators": "🔍 Rileva Automaticamente",
+                "settings_emulators_desc": "Configura i percorsi degli eseguibili per i sistemi standalone e multi-core (RetroArch per Game & Watch/LCD, Visual Pinball per Flipper).",
+                "settings_ra_hint": "Eseguibile retroarch.exe con core 'Handheld / Game & Watch' (gw_libretro.dll).",
+                "settings_vpx_hint": "Eseguibile VPinballX.exe o VPinballX64.exe per rendering tavoli flipper.",
+                "emu_setup_title": "Configurazione Emulatore Richiesta",
+                "emu_setup_web_btn": "🌐 Gioca Subito nel Browser (Web Simulator)",
+                "emu_setup_options_btn": "⚙️ Configura Percorso nelle Opzioni",
+                "emu_setup_download_btn": "📥 Scarica Emulatore",
                 "details_tab_boxart": "🖼️ Copertina Boxart",
                 "details_tab_snap": "📸 Screenshot In-Game",
                 "details_tab_title": "📺 Schermata Titolo",
@@ -3134,6 +3234,15 @@
                 "settings_gamepad_listening": "Listening on USB port / XInput",
                 "settings_btn_reset": "Reset to Defaults",
                 "settings_btn_save": "Save Preferences",
+                "settings_sec_emulators": "🕹️ Emulators & System Cores",
+                "settings_btn_detect_emulators": "🔍 Auto-Detect Emulators",
+                "settings_emulators_desc": "Configure executable paths for standalone and multi-core systems (RetroArch for Game & Watch/LCD, Visual Pinball for Flipper).",
+                "settings_ra_hint": "retroarch.exe executable with 'Handheld / Game & Watch' core (gw_libretro.dll).",
+                "settings_vpx_hint": "VPinballX.exe or VPinballX64.exe executable for pinball physics simulation.",
+                "emu_setup_title": "Emulator Setup Required",
+                "emu_setup_web_btn": "🌐 Play Now in Browser (Web Simulator)",
+                "emu_setup_options_btn": "⚙️ Configure Path in Options",
+                "emu_setup_download_btn": "📥 Download Emulator",
                 "details_tab_boxart": "🖼️ Boxart Cover",
                 "details_tab_snap": "📸 In-Game Snap",
                 "details_tab_title": "📺 Title Screen",
@@ -3347,6 +3456,15 @@
                 "settings_gamepad_listening": "Escuchando en puerto USB / XInput",
                 "settings_btn_reset": "Restablecer Valores Predeterminados",
                 "settings_btn_save": "Guardar Preferencias",
+                "settings_sec_emulators": "🕹️ Emuladores y Cores del Sistema",
+                "settings_btn_detect_emulators": "🔍 Detección Automática",
+                "settings_emulators_desc": "Configura las rutas de ejecutables para emuladores externos (RetroArch para Game & Watch/LCD, Visual Pinball para Pinball).",
+                "settings_ra_hint": "Ejecutable retroarch.exe con core 'Handheld / Game & Watch' (gw_libretro.dll).",
+                "settings_vpx_hint": "Ejecutable VPinballX.exe o VPinballX64.exe para la simulación física de pinball.",
+                "emu_setup_title": "Configuración de Emulador Requerida",
+                "emu_setup_web_btn": "🌐 Jugar Ahora en el Navegador (Simulador Web)",
+                "emu_setup_options_btn": "⚙️ Configurar Ruta en Opciones",
+                "emu_setup_download_btn": "📥 Descargar Emulador",
                 "details_tab_boxart": "🖼️ Portada Boxart",
                 "details_tab_snap": "📸 Captura In-Game",
                 "details_tab_title": "📺 Pantalla de Título",
@@ -4803,7 +4921,11 @@
                     g.play_count = (g.play_count || 0) + 1;
                     updateHeroSourceButtons();
                 } else {
-                    showToast(isEn ? `Launch error: ${data.message}` : `Errore avvio: ${data.message}`);
+                    if (data.message && data.message.startsWith('NOT_CONFIGURED:')) {
+                        handleUnconfiguredEmulator(g, data.message);
+                    } else {
+                        showToast(isEn ? `Launch error: ${data.message}` : `Errore avvio: ${data.message}`);
+                    }
                 }
             } catch (e) {
                 showToast(isEn ? 'Backend communication error.' : 'Errore di comunicazione col backend.');
@@ -5992,6 +6114,7 @@
                 console.warn('Statistiche cache non disponibili offline');
             }
 
+            loadEmulatorSettings();
             document.getElementById('settingsModal').classList.add('open');
         }
 
@@ -6030,6 +6153,217 @@
             } catch (e) {
                 showToast('📂 Cartella locale: retro_downloads/');
             }
+        }
+
+        // ==========================================================================
+        // GESTIONE CONFIGURAZIONE EMULATORI & MODALE SETUP STANDALONE
+        // ==========================================================================
+        let currentSetupGameId = null;
+        let currentSetupSystemCode = null;
+
+        async function loadEmulatorSettings() {
+            try {
+                const res = await fetch('/api/config/emulators');
+                if (res.ok) {
+                    const data = await res.json();
+                    renderEmulatorSettingsUI(data);
+                }
+            } catch (e) {
+                console.warn('Configurazione emulatori non disponibile:', e);
+            }
+        }
+
+        function renderEmulatorSettingsUI(data) {
+            // RetroArch
+            const raInput = document.getElementById('settingsRetroArchPath');
+            const raBadge = document.getElementById('settingsRetroArchBadge');
+            if (raInput && data.retroarch) {
+                raInput.value = data.retroarch.configured || data.retroarch.detected || '';
+            }
+            if (raBadge && data.retroarch) {
+                if (data.retroarch.is_available) {
+                    raBadge.className = 'status-badge downloaded';
+                    raBadge.innerText = '🟢 ' + (data.retroarch.detected ? 'Rilevato' : 'Configurato');
+                } else {
+                    raBadge.className = 'status-badge';
+                    raBadge.style.background = 'rgba(234, 179, 8, 0.15)';
+                    raBadge.style.color = '#eab308';
+                    raBadge.innerText = '🟡 Non Configurato';
+                }
+            }
+
+            // VPX
+            const vpxInput = document.getElementById('settingsVpxPath');
+            const vpxBadge = document.getElementById('settingsVpxBadge');
+            if (vpxInput && data.vpx) {
+                vpxInput.value = data.vpx.configured || data.vpx.detected || '';
+            }
+            if (vpxBadge && data.vpx) {
+                if (data.vpx.is_available) {
+                    vpxBadge.className = 'status-badge downloaded';
+                    vpxBadge.innerText = '🟢 ' + (data.vpx.detected ? 'Rilevato' : 'Configurato');
+                } else {
+                    vpxBadge.className = 'status-badge';
+                    vpxBadge.style.background = 'rgba(234, 179, 8, 0.15)';
+                    vpxBadge.style.color = '#eab308';
+                    vpxBadge.innerText = '🟡 Non Configurato';
+                }
+            }
+
+            // MAME
+            const mameInput = document.getElementById('settingsMamePath');
+            const mameBadge = document.getElementById('settingsMameBadge');
+            if (mameInput && data.mame) {
+                mameInput.value = data.mame.configured || data.mame.detected || '';
+            }
+            if (mameBadge && data.mame) {
+                if (data.mame.is_available) {
+                    mameBadge.className = 'status-badge downloaded';
+                    mameBadge.innerText = '🟢 Attivo';
+                } else {
+                    mameBadge.className = 'status-badge';
+                    mameBadge.innerText = 'Non Rilevato';
+                }
+            }
+        }
+
+        async function saveSingleEmulator(type) {
+            let path = '';
+            if (type === 'retroarch') {
+                path = document.getElementById('settingsRetroArchPath')?.value || '';
+            } else if (type === 'vpx') {
+                path = document.getElementById('settingsVpxPath')?.value || '';
+            } else if (type === 'mame') {
+                path = document.getElementById('settingsMamePath')?.value || '';
+            }
+
+            const payload = {};
+            payload[type] = path;
+
+            try {
+                const res = await fetch('/api/config/emulators', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`💾 Impostazioni salvate con successo!`);
+                    loadEmulatorSettings();
+                } else {
+                    showToast(`Errore salvataggio: ${data.message}`);
+                }
+            } catch (e) {
+                showToast('Errore di comunicazione col backend');
+            }
+        }
+
+        async function detectEmulatorsAuto() {
+            showToast('🔍 Scansione del sistema in corso...');
+            try {
+                const res = await fetch('/api/config/emulators/detect', { method: 'POST' });
+                if (res.ok) {
+                    const data = await res.json();
+                    renderEmulatorSettingsUI(data);
+                    if (data.count > 0) {
+                        showToast(`✅ Rilevati ed agganciati ${data.count} emulatori sul PC!`);
+                    } else {
+                        showToast('ℹ️ Nessun emulatore trovato nei percorsi standard. Inserisci il percorso manualmente.');
+                    }
+                }
+            } catch (e) {
+                showToast('Errore durante la scansione automatica');
+            }
+        }
+
+        function handleUnconfiguredEmulator(game, rawMsg) {
+            currentSetupGameId = game.id;
+            currentSetupSystemCode = game.system_code;
+
+            const iconEl = document.getElementById('emuSetupIcon');
+            const titleEl = document.getElementById('emuSetupTitle');
+            const badgeEl = document.getElementById('emuSetupGameBadge');
+            const descEl = document.getElementById('emuSetupDesc');
+            const webBtn = document.getElementById('emuSetupWebBtn');
+
+            if (game.system_code === 'GAMEWATCH' || game.system_code === 'LCD') {
+                if (iconEl) iconEl.innerText = '📟';
+                if (titleEl) titleEl.innerText = t('emu_setup_title');
+                if (badgeEl) badgeEl.innerText = `Nintendo Game & Watch — ${game.title}`;
+                if (descEl) {
+                    descEl.innerText = (currentLang === 'en')
+                        ? `To play this Game & Watch title with full simulation, configure RetroArch (Handheld core) in Options, or launch the authentic interactive web simulator instantly in your browser.`
+                        : ((currentLang === 'es')
+                            ? `Para jugar a este título Game & Watch, configura RetroArch (core Handheld) en Opciones, o inicia el simulador interactivo web de inmediato en tu navegador.`
+                            : `Per avviare questo capolavoro Game & Watch con la simulazione fisica originale, configura RetroArch (core Handheld) nelle Opzioni, oppure gioca subito online tramite il simulatore web autentico.`);
+                }
+                if (webBtn) webBtn.style.display = 'block';
+            } else if (game.system_code === 'PINBALL') {
+                if (iconEl) iconEl.innerText = '🎯';
+                if (titleEl) titleEl.innerText = t('emu_setup_title');
+                if (badgeEl) badgeEl.innerText = `Visual Pinball — ${game.title}`;
+                if (descEl) {
+                    descEl.innerText = (currentLang === 'en')
+                        ? `Visual Pinball X (VPinballX64.exe) is required to run this pinball table with full physics simulation. Configure its path in Options.`
+                        : `È richiesto Visual Pinball X (VPinballX64.exe) per simulare la fisica e la grafica di questo tavolo. Configura il percorso nelle Opzioni.`;
+                }
+                if (webBtn) webBtn.style.display = 'none';
+            } else {
+                if (iconEl) iconEl.innerText = '🕹️';
+                if (titleEl) titleEl.innerText = t('emu_setup_title');
+                if (badgeEl) badgeEl.innerText = `${game.platform} — ${game.title}`;
+                if (descEl) descEl.innerText = rawMsg;
+                if (webBtn) webBtn.style.display = 'none';
+            }
+
+            document.getElementById('emulatorSetupModal').classList.add('open');
+        }
+
+        function closeEmulatorSetupModal() {
+            document.getElementById('emulatorSetupModal').classList.remove('open');
+            currentSetupGameId = null;
+        }
+
+        function openSettingsModalToEmulators() {
+            closeEmulatorSetupModal();
+            openSettingsModal();
+            setTimeout(() => {
+                const section = document.getElementById('settingsSectionEmulators');
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    section.classList.remove('highlight-glow-pulse');
+                    void section.offsetWidth;
+                    section.classList.add('highlight-glow-pulse');
+                }
+            }, 300);
+        }
+
+        async function launchCurrentGameWebSimulator() {
+            if (!currentSetupGameId) return;
+            const id = currentSetupGameId;
+            closeEmulatorSetupModal();
+            showToast('🌐 Apertura simulatore web nel browser...');
+            try {
+                const res = await fetch('/api/launch/web', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: id })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('✅ Simulatore web aperto nel browser!');
+                }
+            } catch (e) {
+                showToast('Errore durante l\'apertura del browser');
+            }
+        }
+
+        function openEmulatorDownloadSite() {
+            let url = 'https://www.retroarch.com/?page=platforms';
+            if (currentSetupSystemCode === 'PINBALL') {
+                url = 'https://github.com/vpinball/vpinball/releases';
+            }
+            window.open(url, '_blank');
         }
 
         // --------------------------------------------------------------------------

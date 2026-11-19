@@ -1,6 +1,6 @@
 # 🗺️ RetroHub — Roadmap di Sviluppo Strategica
-**Versione Roadmap:** 3.3 (Release v0.45.0 | Progressive Disclosure Hero, Quote-Immune Native Launch, Custom Collections & OLED Modals)  
-**Obiettivo:** Trasformare RetroHub nel launcher retrogaming definitivo per Windows: motore Rust a 60 FPS da 9 MB, enciclopedia on-demand per 1.734+ titoli storici organizzati in 12 macro-famiglie (con Laserdisc, Pinball, Game & Watch, Computer storici e PC Recomp/Indie), Hero Widescreen cinematografica con progressive disclosure ("A Sorpresa" permanente, preferiti/continua/custom solo se reali), zero file toccati in locale, icone vettoriali minimali, avvio MAME quote-immune e simulatore P2P per l'Arena. *(Linux e macOS pianificati per le fasi successive al rilascio Windows).*
+**Versione Roadmap:** 3.4 (Release v0.45.1 | Standalone Emulators Hub, Game & Watch Web Simulator Fallback, 100% Verified Pinball & Laserdisc Covers & OLED Modal Dispatch)  
+**Obiettivo:** Trasformare RetroHub nel launcher retrogaming definitivo per Windows: motore Rust a 60 FPS da 9 MB, enciclopedia on-demand per 1.734+ titoli storici organizzati in 12 macro-famiglie (con Laserdisc, Pinball, Game & Watch, Computer storici e PC Recomp/Indie), Hero Widescreen cinematografica con progressive disclosure ("A Sorpresa" permanente, preferiti/continua/custom solo se reali), zero file toccati in locale, icone vettoriali minimali, avvio MAME quote-immune, configurazione emulatori in Opzioni (RetroArch, VPX, MAME) con fallback simulatore web e simulatore P2P per l'Arena. *(Linux e macOS pianificati per le fasi successive al rilascio Windows).*
 
 ---
 
@@ -73,9 +73,17 @@
   - Nessun romset pesante scaricato a monte; le ROM rimangono interamente in cloud/on-demand, scaricate al click `▶ GIOCA` con gestione salva-spazio post-partita.
   - Disconnessione sicura software di `emu_root` senza mai toccare, spostare o cancellare file utente.
 
-### **4.2 Download ROM "On-The-Fly" & Lancio Robusto (v0.45.0)**
+### **4.2 Download ROM "On-The-Fly", Gestione Emulatori & Lancio Robusto (v0.45.1)**
 - [x] **Download Trasparente al Lancio:**
   - Al click **☁️ SCARICA & GIOCA**, il client scarica la singola ROM in background in `retro_downloads/` ed avvia il gioco a schermo intero.
+- [x] **Hub Configurazione Emulatori Standalone & Multi-Core in Opzioni:**
+  - Sezione dedicata **`🕹️ Emulatori & Core di Sistema`** nelle Opzioni con input percorsi, badge di stato live (`🟢 Rilevato` / `🟡 Non Configurato`) e pulsante di auto-rilevamento globale (`🔍 Rileva Automaticamente`).
+  - Salvataggio e caricamento persistente in `retrohub.json` per RetroArch, Visual Pinball X (VPX) e MAME Arcade.
+- [x] **Modale Intelligente OLED per Titoli Standalone (`#emulatorSetupModal`):**
+  - Intercetta i tentativi di avvio di titoli che richiedono configurazione esterna (es. Nintendo Game & Watch o tavoli Pinball VPX).
+  - Offre all'utente 3 azioni immediate: apertura diretta del simulatore web interattivo a 60 FPS in 1 clic, collegamento guidato alle Opzioni con animazione neon di evidenziazione pulsante, o link al download ufficiale.
+- [x] **Supporto Protocolli Dedicati `RETROARCH:` e `web://` nel Launcher Rust:**
+  - Avvio automatico con RetroArch core dedicato (`-L cores\gw_libretro.dll`) e apertura istantanea nel browser default per emulatori LCD online.
 - [x] **Risolto Falso Crash e Rimozione Timer Cieco a 4s:**
   - Rimosso il pop-up arbitrario a 4 secondi post-lancio che rubava il focus durante l'apertura dell'emulatore.
   - Comportamento post-partita predefinito su **Conserva sempre su disco** (`always_keep`), con dialog gentile al rientro (`focus` window dopo >25s) solo se configurato su `ask`.
@@ -129,6 +137,10 @@
 *Obiettivo: Automatizzare al 100% l'arricchimento di metadati e cover per ROM locali, librerie digitali PC e progetti Recomp.*
 
 - [x] **Risolutore Locandine MAME Locali:** Corretto endpoint `/api/cover/mame/<rom>` con parsing pulito dell'estensione, collegando oltre 530 flyers, titles e snaps già presenti su disco.
-- [x] **Generatore Copertine Vettoriali SVG:** Creazione e servizio di poster vettoriali in tempo reale per flipper, Game & Watch e Laserdisc in `/api/cover/file/`.
+- [x] **Ingestion & Servizio Copertine 100% Pinball, Laserdisc & Game & Watch:**
+  - **Pinball (40/40 - 100%):** Tutte le 40 backglass originali ad alta definizione WebP servite con successo (0 box vuoti, 0 placeholder generici).
+  - **Laserdisc & FMV (22/22 - 100%):** Tutte le 22 locandine verticali 3D e marquees arcade originali (incluso *Casino Strip 1984*, *Dragon's Lair*, *Space Ace*, *Time Gal*, *Cliff Hanger*, *Super Don Quix-ote*, *Thayer's Quest*) servite correttamente tramite fix del routing multi-root in `server.rs`.
+  - **Game & Watch (15/15 - 100%):** Tutte le 15 foto autentiche dei modellini originali LCD Nintendo servite con successo.
+  - **Audit HTTP & Browser QA Automatizzato:** 100% HTTP 200 OK e verifica visiva con screenshot HUD confermata.
 - [ ] **Scraper Automatico No-Intro / Redump / ScreenScraper:** Caching locale permanente delle boxart 3D e screenshot in-game per le copertine rimanenti.
 - [ ] **Steam & GOG Auto-Discovery:** Rilevamento automatico delle installazioni locali PC.
