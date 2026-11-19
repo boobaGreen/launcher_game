@@ -37,21 +37,21 @@ Per prendere decisioni ingegneristiche inconfutabili, abbiamo calcolato l'esatto
 ### 2.2 Le Immagini delle Copertine (Boxart)
 Una copertina standard verticale (300x420 px compressa in formato WebP o PNG ottimizzato) pesa in media **70 KB – 110 KB** (media: **90 KB**).
 
-| Ambito | Numero Titoli | Peso Streaming (Cache Dinamica) | Peso Offline Full Pack |
+| Ambito | Numero Titoli | Piattaforma Sbloccata (Copertine Locali HD) | Peso Totale ROMs (Solo On-Demand) |
 | :--- | :--- | :--- | :--- |
-| **Super Nintendo (SNES)** | 780 giochi | Scarica solo ciò che vedi a video (~5-10 MB) | **~70 MB** |
-| **Nintendo NES** | 710 giochi | Scarica solo ciò che vedi a video (~5-10 MB) | **~64 MB** |
-| **Sega Mega Drive** | 880 giochi | Scarica solo ciò che vedi a video (~5-10 MB) | **~79 MB** |
-| **Game Boy Advance (GBA)** | 1.050 giochi | Scarica solo ciò che vedi a video (~5-10 MB) | **~94 MB** |
-| **Sony PlayStation (PS1)** | 1.400 giochi | Scarica solo ciò che vedi a video (~8-12 MB) | **~140 MB** |
-| **Arcade MAME (Top Classici)** | 1.500 giochi | Scarica solo ciò che vedi a video (~8-12 MB) | **~135 MB** |
-| **TOP 5 Piattaforme Regina** | ~4.500 giochi | **0 MB iniziali** (cache dinamica con limite LRU 100 MB) | **~440 MB** |
-| **TOP 10 Piattaforme Regina** | ~8.000 giochi | **0 MB iniziali** (cache dinamica con limite LRU 250 MB) | **~780 MB** |
-| **TUTTE le 200 Piattaforme** | ~50.000 giochi | **0 MB iniziali** (streaming Webview) | **~4,5 GB** |
+| **Super Nintendo (SNES)** | 780 giochi | **~85 MB** (salvate in locale a 60 FPS) | **~1.1 GB** (0 MB su disco a monte) |
+| **Nintendo NES** | 710 giochi | **~78 MB** (salvate in locale a 60 FPS) | **~140 MB** (0 MB su disco a monte) |
+| **Sega Mega Drive** | 880 giochi | **~96 MB** (salvate in locale a 60 FPS) | **~1.0 GB** (0 MB su disco a monte) |
+| **Game Boy Advance (GBA)** | 1.050 giochi | **~115 MB** (salvate in locale a 60 FPS) | **~6.3 GB** (0 MB su disco a monte) |
+| **Sony PlayStation (PS1)** | 1.450 giochi | **~159 MB** (salvate in locale a 60 FPS) | **~580 GB** (0 MB su disco a monte) |
+| **Arcade MAME (1G1R Parent)** | 950 giochi | **~105 MB** (salvate in locale a 60 FPS) | **~28 GB** (0 MB su disco a monte) |
+| **TOP 5 Piattaforme Regina** | ~4.500 giochi | **~450 MB** totali copertine locali | **0 MB su disco** (100% On-Demand al click) |
+| **TOP 10 Piattaforme Regina** | ~8.000 giochi | **~780 MB** totali copertine locali | **0 MB su disco** (100% On-Demand al click) |
 
-> **Verdetto sulle Copertine:**
-> Il download massivo preventivo di tutte le immagini di 200 console occuperebbe circa **4,5 GB**!
-> **La scelta di default perfetta è lo Streaming Lazy Cache:** all'attivazione della console, il download preventivo è **ZERO MB**. Il browser scarica le copertine in background solo mentre scorri la griglia e le memorizza in `cache/covers/` con un tetto massimo configurabile (es. 150 MB).
+> **⚡ La Regola Aurea RetroHub sulle Copertine:**
+> Allo sblocco di ogni piattaforma scelta dall'utente, RetroHub **scarica e memorizza in locale nella cartella `covers/<piattaforma>/` tutte le copertine HD**.
+> - **Prestazioni:** Griglia a 60 FPS nativi a 0ms, zero lag di caricamento, consultazione fluida al 100% offline anche in aereo o senza internet.
+> - **ROMs:** **Rigorosamente 0 Byte preventivi su disco**. Nessun download di massa di ROM inutilizzate. Il gioco viene scaricato solo ed esclusivamente al click `▶ GIOCA`.
 
 ---
 
@@ -92,25 +92,26 @@ Attraverso i dati storici di utilizzo di RetroArch, Batocera e dei progetti retr
 ```mermaid
 flowchart TD
     W["Wizard Iniziale RetroHub"]
-    W --> C1["Caso 1: Nuovo Utente Puro<br>(Zero ROM sul PC)"]
-    W --> C2["Caso 2: Collezione Esistente<br>(Ho già le mie ROM)"]
-    W --> C3["Caso 3: Low Storage / Handheld<br>(Poco spazio su disco)"]
-    W --> C4["Caso 4: Full Storage / Desktop<br>(Dischi illimitati 4TB+)"]
+    W --> C1["Caso 1: Smart On-Demand (Default)<br>(0 ROM sul PC • Copertine Locali)"]
+    W --> C2["Caso 2: Collezione Esistente<br>(Ho già le mie ROM in locale)"]
+    W --> C3["Caso 3: Low Storage / Handheld<br>(0 Byte immagini a monte)"]
+    W --> C4["Caso 4: Full Pack Offline<br>(Tutto su disco per console scelte)"]
 
-    C1 --> O1["Modalità Cloud On-Demand<br>Streaming Lazy Cache<br>ROM cancellate post-partita (0 MB su disco)"]
-    C2 --> O2["Modalità Ibrida<br>Auto-Discovery cartella standard<br>Locale prioritario + Cloud integrato"]
-    C3 --> O3["Modalità Placeholder Tipografici<br>Zero immagini caricate a monte<br>Copertina scaricata solo se scarichi la ROM"]
-    C4 --> O4["Modalità Full Offline<br>Tutte le 200 console disponibili<br>ROM conservate sempre sul PC"]
+    C1 --> O1["Copertine HD scaricate in locale (~80-170 MB/console)<br>ROMs 100% On-Demand al click ▶ GIOCA<br>Eliminazione opzionale post-partita"]
+    C2 --> O2["Modalità Sola Lettura<br>Auto-Discovery cartella radice standard<br>Zero spostamenti • Zero duplicazioni"]
+    C3 --> O3["Modalità Card Tipografiche Vettoriali<br>Zero immagini caricate a monte (0 Byte)<br>Cover scaricata solo per Preferiti ⭐ o giocate"]
+    C4 --> O4["Modalità Full Offline<br>Copertine + Intero romset scaricato in locale<br>100% giocabile sempre senza internet"]
 ```
 
-### 👤 Caso 1: Il Nuovo Utente (Zero ROM sul PC)
-* **Esigenza:** Installare ed essere in gioco in 60 secondi, senza scaricare romset giganti e senza manuali tecnici.
+### 👤 Caso 1: Smart On-Demand Standard (Default Consigliato di RetroHub)
+* **Esigenza:** Installare ed essere in gioco in 60 secondi, con navigazione visiva fluida e zero gigabyte sprecati per ROM inutilizzate.
 * **Scelta Consigliata nel Wizard:**
   * Piattaforme consigliate all'avvio: **Top 5 o Top 10 Regina + PC INDIE (Freeware)**.
-  * Download iniziale immagini: **0 MB** (Streaming lazy).
-  * Gestione post-partita: **Eliminazione automatica dalla cache temporanea** (tranne i Preferiti ⭐).
-  * **PC Indie nel Profilo Nuovo Utente:** Di default sono visibili solo i titoli freeware immediatamente scaricabili in 3 secondi (LocoMalito, AM2R, Cave Story, Spelunky, ecc., totale ~350 MB per tutta la collezione). I titoli commerciali non compaiono come download per non generare frustrazione o problemi di licenza.
-* **Impatto su disco:** **Meno di 25 MB totali** (solo il database e il client nativo).
+  * **Copertine & Metadati:** Allo sblocco della piattaforma, il pacchetto copertine HD viene scaricato e memorizzato in locale (`covers/<console>/`), garantendo navigazione a 60 FPS nativi a 0ms e consultazione 100% offline.
+  * **File ROM:** **0 MB sul disco a monte**. La singola ROM viene scaricata all'istante solo quando l'utente preme `▶ GIOCA`.
+  * **Gestione post-partita:** Prompt di chiusura con opzione per eliminare automaticamente la ROM o conservarla sul disco.
+  * **PC Indie nel Profilo Nuovo Utente:** Di default sono visibili i titoli freeware immediatamente scaricabili (LocoMalito, AM2R, Cave Story, Spelunky).
+* **Impatto su disco:** Solo il pacchetto copertine delle console sbloccate (~350-450 MB per 5 console storiche) + database SQLite. 0 MB di ROM preventive!
 
 ---
 
@@ -131,10 +132,10 @@ flowchart TD
 
 ---
 
-### 👤 Caso 3: Dispositivi Low Storage / Handheld (La Tua Idea dei Placeholder Tipografici)
+### 👤 Caso 3: Dispositivi Low Storage / Handheld (Card Vettoriali Dinamiche)
 * **Esigenza:** Massima leggerezza su dispositivi con memoria SSD limitata (Steam Deck, ROG Ally, Mini PC, vecchi laptop con 10 GB liberi).
-* **La Tua Proposta (Approccio Vincente):**
-  * In questo profilo, **RetroHub NON scarica nemmeno le immagini delle copertine in streaming**!
+* **Funzionamento:**
+  * In questo profilo, **RetroHub NON scarica nemmeno le immagini delle copertine a monte (0 Byte)**!
   * Tutte le card a video utilizzano un **Placeholder Tipografico Vettoriale Dinamico**:
     * Sfumatura CSS con i colori sociali autentici della console (es. viola per SNES, nero/rosso per Arcade, blu per Mega Drive).
     * Titolo nitido con font retro.
@@ -142,16 +143,16 @@ flowchart TD
     * Icona filigrana vettoriale (🎮, 🕹️, 💾).
   * **Quando viene scaricata la vera copertina?**
     SOLO quando l'utente clicca per scaricare la ROM o assegna la Stella dei Preferiti ⭐!
-  * **Impatto su disco:** **0 byte per le immagini**! Il catalogo di 50.000 giochi richiede solo i 35 MB del file SQLite!
+  * **Impatto su disco:** **0 byte per le immagini all'avvio**! Il catalogo di 50.000 giochi richiede solo i 35 MB del file SQLite!
 
 ---
 
-### 👤 Caso 4: PC Gaming con Storage Illimitato (Desktop da 4TB+)
-* **Esigenza:** Avere tutto pronto e offline, con possibilità di personalizzazione totale.
+### 👤 Caso 4: PC Gaming con Storage Illimitato / Full Pack Offline
+* **Esigenza:** Avere l'intero catalogo pronto e giocabile 100% offline per le console prescelte, senza alcuna necessità di connessione internet.
 * **Gestione Piattaforme:**
-  * L'utente può cliccare `[ Sblocca Tutte le 200 Piattaforme ]`.
+  * L'utente sceglie le specifiche console per cui scaricare sia l'intero pacchetto copertine HD sia il set completo di file ROM.
   * **Filtro di Disattivazione Sempre Presente:** Dalle impostazioni o dalla sidebar, qualsiasi console non gradita può essere spenta con un interruttore `[ ON / OFF ]`, sparendo all'istante dall'interfaccia.
-  * **Gestione Spazio:** "Conserva sempre le ROM scaricate". Ogni gioco avviato viene archiviato per sempre nella cartella locale `roms/<console>/`.
+  * **Gestione Spazio:** Tutte le ROM scaricate vengono conservate permanentemente sul disco nella cartella locale `roms/<console>/`.
 
 ---
 
@@ -198,8 +199,11 @@ L'Arena di RetroHub si articolerà in due anime complementari:
 
 ## 📝 7. Riepilogo Decisioni di Design Concordate
 
-1. **Zero download massivo di immagini all'inizio:** Si usa lo Streaming Lazy Cache per garantire avvio a 60fps e 0 byte occupati.
-2. **Struttura cartelle con convenzione standard universale:** Cartella radice indicata dall'utente + sottocartelle `roms/<console>/`.
-3. **Modalità Placeholder Tipografico (Caso 3):** Opzione attiva per handheld e laptop con poco spazio, con immagini reali caricate solo per i giochi scaricati o preferiti.
-4. **Piattaforme modulari sempre disattivabili:** Nessuna console viene imposta a forza; ciascuna può essere accesa o spenta con un toggle.
-5. **Leaderboard integrata in Arena:** Pilastro competitivo per Arcade e classici a punti.
+1. **Piattaforma Sbloccata = Copertine Locali HD + ROMs 100% On-Demand:**
+   * Allo sblocco di una piattaforma, il pacchetto copertine HD viene scaricato e memorizzato in locale (`covers/<console>/`) per garantire navigazione a 60 FPS nativi e fruizione 100% offline del catalogo.
+   * Le ROM restano rigorosamente a **0 Byte su disco**; il download avviene solo al click `▶ GIOCA` con pulizia automatica o manuale post-partita.
+2. **Struttura cartelle con convenzione standard universale:** Cartella radice indicata dall'utente + sottocartelle `roms/<console>/`. Scansione in sola lettura, zero file toccati.
+3. **Modalità Card Vettoriali Dinamiche (Caso 3):** Opzione attiva per handheld e dispositivi low storage con 0 byte per le immagini a monte (copertina reale scaricata solo per Preferiti ⭐ o giochi avviati).
+4. **MAME Curato 1G1R di Default:** Set pulito di ~950 Parent ROM uniche escludendo cloni e slot machine, con opzione di sblocco visualizzazione cloni/regionali.
+5. **Piattaforme modulari sempre disattivabili:** Nessuna console viene imposta a forza; ciascuna può essere accesa o spenta con un toggle.
+6. **Leaderboard integrata in Arena:** Pilastro competitivo per Arcade e classici a punti.

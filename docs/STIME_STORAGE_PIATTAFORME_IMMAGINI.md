@@ -47,7 +47,8 @@ Di seguito la suddivisione accurata per ciascuno dei sistemi storici supportati 
 | **Sony PlayStation 1** | `PSX` | 50 | 1.450 | 5.5 MB | **159 MB** | 137 MB | ~400 MB (`.chd`) | **~580 GB** |
 | **Sony PlayStation 2** | `PS2` | 40 | 2.000 | 4.4 MB | **220 MB** | 190 MB | ~1.8 GB (`.chd/iso`)| **~3.6 TB** |
 | **Sony PSP** | `PSP` | 30 | 1.100 | 3.3 MB | **121 MB** | 104 MB | ~700 MB (`.cso/chd`)| **~770 GB** |
-| **Arcade (MAME)** | `ARCADE` | 100 | 3.200 | 11.0 MB | **352 MB** | 304 MB | ~15 MB (`.zip`) | **~48 GB** |
+| **Arcade MAME (1G1R Parent - Default)** | `ARCADE` | 100 | **950** | 11.0 MB | **105 MB** | 90 MB | ~29 MB (`.zip`) | **~28 GB** |
+| **Arcade MAME (Full Set Cloni/Regionali)** | `ARCADE_ALL` | 100 | 3.200 | 11.0 MB | **352 MB** | 304 MB | ~15 MB (`.zip`) | **~48 GB** |
 | **SNK Neo Geo** | `NEOGEO` | 40 | 150 | 4.4 MB | **16 MB** | 14 MB | ~25 MB (`.zip`) | **~3.7 GB** |
 | **NEC PC Engine** | `PCENGINE` | 30 | 420 | 3.3 MB | **46 MB** | 39 MB | ~1.5 MB (`.pce.zip`)| **~630 MB** |
 | **Commodore 64** | `C64` | 50 | 3.000 | 5.5 MB | **330 MB** | 285 MB | ~60 KB (`.d64/.t64`)| **~180 MB** |
@@ -63,43 +64,76 @@ Di seguito la suddivisione accurata per ciascuno dei sistemi storici supportati 
 
 ---
 
-## 🧮 4. Analisi Comparativa dei 4 Scenari d'Uso (Footprint Totale)
+## ⚡ 3.1 La Regola Aurea di RetroHub: Piattaforma Sbloccata = Copertine Locali HD + ROM 100% On-Demand
+
+Questa specifica architetturale definisce il comportamento univoco e definitivo del software:
+
+1. **Al Momento dello Sblocco della Piattaforma (Console Attivata):**
+   * RetroHub scarica e memorizza in locale nella cartella `covers/<piattaforma>/` il **pacchetto completo delle copertine HD** (in formato WebP/PNG ultra-compresso da ~90-110 KB a titolo).
+   * **Prestazioni Garantite:** Navigazione della griglia a **60 FPS nativi a 0ms di latenza**, zero dipendenza dalla rete, zero buchi o "flickering" durante lo scroll veloce, **consultazione al 100% fruibile anche offline** senza connessione internet.
+   * **Impatto Reale su Disco:** Pochi Megabyte per console!
+     * Super Nintendo (SNES): **~85 MB** (780 titoli)
+     * Nintendo NES: **~78 MB** (710 titoli)
+     * Sega Mega Drive: **~96 MB** (880 titoli)
+     * Game Boy Advance: **~115 MB** (1.050 titoli)
+     * Sony PlayStation (PS1): **~159 MB** (1.450 titoli)
+     * Arcade MAME (1G1R Parent): **~105 MB** (950 titoli unici)
+     * **Top 5 Console Regine:** **~450 MB complessivi** di sole copertine per oltre 4.500 capolavori storici!
+
+2. **File ROM (I Giochi Effettivi):**
+   * **Rigorosamente 0 Byte preventivi su disco**. Nessun romset pesante scaricato a vuoto.
+   * Il trasferimento della singola ROM avviene **100% On-Demand al click `▶ GIOCA`** (download in background in 1-3 secondi per cartucce, streaming veloce per CD).
+   * **Dialog Salva-Spazio Post-Partita:** Alla chiusura dell'emulatore l'utente sceglie se conservare la ROM sul disco o rimuoverla per ripristinare all'istante lo storage a 0 byte.
+
+3. **Strategia MAME (Arcade Pulito 1G1R vs Full Cloni):**
+   * **Default Consigliato (1G1R Parent-Only):** Catalogo di **~950 titoli storici originali (Parent ROM)**, escludendo cloni, bootleg, mahjong, quiz giapponesi e slot machine. Copertine: **105 MB**, ROM totali on-demand: **~28 GB**.
+   * **Visualizzazione Completa Cloni/Regionali:** Consultabile e attivabile tramite apposito filtro toggle nel pannello di ricerca o dalla scheda dettagli del gioco.
+
+---
+
+## 🧮 4. Analisi Comparativa dei 4 Profili Utente del Wizard
 
 ```mermaid
 flowchart TD
-    S1["Scenario 1: Nuovo Utente On-Demand<br>Disco: 0 MB ➔ 25 MB"]
-    S2["Scenario 2: Starter Pack Base (Top 200)<br>Boxart: 22 MB • Metadati: 0.25 MB"]
-    S3["Scenario 3: Handheld 0 Byte Immagini<br>Placeholders Vettoriali CSS: 0 Byte"]
-    S4["Scenario 4: Full Set Mondiale Totale<br>Boxart: ~2.5 GB • ROMs: terabyte"]
+    W["Wizard Iniziale RetroHub"]
+    W --> P1["Profilo 1: Smart On-Demand (Default)<br>Copertine: Scaricate in Locale (~80-170 MB per console)<br>ROM: 0 MB su disco (Download al click)"]
+    W --> P2["Profilo 2: Collezione Esistente<br>Scansione Sola Lettura Cartella Locale<br>Zero spostamenti • Zero duplicazioni"]
+    W --> P3["Profilo 3: Ultra-Low Storage / Handheld<br>Copertine: 0 Byte (Card Vettoriali Console)<br>Download cover solo per Preferiti ⭐"]
+    W --> P4["Profilo 4: Full Pack Offline<br>Copertine Locali + ROMs Pre-Scaricate<br>100% Giocabile Offline per Console Scelte"]
 ```
 
-### 🟢 Scenario 1: Modalità Vergine On-Demand (Default di RetroHub)
-* **Spazio occupato all'installazione:** **0 MB** (zero file scaricati preventivamente).
-* **Funzionamento:** Tutte le copertine vengono caricate in streaming lazy tramite cache del browser. La ROM viene scaricata istantaneamente solo nel momento in cui l'utente preme `▶ GIOCA`.
-* **Consumo disco dopo 50 partite:** **~12 MB** di immagini in cache + i soli giochi salvati nei Preferiti.
+### 🟢 Profilo 1: Smart On-Demand Standard (Default Consigliato di RetroHub)
+* **Ideale per:** Chi desidera un'esperienza fluida da console moderna (stile Steam/Netflix), senza sprecare gigabyte di memoria per ROM che non giocherà mai.
+* **Funzionamento:**
+  * L'utente sceglie le piattaforme da sbloccare (es. Top 5 o Top 10 + Indie Freeware).
+  * **Copertine & Metadati:** Vengono scaricate e memorizzate in locale le copertine HD delle piattaforme selezionate (~350–450 MB per 5 console), garantendo navigazione a 60 FPS nativi e consultazione offline.
+  * **File ROM:** **0 MB sul disco** all'avvio. La singola ROM viene scaricata all'istante solo quando l'utente preme `▶ GIOCA`.
+  * **Post-Partita:** Possibilità di ripulire automaticamente la cartella download a fine sessione o conservare i titoli giocati.
+* **Impatto su disco:** Solo il pacchetto copertine delle console sbloccate + database SQLite (~350 MB totali per 5 console storiche).
 
-### 🟡 Scenario 2: Il "Pacchetto Base" (Starter Pack Top 200 Giochi Curati)
-Ideato per la configurazione guidata (Setup Wizard) per chi vuole un archivio curato dei migliori capolavori storici (MAME, NES, SNES, Mega Drive, PS1, N64, C64, DOS, ScummVM, Amiga, Indie):
-* **Numero Titoli:** **200 Giochi**.
-* **Metadati SQLite:** **0.25 MB** (istantaneo).
-* **Boxart Frontali 2:3:** 200 × 110 KB = **~22 MB**.
-* **Hero Panoramiche (Top 10 in rotazione):** **~3 MB**.
-* **Screenshot e Title Screens:** Caricati solo on-demand nel modale dettaglio (**~0 MB** preventivi).
-* **Impatto Totale Starter Pack:** **Meno di 26 MB totali**!
+### 🟡 Profilo 2: Collezione Esistente (Zero Spostamenti)
+* **Ideale per:** Chi possiede già il proprio archivio di ROM o giochi PC Indie sul proprio computer o hard disk esterno.
+* **Funzionamento:**
+  * Scansione in sola lettura della cartella radice indicata dall'utente (es. `roms/snes/`, `roms/mame/`, `roms/indie/`).
+  * **Garanzia Assoluta:** RetroHub NON copia, NON sposta, NON rinomina e NON tocca mai i file originali.
+  * Sblocca automaticamente le piattaforme corrispondenti e associa le copertine locali dedicate.
+* **Impatto su disco:** 0 byte aggiuntivi per le ROM; sfrutta interamente lo storage esistente.
 
-### 🔵 Scenario 3: Profilo Handheld / Low Storage (Placeholder Vettoriali)
-Pensato per dispositivi con storage critico (ROG Ally, Steam Deck 64GB, laptop con disco quasi pieno):
-* **Copertine scaricate a monte:** **0 Byte**.
-* **Interfaccia:** Utilizza card tipografiche dinamiche basate sui colori societari della console, con font retro e filigrane vettoriali integrate.
-* **Download copertina reale:** Solo quando il gioco viene scaricato localmente o contrassegnato con la stella ⭐ nei Preferiti.
+### 🔵 Profilo 3: Ultra-Low Storage / Handheld (Placeholder Vettoriali)
+* **Ideale per:** Dispositivi con memoria SSD critica (ROG Ally, Steam Deck 64GB, laptop con pochi GB liberi).
+* **Funzionamento:**
+  * **0 Byte per le immagini a monte:** Nessun pacchetto copertine scaricato all'avvio.
+  * Tutte le card a video utilizzano eleganti **Card Tipografiche Vettoriali Dinamiche** stilizzate nei colori sociali originali della console con font retro e filigrane geometriche.
+  * La copertina reale HD viene scaricata e memorizzata in locale **solo ed esclusivamente** quando il gioco viene avviato o contrassegnato con la stella ⭐ nei Preferiti (limite cache LRU 50-100 MB).
+* **Impatto su disco:** **0 MB per le immagini**; solo il database SQLite nativo (~35 MB).
 
-### 🟣 Scenario 4: Full Set Mondiale Offline (Archiviazione Massiva)
-Se un utente volesse scaricare preventivamente tutte le copertine dell'intera storia dei videogiochi:
-* **Copertine Boxart (Tutte le console):** **~2.4 GB**.
-* **Screenshot In-game (Tutti i giochi):** **~2.1 GB**.
-* **Title Screens storiche:** **~1.8 GB**.
-* **Totale Asset Grafici Completi:** **~6.3 GB**.
-* **Conclusioni:** Questo dato dimostra l'eccellenza della scelta di RetroHub: **utilizzare lo streaming lazy on-demand evita all'utente di dover attendere il download di oltre 6 GB di immagini**, garantendo un'esperienza immediata, moderna e reattiva.
+### 🟣 Profilo 4: Full Pack Offline (Console Selezionate o Archivio Totale)
+* **Ideale per:** Chi deve viaggiare senza alcuna connessione internet o possiede dischi capienti (SSD 2TB-4TB+) e vuole l'intero romset sempre disponibile offline.
+* **Funzionamento:**
+  * L'utente seleziona le specifiche console da archiviare offline (es. SNES ~1.1 GB, Mega Drive ~1.0 GB, MAME 1G1R ~28 GB).
+  * RetroHub scarica sia l'intero pacchetto copertine HD sia il set completo di ROM per le sole piattaforme prescelte.
+  * Le ROM rimangono sempre archiviate e pronte sul disco senza necessità di download al click.
+* **Impatto su disco:** Da pochi Gigabyte per le console 8/16-bit fino a centinaia di Gigabyte per i sistemi ottici.
 
 ---
 

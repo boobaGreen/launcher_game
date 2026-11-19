@@ -50,30 +50,31 @@
 ---
 
 ## 📌 FASE 4: Personalizzazione Libreria, Enciclopedia Immagini & Onboarding Vergine (In Corso 🚀)
-*Obiettivo: Nessun bisogno di riempire l'hard disk con terabyte di file: consultazione visiva al 100% dell'intero catalogo e download automatico della ROM al click.*
+*Obiettivo: Separazione netta tra Scheletro visivo (copertine HD in locale a 60 FPS offline) e Muscolo (ROM a 0 Byte sul disco, scaricate solo ed esclusivamente al click `▶ GIOCA`).*
 
-### **4.1 Modalità Vergine "Nuovo Utente" & Zero File Toccati**
-- [x] **Disconnessione Sicura delle Cartelle Locali:**
-  - Scollegamento software di `emu_root` senza mai toccare, spostare o cancellare un singolo file utente in `C:\...\emu`.
-  - Avvio pulito a 0 giochi installati / 0 MB occupati per collaudare l'esperienza reale del nuovo utente.
-- [x] **Standardizzazione Card Tipografiche Vettoriali a 0 Byte:**
-  - Eliminazione di tutte le immagini sporche, mockup temporanei o URL esterni non certificati.
-  - Visualizzazione di default con schede tipografiche eleganti nei colori ufficiali console con watermark geometrico.
-  - Caching locale in `covers/<id>.png` solo al momento dell'installazione o download effettivo.
+### **4.1 Regola Aurea RetroHub: Piattaforma Sbloccata = Copertine Locali + ROMs On-Demand**
+- [x] **Pre-Download Copertine HD allo Sblocco Console:**
+  - Allo sblocco di ogni console selezionata (es. SNES 85 MB, NES 78 MB, MD 96 MB, MAME 1G1R 105 MB), RetroHub scarica e archivia in locale nella cartella `covers/<console>/` tutte le boxart HD.
+  - **Prestazioni:** Griglia a 60 FPS nativi a 0ms, zero lag di caricamento, consultazione 100% offline del catalogo.
+- [x] **ROMs a 0 Byte Preventivi su Disco:**
+  - Nessun romset pesante scaricato a monte; le ROM rimangono interamente in cloud/on-demand.
+  - Disconnessione sicura software di `emu_root` senza mai toccare, spostare o cancellare file utente.
 
 ### **4.2 Download ROM "On-The-Fly" al Click**
 - [x] **Download Trasparente al Lancio:**
-  - Se l'utente clicca **☁️ SCARICA & GIOCA**, il client scarica la ROM in background tramite `DownloadManager` nella cartella pulita `retro_downloads/`.
-- [x] **Avvio Immediato Post-Download:**
-  - Al termine del download, la ROM viene registrata come installata e il gioco si avvia istantaneamente a schermo intero.
+  - Al click **☁️ SCARICA & GIOCA**, il client scarica la singola ROM in background in `retro_downloads/` ed avvia il gioco a schermo intero.
 - [x] **Dialog Intelligente Post-Partita (Salva-Spazio):**
   - Prompt di chiusura integrato: `[ 💾 TIENI SUL PC ]` vs `[ 🗑️ ELIMINA PER FARE SPAZIO ]`.
 
-### **4.3 Wizard di Onboarding & Strategie di Storage (4 Profili Utente Reali)**
-- [x] **Caso 1: Installazione Pulita & On-Demand:** Zero byte preventivi, catalogo cloud al 100%, scarica al volo solo mentre giochi con pulizia automatica opzionale.
-- [x] **Caso 2: Collezione Esistente (Zero Spostamenti):** Scansione in sola lettura della cartella radice locale senza mai duplicare, spostare o rinominare i file dell'utente.
-- [x] **Caso 3: Low Storage / Handheld (Smart Cache):** 0 byte per le immagini all'inizio (card tipografiche vettoriali). Scarica le copertine solo per i preferiti ⭐ o giochi avviati (cache limitata 50-100 MB).
-- [x] **Caso 4: Full Pack Offline (Console Scelte):** Scalabile: permette di scaricare l'intero pack offline per le console selezionate (pochi GB per SNES/MD) o l'intero archivio per chi ha dischi grandi.
+### **4.3 Wizard di Onboarding & Strategie di Storage (I 4 Profili Ufficiali)**
+- [x] **Caso 1: Smart On-Demand Standard (Default Consigliato):** Copertine HD scaricate in locale per le console scelte (~350-450 MB per 5 console); **0 Byte ROM su disco** a monte con download on-demand al click ed eliminazione opzionale post-partita.
+- [x] **Caso 2: Collezione Esistente (Zero Spostamenti):** Scansione in sola lettura della cartella radice utente (`roms/<console>`) senza mai duplicare o spostare file.
+- [x] **Caso 3: Low Storage / Handheld (Zero Byte Immagini):** 0 Byte per le copertine a monte (card tipografiche vettoriali con colori console); copertina reale scaricata solo per Preferiti ⭐ o giochi avviati (cache 50-100 MB).
+- [x] **Caso 4: Full Pack Offline (Console Scelte):** Download preventivo sia del pacchetto copertine sia dell'intero set di ROM per le console selezionate (giocabile 100% offline ovunque).
+
+### **4.4 Strategia MAME Curato (1G1R Parent-Only vs Cloni)**
+- [x] **Default Pulito 1G1R (~950 Titoli Parent):** Esclusione di cloni, bootleg, mahjong e slot machine; 105 MB copertine, ~28 GB ROM on-demand.
+- [x] **Switch Cloni & Varianti Regionali:** Filtro opzionale per consultare ed avviare versioni alternative e set completi.
 
 ---
 

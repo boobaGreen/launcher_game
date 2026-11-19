@@ -11,14 +11,16 @@
 **RetroHub** è un launcher desktop retrogaming in **Rust** ideato per unire la reattività estrema di un binario compilato nativo (<50ms di avvio, RAM <25MB) con l'eleganza di una *10-Foot User Interface* moderna da divano (in stile Steam Deck e RecompLauncher).
 
 ### Il Nuovo Paradigma di Prodotto Concordato:
-1. **Enciclopedia Visiva Sbloccata al 100% (Zero-Disk Footprint):**
-   * L'utente non deve scaricare terabyte di ROM in anticipo.
-   * Quando seleziona una console o piattaforma (o l'intera libreria), **può visualizzare e sbloccare tutte le copertine/boxart 3D, le descrizioni e i metadati al 100%**.
-2. **Download ROM "On-The-Fly":**
-   * Al click su **▶ GIOCA**, se la ROM non è presente in locale, il client la scarica al volo in background, ne verifica l'integrità e avvia istantaneamente l'emulatore.
+1. **Regola Aurea: Piattaforma Sbloccata = Copertine Locali HD + ROMs 100% On-Demand:**
+   * Allo sblocco di una piattaforma, il pacchetto completo delle copertine HD viene scaricato e memorizzato in locale (`covers/<console>/`), garantendo navigazione a 60 FPS nativi a 0ms e consultazione 100% offline.
+   * **ROM a 0 Byte su disco:** Nessun romset gigante scaricato preventivamente.
+2. **Download ROM "On-The-Fly" al Click:**
+   * Al click su **▶ GIOCA**, se la ROM non è presente in locale, il client la scarica al volo in background (`retro_downloads/`), ne verifica l'integrità e avvia istantaneamente l'emulatore.
 3. **Dialog Post-Partita Salva-Spazio:**
-   * Alla chiusura del gioco, l'utente sceglie se conservare la ROM sul disco o eliminarla per mantenere pulito lo storage.
-4. **Gestione Modulare degli Emulatori (Standard Batocera / RetroBat):**
+   * Alla chiusura del gioco, l'utente sceglie se conservare la ROM sul disco (`[ 💾 TIENI SUL PC ]`) o eliminarla per mantenere pulito lo storage (`[ 🗑️ ELIMINA PER FARE SPAZIO ]`).
+4. **MAME Curato 1G1R (1 Game 1 ROM Parent-Only):**
+   * Default pulito su ~950 capolavori storici unici senza duplicati regionali, cloni o slot machine, con opzione per sbloccare la visualizzazione dei cloni.
+5. **Gestione Modulare degli Emulatori (Standard Batocera / RetroBat):**
    * Transizione dall'avvio statico tramite scorciatoie `.lnk`/`.bat` all'architettura standard a doppio binario: **Core Libretro (RetroArch)** per l'80% delle console classiche + **Emulatori Standalone Ottimizzati** per arcade 3D e sistemi pesanti.
 
 ---
