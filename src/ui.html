@@ -1530,7 +1530,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">v0.44</div>
+            <div class="brand-badge">v0.45</div>
         </div>
 
         <div class="nav-search-container">
@@ -5428,9 +5428,37 @@
         // --------------------------------------------------------------------------
         // MODALE DI CONFERMA & DIALOG CUSTOM (SOSTITUISCE CONFIRM/ALERT NATIVI)
         // --------------------------------------------------------------------------
-        function showCustomConfirm({ title, message, icon = '⚠️', okText = 'Conferma', cancelText = 'Annulla', isDanger = false }) {
+        // DIALOG DI CONFERMA CUSTOM OLED (SOSTITUISCE CONFIRM/ALERT DEL BROWSER)
+        // --------------------------------------------------------------------------
+        function showCustomConfirm(options, msg, onOk) {
+            let title = 'Conferma Operazione';
+            let message = '';
+            let icon = '⚠️';
+            let okText = 'Conferma';
+            let cancelText = 'Annulla';
+            let isDanger = false;
+            let callback = null;
+
+            if (typeof options === 'string') {
+                title = options;
+                message = msg || '';
+                callback = onOk;
+            } else if (options && typeof options === 'object') {
+                title = options.title || title;
+                message = options.message || message;
+                icon = options.icon || icon;
+                okText = options.okText || okText;
+                cancelText = options.cancelText || cancelText;
+                isDanger = !!options.isDanger;
+            }
+
             return new Promise((resolve) => {
-                confirmModalResolve = resolve;
+                confirmModalResolve = (val) => {
+                    if (val && typeof callback === 'function') {
+                        callback();
+                    }
+                    resolve(val);
+                };
                 const modal = document.getElementById('confirmModal');
                 const titleEl = document.getElementById('confirmModalTitle');
                 const msgEl = document.getElementById('confirmModalMessage');
@@ -5453,16 +5481,17 @@
                 }
                 if (cancelBtn) cancelBtn.innerText = cancelText;
 
-                if (modal) modal.classList.add('active');
+                if (modal) modal.classList.add('open');
             });
         }
 
         function closeConfirmModal(result) {
             const modal = document.getElementById('confirmModal');
-            if (modal) modal.classList.remove('active');
+            if (modal) modal.classList.remove('open');
             if (confirmModalResolve) {
-                confirmModalResolve(result);
+                const fn = confirmModalResolve;
                 confirmModalResolve = null;
+                fn(result);
             }
         }
 
@@ -5521,13 +5550,15 @@
 
             try {
                 await fetch('/api/factory-reset', { method: 'POST' }).catch(() => {});
-                localStorage.clear();
-                localStorage.setItem('retrohub_app_version', '0.44.0');
+                localStorage.removeItem('retrohub_wizard_completed');
+                localStorage.removeItem('retrohub_downloaded_ids');
+                localStorage.setItem('retrohub_app_version', '0.45.0');
+                downloadedGameIds.clear();
                 closeSettingsModal();
-                showToast(isEn ? '🔄 Reset complete: restarting as clean new user...' : (isEs ? '🔄 Restablecimiento completo: reiniciando...' : '🔄 Reset completato: riavvio in modalità nuovo utente...'));
+                showToast(isEn ? '🔄 Reset complete: restarting wizard...' : (isEs ? '🔄 Restablecimiento completo: reiniciando...' : '🔄 Reset completato: riavvio Setup Wizard...'));
                 setTimeout(() => {
-                    window.location.reload();
-                }, 600);
+                    openWizardModal(true);
+                }, 350);
             } catch (e) {
                 console.error('Errore reset:', e);
             }
@@ -5711,15 +5742,11 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Se la versione salvata differisce da v0.44.0, pulizia totale dello stato per Nuovo Utente Pulito
-                const currentAppVer = '0.44.0';
+                // Controllo Versione: Aggiornamento trasparente a v0.45.0 preservando le preferenze e raccolte dell'utente
+                const currentAppVer = '0.45.0';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
-                    localStorage.removeItem('retrohub_downloaded_ids');
-                    localStorage.removeItem('retrohub_custom_collections');
-                    localStorage.removeItem('retrohub_wizard_completed');
                     localStorage.setItem('retrohub_app_version', currentAppVer);
-                    downloadedGameIds.clear();
                 }
 
                 const savedLang = localStorage.getItem('retrohub_lang');

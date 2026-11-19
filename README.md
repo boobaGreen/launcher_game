@@ -3,9 +3,9 @@
 [![Rust Version](https://img.shields.io/badge/rust-2021%20edition-orange.svg)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011%20(x86__64)-blue.svg)]()
-[![Status](https://img.shields.io/badge/status-active%20development%20v2.0-brightgreen.svg)]()
+[![Status](https://img.shields.io/badge/version-v0.45.0-brightgreen.svg)]()
 
-Client desktop nativo ultra-veloce scritto interamente in **Rust** per la gestione, consultazione multi-tag, sblocco enciclopedico delle copertine e lancio istantaneo dell'intera storia dei videogiochi (oltre **1.149 titoli** su oltre **16 piattaforme**, architettura predisposta a oltre 200 sistemi).
+Client desktop nativo ultra-veloce scritto interamente in **Rust** per la gestione, consultazione multi-tag, sblocco enciclopedico delle copertine e lancio istantaneo dell'intera storia dei videogiochi (oltre **1.734 titoli** su **41 piattaforme**, architettura organizzata in 12 macro-famiglie universali).
 
 ---
 
@@ -14,8 +14,9 @@ Client desktop nativo ultra-veloce scritto interamente in **Rust** per la gestio
 * **Avvio Istantaneo (< 50ms):** Zero tempi di caricamento, consumo di CPU pari allo 0% in idle e footprint di memoria RAM inferiore a 30 MB.
 * **Single Binary Executable (`retro-hub.exe`):** Tutta l'applicazione (micro-server HTTP, SQLite database, interfaccia Webview embedded, motore di ricerca fuzzy e netcode) compilata in un singolo file autonomo e portabile.
 * **Enciclopedia Visiva Sbloccata al 100% (Zero-Disk Footprint):** Sfoglia tutte le copertine boxart in alta definizione, gli anni, i generi, le case produttrici e i comandi gamepad anche senza avere le ROM scaricate in anticipo.
-* **Download ROM "On-The-Fly":** Clicchi su qualsiasi titolo e RetroHub ne scarica la ROM al volo in background, ne verifica l'integrità tramite checksum e lancia subito l'emulatore.
-* **Prompt Salva-Spazio Post-Partita:** Alla chiusura del gioco, decidi con un click se conservare il titolo nei tuoi Preferiti locali o eliminarlo per liberare spazio su disco.
+* **Hero Spotlight a Rivelazione Progressiva (Progressive Disclosure):** Modalità *"🎲 A Sorpresa"* permanente sul catalogo; pulsanti *"⭐ Preferiti"*, *"⏱️ Continua"* e *"📁 Custom"* visualizzati solo in presenza di dati reali dell'utente.
+* **Download ROM "On-The-Fly" & Lancio Diretto Quote-Immune:** Clicchi su qualsiasi titolo e RetroHub ne scarica la ROM al volo in background ed avvia l'emulatore nativo (MAME con `-skip_gameinfo`, Hypseus Laserdisc, RetroArch, DuckStation, Flycast, Dolphin) con immunità totale ad apici e percorsi complessi.
+* **Gestione Salva-Spazio Post-Partita Gentile:** Modalità predefinita "Conserva sempre su disco" senza pop-up aggressivi; prompt discreto di pulizia solo al rientro dell'utente su RetroHub se configurato su richiesta.
 * **Doppio Binario Emulatori & Core (Stile Batocera / RetroBat):**
   * **RetroArch Libretro Cores (Invisibile / Headless):** Gestione unificata e automatica per l'80% delle console classiche vintage (NES, SNES, Genesis, Game Boy, Atari, C64).
   * **Emulatori Standalone Dedicati:** MAME nativo con BGFX, Dolphin (GameCube/Wii), Flycast (Dreamcast/Naomi), DuckStation (PS1), PCSX2 (PS2), Hypseus (LaserDisc), Recomp Native PC.

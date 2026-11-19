@@ -127,16 +127,24 @@ impl HttpServer {
 
             // Servizio immagini locali MAME ad alta velocità (Flyers, Titles, Snaps)
             if (method == Method::Get || method == Method::Head) && path.starts_with("/api/cover/mame/") {
-                let rom = path.trim_start_matches("/api/cover/mame/").trim();
-                let clean_rom = rom.replace(['/', '\\', '.', ':', ';'], "");
+                let raw_rom = path.trim_start_matches("/api/cover/mame/").trim();
+                let rom_base = raw_rom
+                    .trim_end_matches(".png")
+                    .trim_end_matches(".jpg")
+                    .trim_end_matches(".jpeg")
+                    .trim_end_matches(".webp")
+                    .replace(['/', '\\', ':', ';', ' '], "");
                 let emu_mame = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\mame");
+                let emu_covers = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\covers");
                 let candidates = [
-                    emu_mame.join("flyers").join(format!("{}.png", clean_rom)),
-                    emu_mame.join("flyers").join(format!("{}.jpg", clean_rom)),
-                    emu_mame.join("titles").join(format!("{}.png", clean_rom)),
-                    emu_mame.join("titles").join(format!("{}.jpg", clean_rom)),
-                    emu_mame.join("snap").join(format!("{}.png", clean_rom)),
-                    emu_mame.join("snap").join(format!("{}.jpg", clean_rom)),
+                    emu_mame.join("flyers").join(format!("{}.png", rom_base)),
+                    emu_mame.join("flyers").join(format!("{}.jpg", rom_base)),
+                    emu_mame.join("titles").join(format!("{}.png", rom_base)),
+                    emu_mame.join("titles").join(format!("{}.jpg", rom_base)),
+                    emu_mame.join("snap").join(format!("{}.png", rom_base)),
+                    emu_mame.join("snap").join(format!("{}.jpg", rom_base)),
+                    emu_covers.join(format!("{}.png", rom_base)),
+                    emu_covers.join(format!("{}.jpg", rom_base)),
                 ];
                 let found_file = candidates.into_iter().find(|p| p.exists());
                 if let Some(path_buf) = found_file {
