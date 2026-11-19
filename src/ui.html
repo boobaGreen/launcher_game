@@ -1279,6 +1279,73 @@
             background: rgba(0, 0, 0, 0.6);
         }
 
+        /* Active Filter Breadcrumbs Strip */
+        .active-filters-strip {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 8px 14px;
+            background: rgba(0, 229, 180, 0.05);
+            border: 1px dashed rgba(0, 229, 180, 0.28);
+            border-radius: var(--radius-md);
+            animation: fadeIn 0.25s ease-out;
+        }
+        .active-filters-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            letter-spacing: 0.5px;
+            margin-right: 2px;
+        }
+        .active-filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+        .active-filter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #fff;
+            font-size: 0.74rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .active-filter-tag:hover {
+            background: rgba(255, 75, 75, 0.18);
+            border-color: rgba(255, 75, 75, 0.45);
+            color: #ff9e9e;
+        }
+        .active-filter-tag-close {
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+        }
+        .active-filter-tag:hover .active-filter-tag-close {
+            color: #ff6b6b;
+        }
+        .btn-clear-all-chips {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.74rem;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: auto;
+            transition: var(--transition-fast);
+        }
+        .btn-clear-all-chips:hover {
+            color: #ff6b6b;
+        }
+
         /* ==========================================================================
            7. GAMEPAD-FIRST HUD (ALWAYS-ON STATUS AT BOTTOM RIGHT)
            ========================================================================== */
@@ -1638,6 +1705,13 @@
             </div>
         </div>
 
+        <!-- Striscia Breadcrumb Filtri Attivi (Rimozione con 1 Clic) -->
+        <div id="activeFiltersBreadcrumb" class="active-filters-strip" style="display: none;">
+            <span class="active-filters-label">FILTRI ATTIVI:</span>
+            <div id="activeFilterChipsContainer" class="active-filter-chips"></div>
+            <button type="button" class="btn-clear-all-chips" onclick="resetAdvSearchFilters()">✕ Azzera Tutti</button>
+        </div>
+
         <div class="games-grid" id="gamesGrid">
             <!-- Populated dynamically via JS -->
         </div>
@@ -1989,6 +2063,91 @@
                     <button class="btn btn-secondary" style="flex:1; border-color: var(--accent-danger); color: var(--accent-danger);" onclick="resolvePostGame('delete')">
                         🗑️ Elimina (Libera Spazio)
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODALE 7: SCHEDA DETTAGLI APPROFONDITI GIOCO & ANTEPRIMA MEDIA (MUSEUM GRADE)
+         ========================================================================== -->
+    <div class="modal-backdrop" id="gameDetailsModal">
+        <div class="modal-window" style="max-width: 780px; max-height: 88vh; display: flex; flex-direction: column;">
+            <button class="modal-close-btn" onclick="closeGameDetailsModal()">✕</button>
+            <div style="padding: 28px 32px; overflow-y: auto;">
+                <!-- Header: Piattaforma + Titolo + Metadati -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span class="hero-system-pill" id="detailsSysPill">SNES</span>
+                            <span id="detailsStorageBadge" class="status-badge cloud">Cloud On-Demand</span>
+                            <span id="detailsFavBadge" class="badge" style="background:rgba(255,215,0,0.2); color:#ffd700; display:none;">★ Preferito</span>
+                        </div>
+                        <h2 style="font-size: 1.65rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 6px;" id="detailsGameTitle">
+                            Nome Gioco
+                        </h2>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-wrap: wrap; gap: 8px;" id="detailsMetaRow">
+                            <span id="detailsYear">1992</span> • 
+                            <span id="detailsDev">Capcom</span> • 
+                            <span id="detailsGenre">Action</span> • 
+                            <span id="detailsPlayers">👥 1-2 Giocatori</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Showcase Media Tabs (Boxart 2D/3D | In-Game Snap | Schermata Titolo) -->
+                <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid var(--border-card); border-radius: var(--radius-md); padding: 14px; margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;">
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" class="adv-chip active" id="tabMediaBoxart" onclick="switchDetailsMediaTab('boxart')">🖼️ Copertina Boxart</button>
+                            <button type="button" class="adv-chip" id="tabMediaSnap" onclick="switchDetailsMediaTab('snap')">📸 Screenshot In-Game</button>
+                            <button type="button" class="adv-chip" id="tabMediaTitle" onclick="switchDetailsMediaTab('title')">📺 Schermata Titolo</button>
+                        </div>
+                        <span id="detailsMediaLabel" style="font-size: 0.70rem; color: var(--text-muted); font-family: var(--font-mono); text-transform: uppercase;">BOXART NATequation</span>
+                    </div>
+
+                    <div style="height: 290px; display: flex; align-items: center; justify-content: center; background: rgba(8, 12, 20, 0.85); border-radius: var(--radius-sm); overflow: hidden; position: relative;">
+                        <img id="detailsMediaImg" src="" alt="Media Preview" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px; transition: opacity 0.25s ease;" onerror="handleDetailsMediaError()">
+                        <div id="detailsMediaFallback" style="display: none; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); text-align: center; padding: 20px;">
+                            <div style="font-size: 2.2rem; margin-bottom: 6px;">🎮</div>
+                            <div style="font-size: 0.90rem; font-weight: 700; color: #fff;" id="detailsFallbackTitle">Anteprima non disponibile</div>
+                            <div style="font-size: 0.74rem; margin-top: 4px;">Asset in caricamento o fallback vettoriale attivo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trama / Sinossi Approfondita & Storia -->
+                <div class="adv-section-card" style="margin-bottom: 14px;">
+                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                        📖 Panoramica & Storia del Titolo
+                    </div>
+                    <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.6; margin: 0;" id="detailsSynopsis">
+                        Caricamento scheda dettagli...
+                    </p>
+                </div>
+
+                <!-- Scheda Tecnica Emulazione (Risoluzione, Core, Controller) -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px;">
+                    <div class="adv-section-card" style="padding: 10px 12px;">
+                        <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight:700;">Risoluzione & Refresh</div>
+                        <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-top: 3px;" id="detailsTechRes">256x224 • 60 FPS</div>
+                    </div>
+                    <div class="adv-section-card" style="padding: 10px 12px;">
+                        <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight:700;">Core / Backend</div>
+                        <div style="font-size: 0.82rem; font-weight: 700; color: var(--accent-cyan); margin-top: 3px;" id="detailsTechCore">Libretro / Nativ</div>
+                    </div>
+                    <div class="adv-section-card" style="padding: 10px 12px;">
+                        <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight:700;">Configurazione Joypad</div>
+                        <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-top: 3px;" id="detailsTechControls">Standard Joypad</div>
+                    </div>
+                </div>
+
+                <!-- Footer Azioni -->
+                <div style="display: flex; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
+                    <button type="button" class="btn btn-secondary" style="flex:1;" onclick="closeGameDetailsModal()">Chiudi</button>
+                    <button type="button" class="btn btn-secondary" id="detailsFavBtn" style="flex:1.2;" onclick="toggleCurrentDetailsFavorite()">★ Preferito</button>
+                    <button type="button" class="btn btn-secondary" style="flex:1.2;" onclick="addCurrentDetailsToCollection()">📁 In Raccolta</button>
+                    <button type="button" class="btn btn-primary" id="detailsPlayBtn" style="flex:1.6;" onclick="launchCurrentDetailsGame()">▶ GIOCA ORA</button>
                 </div>
             </div>
         </div>
@@ -2609,6 +2768,7 @@
 
             document.getElementById('catalogStatsBadge').innerText = `${filtered.length} giochi visibili`;
             updateAdvFilterButtonBadge();
+            renderActiveFilterBreadcrumbs();
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
@@ -2662,6 +2822,7 @@
                         <div class="card-quick-actions" onclick="event.stopPropagation();">
                             <button class="quick-play-btn" onclick="launchGameById(${g.id})">${isInstalled ? '▶ GIOCA' : '☁️ SCARICA'}</button>
                             <button class="quick-fav-btn ${g.is_favorite ? 'is-fav' : ''}" onclick="toggleGameFavorite(${g.id})">★</button>
+                            <button class="quick-fav-btn" style="color:var(--accent-cyan);" title="Dettagli & Screenshot" onclick="openGameDetailsModalById(${g.id})">ℹ️</button>
                         </div>
                     </div>
                 `;
@@ -2939,6 +3100,9 @@
                     closeArenaModal();
                     closeRouletteModal();
                     closePostGameModal();
+                    closeAdvSearchModal();
+                    closeCustomCollectionsModal();
+                    closeGameDetailsModal();
                 }
             });
         }
@@ -3230,6 +3394,313 @@
             saveCustomCollectionsToStorage();
             renderCollectionsList();
             showToast(`✅ Raccolta "${name.trim()}" salvata con ${gameIds.length} giochi!`);
+        }
+
+        // ==========================================================================
+        // BREADCRUMB FILTRI ATTIVI & RIMOZIONE RAPIDA CON 1 CLIC
+        // ==========================================================================
+        function renderActiveFilterBreadcrumbs() {
+            const strip = document.getElementById('activeFiltersBreadcrumb');
+            const container = document.getElementById('activeFilterChipsContainer');
+            if (!strip || !container) return;
+
+            const chips = [];
+
+            if (advYearMin > 1972 || advYearMax < 2026) {
+                chips.push({
+                    label: `📅 ${advYearMin}–${advYearMax}`,
+                    onRemove: 'removeAdvYearFilter()'
+                });
+            }
+
+            if (advSelectedGenres.size > 0) {
+                advSelectedGenres.forEach(gen => {
+                    chips.push({
+                        label: `🏷️ ${gen}`,
+                        onRemove: `toggleAdvGenre('${gen}')`
+                    });
+                });
+            } else if (currentGenre !== 'ALL') {
+                chips.push({
+                    label: `🏷️ ${currentGenre}`,
+                    onRemove: "filterGenre('ALL')"
+                });
+            }
+
+            if (advDevFilter.length > 0) {
+                chips.push({
+                    label: `🏢 ${advDevFilter}`,
+                    onRemove: 'removeAdvDevFilter()'
+                });
+            }
+
+            if (advPlatformFilter !== 'ALL') {
+                chips.push({
+                    label: `🎮 ${advPlatformFilter}`,
+                    onRemove: 'removeAdvPlatformFilter()'
+                });
+            }
+
+            if (advStorageFilter === 'downloaded') {
+                chips.push({
+                    label: '💾 Solo Scaricati',
+                    onRemove: 'removeAdvStorageFilter()'
+                });
+            }
+
+            if (advOptFavorites || activeQuickFilter === 'favorites') {
+                chips.push({
+                    label: '⭐ Solo Preferiti',
+                    onRemove: 'toggleQuickFilter("favorites")'
+                });
+            }
+
+            if (advOptMultiplayer || activeQuickFilter === 'multiplayer') {
+                chips.push({
+                    label: '👥 2+ Giocatori',
+                    onRemove: 'toggleQuickFilter("multiplayer")'
+                });
+            }
+
+            if (chips.length > 0) {
+                strip.style.display = 'flex';
+                container.innerHTML = chips.map(c => `
+                    <span class="active-filter-tag" onclick="${c.onRemove}">
+                        <span>${escapeHtml(c.label)}</span>
+                        <span class="active-filter-tag-close">✕</span>
+                    </span>
+                `).join('');
+            } else {
+                strip.style.display = 'none';
+                container.innerHTML = '';
+            }
+        }
+
+        function removeAdvYearFilter() {
+            setAdvDecadeRange('ALL');
+            renderCatalog();
+        }
+
+        function removeAdvDevFilter() {
+            advDevFilter = '';
+            const input = document.getElementById('advDevInput');
+            if (input) input.value = '';
+            document.querySelectorAll('[id^="chipDev_"]').forEach(el => el.classList.remove('active'));
+            renderCatalog();
+        }
+
+        function removeAdvPlatformFilter() {
+            advPlatformFilter = 'ALL';
+            const sel = document.getElementById('advPlatformSelect');
+            if (sel) sel.value = 'ALL';
+            renderCatalog();
+        }
+
+        function removeAdvStorageFilter() {
+            advStorageFilter = 'all';
+            storageFilter = 'all';
+            document.getElementById('toggleAllCloud')?.classList.add('active');
+            document.getElementById('toggleOnlyDownloaded')?.classList.remove('active');
+            const sel = document.getElementById('advStorageSelect');
+            if (sel) sel.value = 'all';
+            renderCatalog();
+        }
+
+        // ==========================================================================
+        // SCHEDA DETTAGLI APPROFONDITI (MUSEUM GRADE MODAL & MEDIA SHOWCASE)
+        // ==========================================================================
+        let activeDetailsGame = null;
+        let activeDetailsMediaTab = 'boxart'; // 'boxart' | 'snap' | 'title'
+
+        function openGameDetailsModalById(id) {
+            const g = allGames.find(x => x.id === id);
+            if (!g) return;
+            openGameDetails(g);
+        }
+
+        function openHeroGameDetails() {
+            const g = heroList[heroIndex];
+            if (!g) return;
+            openGameDetails(g);
+        }
+
+        function openGameDetails(g) {
+            activeDetailsGame = g;
+            activeDetailsMediaTab = 'boxart';
+
+            const pInfo = allPlatforms.find(p => p.code === g.system_code);
+            const brandColor = pInfo ? pInfo.color : '#00e5b4';
+
+            // Header info
+            const sysPill = document.getElementById('detailsSysPill');
+            sysPill.innerText = g.system_code;
+            sysPill.style.borderColor = brandColor;
+            sysPill.style.color = brandColor;
+
+            const storageBadge = document.getElementById('detailsStorageBadge');
+            const isInstalled = isSandboxMode ? false : g.is_installed;
+            storageBadge.className = isInstalled ? 'status-badge downloaded' : 'status-badge cloud';
+            storageBadge.innerText = isInstalled ? '💾 Installato su PC' : '☁️ Cloud On-Demand';
+
+            const favBadge = document.getElementById('detailsFavBadge');
+            favBadge.style.display = g.is_favorite ? 'inline-block' : 'none';
+
+            document.getElementById('detailsGameTitle').innerText = g.title;
+            document.getElementById('detailsYear').innerText = g.year;
+            document.getElementById('detailsDev').innerText = g.developer || 'N/D';
+            document.getElementById('detailsGenre').innerText = g.genre;
+            document.getElementById('detailsPlayers').innerText = g.system_code === 'ARCADE' ? '👥 2P Coin-Op' : '👥 1-2 Giocatori';
+
+            // Media
+            switchDetailsMediaTab('boxart');
+
+            // Synopsis
+            document.getElementById('detailsSynopsis').innerText = generateGameSynopsis(g);
+
+            // Technical Specs
+            document.getElementById('detailsTechRes').innerText = getPlatformResolution(g.system_code);
+            document.getElementById('detailsTechCore').innerText = getPlatformCore(g.system_code);
+            document.getElementById('detailsTechControls').innerText = g.controls || 'Standard Gamepad (D-pad + 6 Tasti)';
+
+            // Action Buttons
+            const favBtn = document.getElementById('detailsFavBtn');
+            favBtn.innerText = g.is_favorite ? '★ Salvato nei Preferiti' : '★ Aggiungi ai Preferiti';
+            favBtn.style.color = g.is_favorite ? 'var(--accent-gold)' : '#fff';
+
+            const playBtn = document.getElementById('detailsPlayBtn');
+            playBtn.innerText = isInstalled ? '▶ GIOCA SUBITO' : '☁️ SCARICA & AVVIA';
+
+            document.getElementById('gameDetailsModal').classList.add('open');
+        }
+
+        function closeGameDetailsModal() {
+            document.getElementById('gameDetailsModal').classList.remove('open');
+            activeDetailsGame = null;
+        }
+
+        function switchDetailsMediaTab(tab) {
+            activeDetailsMediaTab = tab;
+            document.getElementById('tabMediaBoxart')?.classList.toggle('active', tab === 'boxart');
+            document.getElementById('tabMediaSnap')?.classList.toggle('active', tab === 'snap');
+            document.getElementById('tabMediaTitle')?.classList.toggle('active', tab === 'title');
+            updateDetailsMedia();
+        }
+
+        function updateDetailsMedia() {
+            if (!activeDetailsGame) return;
+            const g = activeDetailsGame;
+            const img = document.getElementById('detailsMediaImg');
+            const fallback = document.getElementById('detailsMediaFallback');
+            const label = document.getElementById('detailsMediaLabel');
+
+            img.style.display = 'block';
+            fallback.style.display = 'none';
+
+            const coverUrl = g.cover_url || '';
+            let targetUrl = coverUrl;
+
+            if (coverUrl.includes('/Named_Boxarts/')) {
+                if (activeDetailsMediaTab === 'snap') {
+                    targetUrl = coverUrl.replace('/Named_Boxarts/', '/Named_Snaps/');
+                    label.innerText = 'SCREENSHOT IN-GAME (AZIONE)';
+                } else if (activeDetailsMediaTab === 'title') {
+                    targetUrl = coverUrl.replace('/Named_Boxarts/', '/Named_Titles/');
+                    label.innerText = 'SCHERMATA INTRO / TITOLO';
+                } else {
+                    label.innerText = 'BOXART COPERTINA UFFICIALE';
+                }
+            } else {
+                label.innerText = 'COPERTINA UFFICIALE';
+            }
+
+            img.src = targetUrl;
+        }
+
+        function handleDetailsMediaError() {
+            const img = document.getElementById('detailsMediaImg');
+            const fallback = document.getElementById('detailsMediaFallback');
+            if (activeDetailsMediaTab !== 'boxart' && activeDetailsGame?.cover_url) {
+                img.src = activeDetailsGame.cover_url;
+                document.getElementById('detailsMediaLabel').innerText = 'BOXART FALLBACK (SNAP ASSENTE)';
+            } else {
+                img.style.display = 'none';
+                fallback.style.display = 'flex';
+                document.getElementById('detailsFallbackTitle').innerText = activeDetailsGame ? activeDetailsGame.title : 'N/D';
+            }
+        }
+
+        function generateGameSynopsis(g) {
+            const dev = g.developer ? `creato dal leggendario team di ${g.developer}` : 'pubblicato come classico del retrogaming';
+            return `${g.title} (${g.year}) è un capolavoro del genere ${g.genre} per sistema ${g.platform}, ${dev}. Rappresenta una pietra miliare dell'epoca d'oro, caratterizzato da level design raffinato, colonna sonora iconica e un gameplay perfettamente reattivo testato ed emulato con sincronizzazione frame-per-frame per il tuo PC.`;
+        }
+
+        function getPlatformResolution(sys) {
+            switch(sys) {
+                case 'SNES': return '256x224 • 60.09 Hz';
+                case 'MEGADRIVE': return '320x224 • 59.92 Hz';
+                case 'ARCADE':
+                case 'NEOGEO': return '320x224 (RGB) • 59.18 Hz';
+                case 'PSX': return '320x240 / 512x240 • 60 Hz';
+                case 'PS2': return '640x480i / 480p • 60 Hz';
+                case 'N64': return '320x240 (Ultra 64) • 60 Hz';
+                case 'DREAMCAST': return '640x480 (VGA 31kHz) • 60 Hz';
+                case 'SATURN': return '352x240 (Dual VDP) • 60 Hz';
+                case 'AMIGA': return '320x256 (PAL) • 50 Hz';
+                case 'DOS': return '320x200 (VGA Mode 13h) • 70 Hz';
+                case 'C64': return '320x200 (VIC-II) • 50 Hz';
+                case 'GB':
+                case 'GBA': return '240x160 • 59.72 Hz';
+                default: return 'Risoluzione Nativa Ottimizzata';
+            }
+        }
+
+        function getPlatformCore(sys) {
+            switch(sys) {
+                case 'SNES': return 'Snes9x Current (Libretro)';
+                case 'MEGADRIVE': return 'Genesis Plus GX (Libretro)';
+                case 'ARCADE': return 'FBNeo / FinalBurn Neo 2026';
+                case 'NEOGEO': return 'FBNeo Neo-Geo Core';
+                case 'PSX': return 'DuckStation / PCSX-ReARMed';
+                case 'PS2': return 'PCSX2 Standalone 64-bit';
+                case 'N64': return 'Mupen64Plus-Next OpenGL';
+                case 'DREAMCAST': return 'Flycast High-Precision';
+                case 'SATURN': return 'Beetle Saturn / Mednafen';
+                case 'AMIGA': return 'PUAE 2026 (WHDLoad Auto)';
+                case 'DOS': return 'DOSBox Pure (ZIP Direct Boot)';
+                case 'C64': return 'VICE x64sc Accurate';
+                case 'RECOMP': return 'Nativo PC C/C++ Recompiled';
+                default: return 'Core Open-Source Integrato';
+            }
+        }
+
+        function toggleCurrentDetailsFavorite() {
+            if (!activeDetailsGame) return;
+            toggleGameFavorite(activeDetailsGame.id);
+            activeDetailsGame.is_favorite = !activeDetailsGame.is_favorite;
+            const favBtn = document.getElementById('detailsFavBtn');
+            const favBadge = document.getElementById('detailsFavBadge');
+            favBtn.innerText = activeDetailsGame.is_favorite ? '★ Salvato nei Preferiti' : '★ Aggiungi ai Preferiti';
+            favBtn.style.color = activeDetailsGame.is_favorite ? 'var(--accent-gold)' : '#fff';
+            favBadge.style.display = activeDetailsGame.is_favorite ? 'inline-block' : 'none';
+        }
+
+        function launchCurrentDetailsGame() {
+            if (!activeDetailsGame) return;
+            const id = activeDetailsGame.id;
+            closeGameDetailsModal();
+            launchGameById(id);
+        }
+
+        function addCurrentDetailsToCollection() {
+            if (!activeDetailsGame) return;
+            const coll = customCollections[0];
+            if (!coll.gameIds.includes(activeDetailsGame.id)) {
+                coll.gameIds.push(activeDetailsGame.id);
+                saveCustomCollectionsToStorage();
+                showToast(`Aggiunto a "${coll.name}"!`);
+            } else {
+                showToast(`Già presente in "${coll.name}".`);
+            }
         }
 
         // Gestione Raccolte & Playlist Custom
