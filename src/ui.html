@@ -427,8 +427,8 @@
 
         .hero-banner {
             position: relative;
-            min-height: 450px;
-            max-height: 450px;
+            min-height: 500px;
+            max-height: 500px;
             border-radius: var(--radius-xl);
             overflow: hidden;
             background: linear-gradient(135deg, #0e1422 0%, #070a11 100%);
@@ -437,8 +437,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 32px 48px 60px 48px;
-            gap: 36px;
+            padding: 40px 48px 74px 48px;
+            gap: 40px;
         }
 
         /* 3-Layer Ambient Backdrop Re-engineered */
@@ -446,12 +446,12 @@
             position: absolute;
             inset: 0;
             background-size: cover;
-            background-position: right center;
-            opacity: 0.65;
+            background-position: center 30%;
+            opacity: 0.80;
             transition: background-image 0.5s ease-in-out, opacity 0.4s ease;
             pointer-events: none;
             z-index: 1;
-            filter: contrast(1.08) saturate(1.25);
+            filter: contrast(1.12) saturate(1.22) brightness(0.72);
         }
 
         .hero-bg-glow {
@@ -468,23 +468,23 @@
             inset: 0;
             background: linear-gradient(to right, 
                 #070a11 0%, 
-                rgba(7, 10, 17, 0.96) 38%, 
-                rgba(7, 10, 17, 0.65) 65%, 
-                rgba(7, 10, 17, 0.30) 85%, 
+                rgba(7, 10, 17, 0.96) 35%, 
+                rgba(7, 10, 17, 0.62) 65%, 
+                rgba(7, 10, 17, 0.28) 85%, 
                 #070a11 100%
             );
             pointer-events: none;
             z-index: 3;
         }
 
-        /* Contenuto Sinistro con Posizioni Fisse Anchored */
+        /* Contenuto Sinistro con Spaziatura Elegante e Respiro Visivo */
         .hero-content {
             position: relative;
             z-index: 4;
-            max-width: 640px;
+            max-width: 650px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 16px;
         }
 
         .hero-super-tags {
@@ -492,7 +492,7 @@
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
-            height: 26px;
+            margin-bottom: 2px;
         }
 
         .hero-system-pill {
@@ -517,28 +517,30 @@
         }
 
         .hero-title {
-            font-size: 2.35rem;
-            font-weight: 800;
-            line-height: 1.15;
-            letter-spacing: -0.8px;
+            font-size: 2.6rem;
+            font-weight: 850;
+            line-height: 1.25;
+            letter-spacing: -0.5px;
             color: #ffffff;
-            text-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            height: 2.3em;
-            max-height: 2.3em;
+            min-height: 64px;
+            max-height: 110px;
+            margin: 0;
         }
 
         .hero-meta {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.86rem;
-            color: var(--text-secondary);
+            gap: 12px;
+            font-size: 0.88rem;
+            color: #94a3b8;
             font-weight: 500;
-            height: 22px;
+            height: auto;
+            margin-bottom: 2px;
         }
         .hero-meta span {
             color: #cbd5e1;
@@ -546,16 +548,17 @@
         }
 
         .hero-desc {
-            font-size: 0.90rem;
-            line-height: 1.45;
-            color: #94a3b8;
-            max-width: 580px;
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: #cbd5e1;
+            max-width: 610px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            height: 2.9em;
-            max-height: 2.9em;
+            height: auto;
+            min-height: 3.2em;
+            margin: 0;
         }
 
         .hero-controls-hint {
@@ -576,9 +579,9 @@
         .hero-actions-row {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-top: 4px;
-            margin-bottom: 8px;
+            gap: 14px;
+            margin-top: 10px;
+            margin-bottom: 6px;
         }
 
         /* Contenuto Destro (Copertina Hero Perfettamente Centrata) */
@@ -1535,7 +1538,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">v0.40</div>
+            <div class="brand-badge">v0.41</div>
         </div>
 
         <div class="nav-search-container">
@@ -1573,13 +1576,17 @@
         <aside class="left-sidebar" id="leftSidebar" title="Tassonomia 12 Macro-Famiglie">
             <div class="sidebar-nav-list">
                 <div class="sidebar-item active" id="sideNavALL" onclick="selectMacroFamily('ALL')">
-                    <div class="sidebar-icon">🌟</div>
+                    <div class="sidebar-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="3.5"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="16" cy="10" r="1" fill="currentColor"></circle><circle cx="18" cy="12" r="1" fill="currentColor"></circle><circle cx="16" cy="14" r="1" fill="currentColor"></circle><circle cx="14" cy="12" r="1" fill="currentColor"></circle></svg>
+                    </div>
                     <span class="sidebar-label" data-i18n="side_all">Tutti i Giochi</span>
                     <span class="sidebar-count" id="sideCountALL">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavFAV" onclick="selectMacroFamily('FAVORITES')">
-                    <div class="sidebar-icon">⭐</div>
+                    <div class="sidebar-icon" style="color: var(--accent-gold);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    </div>
                     <span class="sidebar-label" data-i18n="side_fav">I Tuoi Preferiti</span>
                     <span class="sidebar-count" id="sideCountFAV">0</span>
                 </div>
@@ -1588,73 +1595,97 @@
 
                 <!-- 12 Macro-Famiglie Universali -->
                 <div class="sidebar-item" id="sideNavARCADE" onclick="selectMacroFamily('ARCADE')">
-                    <div class="sidebar-icon">🕹️</div>
+                    <div class="sidebar-icon" style="color: #f97316;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h12"></path><path d="M12 18v-7"></path><circle cx="12" cy="7" r="4"></circle><circle cx="18" cy="14" r="1.5" fill="currentColor"></circle><circle cx="18" cy="18" r="1.5" fill="currentColor"></circle></svg>
+                    </div>
                     <span class="sidebar-label" data-i18n="side_arcade">Arcade Coin-Op</span>
                     <span class="sidebar-count" id="sideCountARCADE">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavLASERDISC" onclick="selectMacroFamily('LASERDISC')">
-                    <div class="sidebar-icon">📀</div>
+                    <div class="sidebar-icon" style="color: #ec4899;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3"></circle><line x1="12" y1="3" x2="12" y2="6"></line><line x1="18.36" y1="5.64" x2="16.24" y2="7.76"></line></svg>
+                    </div>
                     <span class="sidebar-label">Laserdisc & FMV</span>
                     <span class="sidebar-count" id="sideCountLASERDISC">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavPINBALL" onclick="selectMacroFamily('PINBALL')">
-                    <div class="sidebar-icon">🎯</div>
+                    <div class="sidebar-icon" style="color: #06b6d4;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 3 20 20 4 20"></polygon><circle cx="12" cy="10" r="2.5"></circle><line x1="8" y1="17" x2="11" y2="15"></line><line x1="16" y1="17" x2="13" y2="15"></line></svg>
+                    </div>
                     <span class="sidebar-label">Pinball & Flipper</span>
                     <span class="sidebar-count" id="sideCountPINBALL">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavLCD" onclick="selectMacroFamily('LCD')">
-                    <div class="sidebar-icon">📟</div>
+                    <div class="sidebar-icon" style="color: #84cc16;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="9" rx="1.5"></rect><rect x="5" y="13" width="14" height="9" rx="1.5"></rect><line x1="8" y1="17.5" x2="11" y2="17.5"></line><line x1="9.5" y1="16" x2="9.5" y2="19"></line><circle cx="15.5" cy="17.5" r="1" fill="currentColor"></circle></svg>
+                    </div>
                     <span class="sidebar-label">LCD & Game & Watch</span>
                     <span class="sidebar-count" id="sideCountLCD">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavNINTENDO" onclick="selectMacroFamily('NINTENDO')">
-                    <div class="sidebar-icon">🍄</div>
+                    <div class="sidebar-icon" style="color: #ef4444;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3z"></path><circle cx="12" cy="12" r="1.5" fill="currentColor"></circle></svg>
+                    </div>
                     <span class="sidebar-label">Nintendo Universe</span>
                     <span class="sidebar-count" id="sideCountNINTENDO">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavSEGA" onclick="selectMacroFamily('SEGA')">
-                    <div class="sidebar-icon">🌀</div>
+                    <div class="sidebar-icon" style="color: #0284c7;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="4"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg>
+                    </div>
                     <span class="sidebar-label">Sega Universe</span>
                     <span class="sidebar-count" id="sideCountSEGA">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavSONY" onclick="selectMacroFamily('SONY')">
-                    <div class="sidebar-icon">🎮</div>
+                    <div class="sidebar-icon" style="color: #3b82f6;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="8 4 5 9 11 9"></polygon><circle cx="16" cy="6.5" r="2.5"></circle><line x1="5.5" y1="14.5" x2="10.5" y2="19.5"></line><line x1="10.5" y1="14.5" x2="5.5" y2="19.5"></line><rect x="13.5" y="14.5" width="5" height="5" rx="0.5"></rect></svg>
+                    </div>
                     <span class="sidebar-label" data-i18n="side_sony">Sony PlayStation</span>
                     <span class="sidebar-count" id="sideCountSONY">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavATARI" onclick="selectMacroFamily('ATARI')">
-                    <div class="sidebar-icon">🦅</div>
+                    <div class="sidebar-icon" style="color: #eab308;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M4 21c0-8 3-15 8-17"></path><path d="M20 21c0-8-3-15-8-17"></path></svg>
+                    </div>
                     <span class="sidebar-label">Atari & Pioneers</span>
                     <span class="sidebar-count" id="sideCountATARI">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavSNKNEC" onclick="selectMacroFamily('SNKNEC')">
-                    <div class="sidebar-icon">⚔️</div>
+                    <div class="sidebar-icon" style="color: #a855f7;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="3"></rect><circle cx="7" cy="12.5" r="1.5"></circle><circle cx="12" cy="10" r="1.5" fill="currentColor"></circle><circle cx="14.5" cy="11.5" r="1.5" fill="currentColor"></circle><circle cx="17" cy="13" r="1.5" fill="currentColor"></circle></svg>
+                    </div>
                     <span class="sidebar-label">SNK & NEC Engine</span>
                     <span class="sidebar-count" id="sideCountSNKNEC">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavCOMPUTER" onclick="selectMacroFamily('COMPUTER')">
-                    <div class="sidebar-icon">💾</div>
+                    <div class="sidebar-icon" style="color: #10b981;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l5 5v13H5V3z"></path><rect x="8" y="3" width="8" height="5"></rect><rect x="8" y="14" width="8" height="7"></rect></svg>
+                    </div>
                     <span class="sidebar-label" data-i18n="side_computers">Computer Occidentali</span>
                     <span class="sidebar-count" id="sideCountCOMPUTER">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavNIPPON" onclick="selectMacroFamily('NIPPON')">
-                    <div class="sidebar-icon">🗾</div>
+                    <div class="sidebar-icon" style="color: #f43f5e;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="6.5" height="18" rx="1.5"></rect><rect x="13.5" y="3" width="6.5" height="18" rx="1.5"></rect><line x1="4" y1="9" x2="10.5" y2="9"></line><line x1="13.5" y1="9" x2="20" y2="9"></line></svg>
+                    </div>
                     <span class="sidebar-label">Nippon Computers</span>
                     <span class="sidebar-count" id="sideCountNIPPON">0</span>
                 </div>
 
                 <div class="sidebar-item" id="sideNavPC" onclick="selectMacroFamily('PC')">
-                    <div class="sidebar-icon">⚡</div>
+                    <div class="sidebar-icon" style="color: #00e5b4;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    </div>
                     <span class="sidebar-label">PC Recomp & Indie</span>
                     <span class="sidebar-count" id="sideCountPC">0</span>
                 </div>
@@ -1662,7 +1693,9 @@
                 <div class="sidebar-divider"></div>
 
                 <div class="sidebar-item" id="sideNavCUSTOM" onclick="openCustomCollectionsModal()">
-                    <div class="sidebar-icon">📁</div>
+                    <div class="sidebar-icon" style="color: #38bdf8;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+                    </div>
                     <span class="sidebar-label">Raccolte Custom</span>
                     <span class="sidebar-count">+</span>
                 </div>
@@ -1770,6 +1803,17 @@
         <!-- Filter Sub-Bar: Switches & Tag Pills -->
         <div class="filter-sub-bar">
             <div class="filter-switches">
+                <!-- Selettore Set: Hall of Fame vs 1G1R Completo -->
+                <div class="toggle-switch-group" id="groupCatalogMode" title="Scegli tra la selezione d'élite Hall of Fame o la collezione completa 1G1R">
+                    <button id="toggleModeCurated" class="toggle-btn active" onclick="setCatalogMode('curated')" title="Visualizza solo i capolavori selezionati (Hall of Fame, senza duplicati)">
+                        <span data-i18n="mode_curated">🌟 Hall of Fame</span> (<span id="countCurated">1.734</span>)
+                    </button>
+                    <button id="toggleModeFull" class="toggle-btn" onclick="setCatalogMode('full')" title="Visualizza la collezione completa 1G1R (senza cloni, BIOS o utility non-gioco)">
+                        <span data-i18n="mode_full">📚 Collezione 1G1R</span> (<span id="countFull">1.734</span>)
+                    </button>
+                </div>
+
+                <!-- Selettore Storage: Cloud vs Scaricati -->
                 <div class="toggle-switch-group">
                     <button id="toggleAllCloud" class="toggle-btn active" onclick="setStorageFilter('all')">
                         <span data-i18n="sub_all_cloud">🔓 Tutto l'Archivio Cloud</span> (<span id="countCloud">0</span>)
@@ -2476,6 +2520,8 @@
                 "hero_src_favorites": "⭐ Preferiti",
                 "hero_src_recent": "⏱️ Continua",
                 "hero_src_custom": "📁 Custom",
+                "mode_curated": "🌟 Hall of Fame",
+                "mode_full": "📚 Collezione 1G1R",
                 "sub_all_cloud": "🔓 Tutto l'Archivio Cloud",
                 "sub_only_down": "💾 Solo Scaricati",
                 "sub_fav": "⭐ Preferiti",
@@ -2677,6 +2723,8 @@
                 "hero_src_favorites": "⭐ Favorites",
                 "hero_src_recent": "⏱️ Continue",
                 "hero_src_custom": "📁 Custom",
+                "mode_curated": "🌟 Hall of Fame",
+                "mode_full": "📚 1G1R Collection",
                 "sub_all_cloud": "🔓 All Cloud Games",
                 "sub_only_down": "💾 Downloaded Only",
                 "sub_fav": "⭐ Favorites",
@@ -2878,6 +2926,8 @@
                 "hero_src_favorites": "⭐ Favoritos",
                 "hero_src_recent": "⏱️ Continuar",
                 "hero_src_custom": "📁 Personalizado",
+                "mode_curated": "🌟 Hall of Fame",
+                "mode_full": "📚 Colección 1G1R",
                 "sub_all_cloud": "🔓 Todo el Archivo Cloud",
                 "sub_only_down": "💾 Solo Descargados",
                 "sub_fav": "⭐ Favoritos",
@@ -3062,6 +3112,7 @@
         let currentMacroFamily = 'ALL';
         let currentPlatform = 'ALL';
         let currentGenre = 'ALL';
+        let catalogMode = 'curated'; // 'curated' (🌟 Hall of Fame) | 'full' (📚 Collezione 1G1R Completa)
         let storageFilter = 'all'; // 'all' (Cloud) | 'downloaded' (Solo Scaricati)
         let activeQuickFilter = null; // 'favorites' | 'multiplayer'
         let isSandboxMode = false;
@@ -3379,6 +3430,14 @@
             renderCatalog();
         }
 
+        function setCatalogMode(mode) {
+            catalogMode = mode;
+            document.getElementById('toggleModeCurated')?.classList.toggle('active', mode === 'curated');
+            document.getElementById('toggleModeFull')?.classList.toggle('active', mode === 'full');
+            updateCatalogTitle();
+            renderCatalog();
+        }
+
         function setStorageFilter(mode) {
             storageFilter = mode;
             document.getElementById('toggleAllCloud')?.classList.toggle('active', mode === 'all');
@@ -3522,12 +3581,26 @@
             if (backdrop) {
                 if (isSteamWide) {
                     backdrop.style.backgroundImage = `url("${wideArt}")`;
-                    backdrop.style.filter = 'contrast(1.1) saturate(1.25)';
-                    backdrop.style.opacity = '0.65';
+                    backdrop.style.filter = 'contrast(1.12) saturate(1.22) brightness(0.72)';
+                    backdrop.style.opacity = '0.80';
                 } else if (coverUrl && !isTypographicMode) {
-                    backdrop.style.backgroundImage = `url("${coverUrl}")`;
-                    backdrop.style.filter = 'blur(55px) saturate(2) brightness(0.42)';
-                    backdrop.style.opacity = '0.55';
+                    // Per i titoli retro carica lo screenshot landscape in-game d'azione (Named_Snaps)
+                    const snapCandidate = coverUrl.includes('Named_Boxarts') ? coverUrl.replace('Named_Boxarts', 'Named_Snaps') : coverUrl;
+                    
+                    backdrop.style.backgroundImage = `url("${snapCandidate}"), url("${coverUrl}")`;
+                    backdrop.style.filter = 'contrast(1.14) saturate(1.20) brightness(0.70)';
+                    backdrop.style.opacity = '0.82';
+
+                    // Se lo snap esiste usalo nitido, altrimenti fallback morbido
+                    const imgTest = new Image();
+                    imgTest.onload = () => {
+                        backdrop.style.backgroundImage = `url("${snapCandidate}")`;
+                    };
+                    imgTest.onerror = () => {
+                        backdrop.style.backgroundImage = `url("${coverUrl}")`;
+                        backdrop.style.filter = 'contrast(1.08) saturate(1.15) brightness(0.55)';
+                    };
+                    imgTest.src = snapCandidate;
                 } else {
                     backdrop.style.backgroundImage = `radial-gradient(circle at 75% 35%, ${brandColor}40 0%, rgba(10, 14, 23, 0.95) 75%)`;
                     backdrop.style.filter = 'none';
@@ -3686,7 +3759,12 @@
         // --------------------------------------------------------------------------
         // 4. RENDERING GRIGLIA GIOCHI (AND LOGIC MULTI-FILTRO & ASSET 2:3)
         // --------------------------------------------------------------------------
-        function gameMatchesFilters(g, isModalPreview = false, ignoreStorage = false) {
+        function gameMatchesFilters(g, isModalPreview = false, ignoreStorage = false, ignoreCatalogMode = false) {
+            // 0. Catalog Mode: Hall of Fame (Curata) vs Collezione Completa (1G1R)
+            if (!ignoreCatalogMode && !isModalPreview && catalogMode === 'curated') {
+                if (g.is_curated === false) return false;
+            }
+
             // 1. Macro-Famiglia Sidebar (applicata solo alla griglia principale)
             if (!isModalPreview) {
                 if (currentMacroFamily !== 'ALL' && currentMacroFamily !== 'FAVORITES') {
@@ -3793,14 +3871,27 @@
             const grid = document.getElementById('gamesGrid');
             
             // 1. Dynamic Scope Calculation (Macro-family, platform, search query, genre, year, multiplayer, etc.)
-            const scopedGames = allGames.filter(g => gameMatchesFilters(g, false, true));
+            const baseScopedGames = allGames.filter(g => gameMatchesFilters(g, false, true, true));
+            const scopeCuratedCount = baseScopedGames.filter(g => g.is_curated !== false).length;
+            const scopeFullCount = baseScopedGames.length;
+            
+            const countCuratedEl = document.getElementById('countCurated');
+            if (countCuratedEl) countCuratedEl.innerText = scopeCuratedCount.toLocaleString('it-IT');
+            const countFullEl = document.getElementById('countFull');
+            if (countFullEl) countFullEl.innerText = scopeFullCount.toLocaleString('it-IT');
+
+            // Apply catalog mode filter to scoped games
+            const scopedGames = baseScopedGames.filter(g => {
+                if (catalogMode === 'curated' && g.is_curated === false) return false;
+                return true;
+            });
             const scopeCloudCount = scopedGames.length;
             const scopeDownCount = scopedGames.filter(g => isSandboxMode ? false : g.is_installed).length;
             
             const countCloudEl = document.getElementById('countCloud');
-            if (countCloudEl) countCloudEl.innerText = scopeCloudCount;
+            if (countCloudEl) countCloudEl.innerText = scopeCloudCount.toLocaleString('it-IT');
             const countDownEl = document.getElementById('countDownloaded');
-            if (countDownEl) countDownEl.innerText = scopeDownCount;
+            if (countDownEl) countDownEl.innerText = scopeDownCount.toLocaleString('it-IT');
 
             // 2. Filter games according to the active storage filter (Cloud vs Only Downloaded)
             const isOnlyDownloaded = (storageFilter === 'downloaded' || advStorageFilter === 'downloaded');
@@ -5179,6 +5270,17 @@
                 } else {
                     catTitle.innerText = t('catalog_title_all');
                 }
+            }
+
+            const curCount = document.getElementById('countCurated')?.innerText || '0';
+            const fullCount = document.getElementById('countFull')?.innerText || '0';
+            const curBtn = document.getElementById('toggleModeCurated');
+            if (curBtn) {
+                curBtn.innerHTML = `<span data-i18n="mode_curated">${t('mode_curated')}</span> (<span id="countCurated">${curCount}</span>)`;
+            }
+            const fullBtn = document.getElementById('toggleModeFull');
+            if (fullBtn) {
+                fullBtn.innerHTML = `<span data-i18n="mode_full">${t('mode_full')}</span> (<span id="countFull">${fullCount}</span>)`;
             }
 
             const cloudCount = document.getElementById('countCloud')?.innerText || '0';
