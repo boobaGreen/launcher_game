@@ -1461,9 +1461,6 @@
                         <p class="hero-desc" id="heroDesc">
                             Il capolavoro assoluto a 16-bit. Esplora Dinosaur Land, scopri 96 uscite segrete e cavalca per la prima volta l'iconico dinosauro Yoshi!
                         </p>
-                        <div class="hero-controls-hint" id="heroControlsHint">
-                            🎮 Xbox: A Salto, X Corsa/Sputa, B Giro, Start Pausa
-                        </div>
                         <div class="hero-actions-row">
                             <button class="btn btn-primary" id="heroPlayBtn" onclick="launchHeroCurrentGame()">
                                 ▶ GIOCA ORA
@@ -1859,7 +1856,7 @@
         let storageFilter = 'all'; // 'all' (Cloud) | 'downloaded' (Solo Scaricati)
         let activeQuickFilter = null; // 'favorites' | 'multiplayer' | 'freeware'
         let isSandboxMode = false;
-        let isTypographicMode = true; // Inizializzato a TRUE per il look pulito senza immagini provvisorie rotte
+        let isTypographicMode = false; // Mostra boxart grafiche reali; fallback tipografico su 404/errore
         let customCollections = [
             { id: 1, name: '⭐ I Miei Preferiti Classici', gameIds: [1, 2, 3] },
             { id: 2, name: '🕹️ Capcom Arcade 90s', gameIds: [225, 226, 227] },
@@ -2152,8 +2149,6 @@
             document.getElementById('heroDesc').innerText = g.developer ? 
                 `Grande classico ${g.genre} pubblicato da ${g.developer}. Ottimizzato a 60 FPS nativi per il tuo PC.` :
                 `Esperienza retrogaming per ${g.platform}.`;
-            
-            document.getElementById('heroControlsHint').innerText = g.controls || '🎮 Xbox Gamepad: RT Acceleratore, A Salto, X Attacco';
 
             // Pulsanti Azione
             const isInstalled = isSandboxMode ? false : g.is_installed;
@@ -2240,14 +2235,6 @@
 
             initHeroSpotlight();
             showToast(`Vetrina impostata su: ${getSourceLabel(src)}`);
-        }
-            switch(src) {
-                case 'favorites': return '⭐ I TUOI PREFERITI';
-                case 'recent': return '⏱️ CONTINUA A GIOCARE';
-                case 'platform': return '🎮 IN EVIDENZA CONSOLE';
-                case 'shuffle': return '🎲 RETRO-SHUFFLE';
-                default: return '👑 PROPOSTA DEL GIORNO';
-            }
         }
 
         function startHeroRotation() {

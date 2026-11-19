@@ -26,20 +26,21 @@ use db::Database;
 use plugins::{load_plugins, PluginManager};
 use server::HttpServer;
 
-fn is_server_alive(url: &str) -> bool {
-    // Verifica che il server esistente risponda davvero a una richiesta HTTP (non solo che la porta sia aperta)
+fn is_server_alive(_url: &str) -> bool {
+    // Verifica che il server esistente risponda davvero a una richiesta HTTP (senza bloccarsi)
     use std::io::{Read, Write};
     if let Ok(mut stream) = std::net::TcpStream::connect_timeout(
         &"127.0.0.1:39281".parse().unwrap(),
         std::time::Duration::from_millis(300),
     ) {
-        let req = format!(
-            "GET /api/platforms HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n"
-        );
+        let _ = stream.set_read_timeout(Some(std::time::Duration::from_millis(300)));
+        let _ = stream.set_write_timeout(Some(std::time::Duration::from_millis(300)));
+        let req = "GET /api/platforms HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n";
         if stream.write_all(req.as_bytes()).is_ok() {
-            let mut buf = String::new();
-            if stream.read_to_string(&mut buf).is_ok() {
-                return buf.contains("200");
+            let mut buf = [0u8; 512];
+            if let Ok(n) = stream.read(&mut buf) {
+                let resp = String::from_utf8_lossy(&buf[..n]);
+                return resp.contains("200");
             }
         }
     }
@@ -53,10 +54,18 @@ fn open_app_window(url: &str) {
         r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
     ];
 
+    let user_data = std::env::var("LOCALAPPDATA")
+        .unwrap_or_else(|_| r"C:\Temp".to_string())
+        + r"\RetroHub\edge_profile";
+
     for path in &edge_paths {
         if Path::new(path).exists() {
             if Command::new(path)
-                .args(&[&format!("--app={}", url), "--window-size=1440,900"])
+                .args(&[
+                    &format!("--app={}", url),
+                    &format!("--user-data-dir={}", user_data),
+                    "--window-size=1440,900",
+                ])
                 .spawn()
                 .is_ok()
             {

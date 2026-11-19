@@ -31,6 +31,8 @@ impl MasterCatalog {
                     clean_title.clone()
                 } else if $sys == "C64" || $sys == "AMIGA" {
                     format!("{} (Europe)", clean_title)
+                } else if $sys == "DOS" || $sys == "SCUMMVM" || $sys == "LASERDISC" || $sys == "PINBALL" {
+                    clean_title.clone()
                 } else {
                     format!("{} (USA)", clean_title)
                 };
@@ -48,7 +50,7 @@ impl MasterCatalog {
                     genre: $genre.to_string(),
                     developer: $dev.to_string(),
                     publisher: $dev.to_string(),
-                    controls: "Gamepad Standard (D-Pad + 4 Tasti)".to_string(),
+                    controls: String::new(),
                     launch_target: String::new(),
                     cover_url: Some(cover),
                     is_favorite: false,
@@ -235,6 +237,64 @@ impl MasterCatalog {
         add_game!("VECTREX", "GCE Vectrex", "Scramble", 1982, "Vector Shmup", "GCE", vec_sub);
         add_game!("VECTREX", "GCE Vectrex", "Space Wars", 1982, "Vector Space Combat", "GCE", vec_sub);
         add_game!("VECTREX", "GCE Vectrex", "Clean Sweep", 1982, "Vector Maze Action", "GCE", vec_sub);
+
+        // ==========================================
+        // MS-DOS PC CLASSICS
+        // ==========================================
+        let dos_sub = "DOS";
+        add_game!("DOS", "MS-DOS PC Classics", "DOOM (1993)", 1993, "FPS", "id Software", dos_sub);
+        add_game!("DOS", "MS-DOS PC Classics", "DOOM II - Hell on Earth", 1994, "FPS", "id Software", dos_sub);
+        add_game!("DOS", "MS-DOS PC Classics", "Duke Nukem 3D", 1996, "FPS", "3D Realms", dos_sub);
+        add_game!("DOS", "MS-DOS PC Classics", "Prince of Persia", 1989, "Cinematic Platformer", "Broderbund", dos_sub);
+
+        // ==========================================
+        // SCUMMVM POINT & CLICK ADVENTURES
+        // ==========================================
+        let scumm_sub = "ScummVM";
+        add_game!("SCUMMVM", "ScummVM Point & Click", "Day of the Tentacle", 1993, "Avventura Grafica", "LucasArts", scumm_sub);
+        add_game!("SCUMMVM", "ScummVM Point & Click", "Curse of Monkey Island, The", 1997, "Avventura Grafica", "LucasArts", scumm_sub);
+        add_game!("SCUMMVM", "ScummVM Point & Click", "Monkey Island 2_ LeChuck's Revenge", 1991, "Avventura Grafica", "LucasArts", scumm_sub);
+
+        // ==========================================
+        // COMMODORE AMIGA 500 / 1200
+        // ==========================================
+        let amiga_sub = "Commodore_-_Amiga";
+        add_game!("AMIGA", "Commodore Amiga (500/1200)", "Turrican II - The Final Fight", 1991, "Run and Gun", "Rainbow Arts", amiga_sub);
+        add_game!("AMIGA", "Commodore Amiga (500/1200)", "All New World of Lemmings", 1994, "Puzzle Platform", "DMA Design", amiga_sub);
+        add_game!("AMIGA", "Commodore Amiga (500/1200)", "Sensible Soccer", 1992, "Sport / Calcio", "Sensible Software", amiga_sub);
+
+        // ==========================================
+        // SEGA DREAMCAST & SATURN
+        // ==========================================
+        let dc_sub = "Sega_-_Dreamcast";
+        add_game!("DREAMCAST", "Sega Dreamcast", "Crazy Taxi", 2000, "Arcade Racing", "Sega", dc_sub);
+        add_game!("DREAMCAST", "Sega Dreamcast", "Shenmue", 1999, "Open World Adventure", "Sega AM2", dc_sub);
+        add_game!("DREAMCAST", "Sega Dreamcast", "Sonic Adventure", 1998, "3D Platform", "Sega", dc_sub);
+
+        let saturn_sub = "Sega_-_Saturn";
+        add_game!("SATURN", "Sega Saturn", "NiGHTS into Dreams...", 1996, "Action 3D", "Sonic Team", saturn_sub);
+        add_game!("SATURN", "Sega Saturn", "Sega Rally Championship", 1995, "Arcade Racing", "Sega", saturn_sub);
+
+        // ==========================================
+        // SONY PLAYSTATION 2
+        // ==========================================
+        let ps2_sub = "Sony_-_PlayStation_2";
+        add_game!("PS2", "PlayStation 2", "Shadow of the Colossus", 2005, "Action Adventure", "Team Ico / Sony", ps2_sub);
+        add_game!("PS2", "PlayStation 2", "Metal Gear Solid 3 - Snake Eater", 2004, "Stealth Action", "Konami", ps2_sub);
+
+        // ==========================================
+        // NEC PC ENGINE / TURBOGRAFX
+        // ==========================================
+        let pce_sub = "NEC_-_PC_Engine_-_TurboGrafx_16";
+        add_game!("PCENGINE", "PC Engine / TurboGrafx", "Castlevania - Rondo of Blood", 1993, "Action Platform", "Konami", pce_sub);
+        add_game!("PCENGINE", "PC Engine / TurboGrafx", "Bonk's Adventure", 1989, "Platform", "Hudson Soft", pce_sub);
+
+        // ==========================================
+        // ATARI 2600 PIONEERS
+        // ==========================================
+        let a26_sub = "Atari_-_2600";
+        add_game!("ATARI2600", "Atari 2600", "Space Invaders", 1980, "Arcade Classic", "Atari / Taito", a26_sub);
+        add_game!("ATARI2600", "Atari 2600", "River Raid", 1982, "Scrolling Shooter", "Activision", a26_sub);
 
         // ==========================================
         // PC INDIE & LOCOMALITO - Built-in Manifest
