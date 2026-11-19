@@ -620,6 +620,77 @@ impl HttpServer {
                     let _ = request.respond(response);
                 }
 
+                // SETTINGS API - Get cache stats
+                (&Method::Get, "/api/cache/stats") => {
+                    let mut total_bytes: u64 = 0;
+                    let mut file_count: usize = 0;
+                    let cache_dirs = ["covers", "retro_downloads", "downloads"];
+                    for d in &cache_dirs {
+                        let path = std::path::Path::new(d);
+                        if path.exists() && path.is_dir() {
+                            if let Ok(entries) = std::fs::read_dir(path) {
+                                for entry in entries.flatten() {
+                                    if let Ok(meta) = entry.metadata() {
+                                        total_bytes += meta.len();
+                                        file_count += 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    let mb = (total_bytes as f64) / (1024.0 * 1024.0);
+                    let json = serde_json::json!({
+                        "success": true,
+                        "size_mb": format!("{:.1}", mb),
+                        "file_count": file_count,
+                        "downloads_path": std::env::current_dir().unwrap_or_default().join("retro_downloads").to_string_lossy()
+                    }).to_string();
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // SETTINGS API - Clear image / cover cache
+                (&Method::Post, "/api/cache/clear") => {
+                    let cover_path = std::path::Path::new("covers");
+                    let mut deleted = 0;
+                    if cover_path.exists() && cover_path.is_dir() {
+                        if let Ok(entries) = std::fs::read_dir(cover_path) {
+                            for entry in entries.flatten() {
+                                if let Ok(path) = entry.path().canonicalize() {
+                                    let _ = std::fs::remove_file(path);
+                                    deleted += 1;
+                                }
+                            }
+                        }
+                    }
+                    let json = serde_json::json!({
+                        "success": true,
+                        "deleted_files": deleted,
+                        "message": format!("Cache immagini ripulita: eliminati {} file", deleted)
+                    }).to_string();
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // SETTINGS API - Open downloads folder in Explorer
+                (&Method::Post, "/api/open-downloads-folder") => {
+                    let dl_path = std::env::current_dir().unwrap_or_default().join("retro_downloads");
+                    let _ = std::fs::create_dir_all(&dl_path);
+                    #[cfg(target_os = "windows")]
+                    {
+                        let _ = std::process::Command::new("explorer").arg(&dl_path).spawn();
+                    }
+                    let json = serde_json::json!({
+                        "success": true,
+                        "path": dl_path.to_string_lossy()
+                    }).to_string();
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
                 // Chiude il server quando la finestra del browser viene chiusa
                 (&Method::Post, "/api/shutdown") => {
                     self.shutdown.store(true, Ordering::SeqCst);
