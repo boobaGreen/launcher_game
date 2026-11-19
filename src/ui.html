@@ -2225,9 +2225,9 @@
                             <span data-i18n="settings_sec_lang"><span>🌐</span> Lingua dell'Interfaccia / Language</span>
                         </label>
                         <select id="settingsLanguageSelect" class="adv-input-field" onchange="onSettingsLanguageChanged()">
-                            <option value="it" data-i18n="settings_lang_it">🇮🇹 Italiano (Attivo al 100%)</option>
-                            <option value="en" data-i18n="settings_lang_en">🇬🇧 English (Active 100%)</option>
-                            <option value="es" data-i18n="settings_lang_es">🇪🇸 Español (Activo 100%)</option>
+                            <option value="it" data-i18n="settings_lang_it">Italiano</option>
+                            <option value="en" data-i18n="settings_lang_en">English</option>
+                            <option value="es" data-i18n="settings_lang_es">Español</option>
                         </select>
                         <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4;">
                             <span data-i18n="settings_lang_desc">L'interfaccia, i messaggi e le schede informative operano nella lingua selezionata.</span>
@@ -2433,9 +2433,9 @@
                 "settings_title": "⚙️ Opzioni & Impostazioni",
                 "settings_subtitle": "Personalizza lingua, gestione archiviazione, cache boxart e comportamento dell'interfaccia.",
                 "settings_sec_lang": "🌐 Lingua dell'Interfaccia / Language",
-                "settings_lang_it": "🇮🇹 Italiano (Attivo al 100%)",
-                "settings_lang_en": "🇬🇧 English (Active 100%)",
-                "settings_lang_es": "🇪🇸 Español (Activo 100%)",
+                "settings_lang_it": "Italiano",
+                "settings_lang_en": "English",
+                "settings_lang_es": "Español",
                 "settings_lang_desc": "L'interfaccia, i messaggi e le schede informative operano nella lingua selezionata.",
                 "settings_sec_storage": "📁 Percorsi & Archiviazione ROMs",
                 "settings_label_down_folder": "CARTELLA DOWNLOAD ROMS ON-DEMAND",
@@ -2628,9 +2628,9 @@
                 "settings_title": "⚙️ Options & Settings",
                 "settings_subtitle": "Customize language, storage management, boxart cache, and interface behavior.",
                 "settings_sec_lang": "🌐 Interface Language / Idioma",
-                "settings_lang_it": "🇮🇹 Italiano (Attivo al 100%)",
-                "settings_lang_en": "🇬🇧 English (Active 100%)",
-                "settings_lang_es": "🇪🇸 Español (Activo 100%)",
+                "settings_lang_it": "Italiano",
+                "settings_lang_en": "English",
+                "settings_lang_es": "Español",
                 "settings_lang_desc": "The entire interface, messages, and info sheets operate in the selected language.",
                 "settings_sec_storage": "📁 Paths & ROM Storage",
                 "settings_label_down_folder": "ON-DEMAND ROMS DOWNLOAD FOLDER",
@@ -2823,9 +2823,9 @@
                 "settings_title": "⚙️ Opciones y Ajustes",
                 "settings_subtitle": "Personaliza idioma, gestión de almacenamiento, caché de portadas y comportamiento de la interfaz.",
                 "settings_sec_lang": "🌐 Idioma de la Interfaz / Language",
-                "settings_lang_it": "🇮🇹 Italiano (Attivo al 100%)",
-                "settings_lang_en": "🇬🇧 English (Active 100%)",
-                "settings_lang_es": "🇪🇸 Español (Activo 100%)",
+                "settings_lang_it": "Italiano",
+                "settings_lang_en": "English",
+                "settings_lang_es": "Español",
                 "settings_lang_desc": "Toda la interfaz, los avisos y las fichas de datos funcionan en el idioma seleccionado.",
                 "settings_sec_storage": "📁 Rutas y Almacenamiento de ROMs",
                 "settings_label_down_folder": "CARPETA DE DESCARGA DE ROMS ON-DEMAND",
@@ -4869,11 +4869,11 @@
             applyLanguage(lang);
             localStorage.setItem('retrohub_lang', lang);
             if (lang === 'en') {
-                showToast('🇬🇧 English language activated.');
+                showToast('🌐 English language activated.');
             } else if (lang === 'es') {
-                showToast('🇪🇸 Idioma Español activado.');
+                showToast('🌐 Idioma Español activado.');
             } else {
-                showToast('🇮🇹 Lingua Italiana attivata.');
+                showToast('🌐 Lingua Italiana attivata.');
             }
         }
 
