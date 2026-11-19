@@ -167,6 +167,7 @@ impl Database {
                     is_favorite: fav_num == 1,
                     play_count: row.get(12)?,
                     last_played_at: row.get(13)?,
+                    is_installed: check_installed(&row.get::<_, String>(9)?),
                 })
             })?
             .collect::<Result<Vec<Game>>>()?;
@@ -198,6 +199,7 @@ impl Database {
                 is_favorite: fav_num == 1,
                 play_count: row.get(12)?,
                 last_played_at: row.get(13)?,
+                is_installed: check_installed(&row.get::<_, String>(9)?),
             }))
         } else {
             Ok(None)
@@ -386,6 +388,7 @@ impl Database {
                     is_favorite: fav_num == 1,
                     play_count: row.get(12)?,
                     last_played_at: row.get(13)?,
+                    is_installed: check_installed(&row.get::<_, String>(9)?),
                 })
             })?
             .collect::<Result<Vec<Game>>>()?;
@@ -414,6 +417,7 @@ impl Database {
                     is_favorite: fav_num == 1,
                     play_count: row.get(12)?,
                     last_played_at: row.get(13)?,
+                    is_installed: check_installed(&row.get::<_, String>(9)?),
                 })
             })?
             .collect::<Result<Vec<Game>>>()?;
@@ -461,6 +465,27 @@ fn chrono_free_now() -> String {
     format!("{}", since_epoch)
 }
 
+fn check_installed(target: &str) -> bool {
+    let t = target.trim();
+    if t.is_empty() {
+        return false;
+    }
+    if t.starts_with("MAME:") {
+        return true;
+    }
+    let p = std::path::Path::new(t);
+    if p.exists() {
+        return true;
+    }
+    let candidates = [
+        std::path::PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu").join(t),
+        std::path::PathBuf::from("emu").join(t),
+        std::path::PathBuf::from("roms").join(t),
+        std::path::PathBuf::from("downloads").join(t),
+    ];
+    candidates.iter().any(|c| c.exists())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -483,6 +508,7 @@ mod tests {
             is_favorite: false,
             play_count: 0,
             last_played_at: None,
+            is_installed: true,
         };
 
         db.upsert_game(&g).unwrap();

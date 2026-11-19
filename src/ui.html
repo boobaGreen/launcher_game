@@ -2134,6 +2134,11 @@
                 </div>
             </div>
             <div class="header-actions">
+                <button class="fav-filter-btn" onclick="toggleArchiveMode()" id="archiveToggleBtn" title="Passa da 'Tutto l'Archivio (100% Immagini)' a 'Solo Giochi Scaricati in Locale'" style="border-color: rgba(56, 189, 248, 0.4);">
+                    <span id="archiveIcon">🔓</span>
+                    <span id="archiveLabel">Tutto l'Archivio</span>
+                    <span class="fav-status-badge" id="archiveBadge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">100%</span>
+                </button>
                 <button class="fav-filter-btn" onclick="toggleFavoritesOnly()" id="favToggleBtn" title="Attiva o disattiva il filtro Solo Preferiti">
                     <span class="fav-star">★</span>
                     <span id="favBtnLabel">Preferiti</span>
@@ -2437,6 +2442,30 @@
         </div>
     </div>
 
+    <!-- MODALE: GESTIONE SPAZIO POST-PARTITA (ON-DEMAND) -->
+    <div class="modal-overlay" id="postGameModal" onclick="closeModalOnBackdrop(event, 'postGameModal')">
+        <div class="modal-card" style="max-width: 480px;">
+            <div class="modal-header">
+                <div class="modal-title">🎮 Partita Conclusa</div>
+                <button class="modal-close" onclick="closeModal('postGameModal')">✕</button>
+            </div>
+            <div class="modal-body" style="gap: 16px;">
+                <div id="postGameTitle" style="font-size: 1.15rem; font-weight: 800; color: #fff;">-</div>
+                <p style="font-size: 0.88rem; color: #94a3b8; margin: 0; line-height: 1.45;">
+                    Hai giocato tramite il download on-the-fly. Cosa desideri fare con il file della ROM per la gestione dello spazio su disco?
+                </p>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="action-btn" onclick="confirmKeepRom()" style="flex: 1; justify-content: center; background: #162033; border: 1px solid var(--accent); color: #fff; padding: 12px;">
+                        💾 Tieni sul PC
+                    </button>
+                    <button class="action-btn" onclick="confirmDeleteRom()" style="flex: 1; justify-content: center; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; padding: 12px;">
+                        🗑️ Elimina per Fare Spazio
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICA -->
     <div class="toast" id="toastNotification">Notifica RetroHub</div>
 
@@ -2453,6 +2482,8 @@
         let currentDecade = 'ALL';
         let currentSort = 'title_asc';
         let favoritesOnly = false;
+        let installedOnly = false;
+        let lastOnDemandGameId = null;
         let activePlaylistId = null;
         let selectedGameIndex = 0;
         let searchDebounce = null;
@@ -2657,7 +2688,8 @@
                     platform: currentPlatform,
                     sort_by: sortBy,
                     sort_asc: sortAsc.toString(),
-                    favorites_only: favoritesOnly.toString()
+                    favorites_only: favoritesOnly.toString(),
+                    installed_only: installedOnly.toString()
                 });
 
                 if (currentGenre !== 'ALL') params.set('genre', currentGenre);
@@ -2974,7 +3006,16 @@
             document.getElementById('drawerControls').innerText = game.controls || 'Controlli standard';
             document.getElementById('drawerStats').innerText = `Avviato ${game.play_count} volte • Ultima partita: ${game.last_played_at || 'Mai'}`;
 
-            document.getElementById('drawerPlayBtn').onclick = () => launchGame(game.id);
+            const playBtn = document.getElementById('drawerPlayBtn');
+            if (game.is_installed) {
+                playBtn.innerHTML = `<span>▶</span><span>GIOCA ORA</span>`;
+                playBtn.style.background = '';
+                playBtn.onclick = () => launchGame(game.id);
+            } else {
+                playBtn.innerHTML = `<span>☁️</span><span>SCARICA & GIOCA</span>`;
+                playBtn.style.background = 'linear-gradient(135deg, #0284c7, #2563eb)';
+                playBtn.onclick = () => downloadAndPlay(game.id);
+            }
 
             const favBtn = document.getElementById('drawerFavBtn');
             favBtn.className = `drawer-fav-btn ${game.is_favorite ? 'active' : ''}`;
@@ -3258,13 +3299,34 @@
             const author = g.developer || g.publisher || 'Arcade Classic';
             const yearPart = (g.year && g.year > 0) ? `<span class="card-meta-sep">•</span><span class="card-meta-year">${g.year}</span>` : '';
             const genreText = g.genre || '';
+            const isInstalled = g.is_installed !== false;
+
+            const onDemandBadge = !isInstalled ? `
+                    <span class="card-ondemand-badge" style="position: absolute; bottom: 8px; right: 8px; background: rgba(15, 23, 42, 0.88); border: 1px solid rgba(56, 189, 248, 0.6); color: #38bdf8; font-size: 0.65rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; z-index: 2; backdrop-filter: blur(4px); box-shadow: 0 2px 6px rgba(0,0,0,0.5);">☁️ ON-DEMAND</span>
+            ` : '';
+
+            const playOverlayBtn = isInstalled ? `
+                        <button class="card-play-action-btn" onclick="event.stopPropagation(); launchGame(${g.id})" title="Gioca subito (${escapeHtml(g.title)})">
+                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            GIOCA
+                        </button>
+                        <div class="card-play-hint">Doppio click per avviare</div>
+            ` : `
+                        <button class="card-play-action-btn" onclick="event.stopPropagation(); downloadAndPlay(${g.id})" style="background: linear-gradient(135deg, #0284c7, #2563eb); border: 1px solid #38bdf8;" title="Scarica ed avvia subito (${escapeHtml(g.title)})">
+                            <span style="font-size: 0.95rem; margin-right: 4px;">☁️</span> SCARICA & GIOCA
+                        </button>
+                        <div class="card-play-hint">Download on-the-fly (Zero Disk)</div>
+            `;
+
+            const dblClickAction = isInstalled ? `launchGame(${g.id})` : `downloadAndPlay(${g.id})`;
 
             return `
-            <div class="game-card ${isSelected ? 'selected' : ''}" data-id="${g.id}" data-idx="${idx}" onclick="selectCard(${idx})" ondblclick="launchGame(${g.id})">
+            <div class="game-card ${isSelected ? 'selected' : ''}" data-id="${g.id}" data-idx="${idx}" onclick="selectCard(${idx})" ondblclick="${dblClickAction}">
                 <div class="card-cover-wrapper">
                     <span class="card-tag-pill" onclick="filterByPlatformTag(event, '${g.system_code}')" title="Filtra console: ${g.system_code}">
                         ${g.system_code}
                     </span>
+                    ${onDemandBadge}
                     <div class="card-cover-fallback">
                         <div class="fallback-title-centered">${escapeHtml(g.title)}</div>
                         <div class="fallback-watermark">🎮</div>
@@ -3272,11 +3334,7 @@
                     ${cover ? `<img class="card-cover" src="${cover}" loading="lazy" data-title="${escapeHtml(g.title)}" data-sys="${g.system_code}" onload="this.classList.add('loaded')" onerror="handleCoverError(this)" alt="${escapeHtml(g.title)}">` : ''}
                     <button class="card-fav-btn ${favActive}" onclick="toggleFav(event, ${g.id})" title="Preferito">★</button>
                     <div class="card-play-overlay">
-                        <button class="card-play-action-btn" onclick="event.stopPropagation(); launchGame(${g.id})" title="Gioca subito (${escapeHtml(g.title)})">
-                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            GIOCA
-                        </button>
-                        <div class="card-play-hint">Doppio click per avviare</div>
+                        ${playOverlayBtn}
                     </div>
                 </div>
                 <div class="card-info">
@@ -3492,6 +3550,138 @@
                 showToast(data.is_favorite ? "★ Aggiunto ai Preferiti" : "Rimosso dai Preferiti");
             } catch (err) {
                 console.error("Errore toggle favorite:", err);
+            }
+        }
+
+        // ----------------------------------------------------
+        // ON-DEMAND ROM DOWNLOADER & ARCHIVIO ZERO-DISK
+        // ----------------------------------------------------
+        function toggleArchiveMode() {
+            installedOnly = !installedOnly;
+            const btn = document.getElementById('archiveToggleBtn');
+            const icon = document.getElementById('archiveIcon');
+            const label = document.getElementById('archiveLabel');
+            const badge = document.getElementById('archiveBadge');
+
+            if (installedOnly) {
+                if (btn) btn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+                if (icon) icon.textContent = '💾';
+                if (label) label.textContent = 'Solo Scaricati';
+                if (badge) {
+                    badge.textContent = 'LOCALE';
+                    badge.style.background = 'rgba(16, 185, 129, 0.2)';
+                    badge.style.color = '#10b981';
+                }
+                showToast("💾 Visualizzazione: Solo giochi scaricati in locale");
+            } else {
+                if (btn) btn.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+                if (icon) icon.textContent = '🔓';
+                if (label) label.textContent = "Tutto l'Archivio";
+                if (badge) {
+                    badge.textContent = '100%';
+                    badge.style.background = 'rgba(56, 189, 248, 0.2)';
+                    badge.style.color = '#38bdf8';
+                }
+                showToast("🔓 Visualizzazione: Archivio completo sbloccato al 100%");
+            }
+            loadGames();
+        }
+
+        async function downloadAndPlay(id) {
+            const g = displayedGames.find(x => x.id === id) || allGames.find(x => x.id === id);
+            const title = g ? g.title : 'Gioco';
+
+            showToast(`☁️ Download on-the-fly di "${title}" in corso...`);
+
+            // Feedback visivo immediato su card e drawer
+            const activeCard = document.querySelector(`.game-card[data-id="${id}"]`);
+            if (activeCard) activeCard.classList.add('launching');
+            const drawerBtn = document.getElementById('drawerPlayBtn');
+            if (drawerBtn) {
+                drawerBtn.classList.add('launching');
+                drawerBtn.innerHTML = `<span>⏳</span><span>DOWNLOAD ROM...</span>`;
+            }
+
+            try {
+                const res = await fetch('/api/library/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: id })
+                });
+                const data = await res.json();
+                if (!data.success) {
+                    showToast(`❌ Errore download: ${data.message || 'Download fallito'}`);
+                    if (activeCard) activeCard.classList.remove('launching');
+                    if (drawerBtn) {
+                        drawerBtn.classList.remove('launching');
+                        drawerBtn.innerHTML = `<span>☁️</span><span>SCARICA & GIOCA</span>`;
+                    }
+                    return;
+                }
+
+                showToast(`✅ Download completato! Avvio in corso...`);
+                if (g) g.is_installed = true;
+
+                // Aggiorna interfaccia e lancia il gioco
+                renderGameGrid();
+                await launchGame(id);
+
+                // Mostra popup di gestione spazio disco post-partita dopo 6 secondi (o quando l'utente torna alla UI)
+                setTimeout(() => {
+                    openPostGameModal(id, title);
+                }, 6000);
+
+            } catch (err) {
+                console.error("Errore downloadAndPlay:", err);
+                showToast("❌ Errore di connessione durante il download on-the-fly");
+                if (activeCard) activeCard.classList.remove('launching');
+                if (drawerBtn) {
+                    drawerBtn.classList.remove('launching');
+                    drawerBtn.innerHTML = `<span>☁️</span><span>SCARICA & GIOCA</span>`;
+                }
+            }
+        }
+
+        function openPostGameModal(id, title) {
+            lastOnDemandGameId = id;
+            const titleEl = document.getElementById('postGameTitle');
+            if (titleEl) titleEl.innerText = title;
+            const modal = document.getElementById('postGameModal');
+            if (modal) modal.classList.add('open');
+        }
+
+        function confirmKeepRom() {
+            closeModal('postGameModal');
+            showToast("💾 ROM conservata nella cartella locale!");
+            lastOnDemandGameId = null;
+        }
+
+        async function confirmDeleteRom() {
+            if (!lastOnDemandGameId) {
+                closeModal('postGameModal');
+                return;
+            }
+            const id = lastOnDemandGameId;
+            try {
+                const res = await fetch('/api/library/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: id })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast("🗑️ ROM rimossa con successo. Spazio su disco liberato!");
+                    const g = allGames.find(x => x.id === id) || displayedGames.find(x => x.id === id);
+                    if (g) g.is_installed = false;
+                    renderGameGrid();
+                } else {
+                    showToast(`⚠️ ${data.message || 'Errore durante la rimozione'}`);
+                }
+            } catch (err) {
+                showToast("❌ Errore durante l'eliminazione della ROM");
+            } finally {
+                closeModal('postGameModal');
+                lastOnDemandGameId = null;
             }
         }
 

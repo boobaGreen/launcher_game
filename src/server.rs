@@ -207,6 +207,7 @@ impl HttpServer {
                         year_from: query_params.get("year_from").and_then(|v| v.parse::<u16>().ok()),
                         year_to: query_params.get("year_to").and_then(|v| v.parse::<u16>().ok()),
                         favorites_only: query_params.get("favorites_only").map_or(false, |v| v == "true"),
+                        installed_only: query_params.get("installed_only").map_or(false, |v| v == "true"),
                         sort_by: query_params.get("sort_by").cloned(),
                         sort_asc: query_params.get("sort_asc").map_or(true, |v| v != "false"),
                     };
@@ -518,17 +519,75 @@ impl HttpServer {
 
                 // LIBRARY API - Download ROM
                 (&Method::Post, "/api/library/download") => {
-                    let json = r#"{"success": true, "message": "Download avviato"}"#;
+                    let body = read_request_body(&mut request);
+                    let req: Result<LaunchRequest, _> = serde_json::from_str(&body);
+
+                    let res_json = match req {
+                        Ok(r) => {
+                            let db = self.db.lock().unwrap();
+                            if let Ok(Some(game)) = db.get_game_by_id(r.game_id) {
+                                let rom_name = crate::download_manager::DownloadManager::get_rom_filename(&game.title, &game.launch_target, &game.system_code);
+                                match crate::download_manager::DownloadManager::download_rom(game.id, &rom_name, &game.system_code) {
+                                    Ok(path) => {
+                                        serde_json::to_string(&serde_json::json!({
+                                            "success": true,
+                                            "message": format!("ROM scaricata con successo per: {}", game.title),
+                                            "path": path.to_string_lossy()
+                                        })).unwrap()
+                                    }
+                                    Err(err) => {
+                                        serde_json::to_string(&serde_json::json!({
+                                            "success": false,
+                                            "message": err
+                                        })).unwrap()
+                                    }
+                                }
+                            } else {
+                                r#"{"success": false, "message": "Gioco non trovato"}"#.to_string()
+                            }
+                        }
+                        Err(e) => format!(r#"{{"success": false, "message": "Payload non valido: {}"}}"#, e),
+                    };
+
                     let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
-                    let response = Response::from_string(json).with_header(header);
+                    let response = Response::from_string(res_json).with_header(header);
                     let _ = request.respond(response);
                 }
 
                 // LIBRARY API - Delete ROM
                 (&Method::Post, "/api/library/delete") => {
-                    let json = r#"{"success": true, "message": "ROM cancellata"}"#;
+                    let body = read_request_body(&mut request);
+                    let req: Result<LaunchRequest, _> = serde_json::from_str(&body);
+
+                    let res_json = match req {
+                        Ok(r) => {
+                            let db = self.db.lock().unwrap();
+                            if let Ok(Some(game)) = db.get_game_by_id(r.game_id) {
+                                let rom_name = crate::download_manager::DownloadManager::get_rom_filename(&game.title, &game.launch_target, &game.system_code);
+                                let download_path = std::path::PathBuf::from(format!("downloads/{}/{}", game.system_code.to_lowercase(), rom_name));
+                                match crate::download_manager::DownloadManager::delete_rom(&download_path) {
+                                    Ok(_) => {
+                                        serde_json::to_string(&serde_json::json!({
+                                            "success": true,
+                                            "message": format!("ROM eliminata per: {}", game.title)
+                                        })).unwrap()
+                                    }
+                                    Err(err) => {
+                                        serde_json::to_string(&serde_json::json!({
+                                            "success": false,
+                                            "message": err
+                                        })).unwrap()
+                                    }
+                                }
+                            } else {
+                                r#"{"success": false, "message": "Gioco non trovato"}"#.to_string()
+                            }
+                        }
+                        Err(e) => format!(r#"{{"success": false, "message": "Payload non valido: {}"}}"#, e),
+                    };
+
                     let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
-                    let response = Response::from_string(json).with_header(header);
+                    let response = Response::from_string(res_json).with_header(header);
                     let _ = request.respond(response);
                 }
 

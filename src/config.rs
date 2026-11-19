@@ -43,9 +43,18 @@ impl Default for NetplayConfig {
 
 impl Default for ServerConfig {
     fn default() -> Self {
+        let emu_candidate = std::path::Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu");
+        let emu_root = if emu_candidate.exists() {
+            r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu".to_string()
+        } else if std::path::Path::new("emu").exists() {
+            "emu".to_string()
+        } else {
+            ".".to_string()
+        };
+
         Self {
             port: 39281,
-            emu_root: "C:\\Users\\ClaudioDall'Ara\\Desktop\\Clod\\emu".to_string(),
+            emu_root,
             browser_fallback: true,
         }
     }

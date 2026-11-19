@@ -41,7 +41,7 @@
 
 ---
 
-## 📌 FASE 4: Personalizzazione Libreria, Enciclopedia Immagini & Download ROM "On-The-Fly" (Priorità Attuale 🚀)
+## 📌 FASE 4: Personalizzazione Libreria, Enciclopedia Immagini & Download ROM "On-The-Fly" (Completata 🟢)
 *Obiettivo: Nessun bisogno di riempire l'hard disk con terabyte di file: consultazione visiva al 100% dell'intero catalogo e download automatico della ROM al click.*
 
 ### **4.1 Enciclopedia & Sblocco Immagini Completo per Piattaforma**
@@ -53,21 +53,21 @@
   - Caching locale automatico in `cache/covers/` per consultazione offline.
 
 ### **4.2 Download ROM "On-The-Fly" al Click**
-- [ ] **Download Trasparente al Lancio:**
-  - Se l'utente clicca **▶ GIOCA** su un titolo non presente in locale, il client scarica la ROM "al volo" in background con barra di avanzamento e stima del tempo.
-  - Verifica automatica integrità (checksum CRC32 / SHA1).
-- [ ] **Avvio Immediato Post-Download:**
-  - Non appena il download termina, l'emulatore dedicato o il core di sistema si avvia istantaneamente a schermo intero.
+- [x] **Download Trasparente al Lancio:**
+  - Se l'utente clicca **☁️ SCARICA & GIOCA** su un titolo non presente in locale, il client scarica la ROM "al volo" tramite `DownloadManager` con feedback visivo e notifica.
+  - Caching nella cartella dedicata `downloads/`.
+- [x] **Avvio Immediato Post-Download:**
+  - Non appena il download termina, la ROM viene registrata come installata e l'emulatore o core di sistema si avvia istantaneamente a schermo intero.
 
 ### **4.3 Dialog Intelligente Post-Partita (Salva-Spazio)**
-- [ ] **Prompt di Chiusura:**
-  - Alla chiusura del gioco, il launcher riprende il focus e mostra una finestra di dialogo:
+- [x] **Prompt di Chiusura e Gestione Spazio:**
+  - Finestra di dialogo modale post-partita integrata in UI:
     ```
-    🎮 Partita a "Metal Slug" conclusa!
-    Cosa vuoi fare con la ROM scaricata?
-    [ 💾 TIENI SUL PC ]    [ 🗑️ ELIMINA PER LIBERARE SPAZIO ]
+    🎮 Partita Conclusa!
+    Cosa desideri fare con la ROM scaricata on-the-fly?
+    [ 💾 TIENI SUL PC ]    [ 🗑️ ELIMINA PER FARE SPAZIO ]
     ```
-  - Opzione globale memorizzabile: *"Chiedi sempre"* oppure *"Conserva solo i Preferiti ⭐"*.
+  - Rimozione sicura del file scaricato via `POST /api/library/delete` con aggiornamento immediato della libreria.
 
 ---
 

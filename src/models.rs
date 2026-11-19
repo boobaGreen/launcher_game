@@ -16,6 +16,8 @@ pub struct Game {
     pub is_favorite: bool,
     pub play_count: u32,
     pub last_played_at: Option<String>,
+    #[serde(default)]
+    pub is_installed: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -54,6 +56,8 @@ pub struct SearchFilter {
     pub year_from: Option<u16>,
     pub year_to: Option<u16>,
     pub favorites_only: bool,
+    #[serde(default)]
+    pub installed_only: bool,
     pub sort_by: Option<String>, // "title", "year", "play_count", "platform"
     pub sort_asc: bool,
 }

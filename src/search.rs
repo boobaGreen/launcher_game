@@ -444,6 +444,11 @@ impl SearchEngine {
                     return None;
                 }
 
+                // Installed only filter (Zero-Disk Enciclopedia vs Giochi Locali)
+                if filter.installed_only && !g.is_installed {
+                    return None;
+                }
+
                 if !has_query {
                     return Some((g.clone(), 1.0));
                 }
@@ -591,6 +596,7 @@ mod tests {
             is_favorite: false,
             play_count: 0,
             last_played_at: None,
+            is_installed: true,
         }
     }
 

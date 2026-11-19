@@ -180,11 +180,12 @@ impl CatalogLoader {
                 developer: dev.clone(),
                 publisher: dev,
                 controls,
-                launch_target,
+                launch_target: launch_target.clone(),
                 cover_url: Some(cover_url),
                 is_favorite: false,
                 play_count: 0,
                 last_played_at: None,
+                is_installed: !launch_target.is_empty(),
             });
         }
 
