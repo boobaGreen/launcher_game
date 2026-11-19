@@ -1547,7 +1547,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">v0.41</div>
+            <div class="brand-badge">v0.42</div>
         </div>
 
         <div class="nav-search-container">
@@ -4338,9 +4338,6 @@
             const typoToggle = document.getElementById('settingsTypographicToggle');
             if (typoToggle) typoToggle.checked = isTypographicMode;
 
-            const preDownloadToggle = document.getElementById('settingsPreDownloadToggle');
-            if (preDownloadToggle) preDownloadToggle.checked = preDownloadCovers;
-
             closeWizardModal(true);
             renderCatalog();
             renderHeroSlide();
@@ -5511,8 +5508,8 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Se la versione salvata differisce da v0.41.0, pulizia totale dello stato per Nuovo Utente Pulito
-                const currentAppVer = '0.41.0';
+                // Controllo Versione: Se la versione salvata differisce da v0.42.0, pulizia totale dello stato per Nuovo Utente Pulito
+                const currentAppVer = '0.42.0';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.removeItem('retrohub_downloaded_ids');
