@@ -52,12 +52,21 @@
 ## 📌 FASE 4: Personalizzazione Libreria, Enciclopedia Immagini & Onboarding Vergine (In Corso 🚀)
 *Obiettivo: Separazione netta tra Scheletro visivo (copertine HD in locale a 60 FPS offline) e Muscolo (ROM a 0 Byte sul disco, scaricate solo ed esclusivamente al click `▶ GIOCA`).*
 
-### **4.1 Regola Aurea RetroHub: Piattaforma Sbloccata = Copertine Locali + ROMs On-Demand**
-- [x] **Pre-Download Copertine HD allo Sblocco Console:**
-  - Allo sblocco di ogni console selezionata (es. SNES 85 MB, NES 78 MB, MD 96 MB, MAME 1G1R 105 MB), RetroHub scarica e archivia in locale nella cartella `covers/<console>/` tutte le boxart HD.
-  - **Prestazioni:** Griglia a 60 FPS nativi a 0ms, zero lag di caricamento, consultazione 100% offline del catalogo.
+### **4.1 Paradigma Architetturale 1G1R Pulito & Separazione Ruoli (Utente al Centro)**
+- [x] **Il Romset di Riferimento Ufficiale è il Set 1G1R Mondiale Pulito:**
+  - Standard universale: 1 solo gioco per titolo, escludendo rigorosamente doppioni regionali ridondanti (JAP/USA/EUR), cloni pirata, BIOS e diagnostica hardware.
+  - Il catalogo di riferimento mondiale conta **~11.500 titoli commerciali autentici** (~2.500 Arcade, 725 SNES, 715 NES, 1.050 GBA, 1.450 PSX, ecc.).
+- [x] **Nessuna Selezione Arbitraria Imposta: La Selezione la Fa l'Utente:**
+  - Rimossa qualsiasi divisione artificiale rigida ("Hall of Fame vs 1G1R") che generava confusione e numeri identici.
+  - L'utente esplora l'intera collezione pulita ed estrae le SUE selezioni d'élite tramite il motore di ricerca avanzato (Anni, Generi Multipli, 2 Giocatori Co-op vs 1v1, Produttori) salvandole istantaneamente in **Raccolte Custom** e **Preferiti ⭐**.
+- [x] **Gestione Download Immagini & Info (Opzioni vs Home):**
+  - **Metadati (Info, Tag, Anni, Generi, Controlli):** Sempre tutti presenti e istantanei in locale nel database SQLite `retro_hub.db` (~21 MB per tutti gli 11.500 titoli, zero richieste di rete).
+  - **Immagini (Boxart WebP, Screenshot Snaps, Loghi):**
+    - *Default:* Cache Dinamica On-Demand leggera (30–100 MB), scarica solo per i titoli visualizzati.
+    - *Pre-Download Piattaforma (Nelle Opzioni):* Nelle `⚙️ Opzioni`, l'utente ha il toggle/pulsante dedicato per pre-scaricare con 1 clic l'intero pacchetto immagini per la singola piattaforma gestita (es. MAME ~280 MB in WebP) o globale, per navigazione 100% offline a 60 FPS.
+    - *Home / Libreria Principale:* Rimane focalizzata al 100% sulla giocabilità quotidiana: switch limpido `[ 🔓 Tutto l'Archivio Cloud ]` vs `[ 💾 Solo Scaricati ]`, senza pulsanti di manutenzione che appesantiscono la barra.
 - [x] **ROMs a 0 Byte Preventivi su Disco:**
-  - Nessun romset pesante scaricato a monte; le ROM rimangono interamente in cloud/on-demand.
+  - Nessun romset pesante scaricato a monte; le ROM rimangono interamente in cloud/on-demand, scaricate al click `▶ GIOCA` con gestione salva-spazio post-partita.
   - Disconnessione sicura software di `emu_root` senza mai toccare, spostare o cancellare file utente.
 
 ### **4.2 Download ROM "On-The-Fly" al Click**
