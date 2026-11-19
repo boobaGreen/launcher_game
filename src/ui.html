@@ -580,43 +580,52 @@
             margin-bottom: 8px;
         }
 
-        /* Contenuto Destro (Copertina 3D) */
+        /* Contenuto Destro (Copertina Hero Perfettamente Centrata) */
         .hero-visual-side {
             position: relative;
             z-index: 4;
-            width: 250px;
-            height: 350px;
+            width: 260px;
+            height: 360px;
             display: flex;
             align-items: center;
             justify-content: center;
-            perspective: 1200px;
+            perspective: 1000px;
         }
 
         .hero-cover-wrapper {
             position: relative;
-            width: 230px;
-            height: 325px;
+            width: 240px;
+            height: 335px;
             border-radius: var(--radius-md);
-            transform: rotateY(-12deg) rotateX(4deg);
-            transform-style: preserve-3d;
-            box-shadow: -15px 22px 50px rgba(0, 0, 0, 0.85),
-                        0 0 35px var(--current-glow, var(--accent-cyan-glow));
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            transform: perspective(1000px) rotateY(-4deg) rotateX(1deg);
+            box-shadow: -10px 18px 45px rgba(0, 0, 0, 0.85),
+                        0 0 30px var(--current-glow, var(--accent-cyan-glow));
+            border: 1px solid rgba(255, 255, 255, 0.16);
             overflow: hidden;
-            animation: heroCoverFloat 6s ease-in-out infinite alternate;
-            background: #0f1522;
+            background: rgba(15, 21, 34, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
 
-        @keyframes heroCoverFloat {
-            0% { transform: rotateY(-12deg) rotateX(4deg) translateY(0px); }
-            100% { transform: rotateY(-8deg) rotateX(2deg) translateY(-14px); }
+        .hero-cover-wrapper:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(-4px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9),
+                        0 0 40px var(--current-glow, var(--accent-cyan-glow));
         }
 
         .hero-cover-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
             display: block;
+            margin: auto;
+            border-radius: var(--radius-sm);
         }
 
         /* Fallback Tipografico Hero */
@@ -1211,6 +1220,65 @@
             margin-top: auto;
         }
 
+        /* Multi-Filter Modal Chips */
+        .adv-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .adv-chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            font-size: 0.74rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .adv-chip:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .adv-chip.active {
+            background: rgba(0, 229, 180, 0.22);
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 229, 180, 0.35);
+        }
+        .adv-section-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-md);
+            padding: 13px 16px;
+            transition: var(--transition-fast);
+        }
+        .adv-section-card:hover {
+            border-color: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.045);
+        }
+        .adv-input-field {
+            width: 100%;
+            padding: 9px 14px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-sm);
+            color: #fff;
+            font-family: var(--font-main);
+            font-size: 0.85rem;
+            outline: none;
+            transition: var(--transition-fast);
+            box-sizing: border-box;
+        }
+        .adv-input-field:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 12px var(--accent-cyan-glow);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
         /* ==========================================================================
            7. GAMEPAD-FIRST HUD (ALWAYS-ON STATUS AT BOTTOM RIGHT)
            ========================================================================== */
@@ -1282,9 +1350,10 @@
         </div>
 
         <div class="nav-actions">
-            <button class="btn btn-secondary" onclick="openAdvSearchModal()" title="Filtri Avanzati di Ricerca (Anno, Genere, Sviluppatore)">
+            <button class="btn btn-secondary" id="advFilterBtn" onclick="openAdvSearchModal()" title="Filtri Avanzati di Ricerca (Anno, Genere, Sviluppatore)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-                Filtri
+                <span>Filtri</span>
+                <span id="advFilterBadge" style="display:none; background:var(--accent-cyan); color:#000; font-size:0.65rem; font-weight:800; padding:1px 6px; border-radius:10px; margin-left:4px;">0</span>
             </button>
             <button class="btn btn-roulette" onclick="triggerRoulette()" title="Sorprendimi con un gioco casuale! (Tasto Y su Gamepad)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="12" cy="12" r="1.5"/></svg>
@@ -1452,7 +1521,7 @@
                     <div class="hero-content">
                         <div class="hero-super-tags">
                             <span class="hero-system-pill" id="heroSystemPill">SNES</span>
-                            <span class="hero-source-pill" id="heroSourcePill">👑 SPOTLIGHT DEL GIORNO</span>
+                            <span class="hero-source-pill" id="heroSourcePill">🎲 SCOPERTA CASUALE</span>
                         </div>
                         <h1 class="hero-title" id="heroTitle">Super Mario World</h1>
                         <div class="hero-meta" id="heroMeta">
@@ -1496,8 +1565,8 @@
                             <button class="hero-nav-btn" onclick="nextHeroSlide()">›</button>
                         </div>
                         <div class="hero-source-segmented">
-                            <button class="hero-source-btn active" id="heroSrcFeatured" onclick="setHeroSource('featured')">
-                                👑 Spotlight
+                            <button class="hero-source-btn active" id="heroSrcRandom" onclick="setHeroSource('random')">
+                                🎲 A Sorpresa
                             </button>
                             <button class="hero-source-btn" id="heroSrcFavorites" onclick="setHeroSource('favorites')">
                                 ⭐ Preferiti
@@ -1542,9 +1611,6 @@
                 <button class="filter-tag-pill" id="pillMulti" onclick="toggleQuickFilter('multiplayer')">
                     👥 2 Giocatori (Co-op/VS)
                 </button>
-                <button class="filter-tag-pill" id="pillFreeware" onclick="toggleQuickFilter('freeware')">
-                    🕹️ Solo Freeware Pronti
-                </button>
                 <button class="filter-tag-pill" onclick="filterGenre('Platform')">Platform</button>
                 <button class="filter-tag-pill" onclick="filterGenre('Action')">Azione</button>
                 <button class="filter-tag-pill" onclick="filterGenre('Fighting')">Picchiaduro</button>
@@ -1564,6 +1630,12 @@
                 <span id="catalogSectionTitle">Tutti i Giochi</span>
                 <span class="catalog-stats-badge" id="catalogStatsBadge">Caricamento catalogo...</span>
             </h2>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <button class="btn btn-secondary" onclick="saveCurrentViewToCollection()" title="Salva i giochi attualmente visibili come Raccolta Personalizzata">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    Salva Selezione in Raccolta
+                </button>
+            </div>
         </div>
 
         <div class="games-grid" id="gamesGrid">
@@ -1698,51 +1770,146 @@
     </div>
 
     <!-- ==========================================================================
-         MODALE 5: FILTRI AVANZATI DI RICERCA (ANNI, GENERI, DEVELOPER)
+         MODALE 5: FILTRI AVANZATI DI RICERCA (ANNI, GENERI, DEVELOPER, PLAYERS)
          ========================================================================== -->
     <div class="modal-backdrop" id="advSearchModal">
-        <div class="modal-window" style="max-width: 580px;">
+        <div class="modal-window" style="max-width: 680px;">
             <button class="modal-close-btn" onclick="closeAdvSearchModal()">✕</button>
-            <div style="padding: 32px;">
-                <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 6px;">
-                    🔍 Ricerca Avanzata Multi-Filtro
-                </h2>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">
-                    Combina epoca storica, genere, sviluppatore e caratteristiche per trovare la gemma esatta.
-                </p>
-
-                <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="padding: 28px 32px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
                     <div>
-                        <label style="font-size: 0.80rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 6px; display: block;">Genere di Gioco</label>
-                        <select id="advGenreSelect" style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-card); border-radius: var(--radius-sm); color: #fff; font-family: var(--font-main);">
-                            <option value="ALL">Tutti i Generi</option>
-                            <option value="Platform">Platform / Platform Action</option>
-                            <option value="Picchiaduro">Picchiaduro (1vs1 & Scorrimento)</option>
-                            <option value="Action">Action / Avventura Dinamica</option>
-                            <option value="Shoot">Shoot 'em up / Shmup</option>
-                            <option value="RPG">Action RPG / JRPG</option>
-                            <option value="Corse">Corse / Guida Arcade</option>
-                            <option value="Sport">Sportivi & Calcio</option>
-                            <option value="Puzzle">Puzzle / Rompicapo</option>
-                        </select>
+                        <h2 style="font-size: 1.45rem; font-weight: 800; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                            <span>🔍</span> Ricerca Avanzata & Filtri Combinati
+                        </h2>
+                        <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0;">
+                            Esplora l'archivio combinando epoca storica, generi multipli, publisher e piattaforma.
+                        </p>
                     </div>
+                    <div id="advLiveCountBadge" style="background: rgba(0, 229, 180, 0.12); border: 1px solid rgba(0, 229, 180, 0.35); color: var(--accent-cyan); font-size: 0.78rem; font-weight: 700; padding: 6px 14px; border-radius: 20px; white-space: nowrap;">
+                        🎯 0 giochi trovati
+                    </div>
+                </div>
 
-                    <div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <label style="font-size: 0.80rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Epoca / Anno (<span id="advYearVal">1980 - 2026</span>)</label>
+                <div style="display: flex; flex-direction: column; gap: 14px; max-height: 64vh; overflow-y: auto; padding-right: 6px;">
+                    <!-- 1. Epoca Storica / Intervallo Anni (Da - A + Preset) -->
+                    <div class="adv-section-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                                <span>📅</span> Epoca Storica & Intervallo Anni
+                            </label>
+                            <span id="advYearRangeLabel" style="font-size: 0.82rem; font-weight: 700; color: #fff;">1972 – 2026</span>
                         </div>
-                        <input type="range" id="advYearSlider" min="1980" max="2026" value="2026" style="width: 100%; accent-color: var(--accent-cyan);" oninput="updateAdvYearDisplay()">
+                        <div class="adv-chip-row" style="margin-bottom: 10px;">
+                            <button type="button" class="adv-chip active" id="chipDecade_ALL" onclick="setAdvDecadeRange('ALL')">Tutte le Epoche</button>
+                            <button type="button" class="adv-chip" id="chipDecade_70s" onclick="setAdvDecadeRange('70s')">Anni '70 (1972-79)</button>
+                            <button type="button" class="adv-chip" id="chipDecade_80s" onclick="setAdvDecadeRange('80s')">Anni '80 (1980-89)</button>
+                            <button type="button" class="adv-chip" id="chipDecade_90s" onclick="setAdvDecadeRange('90s')">Anni '90 Golden Era (1990-99)</button>
+                            <button type="button" class="adv-chip" id="chipDecade_2000s" onclick="setAdvDecadeRange('2000s')">Anni 2000 (2000-09)</button>
+                            <button type="button" class="adv-chip" id="chipDecade_modern" onclick="setAdvDecadeRange('modern')">Moderni / Indie (2010-26)</button>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="flex: 1;">
+                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">ANNO MINIMO (DA)</span>
+                                <input type="number" id="advYearMinInput" min="1972" max="2026" value="1972" class="adv-input-field" oninput="onAdvYearInputChanged()">
+                            </div>
+                            <span style="color: var(--text-muted); font-size: 1.2rem; padding-top: 16px;">—</span>
+                            <div style="flex: 1;">
+                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">ANNO MASSIMO (A)</span>
+                                <input type="number" id="advYearMaxInput" min="1972" max="2026" value="2026" class="adv-input-field" oninput="onAdvYearInputChanged()">
+                            </div>
+                        </div>
                     </div>
 
-                    <div>
-                        <label style="font-size: 0.80rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 6px; display: block;">Sviluppatore / Publisher</label>
-                        <input type="text" id="advDevInput" placeholder="Es. Capcom, Konami, Nintendo, Square, Sega, LocoMalito..." style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-card); border-radius: var(--radius-sm); color: #fff; font-family: var(--font-main);">
+                    <!-- 2. Generi di Gioco (Chip Multi-Selezione) -->
+                    <div class="adv-section-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                                <span>🏷️</span> Generi di Gioco (Combinabili a scelta)
+                            </label>
+                            <button type="button" style="background: none; border: none; color: var(--text-muted); font-size: 0.72rem; cursor: pointer; text-decoration: underline;" onclick="clearSelectedGenres()">Deseleziona tutti</button>
+                        </div>
+                        <div class="adv-chip-row" id="advGenreChipsContainer">
+                            <button type="button" class="adv-chip active" id="chipGenre_ALL" onclick="toggleAdvGenre('ALL')">Tutti i Generi</button>
+                            <button type="button" class="adv-chip" id="chipGenre_Platform" onclick="toggleAdvGenre('Platform')">Platform</button>
+                            <button type="button" class="adv-chip" id="chipGenre_Action" onclick="toggleAdvGenre('Action')">Azione / Avventura</button>
+                            <button type="button" class="adv-chip" id="chipGenre_Picchiaduro" onclick="toggleAdvGenre('Picchiaduro')">Picchiaduro (1vs1 & Scorrimento)</button>
+                            <button type="button" class="adv-chip" id="chipGenre_Shoot" onclick="toggleAdvGenre('Shoot')">Shoot 'em up / FPS</button>
+                            <button type="button" class="adv-chip" id="chipGenre_RPG" onclick="toggleAdvGenre('RPG')">RPG / JRPG</button>
+                            <button type="button" class="adv-chip" id="chipGenre_Corse" onclick="toggleAdvGenre('Corse')">Corse & Guida Arcade</button>
+                            <button type="button" class="adv-chip" id="chipGenre_Sport" onclick="toggleAdvGenre('Sport')">Sportivi & Calcio</button>
+                            <button type="button" class="adv-chip" id="chipGenre_Avventura" onclick="toggleAdvGenre('Avventura')">Avventura Grafica</button>
+                            <button type="button" class="adv-chip" id="chipGenre_Arcade" onclick="toggleAdvGenre('Arcade')">Arcade Classico & Puzzle</button>
+                        </div>
                     </div>
 
-                    <div style="display: flex; gap: 12px; margin-top: 10px;">
-                        <button class="btn btn-secondary" style="flex:1;" onclick="resetAdvSearchFilters()">Resetta Filtri</button>
-                        <button class="btn btn-primary" style="flex:1;" onclick="applyAdvSearchFilters()">Applica Ricerca</button>
+                    <!-- 3. Produttore / Sviluppatore (Anti-Password Autofill & Chip Rapidi) -->
+                    <div class="adv-section-card">
+                        <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                            <span>🏢</span> Produttore / Sviluppatore (Software House)
+                        </label>
+                        <div style="position: relative; margin-bottom: 8px;">
+                            <input type="search"
+                                   id="advDevInput"
+                                   name="retrohub_search_publisher_query"
+                                   autocomplete="off"
+                                   autocorrect="off"
+                                   autocapitalize="off"
+                                   spellcheck="false"
+                                   data-lpignore="true"
+                                   data-form-type="other"
+                                   data-bwignore="true"
+                                   placeholder="Digita o seleziona un publisher (es. Capcom, Konami, Nintendo, Sega...)"
+                                   class="adv-input-field"
+                                   oninput="onAdvDevInputChanged()">
+                        </div>
+                        <div class="adv-chip-row">
+                            <button type="button" class="adv-chip" id="chipDev_Capcom" onclick="toggleAdvDevChip('Capcom')">Capcom</button>
+                            <button type="button" class="adv-chip" id="chipDev_Konami" onclick="toggleAdvDevChip('Konami')">Konami</button>
+                            <button type="button" class="adv-chip" id="chipDev_Nintendo" onclick="toggleAdvDevChip('Nintendo')">Nintendo</button>
+                            <button type="button" class="adv-chip" id="chipDev_Sega" onclick="toggleAdvDevChip('Sega')">Sega</button>
+                            <button type="button" class="adv-chip" id="chipDev_Square" onclick="toggleAdvDevChip('Square')">Square Enix</button>
+                            <button type="button" class="adv-chip" id="chipDev_SNK" onclick="toggleAdvDevChip('SNK')">SNK</button>
+                            <button type="button" class="adv-chip" id="chipDev_Namco" onclick="toggleAdvDevChip('Namco')">Namco</button>
+                            <button type="button" class="adv-chip" id="chipDev_idSoftware" onclick="toggleAdvDevChip('id Software')">id Software</button>
+                            <button type="button" class="adv-chip" id="chipDev_LucasArts" onclick="toggleAdvDevChip('LucasArts')">LucasArts</button>
+                            <button type="button" class="adv-chip" id="chipDev_Commodore" onclick="toggleAdvDevChip('Commodore')">Commodore</button>
+                            <button type="button" class="adv-chip" id="chipDev_Sony" onclick="toggleAdvDevChip('Sony')">Sony</button>
+                            <button type="button" class="adv-chip" id="chipDev_Atari" onclick="toggleAdvDevChip('Atari')">Atari</button>
+                        </div>
                     </div>
+
+                    <!-- 4. Piattaforma & Disponibilità Storage -->
+                    <div class="adv-section-card">
+                        <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                            <span>🎮</span> Piattaforma & Opzioni Aggiuntive
+                        </label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px;">
+                            <div>
+                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">PIATTAFORMA</span>
+                                <select id="advPlatformSelect" class="adv-input-field" onchange="onAdvFilterChanged()">
+                                    <option value="ALL">🌐 Tutte le Piattaforme</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">STATO STORAGE</span>
+                                <select id="advStorageSelect" class="adv-input-field" onchange="onAdvFilterChanged()">
+                                    <option value="all">🔓 Tutto l'Archivio (Cloud & Locale)</option>
+                                    <option value="downloaded">💾 Solo Scaricati / Installati</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="adv-chip-row">
+                            <button type="button" class="adv-chip" id="advOptFavorites" onclick="toggleAdvOption('favorites')">⭐ Solo Preferiti</button>
+                            <button type="button" class="adv-chip" id="advOptMultiplayer" onclick="toggleAdvOption('multiplayer')">👥 Solo 2+ Giocatori (Co-op / VS)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Azioni -->
+                <div style="display: flex; gap: 10px; margin-top: 18px; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
+                    <button type="button" class="btn btn-secondary" style="flex:1;" onclick="resetAdvSearchFilters()">✕ Resetta</button>
+                    <button type="button" class="btn btn-secondary" style="flex:1.4;" onclick="saveCurrentViewToCollection(); closeAdvSearchModal();">💾 Salva in Raccolta</button>
+                    <button type="button" class="btn btn-primary" id="advApplyBtn" style="flex:1.5;" onclick="applyAdvSearchFilters()">🔍 Mostra Giochi Trovati</button>
                 </div>
             </div>
         </div>
@@ -1851,12 +2018,22 @@
         let currentMacroFamily = 'ALL';
         let currentPlatform = 'ALL';
         let currentGenre = 'ALL';
-        let advYearMax = 2026;
-        let advDevFilter = '';
         let storageFilter = 'all'; // 'all' (Cloud) | 'downloaded' (Solo Scaricati)
-        let activeQuickFilter = null; // 'favorites' | 'multiplayer' | 'freeware'
+        let activeQuickFilter = null; // 'favorites' | 'multiplayer'
         let isSandboxMode = false;
         let isTypographicMode = false; // Mostra boxart grafiche reali; fallback tipografico su 404/errore
+
+        // Stato Filtri Avanzati Combinati (AND Logic)
+        let advYearMin = 1972;
+        let advYearMax = 2026;
+        let advSelectedGenres = new Set();
+        let advDevFilter = '';
+        let advPlatformFilter = 'ALL';
+        let advStorageFilter = 'all';
+        let advOptFavorites = false;
+        let advOptMultiplayer = false;
+        let currentFilteredGames = [];
+
         let customCollections = [
             { id: 1, name: '⭐ I Miei Preferiti Classici', gameIds: [1, 2, 3] },
             { id: 2, name: '🕹️ Capcom Arcade 90s', gameIds: [225, 226, 227] },
@@ -1882,10 +2059,10 @@
             'PC': ['RECOMP', 'INDIE', 'PICO8', 'TIC80']
         };
 
-        // Stato della Hero Spotlight
+        // Stato della Hero Spotlight (Vetrina Dinamica & Random Pick)
         let heroList = [];
         let heroIndex = 0;
-        let heroSource = 'featured'; // 'featured' | 'favorites' | 'recent' | 'custom'
+        let heroSource = 'random'; // 'random' (A Sorpresa) | 'favorites' | 'recent' | 'custom'
         let heroTimerDuration = 8000; // 8 secondi default
         let heroInterval = null;
         let heroProgressInterval = null;
@@ -1896,6 +2073,7 @@
 
         // Inizializzazione al Caricamento
         window.addEventListener('DOMContentLoaded', async () => {
+            loadCustomCollectionsFromStorage();
             initSearch();
             setupHeroHoverEvents();
             setupPlatformScrollWheel();
@@ -2073,7 +2251,6 @@
             }
             document.getElementById('pillFav').classList.toggle('active', activeQuickFilter === 'favorites');
             document.getElementById('pillMulti').classList.toggle('active', activeQuickFilter === 'multiplayer');
-            document.getElementById('pillFreeware').classList.toggle('active', activeQuickFilter === 'freeware');
             renderCatalog();
         }
 
@@ -2083,8 +2260,18 @@
         }
 
         // --------------------------------------------------------------------------
-        // 3. MOTORE HERO SPOTLIGHT WIDESCREEN (4 SORGENTI REALI)
+        // 3. MOTORE HERO SPOTLIGHT WIDESCREEN (4 SORGENTI REALI & RANDOM PICK)
         // --------------------------------------------------------------------------
+        function getShuffledRandomGames(arr, count) {
+            if (!arr || arr.length === 0) return [];
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy.slice(0, Math.min(count, copy.length));
+        }
+
         function initHeroSpotlight() {
             if (!allGames || allGames.length === 0) return;
 
@@ -2099,14 +2286,8 @@
                 heroList = allGames.filter(g => coll?.gameIds?.includes(g.id));
                 if (heroList.length === 0) heroList = allGames.slice(0, 8);
             } else {
-                // 'featured' Spotlight: selezione bilanciata capolavori
-                const featuredCodes = ['SNES', 'ARCADE', 'PSX', 'N64', 'RECOMP', 'INDIE', 'MEGADRIVE', 'C64'];
-                heroList = [];
-                featuredCodes.forEach(code => {
-                    const match = allGames.find(g => g.system_code === code);
-                    if (match) heroList.push(match);
-                });
-                if (heroList.length === 0) heroList = allGames.slice(0, 8);
+                // 'random' (A Sorpresa / Gioco Casuale): estrae una selezione fresca e variegata
+                heroList = getShuffledRandomGames(allGames, 8);
             }
 
             heroIndex = 0;
@@ -2192,10 +2373,18 @@
                 }
             }
 
+            const isSteamWide = wideArt.includes('steamstatic.com') || wideArt.includes('library_hero');
             if (backdrop) {
                 if (wideArt) {
                     backdrop.style.backgroundImage = `url("${wideArt}")`;
-                    backdrop.style.opacity = '0.68';
+                    if (isSteamWide) {
+                        backdrop.style.filter = 'contrast(1.1) saturate(1.25)';
+                        backdrop.style.opacity = '0.65';
+                    } else {
+                        // Per le boxart retro verticali, crea un'aura ambientale d'atmosfera con bokeh profondo
+                        backdrop.style.filter = 'blur(45px) saturate(1.6) brightness(0.5)';
+                        backdrop.style.opacity = '0.45';
+                    }
                 } else {
                     backdrop.style.backgroundImage = 'none';
                     backdrop.style.opacity = '0';
@@ -2218,23 +2407,30 @@
 
         function getSourceLabel(src) {
             switch(src) {
-                case 'favorites': return '⭐ PREFERITI';
+                case 'favorites': return '⭐ I TUOI PREFERITI';
                 case 'recent': return '⏱️ CONTINUA A GIOCARE';
-                case 'custom': return '📁 RACCOLTA CUSTOM';
-                default: return '👑 SPOTLIGHT DEL GIORNO';
+                case 'custom': return '📁 RACCOLTA A TEMA';
+                case 'random':
+                default: return '🎲 SCOPERTA CASUALE';
             }
         }
 
         function setHeroSource(src) {
             heroSource = src;
             document.querySelectorAll('.hero-source-btn').forEach(btn => btn.classList.remove('active'));
-            if (src === 'featured') document.getElementById('heroSrcFeatured').classList.add('active');
-            else if (src === 'favorites') document.getElementById('heroSrcFavorites').classList.add('active');
-            else if (src === 'recent') document.getElementById('heroSrcRecent').classList.add('active');
-            else if (src === 'custom') document.getElementById('heroSrcCustom').classList.add('active');
+            if (src === 'random' || src === 'featured') {
+                const btn = document.getElementById('heroSrcRandom') || document.getElementById('heroSrcFeatured');
+                if (btn) btn.classList.add('active');
+            } else if (src === 'favorites') {
+                document.getElementById('heroSrcFavorites')?.classList.add('active');
+            } else if (src === 'recent') {
+                document.getElementById('heroSrcRecent')?.classList.add('active');
+            } else if (src === 'custom') {
+                document.getElementById('heroSrcCustom')?.classList.add('active');
+            }
 
             initHeroSpotlight();
-            showToast(`Vetrina impostata su: ${getSourceLabel(src)}`);
+            showToast(`Vetrina Hero: ${getSourceLabel(src)}`);
         }
 
         function startHeroRotation() {
@@ -2303,44 +2499,73 @@
         }
 
         // --------------------------------------------------------------------------
-        // 4. RENDERING GRIGLIA GIOCHI (ASPECT RATIO 2:3 & TYPOGRAPHIC FALLBACK)
+        // 4. RENDERING GRIGLIA GIOCHI (AND LOGIC MULTI-FILTRO & ASSET 2:3)
         // --------------------------------------------------------------------------
-        function renderCatalog() {
-            const grid = document.getElementById('gamesGrid');
-            const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
-
-            let filtered = allGames.filter(g => {
-                // Filtro Macro-Famiglia Sidebar
+        function gameMatchesFilters(g, isModalPreview = false) {
+            // 1. Macro-Famiglia Sidebar (applicata solo alla griglia principale)
+            if (!isModalPreview) {
                 if (currentMacroFamily !== 'ALL' && currentMacroFamily !== 'FAVORITES') {
                     const allowed = MACRO_FAMILY_MAP[currentMacroFamily];
                     if (allowed && !allowed.includes(g.system_code)) return false;
                 }
-
-                // Filtro Raccolta Custom attiva
                 if (activeCustomCollectionId) {
                     const coll = customCollections.find(c => c.id === activeCustomCollectionId);
                     if (coll && !coll.gameIds.includes(g.id)) return false;
                 }
+            }
 
-                // Filtro Piattaforma specifica
-                if (currentPlatform !== 'ALL' && g.system_code !== currentPlatform) return false;
+            // 2. Piattaforma Specifica
+            const targetPlat = isModalPreview ? advPlatformFilter : (advPlatformFilter !== 'ALL' ? advPlatformFilter : currentPlatform);
+            if (targetPlat !== 'ALL' && g.system_code !== targetPlat) return false;
 
-                // Filtro Storage
-                const isInstalled = isSandboxMode ? false : g.is_installed;
-                if (storageFilter === 'downloaded' && !isInstalled) return false;
+            // 3. Stato Storage (Cloud vs Solo Scaricati)
+            const isInstalled = isSandboxMode ? false : g.is_installed;
+            const targetStorage = isModalPreview ? advStorageFilter : (advStorageFilter === 'downloaded' || storageFilter === 'downloaded' ? 'downloaded' : 'all');
+            if (targetStorage === 'downloaded' && !isInstalled) return false;
 
-                // Filtri Rapidi
-                if (activeQuickFilter === 'favorites' && !g.is_favorite) return false;
-                if (activeQuickFilter === 'freeware' && !g.launch_target.includes('indie://')) return false;
+            // 4. Preferiti
+            const wantFav = isModalPreview ? advOptFavorites : (advOptFavorites || activeQuickFilter === 'favorites');
+            if (wantFav && !g.is_favorite) return false;
 
-                // Filtro Genere
-                if (currentGenre !== 'ALL' && !g.genre.toLowerCase().includes(currentGenre.toLowerCase())) return false;
+            // 5. Modalità Giocatori (Multiplayer / Co-op / VS)
+            const wantMulti = isModalPreview ? advOptMultiplayer : (advOptMultiplayer || activeQuickFilter === 'multiplayer');
+            if (wantMulti) {
+                const isMulti = (g.players && g.players > 1) ||
+                                g.system_code === 'ARCADE' ||
+                                (g.controls && (g.controls.includes('2') || g.controls.toLowerCase().includes('multi'))) ||
+                                g.genre.toLowerCase().includes('picchiaduro') ||
+                                g.genre.toLowerCase().includes('sport') ||
+                                g.genre.toLowerCase().includes('party');
+                if (!isMulti) return false;
+            }
 
-                // Filtri Ricerca Avanzata (Anno max & Dev)
-                if (g.year > advYearMax) return false;
-                if (advDevFilter && !g.developer.toLowerCase().includes(advDevFilter.toLowerCase())) return false;
+            // 6. Epoca Storica / Intervallo Anni (Min e Max inclusivi)
+            if (g.year < advYearMin || g.year > advYearMax) return false;
 
-                // Ricerca Testuale
+            // 7. Generi Multipli Combinabili
+            if (advSelectedGenres.size > 0) {
+                const gGenre = g.genre.toLowerCase();
+                let matchesAnyGenre = false;
+                for (const gen of advSelectedGenres) {
+                    if (gGenre.includes(gen.toLowerCase())) {
+                        matchesAnyGenre = true;
+                        break;
+                    }
+                }
+                if (!matchesAnyGenre) return false;
+            } else if (currentGenre !== 'ALL') {
+                if (!g.genre.toLowerCase().includes(currentGenre.toLowerCase())) return false;
+            }
+
+            // 8. Produttore / Developer (Ricerca libera o chip)
+            const devQuery = (isModalPreview ? (document.getElementById('advDevInput')?.value || '') : advDevFilter).trim().toLowerCase();
+            if (devQuery.length > 0) {
+                if (!g.developer.toLowerCase().includes(devQuery)) return false;
+            }
+
+            // 9. Ricerca Testuale della barra principale (se non in modale)
+            if (!isModalPreview) {
+                const searchVal = document.getElementById('searchInput')?.value.trim().toLowerCase() || '';
                 if (searchVal.length > 0) {
                     const match = g.title.toLowerCase().includes(searchVal) ||
                                   g.developer.toLowerCase().includes(searchVal) ||
@@ -2348,18 +2573,50 @@
                                   g.year.toString().includes(searchVal);
                     if (!match) return false;
                 }
+            }
 
-                return true;
-            });
+            return true;
+        }
+
+        function updateAdvFilterButtonBadge() {
+            let activeCount = 0;
+            if (advYearMin > 1972 || advYearMax < 2026) activeCount++;
+            if (advSelectedGenres.size > 0) activeCount += advSelectedGenres.size;
+            if (advDevFilter.length > 0) activeCount++;
+            if (advPlatformFilter !== 'ALL') activeCount++;
+            if (advStorageFilter === 'downloaded') activeCount++;
+            if (advOptFavorites) activeCount++;
+            if (advOptMultiplayer) activeCount++;
+
+            const badge = document.getElementById('advFilterBadge');
+            const btn = document.getElementById('advFilterBtn');
+            if (badge && btn) {
+                if (activeCount > 0) {
+                    badge.innerText = activeCount;
+                    badge.style.display = 'inline-block';
+                    btn.classList.add('active');
+                } else {
+                    badge.style.display = 'none';
+                    btn.classList.remove('active');
+                }
+            }
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('gamesGrid');
+            const filtered = allGames.filter(g => gameMatchesFilters(g, false));
+            currentFilteredGames = filtered;
 
             document.getElementById('catalogStatsBadge').innerText = `${filtered.length} giochi visibili`;
+            updateAdvFilterButtonBadge();
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
                     <div style="grid-column: 1/-1; padding: 60px; text-align: center; color: var(--text-muted);">
                         <div style="font-size: 2.5rem; margin-bottom: 12px;">🔍</div>
                         <div style="font-size: 1.1rem; font-weight: 700; color: #fff;">Nessun gioco trovato</div>
-                        <div style="font-size: 0.85rem; margin-top: 4px;">Prova a modificare i filtri o la ricerca.</div>
+                        <div style="font-size: 0.85rem; margin-top: 4px;">Prova a modificare i filtri avanzati o la barra di ricerca.</div>
+                        <button class="btn btn-secondary" style="margin-top: 14px;" onclick="resetAdvSearchFilters()">✕ Azzera Tutti i Filtri</button>
                     </div>
                 `;
                 return;
@@ -2555,7 +2812,7 @@
                 isTypographicMode = false;
                 storageFilter = 'all';
                 currentPlatform = 'ALL';
-                showToast('Profilo 1 Applicato: Top 10 Console + Indie Freeware pronte on-the-fly!');
+                showToast('Profilo 1 Applicato: Top 10 Console + Indie Freeware on-the-fly!');
             } else if (selectedWizardProfileId === 2) {
                 // Caso 2: Collezione Esistente
                 isTypographicMode = false;
@@ -2709,37 +2966,270 @@
             setTimeout(() => { t.classList.remove('show'); }, 3000);
         }
 
-        // Modalità Ricerca Avanzata Multi-Filtro
+        // ==========================================================================
+        // RICERCA AVANZATA MULTI-FILTRO (ANNI DUALI, GENERI, DEVELOPER, PLAYERS)
+        // ==========================================================================
+        function populateAdvPlatformSelect() {
+            const sel = document.getElementById('advPlatformSelect');
+            if (!sel || !allPlatforms) return;
+            const currentVal = sel.value || 'ALL';
+            sel.innerHTML = '<option value="ALL">🌐 Tutte le Piattaforme</option>' +
+                allPlatforms.map(p => `<option value="${p.code}">${escapeHtml(p.name)} (${p.code})</option>`).join('');
+            sel.value = currentVal;
+        }
+
         function openAdvSearchModal() {
+            populateAdvPlatformSelect();
+            computeAdvLivePreview();
             document.getElementById('advSearchModal').classList.add('open');
         }
+
         function closeAdvSearchModal() {
             document.getElementById('advSearchModal').classList.remove('open');
         }
-        function updateAdvYearDisplay() {
-            const val = document.getElementById('advYearSlider').value;
-            advYearMax = parseInt(val, 10);
-            document.getElementById('advYearVal').innerText = `1980 - ${advYearMax}`;
+
+        function computeAdvLivePreview() {
+            if (!allGames || allGames.length === 0) return 0;
+            const matches = allGames.filter(g => gameMatchesFilters(g, true));
+            const count = matches.length;
+            const badge = document.getElementById('advLiveCountBadge');
+            const applyBtn = document.getElementById('advApplyBtn');
+            if (badge) {
+                badge.innerText = `🎯 ${count} giochi trovati`;
+                if (count === 0) {
+                    badge.style.background = 'rgba(255, 75, 75, 0.15)';
+                    badge.style.borderColor = 'rgba(255, 75, 75, 0.4)';
+                    badge.style.color = '#ff6b6b';
+                } else {
+                    badge.style.background = 'rgba(0, 229, 180, 0.12)';
+                    badge.style.borderColor = 'rgba(0, 229, 180, 0.35)';
+                    badge.style.color = 'var(--accent-cyan)';
+                }
+            }
+            if (applyBtn) {
+                applyBtn.innerText = `🔍 Mostra ${count} Giochi Trovati`;
+                applyBtn.disabled = (count === 0);
+            }
+            return count;
         }
+
+        function setAdvDecadeRange(decade) {
+            document.querySelectorAll('[id^="chipDecade_"]').forEach(el => el.classList.remove('active'));
+            const chip = document.getElementById(`chipDecade_${decade}`);
+            if (chip) chip.classList.add('active');
+
+            if (decade === '70s') {
+                advYearMin = 1972;
+                advYearMax = 1979;
+            } else if (decade === '80s') {
+                advYearMin = 1980;
+                advYearMax = 1989;
+            } else if (decade === '90s') {
+                advYearMin = 1990;
+                advYearMax = 1999;
+            } else if (decade === '2000s') {
+                advYearMin = 2000;
+                advYearMax = 2009;
+            } else if (decade === 'modern') {
+                advYearMin = 2010;
+                advYearMax = 2026;
+            } else {
+                advYearMin = 1972;
+                advYearMax = 2026;
+            }
+
+            if (document.getElementById('advYearMinInput')) document.getElementById('advYearMinInput').value = advYearMin;
+            if (document.getElementById('advYearMaxInput')) document.getElementById('advYearMaxInput').value = advYearMax;
+            if (document.getElementById('advYearRangeLabel')) document.getElementById('advYearRangeLabel').innerText = `${advYearMin} – ${advYearMax}`;
+            computeAdvLivePreview();
+        }
+
+        function onAdvYearInputChanged() {
+            let minVal = parseInt(document.getElementById('advYearMinInput').value, 10) || 1972;
+            let maxVal = parseInt(document.getElementById('advYearMaxInput').value, 10) || 2026;
+            if (minVal < 1972) minVal = 1972;
+            if (maxVal > 2026) maxVal = 2026;
+            if (minVal > maxVal) minVal = maxVal;
+            advYearMin = minVal;
+            advYearMax = maxVal;
+            if (document.getElementById('advYearRangeLabel')) document.getElementById('advYearRangeLabel').innerText = `${advYearMin} – ${advYearMax}`;
+            document.querySelectorAll('[id^="chipDecade_"]').forEach(el => el.classList.remove('active'));
+            computeAdvLivePreview();
+        }
+
+        function toggleAdvGenre(genre) {
+            if (genre === 'ALL') {
+                advSelectedGenres.clear();
+                document.querySelectorAll('#advGenreChipsContainer .adv-chip').forEach(el => el.classList.remove('active'));
+                document.getElementById('chipGenre_ALL')?.classList.add('active');
+            } else {
+                document.getElementById('chipGenre_ALL')?.classList.remove('active');
+                const chip = document.getElementById(`chipGenre_${genre}`);
+                if (advSelectedGenres.has(genre)) {
+                    advSelectedGenres.delete(genre);
+                    chip?.classList.remove('active');
+                } else {
+                    advSelectedGenres.add(genre);
+                    chip?.classList.add('active');
+                }
+                if (advSelectedGenres.size === 0) {
+                    document.getElementById('chipGenre_ALL')?.classList.add('active');
+                }
+            }
+            computeAdvLivePreview();
+        }
+
+        function clearSelectedGenres() {
+            toggleAdvGenre('ALL');
+        }
+
+        function toggleAdvDevChip(dev) {
+            const input = document.getElementById('advDevInput');
+            const cleanId = dev.replace(/[\s\.\-]+/g, '');
+            const chip = document.getElementById(`chipDev_${cleanId}`);
+            if (input.value.toLowerCase() === dev.toLowerCase()) {
+                input.value = '';
+                chip?.classList.remove('active');
+            } else {
+                input.value = dev;
+                document.querySelectorAll('[id^="chipDev_"]').forEach(el => el.classList.remove('active'));
+                chip?.classList.add('active');
+            }
+            onAdvDevInputChanged();
+        }
+
+        function onAdvDevInputChanged() {
+            const val = document.getElementById('advDevInput').value.trim().toLowerCase();
+            document.querySelectorAll('[id^="chipDev_"]').forEach(el => {
+                el.classList.toggle('active', val.length > 0 && el.innerText.toLowerCase() === val);
+            });
+            computeAdvLivePreview();
+        }
+
+        function toggleAdvOption(opt) {
+            if (opt === 'favorites') {
+                advOptFavorites = !advOptFavorites;
+                document.getElementById('advOptFavorites')?.classList.toggle('active', advOptFavorites);
+            } else if (opt === 'multiplayer') {
+                advOptMultiplayer = !advOptMultiplayer;
+                document.getElementById('advOptMultiplayer')?.classList.toggle('active', advOptMultiplayer);
+            }
+            computeAdvLivePreview();
+        }
+
+        function onAdvFilterChanged() {
+            advPlatformFilter = document.getElementById('advPlatformSelect')?.value || 'ALL';
+            advStorageFilter = document.getElementById('advStorageSelect')?.value || 'all';
+            computeAdvLivePreview();
+        }
+
         function applyAdvSearchFilters() {
-            const gen = document.getElementById('advGenreSelect').value;
-            currentGenre = gen;
-            advDevFilter = document.getElementById('advDevInput').value.trim();
+            advDevFilter = document.getElementById('advDevInput')?.value.trim() || '';
+            advPlatformFilter = document.getElementById('advPlatformSelect')?.value || 'ALL';
+            advStorageFilter = document.getElementById('advStorageSelect')?.value || 'all';
+
+            if (advStorageFilter === 'downloaded') {
+                storageFilter = 'downloaded';
+                document.getElementById('toggleAllCloud')?.classList.remove('active');
+                document.getElementById('toggleOnlyDownloaded')?.classList.add('active');
+            }
+
             closeAdvSearchModal();
             renderCatalog();
-            showToast('Filtri di ricerca avanzata applicati!');
+            showToast(`Filtri applicati: ${currentFilteredGames.length} giochi visibili!`);
         }
+
         function resetAdvSearchFilters() {
-            currentGenre = 'ALL';
-            document.getElementById('advGenreSelect').value = 'ALL';
-            document.getElementById('advYearSlider').value = 2026;
-            document.getElementById('advDevInput').value = '';
+            advYearMin = 1972;
             advYearMax = 2026;
+            advSelectedGenres.clear();
             advDevFilter = '';
-            updateAdvYearDisplay();
+            advPlatformFilter = 'ALL';
+            advStorageFilter = 'all';
+            advOptFavorites = false;
+            advOptMultiplayer = false;
+            currentGenre = 'ALL';
+
+            if (document.getElementById('advDevInput')) document.getElementById('advDevInput').value = '';
+            if (document.getElementById('advYearMinInput')) document.getElementById('advYearMinInput').value = 1972;
+            if (document.getElementById('advYearMaxInput')) document.getElementById('advYearMaxInput').value = 2026;
+            if (document.getElementById('advYearRangeLabel')) document.getElementById('advYearRangeLabel').innerText = '1972 – 2026';
+            if (document.getElementById('advPlatformSelect')) document.getElementById('advPlatformSelect').value = 'ALL';
+            if (document.getElementById('advStorageSelect')) document.getElementById('advStorageSelect').value = 'all';
+            document.getElementById('advOptFavorites')?.classList.remove('active');
+            document.getElementById('advOptMultiplayer')?.classList.remove('active');
+
+            document.querySelectorAll('[id^="chipDecade_"]').forEach(el => el.classList.remove('active'));
+            document.getElementById('chipDecade_ALL')?.classList.add('active');
+
+            document.querySelectorAll('#advGenreChipsContainer .adv-chip').forEach(el => el.classList.remove('active'));
+            document.getElementById('chipGenre_ALL')?.classList.add('active');
+
+            document.querySelectorAll('[id^="chipDev_"]').forEach(el => el.classList.remove('active'));
+
+            computeAdvLivePreview();
             closeAdvSearchModal();
             renderCatalog();
             showToast('Filtri avanzati resettati.');
+        }
+
+        // ==========================================================================
+        // GESTIONE RACCOLTE & PLAYLIST CUSTOM CON PERSISTENZA LOCALSTORAGE
+        // ==========================================================================
+        function saveCustomCollectionsToStorage() {
+            try {
+                localStorage.setItem('retrohub_custom_collections', JSON.stringify(customCollections));
+            } catch (e) {
+                console.warn('Impossibile salvare le raccolte in localStorage:', e);
+            }
+        }
+
+        function loadCustomCollectionsFromStorage() {
+            try {
+                const saved = localStorage.getItem('retrohub_custom_collections');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        customCollections = parsed;
+                    }
+                }
+            } catch (e) {
+                console.warn('Errore lettura raccolte da localStorage:', e);
+            }
+        }
+
+        function saveCurrentViewToCollection() {
+            if (!currentFilteredGames || currentFilteredGames.length === 0) {
+                showToast('Nessun gioco visibile nella selezione corrente da salvare.');
+                return;
+            }
+
+            let defaultName = 'Raccolta Personalizzata';
+            if (advDevFilter) {
+                defaultName = `Mondo ${advDevFilter} (${currentFilteredGames.length} titoli)`;
+            } else if (advSelectedGenres.size > 0) {
+                defaultName = `I Migliori ${Array.from(advSelectedGenres).join('/')} (${currentFilteredGames.length} titoli)`;
+            } else if (advYearMin > 1972 || advYearMax < 2026) {
+                defaultName = `Epoca ${advYearMin}-${advYearMax} (${currentFilteredGames.length} titoli)`;
+            } else if (currentPlatform !== 'ALL') {
+                defaultName = `Top ${currentPlatform} (${currentFilteredGames.length} titoli)`;
+            } else {
+                defaultName = `Selezione Speciale (${currentFilteredGames.length} titoli)`;
+            }
+
+            const name = prompt('Inserisci il nome per questa nuova Raccolta:', defaultName);
+            if (!name || !name.trim()) return;
+
+            const newId = Date.now();
+            const gameIds = currentFilteredGames.map(g => g.id);
+            customCollections.push({
+                id: newId,
+                name: name.trim(),
+                gameIds: gameIds
+            });
+            saveCustomCollectionsToStorage();
+            renderCollectionsList();
+            showToast(`✅ Raccolta "${name.trim()}" salvata con ${gameIds.length} giochi!`);
         }
 
         // Gestione Raccolte & Playlist Custom
