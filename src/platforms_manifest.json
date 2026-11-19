@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "total_platforms": 25,
+  "total_platforms": 43,
   "platforms": [
     {
       "code": "ARCADE",
@@ -10,7 +10,10 @@
       "year": 1980,
       "color": "#f97316",
       "icon": "🕹️",
-      "extensions": [".zip", ".7z"],
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
       "core": "mame2003_plus_libretro.dll",
       "is_top_ten": true
     },
@@ -22,7 +25,11 @@
       "year": 1990,
       "color": "#8b5cf6",
       "icon": "🎮",
-      "extensions": [".sfc", ".smc", ".zip"],
+      "extensions": [
+        ".sfc",
+        ".smc",
+        ".zip"
+      ],
       "core": "snes9x_libretro.dll",
       "is_top_ten": true
     },
@@ -34,7 +41,10 @@
       "year": 1983,
       "color": "#ef4444",
       "icon": "🎮",
-      "extensions": [".nes", ".zip"],
+      "extensions": [
+        ".nes",
+        ".zip"
+      ],
       "core": "fceumm_libretro.dll",
       "is_top_ten": true
     },
@@ -46,7 +56,13 @@
       "year": 1988,
       "color": "#0284c7",
       "icon": "⚡",
-      "extensions": [".md", ".bin", ".smd", ".gen", ".zip"],
+      "extensions": [
+        ".md",
+        ".bin",
+        ".smd",
+        ".gen",
+        ".zip"
+      ],
       "core": "genesis_plus_gx_libretro.dll",
       "is_top_ten": true
     },
@@ -58,7 +74,13 @@
       "year": 1994,
       "color": "#3b82f6",
       "icon": "💿",
-      "extensions": [".chd", ".cue", ".bin", ".iso", ".pbp"],
+      "extensions": [
+        ".chd",
+        ".cue",
+        ".bin",
+        ".iso",
+        ".pbp"
+      ],
       "core": "duckstation",
       "is_top_ten": true
     },
@@ -70,7 +92,11 @@
       "year": 1996,
       "color": "#10b981",
       "icon": "🎮",
-      "extensions": [".z64", ".n64", ".v64"],
+      "extensions": [
+        ".z64",
+        ".n64",
+        ".v64"
+      ],
       "core": "mupen64plus_next_libretro.dll",
       "is_top_ten": true
     },
@@ -82,7 +108,10 @@
       "year": 2001,
       "color": "#6366f1",
       "icon": "📱",
-      "extensions": [".gba", ".zip"],
+      "extensions": [
+        ".gba",
+        ".zip"
+      ],
       "core": "mgba_libretro.dll",
       "is_top_ten": true
     },
@@ -94,7 +123,11 @@
       "year": 1989,
       "color": "#059669",
       "icon": "📱",
-      "extensions": [".gb", ".gbc", ".zip"],
+      "extensions": [
+        ".gb",
+        ".gbc",
+        ".zip"
+      ],
       "core": "gambatte_libretro.dll",
       "is_top_ten": false
     },
@@ -106,7 +139,11 @@
       "year": 1998,
       "color": "#f59e0b",
       "icon": "🌀",
-      "extensions": [".chd", ".cdi", ".gdi"],
+      "extensions": [
+        ".chd",
+        ".cdi",
+        ".gdi"
+      ],
       "core": "flycast",
       "is_top_ten": true
     },
@@ -118,7 +155,11 @@
       "year": 2001,
       "color": "#7c3aed",
       "icon": "🧊",
-      "extensions": [".rvz", ".iso", ".gcm"],
+      "extensions": [
+        ".rvz",
+        ".iso",
+        ".gcm"
+      ],
       "core": "dolphin",
       "is_top_ten": true
     },
@@ -130,7 +171,12 @@
       "year": 1982,
       "color": "#4f46e5",
       "icon": "💾",
-      "extensions": [".d64", ".t64", ".prg", ".crt"],
+      "extensions": [
+        ".d64",
+        ".t64",
+        ".prg",
+        ".crt"
+      ],
       "core": "vice_x64sc_libretro.dll",
       "is_top_ten": true
     },
@@ -142,7 +188,12 @@
       "year": 1985,
       "color": "#e11d48",
       "icon": "💾",
-      "extensions": [".adf", ".lha", ".hdf", ".ipf"],
+      "extensions": [
+        ".adf",
+        ".lha",
+        ".hdf",
+        ".ipf"
+      ],
       "core": "puae_libretro.dll",
       "is_top_ten": false
     },
@@ -154,7 +205,10 @@
       "year": 1990,
       "color": "#eab308",
       "icon": "🕹️",
-      "extensions": [".zip", ".7z"],
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
       "core": "fbneo_libretro.dll",
       "is_top_ten": false
     },
@@ -166,7 +220,10 @@
       "year": 1985,
       "color": "#2563eb",
       "icon": "🎮",
-      "extensions": [".sms", ".zip"],
+      "extensions": [
+        ".sms",
+        ".zip"
+      ],
       "core": "genesis_plus_gx_libretro.dll",
       "is_top_ten": false
     },
@@ -178,7 +235,11 @@
       "year": 1987,
       "color": "#ea580c",
       "icon": "🎮",
-      "extensions": [".pce", ".cue", ".chd"],
+      "extensions": [
+        ".pce",
+        ".cue",
+        ".chd"
+      ],
       "core": "mednafen_pce_fast_libretro.dll",
       "is_top_ten": false
     },
@@ -190,7 +251,11 @@
       "year": 1994,
       "color": "#0891b2",
       "icon": "🪐",
-      "extensions": [".chd", ".cue", ".iso"],
+      "extensions": [
+        ".chd",
+        ".cue",
+        ".iso"
+      ],
       "core": "mednafen_saturn_libretro.dll",
       "is_top_ten": false
     },
@@ -202,7 +267,10 @@
       "year": 2000,
       "color": "#1d4ed8",
       "icon": "💿",
-      "extensions": [".chd", ".iso"],
+      "extensions": [
+        ".chd",
+        ".iso"
+      ],
       "core": "pcsx2",
       "is_top_ten": false
     },
@@ -214,7 +282,10 @@
       "year": 2004,
       "color": "#0284c7",
       "icon": "📱",
-      "extensions": [".cso", ".iso"],
+      "extensions": [
+        ".cso",
+        ".iso"
+      ],
       "core": "ppsspp_libretro.dll",
       "is_top_ten": false
     },
@@ -226,7 +297,10 @@
       "year": 1977,
       "color": "#dc2626",
       "icon": "🕹️",
-      "extensions": [".a26", ".bin"],
+      "extensions": [
+        ".a26",
+        ".bin"
+      ],
       "core": "stella_libretro.dll",
       "is_top_ten": false
     },
@@ -238,7 +312,10 @@
       "year": 1987,
       "color": "#15803d",
       "icon": "🐒",
-      "extensions": [".scummvm", ".svm"],
+      "extensions": [
+        ".scummvm",
+        ".svm"
+      ],
       "core": "scummvm_libretro.dll",
       "is_top_ten": false
     },
@@ -250,7 +327,12 @@
       "year": 1981,
       "color": "#0d9488",
       "icon": "💾",
-      "extensions": [".exe", ".com", ".bat", ".conf"],
+      "extensions": [
+        ".exe",
+        ".com",
+        ".bat",
+        ".conf"
+      ],
       "core": "dosbox_pure_libretro.dll",
       "is_top_ten": false
     },
@@ -262,7 +344,9 @@
       "year": 2022,
       "color": "#eab308",
       "icon": "⚡",
-      "extensions": [".exe"],
+      "extensions": [
+        ".exe"
+      ],
       "core": "native",
       "is_top_ten": true
     },
@@ -274,7 +358,9 @@
       "year": 2004,
       "color": "#ec4899",
       "icon": "👾",
-      "extensions": [".exe"],
+      "extensions": [
+        ".exe"
+      ],
       "core": "native",
       "is_top_ten": true
     },
@@ -286,7 +372,10 @@
       "year": 1983,
       "color": "#ec4899",
       "icon": "📀",
-      "extensions": [".daphne", ".singe"],
+      "extensions": [
+        ".daphne",
+        ".singe"
+      ],
       "core": "hypseus",
       "is_top_ten": false
     },
@@ -298,7 +387,10 @@
       "year": 1990,
       "color": "#06b6d4",
       "icon": "🎯",
-      "extensions": [".vpx", ".fpt"],
+      "extensions": [
+        ".vpx",
+        ".fpt"
+      ],
       "core": "vpx",
       "is_top_ten": false
     },
@@ -310,7 +402,9 @@
       "year": 1980,
       "color": "#84cc16",
       "icon": "📟",
-      "extensions": [".mgw"],
+      "extensions": [
+        ".mgw"
+      ],
       "core": "gw_libretro.dll",
       "is_top_ten": false
     },
@@ -322,7 +416,10 @@
       "year": 1983,
       "color": "#f43f5e",
       "icon": "🗾",
-      "extensions": [".rom", ".dsk"],
+      "extensions": [
+        ".rom",
+        ".dsk"
+      ],
       "core": "fmsx_libretro.dll",
       "is_top_ten": false
     },
@@ -334,8 +431,224 @@
       "year": 1982,
       "color": "#eab308",
       "icon": "📐",
-      "extensions": [".vec"],
+      "extensions": [
+        ".vec"
+      ],
       "core": "vecx_libretro.dll",
+      "is_top_ten": false
+    },
+    {
+      "code": "MAME",
+      "name": "MAME Arcade",
+      "category": "Arcade",
+      "manufacturer": "Various",
+      "year": 1980,
+      "color": "#f97316",
+      "icon": "🕹️",
+      "extensions": [
+        ".zip"
+      ],
+      "core": "mame",
+      "is_top_ten": true
+    },
+    {
+      "code": "NAOMI",
+      "name": "Sega Naomi",
+      "category": "Arcade",
+      "manufacturer": "Sega",
+      "year": 1998,
+      "color": "#f97316",
+      "icon": "🕹️",
+      "extensions": [
+        ".zip"
+      ],
+      "core": "flycast",
+      "is_top_ten": false
+    },
+    {
+      "code": "ATOMISWAVE",
+      "name": "Sammy Atomiswave",
+      "category": "Arcade",
+      "manufacturer": "Sammy",
+      "year": 2003,
+      "color": "#f97316",
+      "icon": "🕹️",
+      "extensions": [
+        ".zip"
+      ],
+      "core": "flycast",
+      "is_top_ten": false
+    },
+    {
+      "code": "HIKARU",
+      "name": "Sega Hikaru",
+      "category": "Arcade",
+      "manufacturer": "Sega",
+      "year": 1999,
+      "color": "#f97316",
+      "icon": "🕹️",
+      "extensions": [
+        ".zip"
+      ],
+      "core": "demul",
+      "is_top_ten": false
+    },
+    {
+      "code": "HYPSEUS",
+      "name": "Laserdisc Arcade",
+      "category": "Laserdisc",
+      "manufacturer": "Various",
+      "year": 1983,
+      "color": "#ec4899",
+      "icon": "📀",
+      "extensions": [
+        ".daphne"
+      ],
+      "core": "hypseus",
+      "is_top_ten": false
+    },
+    {
+      "code": "ATARI7800",
+      "name": "Atari 7800",
+      "category": "Atari",
+      "manufacturer": "Atari",
+      "year": 1986,
+      "color": "#eab308",
+      "icon": "🦅",
+      "extensions": [
+        ".a78"
+      ],
+      "core": "prosystem",
+      "is_top_ten": false
+    },
+    {
+      "code": "LYNX",
+      "name": "Atari Lynx",
+      "category": "Atari",
+      "manufacturer": "Atari",
+      "year": 1989,
+      "color": "#eab308",
+      "icon": "🦅",
+      "extensions": [
+        ".lnx"
+      ],
+      "core": "handy",
+      "is_top_ten": false
+    },
+    {
+      "code": "JAGUAR",
+      "name": "Atari Jaguar",
+      "category": "Atari",
+      "manufacturer": "Atari",
+      "year": 1993,
+      "color": "#eab308",
+      "icon": "🦅",
+      "extensions": [
+        ".j64"
+      ],
+      "core": "virtualjaguar",
+      "is_top_ten": false
+    },
+    {
+      "code": "COLECO",
+      "name": "ColecoVision",
+      "category": "Pioneers",
+      "manufacturer": "Coleco",
+      "year": 1982,
+      "color": "#eab308",
+      "icon": "🦅",
+      "extensions": [
+        ".col"
+      ],
+      "core": "gearcoleco",
+      "is_top_ten": false
+    },
+    {
+      "code": "INTELLIVISION",
+      "name": "Mattel Intellivision",
+      "category": "Pioneers",
+      "manufacturer": "Mattel",
+      "year": 1979,
+      "color": "#eab308",
+      "icon": "🦅",
+      "extensions": [
+        ".int"
+      ],
+      "core": "freeintv",
+      "is_top_ten": false
+    },
+    {
+      "code": "X68000",
+      "name": "Sharp X68000",
+      "category": "Nippon",
+      "manufacturer": "Sharp",
+      "year": 1987,
+      "color": "#f43f5e",
+      "icon": "🗾",
+      "extensions": [
+        ".dim",
+        ".xdf"
+      ],
+      "core": "px68k",
+      "is_top_ten": false
+    },
+    {
+      "code": "MSX2",
+      "name": "Microsoft MSX2",
+      "category": "Nippon",
+      "manufacturer": "Microsoft/ASCII",
+      "year": 1985,
+      "color": "#f43f5e",
+      "icon": "🗾",
+      "extensions": [
+        ".rom",
+        ".dsk"
+      ],
+      "core": "fmsx",
+      "is_top_ten": false
+    },
+    {
+      "code": "PC88",
+      "name": "NEC PC-88",
+      "category": "Nippon",
+      "manufacturer": "NEC",
+      "year": 1981,
+      "color": "#f43f5e",
+      "icon": "🗾",
+      "extensions": [
+        ".d88"
+      ],
+      "core": "quasi88",
+      "is_top_ten": false
+    },
+    {
+      "code": "PC98",
+      "name": "NEC PC-98",
+      "category": "Nippon",
+      "manufacturer": "NEC",
+      "year": 1982,
+      "color": "#f43f5e",
+      "icon": "🗾",
+      "extensions": [
+        ".hdi",
+        ".d98"
+      ],
+      "core": "np2kai",
+      "is_top_ten": false
+    },
+    {
+      "code": "FMTOWNS",
+      "name": "Fujitsu FM Towns",
+      "category": "Nippon",
+      "manufacturer": "Fujitsu",
+      "year": 1989,
+      "color": "#f43f5e",
+      "icon": "🗾",
+      "extensions": [
+        ".bin",
+        ".iso"
+      ],
+      "core": "fmtowns",
       "is_top_ten": false
     }
   ]
