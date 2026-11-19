@@ -668,6 +668,44 @@ impl HttpServer {
                     let _ = request.respond(response);
                 }
 
+                // MULTI-MONITOR API - Get connected system displays & target monitor
+                (&Method::Get, "/api/system/displays") => {
+                    let displays = crate::config::detect_system_displays();
+                    let config = crate::config::RetroHubConfig::load();
+                    let target = config.multi_monitor.target_display;
+                    let resp = serde_json::json!({
+                        "success": true,
+                        "displays": displays,
+                        "target_display": target
+                    });
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp.to_string()).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // MULTI-MONITOR API - Set target display for MAME & emulators
+                (&Method::Post, "/api/system/displays/select") => {
+                    let body = read_request_body(&mut request);
+                    let mut config = crate::config::RetroHubConfig::load();
+                    let mut new_target = "auto".to_string();
+                    if let Ok(val) = serde_json::from_str::<serde_json::Value>(&body) {
+                        if let Some(target) = val.get("target_display").and_then(|v| v.as_str()) {
+                            new_target = target.trim().to_string();
+                            config.multi_monitor.target_display = new_target.clone();
+                            config.multi_monitor.enabled = new_target != "auto" && !new_target.is_empty();
+                            let _ = config.save();
+                        }
+                    }
+                    let resp = serde_json::json!({
+                        "success": true,
+                        "target_display": new_target,
+                        "message": "Schermo di destinazione aggiornato con successo"
+                    });
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp.to_string()).with_header(header);
+                    let _ = request.respond(response);
+                }
+
                 // EMULATOR INSTALL API - Auto-install Visual Pinball X Core (1-Click)
                 (&Method::Post, "/api/emulators/install-vpx") => {
                     let cur = VPX_INSTALL_PROGRESS.load(Ordering::SeqCst);

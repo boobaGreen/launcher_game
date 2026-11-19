@@ -524,9 +524,16 @@ impl Launcher {
                 .join("downloads/mame");
             let rompaths = format!(r#"roms;{};{}"#, dl_mame.display(), mame_dir.join("roms").display());
 
+            let config = crate::config::RetroHubConfig::load();
+            let screen_arg = match config.multi_monitor.target_display.trim() {
+                "" | "auto" | "AUTO" => "-numscreens 1 -screen auto -screen0 auto".to_string(),
+                disp => format!("-numscreens 1 -screen \"{}\" -screen0 \"{}\"", disp, disp),
+            };
+
             let script = format!(
-                r#"$p = Start-Process -FilePath ".\mame.exe" -ArgumentList '{} -skip_gameinfo -numscreens 1 -screen auto -screen0 auto -rompath "{}"' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
+                r#"$p = Start-Process -FilePath ".\mame.exe" -ArgumentList '{} -skip_gameinfo {} -rompath "{}"' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
                 rom.trim(),
+                screen_arg,
                 rompaths.replace('\'', "''"),
                 mame_dir.display().to_string().replace('\'', "''")
             );

@@ -24,7 +24,8 @@
   "multi_monitor": {
     "enabled": false,
     "layout": "Auto",
-    "primary_display": 0
+    "primary_display": 0,
+    "target_display": "auto"
   },
   "netplay": {
     "enable_stun": true,

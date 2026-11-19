@@ -1839,6 +1839,28 @@
         .toast-notification.show {
             transform: translateX(-50%) translateY(0);
         }
+        /* OLED Multi-Monitor Display Cards */
+        .display-card {
+            cursor: pointer;
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+        }
+        .display-card:hover {
+            border-color: rgba(0, 229, 180, 0.7) !important;
+            background: rgba(0, 229, 180, 0.05) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+        .display-card.active-display {
+            border-color: var(--accent-cyan) !important;
+            background: rgba(0, 229, 180, 0.09) !important;
+            box-shadow: 0 0 18px rgba(0, 229, 180, 0.28) !important;
+        }
+        .display-card.active-display .display-glow-indicator {
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
         /* ==========================================================================
            NINTENDO GAME & WATCH INTEGRATED SIMULATOR CHASSIS
            ========================================================================== */
@@ -3151,6 +3173,35 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 6. Display & Multi-Monitor Dinamico (MAME & Arcade Dual-Screen) -->
+                    <div class="adv-section-card" id="settingsSectionMultiMonitor">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                                <span data-i18n="settings_sec_display"><span>🖥️</span> Schermo di Gioco & Multi-Monitor</span>
+                            </label>
+                            <button type="button" class="btn btn-secondary" style="padding: 3px 10px; font-size: 0.72rem;" onclick="refreshDisplayList()" data-i18n="settings_btn_refresh_displays">🔄 Rileva Monitor</button>
+                        </div>
+                        <div style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+                            <span data-i18n="settings_display_desc">Scegli su quale schermo far partire MAME ed emulatori fullscreen. Puoi mantenere lo schermo principale del portatile oppure inviare il gioco su un secondo o terzo monitor collegato.</span>
+                        </div>
+
+                        <!-- Topologia Visuale OLED dei Monitor Connessi -->
+                        <div id="displaysTopologyGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 12px;">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.35); border-radius: var(--radius-sm); border: 1px solid var(--border-card); padding: 10px 14px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 1.2rem;">🎯</span>
+                                <div>
+                                    <span style="font-size: 0.68rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Destinazione Rendering MAME</span>
+                                    <span id="currentDisplayTargetLabel" style="font-size: 0.82rem; font-weight: 700; color: var(--accent-cyan); font-family: var(--font-mono);">⚡ Auto (Schermo Attivo)</span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.74rem;" onclick="selectMonitorTarget('auto')">Ripristina Auto</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Footer Azioni -->
@@ -3448,6 +3499,9 @@
                 "settings_btn_reset": "Ripristina Predefiniti",
                 "settings_btn_save": "Salva Preferenze",
                 "settings_sec_emulators": "🕹️ Emulatori & Core di Sistema",
+                "settings_sec_display": "🖥️ Schermo di Gioco & Multi-Monitor",
+                "settings_btn_refresh_displays": "🔄 Rileva Monitor",
+                "settings_display_desc": "Scegli su quale schermo far partire MAME ed emulatori fullscreen. Puoi mantenere lo schermo principale del portatile oppure inviare il gioco su un secondo o terzo monitor collegato.",
                 "settings_btn_detect_emulators": "🔍 Rileva Automaticamente",
                 "settings_emulators_desc": "Configura i percorsi degli eseguibili per i sistemi standalone e multi-core (RetroArch per Game & Watch/LCD, Visual Pinball per Flipper).",
                 "settings_ra_hint": "Eseguibile retroarch.exe con core 'Handheld / Game & Watch' (gw_libretro.dll).",
@@ -3672,6 +3726,9 @@
                 "settings_btn_reset": "Reset to Defaults",
                 "settings_btn_save": "Save Preferences",
                 "settings_sec_emulators": "🕹️ Emulators & System Cores",
+                "settings_sec_display": "🖥️ Game Screen & Multi-Monitor",
+                "settings_btn_refresh_displays": "🔄 Detect Monitors",
+                "settings_display_desc": "Select which monitor MAME and standalone emulators launch on. You can use your active primary laptop display or route games directly to a secondary or tertiary monitor.",
                 "settings_btn_detect_emulators": "🔍 Auto-Detect Emulators",
                 "settings_emulators_desc": "Configure executable paths for standalone and multi-core systems (RetroArch for Game & Watch/LCD, Visual Pinball for Flipper).",
                 "settings_ra_hint": "retroarch.exe executable with 'Handheld / Game & Watch' core (gw_libretro.dll).",
@@ -3896,6 +3953,9 @@
                 "settings_btn_reset": "Restablecer Valores Predeterminados",
                 "settings_btn_save": "Guardar Preferencias",
                 "settings_sec_emulators": "🕹️ Emuladores y Cores del Sistema",
+                "settings_sec_display": "🖥️ Pantalla de Juego y Multimonitor",
+                "settings_btn_refresh_displays": "🔄 Detectar Monitores",
+                "settings_display_desc": "Selecciona en qué monitor iniciar MAME y emuladores arcade. Puedes usar la pantalla principal de la portátil o enviar los juegos a un segundo o tercer monitor.",
                 "settings_btn_detect_emulators": "🔍 Detección Automática",
                 "settings_emulators_desc": "Configura las rutas de ejecutables para emuladores externos (RetroArch para Game & Watch/LCD, Visual Pinball para Pinball).",
                 "settings_ra_hint": "Ejecutable retroarch.exe con core 'Handheld / Game & Watch' (gw_libretro.dll).",
@@ -6629,7 +6689,137 @@
             }
 
             loadEmulatorSettings();
+            refreshDisplayList();
             document.getElementById('settingsModal').classList.add('open');
+        }
+
+        // ==========================================================================
+        // MULTI-MONITOR & OLED DISPLAY TOPOLOGY MANAGER
+        // ==========================================================================
+        let currentDisplays = [];
+        let currentTargetDisplay = 'auto';
+
+        async function refreshDisplayList() {
+            const grid = document.getElementById('displaysTopologyGrid');
+            if (!grid) return;
+            grid.innerHTML = `
+                <div style="grid-column: 1 / -1; padding: 16px; text-align: center; color: var(--text-muted); font-size: 0.80rem;">
+                    🔍 Rilevamento monitor fisici e display connessi in corso...
+                </div>
+            `;
+
+            try {
+                const res = await fetch('/api/system/displays');
+                if (!res.ok) throw new Error('Errore risposta API display');
+                const data = await res.json();
+                currentDisplays = data.displays || [];
+                currentTargetDisplay = data.target_display || 'auto';
+                renderDisplaysGrid();
+            } catch (e) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; padding: 14px; text-align: center; color: #ff5555; font-size: 0.80rem;">
+                        ⚠️ Rilevamento schermi non riuscito: ${e.message}
+                    </div>
+                `;
+            }
+        }
+
+        function renderDisplaysGrid() {
+            const grid = document.getElementById('displaysTopologyGrid');
+            if (!grid) return;
+
+            const lbl = document.getElementById('currentDisplayTargetLabel');
+            if (lbl) {
+                if (!currentTargetDisplay || currentTargetDisplay === 'auto') {
+                    lbl.innerText = '⚡ Auto (Schermo Attivo di Windows)';
+                } else {
+                    const found = currentDisplays.find(d => d.id === currentTargetDisplay);
+                    lbl.innerText = found ? `🖥️ ${found.name} (${found.id})` : `🖥️ ${currentTargetDisplay}`;
+                }
+            }
+
+            let html = '';
+
+            // Scheda 1: Modalità Auto (Predefinito di Sistema)
+            const isAutoSelected = !currentTargetDisplay || currentTargetDisplay === 'auto';
+            html += `
+                <div class="display-card ${isAutoSelected ? 'active-display' : ''}" onclick="selectMonitorTarget('auto')" style="border: ${isAutoSelected ? '2px solid var(--accent-cyan)' : '1px solid var(--border-card)'}; background: ${isAutoSelected ? 'rgba(0, 229, 180, 0.08)' : 'rgba(0,0,0,0.3)'}; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.68rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">DINAMICO</span>
+                            <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.08); color: var(--text-muted); font-weight: 700;">AUTO</span>
+                        </div>
+                        <div style="font-size: 1.6rem; margin-bottom: 6px;">⚡</div>
+                        <div style="font-size: 0.84rem; font-weight: 700; color: #fff; margin-bottom: 2px;">Schermo Attivo</div>
+                        <div style="font-size: 0.70rem; color: var(--text-muted); line-height: 1.3;">Avvia sul display principale corrente di Windows.</div>
+                    </div>
+                    <div style="margin-top: 12px; font-size: 0.70rem; font-weight: 700; color: ${isAutoSelected ? 'var(--accent-cyan)' : 'var(--text-muted)'}; display: flex; align-items: center; gap: 4px;">
+                        ${isAutoSelected ? '✔ In Uso (Predefinito)' : 'Clicca per attivare'}
+                    </div>
+                </div>
+            `;
+
+            // Schede per ciascun monitor hardware rilevato
+            if (currentDisplays.length === 0) {
+                html += `
+                    <div style="grid-column: 2 / -1; padding: 14px; color: var(--text-muted); font-size: 0.76rem; display: flex; align-items: center;">
+                        Nessun display secondario rilevato al momento.
+                    </div>
+                `;
+            } else {
+                currentDisplays.forEach((disp, idx) => {
+                    const isSelected = currentTargetDisplay === disp.id;
+                    html += `
+                        <div class="display-card ${isSelected ? 'active-display' : ''}" onclick="selectMonitorTarget('${disp.id}')" style="border: ${isSelected ? '2px solid var(--accent-cyan)' : '1px solid var(--border-card)'}; background: ${isSelected ? 'rgba(0, 229, 180, 0.08)' : 'rgba(0,0,0,0.3)'}; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-size: 0.68rem; font-weight: 700; color: ${disp.is_primary ? '#fbbf24' : 'var(--text-muted)'}; text-transform: uppercase;">
+                                        ${disp.is_primary ? '★ PRINCIPALE' : 'ESTERNO'}
+                                    </span>
+                                    <span style="font-size: 0.68rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; background: rgba(0, 229, 180, 0.12); color: var(--accent-cyan); font-weight: 700;">
+                                        ${disp.width}x${disp.height}
+                                    </span>
+                                </div>
+                                <div style="font-size: 1.6rem; margin-bottom: 6px;">
+                                    ${disp.is_primary ? '💻' : '🖥️'}
+                                </div>
+                                <div style="font-size: 0.84rem; font-weight: 700; color: #fff; margin-bottom: 2px;">
+                                    ${disp.name}
+                                </div>
+                                <div style="font-size: 0.70rem; color: var(--text-muted); font-family: var(--font-mono);">
+                                    ${disp.id}
+                                </div>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 0.70rem; font-weight: 700; color: ${isSelected ? 'var(--accent-cyan)' : 'var(--text-muted)'}; display: flex; align-items: center; gap: 4px;">
+                                ${isSelected ? '✔ Schermo Selezionato' : 'Clicca per assegnare'}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            grid.innerHTML = html;
+        }
+
+        async function selectMonitorTarget(displayId) {
+            try {
+                const res = await fetch('/api/system/displays/select', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ target_display: displayId })
+                });
+                if (res.ok) {
+                    currentTargetDisplay = displayId;
+                    renderDisplaysGrid();
+                    const dispObj = currentDisplays.find(d => d.id === displayId);
+                    const label = displayId === 'auto' ? 'Schermo Attivo (Auto)' : (dispObj ? dispObj.name : displayId);
+                    showToast(`🖥️ MAME configurato per avviarsi su: ${label}`);
+                } else {
+                    showToast('Errore salvataggio schermo di destinazione');
+                }
+            } catch (e) {
+                showToast(`Errore di connessione: ${e.message}`);
+            }
         }
 
         function closeSettingsModal() {

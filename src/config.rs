@@ -96,11 +96,148 @@ pub enum Theme {
     System,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DisplayInfo {
+    pub id: String,
+    pub name: String,
+    pub width: i32,
+    pub height: i32,
+    pub x: i32,
+    pub y: i32,
+    pub is_primary: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MultiMonitorConfig {
     pub enabled: bool,
     pub layout: Layout,
     pub primary_display: usize,
+    #[serde(default = "default_target_display")]
+    pub target_display: String,
+}
+
+fn default_target_display() -> String {
+    "auto".to_string()
+}
+
+impl Default for MultiMonitorConfig {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            layout: Layout::Auto,
+            primary_display: 0,
+            target_display: "auto".to_string(),
+        }
+    }
+}
+
+#[cfg(windows)]
+pub fn detect_system_displays() -> Vec<DisplayInfo> {
+    use std::ffi::c_void;
+
+    type BOOL = i32;
+    type HMONITOR = *mut c_void;
+    type HDC = *mut c_void;
+    type LPARAM = isize;
+
+    #[repr(C)]
+    struct RECT {
+        left: i32,
+        top: i32,
+        right: i32,
+        bottom: i32,
+    }
+
+    #[repr(C, align(4))]
+    struct MONITORINFOEXW {
+        cb_size: u32,
+        rc_monitor: RECT,
+        rc_work: RECT,
+        dw_flags: u32,
+        sz_device: [u16; 32],
+    }
+
+    type MonitorEnumProc = unsafe extern "system" fn(HMONITOR, HDC, *mut RECT, LPARAM) -> BOOL;
+
+    #[link(name = "user32")]
+    extern "system" {
+        fn EnumDisplayMonitors(
+            hdc: HDC,
+            lprc_clip: *const RECT,
+            lpfn_enum: MonitorEnumProc,
+            dw_data: LPARAM,
+        ) -> BOOL;
+
+        fn GetMonitorInfoW(
+            h_monitor: HMONITOR,
+            lp_mi: *mut MONITORINFOEXW,
+        ) -> BOOL;
+    }
+
+    unsafe extern "system" fn callback(
+        h_monitor: HMONITOR,
+        _hdc: HDC,
+        _lprc: *mut RECT,
+        dw_data: LPARAM,
+    ) -> BOOL {
+        let list = &mut *(dw_data as *mut Vec<DisplayInfo>);
+        let mut info: MONITORINFOEXW = std::mem::zeroed();
+        info.cb_size = std::mem::size_of::<MONITORINFOEXW>() as u32;
+        if GetMonitorInfoW(h_monitor, &mut info) != 0 {
+            let len = info.sz_device.iter().position(|&c| c == 0).unwrap_or(info.sz_device.len());
+            let id = String::from_utf16_lossy(&info.sz_device[..len]);
+            let width = info.rc_monitor.right - info.rc_monitor.left;
+            let height = info.rc_monitor.bottom - info.rc_monitor.top;
+            let x = info.rc_monitor.left;
+            let y = info.rc_monitor.top;
+            let is_primary = (info.dw_flags & 1) != 0;
+            let idx = list.len() + 1;
+            let name = if is_primary {
+                format!("Schermo {} (Principale / Laptop)", idx)
+            } else {
+                format!("Monitor Esterno {}", idx)
+            };
+            list.push(DisplayInfo {
+                id,
+                name,
+                width,
+                height,
+                x,
+                y,
+                is_primary,
+            });
+        }
+        1
+    }
+
+    let mut list: Vec<DisplayInfo> = Vec::new();
+    unsafe {
+        EnumDisplayMonitors(
+            std::ptr::null_mut(),
+            std::ptr::null(),
+            callback,
+            &mut list as *mut _ as LPARAM,
+        );
+    }
+
+    // Ordina per coordinata X da sinistra a destra (disposizione fisica)
+    list.sort_by_key(|m: &DisplayInfo| m.x);
+    list
+}
+
+#[cfg(not(windows))]
+pub fn detect_system_displays() -> Vec<DisplayInfo> {
+    vec![
+        DisplayInfo {
+            id: "auto".to_string(),
+            name: "Schermo Principale (Predefinito)".to_string(),
+            width: 1920,
+            height: 1080,
+            x: 0,
+            y: 0,
+            is_primary: true,
+        }
+    ]
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
