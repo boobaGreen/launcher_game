@@ -31,7 +31,7 @@ impl MasterCatalog {
                     clean_title.clone()
                 } else if $sys == "C64" || $sys == "AMIGA" {
                     format!("{} (Europe)", clean_title)
-                } else if $sys == "DOS" || $sys == "SCUMMVM" || $sys == "LASERDISC" || $sys == "PINBALL" {
+                } else if $sys == "DOS" || $sys == "SCUMMVM" || $sys == "LASERDISC" || $sys == "PINBALL" || $sys == "MAME" || $sys == "ARCADE" {
                     clean_title.clone()
                 } else {
                     format!("{} (USA)", clean_title)
@@ -171,6 +171,45 @@ impl MasterCatalog {
         add_game!("NEOGEO", "SNK Neo Geo", "Shock Troopers", 1997, "Run and Gun", "Saurus", ng_sub);
         add_game!("NEOGEO", "SNK Neo Geo", "Blazing Star", 1998, "Shoot 'em up", "Yumekobo", ng_sub);
         add_game!("NEOGEO", "SNK Neo Geo", "Windjammers", 1994, "Sport / Azione", "Data East", ng_sub);
+
+        // ==========================================
+        // ARCADE MAME - Coin-Op Legends (1G1R Parent)
+        // ==========================================
+        let mame_sub = "FBNeo_-_Arcade_Games";
+        add_game!("MAME", "Arcade (MAME)", "Street Fighter II' - Champion Edition", 1992, "Picchiaduro", "Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Super Street Fighter II Turbo", 1994, "Picchiaduro", "Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Cadillacs and Dinosaurs", 1993, "Picchiaduro a Scorrimento", "Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Final Fight", 1989, "Picchiaduro a Scorrimento", "Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "The Punisher", 1993, "Picchiaduro a Scorrimento", "Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Captain Commando", 1991, "Picchiaduro a Scorrimento", "Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Mortal Kombat II", 1993, "Picchiaduro", "Midway", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Ultimate Mortal Kombat 3", 1995, "Picchiaduro", "Midway", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "NBA Jam Tournament Edition", 1994, "Sport / Basket", "Midway", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Teenage Mutant Ninja Turtles - Turtles in Time", 1991, "Picchiaduro a Scorrimento", "Konami", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "The Simpsons", 1991, "Picchiaduro a Scorrimento", "Konami", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Sunset Riders", 1991, "Run and Gun", "Konami", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Pac-Man", 1980, "Labirinto / Arcade", "Namco", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Ms. Pac-Man", 1981, "Labirinto / Arcade", "Midway / Namco", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Galaga", 1981, "Shoot 'em up Fisso", "Namco", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Dig Dug", 1982, "Azione / Scavo", "Namco", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Out Run", 1986, "Guida Arcade", "Sega AM2", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Golden Axe", 1989, "Picchiaduro Fantasy", "Sega", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Shinobi", 1987, "Action Platform", "Sega", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Altered Beast", 1988, "Azione Beat 'em Up", "Sega", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Bubble Bobble", 1986, "Platform Arcade", "Taito", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Rainbow Islands", 1987, "Platform Arcade", "Taito", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Pang", 1989, "Azione / Bolle", "Mitchell / Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Snow Bros. - Nick & Tom", 1990, "Platform Arcade", "Toaplan", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Double Dragon", 1987, "Picchiaduro a Scorrimento", "Technos Japan", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Toki", 1989, "Platform Action", "TAD Corporation", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Space Invaders", 1978, "Fixed Shooter", "Taito", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Donkey Kong", 1981, "Platform Classico", "Nintendo", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "1942", 1984, "Vertical Shmup", "Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Ghosts 'n Goblins", 1985, "Platform Action", "Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Ghouls 'n Ghosts", 1988, "Platform Action", "Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Strider", 1989, "Action Platform", "Capcom", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Neo Turf Masters", 1996, "Sport / Golf", "Nazca / SNK", mame_sub);
+        add_game!("MAME", "Arcade (MAME)", "Puzzle Bobble", 1994, "Puzzle Arcade", "Taito", mame_sub);
 
         // ==========================================
         // NINTENDO 64 - On-Demand Cloud

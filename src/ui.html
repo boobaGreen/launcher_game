@@ -2275,6 +2275,13 @@
                             <span style="font-size: 0.74rem; color: var(--text-muted);" data-i18n="settings_clear_cache_desc">Svuota i file temporanei delle copertine per liberare spazio su disco.</span>
                             <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.75rem; color: var(--accent-danger); border-color: rgba(255,75,75,0.4);" data-i18n="settings_btn_clear_cache" onclick="clearImageCache()">🧹 Svuota Cache Immagini</button>
                         </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 10px; margin-top: 6px;">
+                            <div>
+                                <span style="font-size: 0.78rem; font-weight: 700; color: #ff5555; display: block;" data-i18n="settings_factory_reset_title">🔄 Ripristino Stato Nuovo Utente</span>
+                                <span style="font-size: 0.72rem; color: var(--text-muted);" data-i18n="settings_factory_reset_desc">Azzera cache, cronologia e riapre il Setup Wizard. Le tue ROM sul disco non vengono toccate.</span>
+                            </div>
+                            <button type="button" class="btn btn-secondary" style="padding: 5px 14px; font-size: 0.75rem; color: #ff5555; border-color: rgba(255,85,85,0.4);" data-i18n="settings_btn_factory_reset" onclick="factoryResetNewUser()">🔄 Azzera e Riavvia Wizard</button>
+                        </div>
                     </div>
 
                     <!-- 4. Hero & Interfaccia -->
@@ -2449,6 +2456,9 @@
                 "settings_typographic_desc": "Usa poster vettoriali stilizzati invece di scaricare immagini reali da internet.",
                 "settings_clear_cache_desc": "Svuota i file temporanei delle copertine per liberare spazio su disco.",
                 "settings_btn_clear_cache": "🧹 Svuota Cache Immagini",
+                "settings_factory_reset_title": "🔄 Ripristino Stato Nuovo Utente",
+                "settings_factory_reset_desc": "Azzera cache, cronologia e riapre il Setup Wizard. Le tue ROM sul disco non vengono toccate.",
+                "settings_btn_factory_reset": "🔄 Azzera e Riavvia Wizard",
                 "settings_sec_hero": "⏱️ Vetrina Hero & Gamepad",
                 "settings_label_hero_rot": "ROTAZIONE AUTOMATICA HERO",
                 "settings_hero_fast": "Veloce (4 secondi)",
@@ -2644,6 +2654,9 @@
                 "settings_typographic_desc": "Use styled vector posters instead of downloading real images from the internet.",
                 "settings_clear_cache_desc": "Clear temporary cover files to free up disk space.",
                 "settings_btn_clear_cache": "🧹 Clear Image Cache",
+                "settings_factory_reset_title": "🔄 Factory Reset (New User)",
+                "settings_factory_reset_desc": "Clears local cache, history and re-opens Setup Wizard. Your ROM files on disk are NOT touched.",
+                "settings_btn_factory_reset": "🔄 Reset & Restart Wizard",
                 "settings_sec_hero": "⏱️ Hero Showcase & Gamepad",
                 "settings_label_hero_rot": "HERO AUTO-ROTATION",
                 "settings_hero_fast": "Fast (4 seconds)",
@@ -2839,6 +2852,9 @@
                 "settings_typographic_desc": "Usa pósteres vectoriales estilizados en lugar de descargar imágenes de internet.",
                 "settings_clear_cache_desc": "Vacía los archivos temporales de portadas para liberar espacio en disco.",
                 "settings_btn_clear_cache": "🧹 Vaciar Caché de Portadas",
+                "settings_factory_reset_title": "🔄 Restablecer Estado Nuevo Usuario",
+                "settings_factory_reset_desc": "Borra la caché, historial y reabre el asistente. Tus archivos ROM en disco NO se tocan.",
+                "settings_btn_factory_reset": "🔄 Restablecer y Reiniciar Asistente",
                 "settings_sec_hero": "⏱️ Escaparate Hero y Gamepad",
                 "settings_label_hero_rot": "ROTACIÓN AUTOMÁTICA DE HERO",
                 "settings_hero_fast": "Rápida (4 segundos)",
@@ -4780,6 +4796,28 @@
                 }
             } catch (e) {
                 showToast('🧹 Cache locale svuotata.');
+            }
+        }
+
+        async function factoryResetNewUser() {
+            const confirmMsg = currentLang === 'en'
+                ? 'Are you sure you want to reset RetroHub to a clean new-user state? This will clear local cache and re-open the Setup Wizard. Your ROM files on disk will NOT be touched.'
+                : (currentLang === 'es'
+                    ? '¿Estás seguro de que deseas restablecer RetroHub al estado de nuevo usuario? Esto borrará la caché local y reabrirá el asistente. Tus archivos ROM en disco NO se tocarán.'
+                    : 'Sei sicuro di voler ripristinare RetroHub allo stato di nuovo utente? Questo azzererà la cache locale e riaprirà il Setup Wizard. Le tue ROM sul disco NON verranno toccate.');
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                await fetch('/api/factory-reset', { method: 'POST' }).catch(() => {});
+                localStorage.clear();
+                localStorage.setItem('retrohub_app_version', '0.37.0');
+                closeSettingsModal();
+                showToast(currentLang === 'en' ? '🔄 Reset complete: restarting as clean new user...' : '🔄 Reset completato: riavvio in modalità nuovo utente...');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 600);
+            } catch (e) {
+                console.error('Errore reset:', e);
             }
         }
 

@@ -674,6 +674,36 @@ impl HttpServer {
                     let _ = request.respond(response);
                 }
 
+                // SETTINGS API - Factory Reset (Nuovo Utente Pulito)
+                (&Method::Post, "/api/factory-reset") => {
+                    // 1. Elimina cartelle locali temporanee del launcher (MAI toccare cartelle esterne o ROM utente)
+                    let cache_dirs = ["covers", "retro_downloads", "downloads"];
+                    for d in &cache_dirs {
+                        let p = std::path::Path::new(d);
+                        if p.exists() && p.is_dir() {
+                            let _ = std::fs::remove_dir_all(p);
+                        }
+                    }
+                    // 2. Ripristina il database SQLite al catalogo vergine Cloud On-Demand
+                    let cloud_games = crate::master_catalog::MasterCatalog::get_cloud_catalog(1);
+                    let total = cloud_games.len();
+                    let reset_ok = {
+                        let db = self.db.lock().unwrap();
+                        db.reset_catalog(&cloud_games).is_ok()
+                    };
+                    // 3. Ripristina retrohub.json a default
+                    let _ = crate::config::RetroHubConfig::default().save();
+
+                    let json = serde_json::json!({
+                        "success": reset_ok,
+                        "total_games": total,
+                        "message": "Ripristino a nuovo utente completato con successo. Le tue ROM sul disco sono al sicuro."
+                    }).to_string();
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(json).with_header(header);
+                    let _ = request.respond(response);
+                }
+
                 // SETTINGS API - Open downloads folder in Explorer
                 (&Method::Post, "/api/open-downloads-folder") => {
                     let dl_path = std::env::current_dir().unwrap_or_default().join("retro_downloads");
