@@ -1757,17 +1757,17 @@
                             <div id="heroProgressPills" style="display: flex; gap: 8px;"></div>
                             <button class="hero-nav-btn" onclick="nextHeroSlide()">›</button>
                         </div>
-                        <div class="hero-source-segmented">
+                        <div class="hero-source-segmented" id="heroSourceSegmented">
                             <button class="hero-source-btn active" id="heroSrcRandom" onclick="setHeroSource('random')">
                                 🎲 A Sorpresa
                             </button>
-                            <button class="hero-source-btn" id="heroSrcFavorites" onclick="setHeroSource('favorites')">
+                            <button class="hero-source-btn" id="heroSrcFavorites" onclick="setHeroSource('favorites')" style="display: none;">
                                 ⭐ Preferiti
                             </button>
-                            <button class="hero-source-btn" id="heroSrcRecent" onclick="setHeroSource('recent')">
+                            <button class="hero-source-btn" id="heroSrcRecent" onclick="setHeroSource('recent')" style="display: none;">
                                 ⏱️ Continua
                             </button>
-                            <button class="hero-source-btn" id="heroSrcCustom" onclick="setHeroSource('custom')">
+                            <button class="hero-source-btn" id="heroSrcCustom" onclick="setHeroSource('custom')" style="display: none;">
                                 📁 Custom
                             </button>
                         </div>
@@ -3497,8 +3497,46 @@
             return copy.slice(0, Math.min(count, copy.length));
         }
 
+        function updateHeroSourceButtons() {
+            const hasFavorites = Array.isArray(allGames) && allGames.some(g => g.is_favorite);
+            const hasRecent = Array.isArray(allGames) && allGames.some(g => g.last_played_at || (g.play_count && g.play_count > 0));
+            const hasCustom = Array.isArray(customCollections) && customCollections.length > 0 && customCollections.some(c => c.gameIds && c.gameIds.length > 0);
+
+            const btnRandom = document.getElementById('heroSrcRandom');
+            const btnFav = document.getElementById('heroSrcFavorites');
+            const btnRecent = document.getElementById('heroSrcRecent');
+            const btnCustom = document.getElementById('heroSrcCustom');
+
+            if (btnRandom) btnRandom.style.display = 'inline-flex';
+            if (btnFav) btnFav.style.display = hasFavorites ? 'inline-flex' : 'none';
+            if (btnRecent) btnRecent.style.display = hasRecent ? 'inline-flex' : 'none';
+            if (btnCustom) btnCustom.style.display = hasCustom ? 'inline-flex' : 'none';
+
+            // Se la modalità attualmente selezionata non ha più dati disponibili, torna in automatico su 'random' (A Sorpresa)
+            if (heroSource === 'favorites' && !hasFavorites) {
+                heroSource = 'random';
+            } else if (heroSource === 'recent' && !hasRecent) {
+                heroSource = 'random';
+            } else if (heroSource === 'custom' && !hasCustom) {
+                heroSource = 'random';
+            }
+
+            document.querySelectorAll('.hero-source-btn').forEach(btn => btn.classList.remove('active'));
+            if (heroSource === 'favorites' && btnFav) {
+                btnFav.classList.add('active');
+            } else if (heroSource === 'recent' && btnRecent) {
+                btnRecent.classList.add('active');
+            } else if (heroSource === 'custom' && btnCustom) {
+                btnCustom.classList.add('active');
+            } else if (btnRandom) {
+                btnRandom.classList.add('active');
+            }
+        }
+
         function initHeroSpotlight() {
             if (!allGames || allGames.length === 0) return;
+
+            updateHeroSourceButtons();
 
             // Filtro di sicurezza assoluto: nessun BIOS, firmware o file diagnostico può mai entrare nella Hero
             const playablePool = allGames.filter(g => {
@@ -3508,14 +3546,26 @@
 
             if (heroSource === 'favorites') {
                 heroList = playablePool.filter(g => g.is_favorite);
-                if (heroList.length === 0) heroList = playablePool.slice(0, 8);
+                if (heroList.length === 0) {
+                    heroSource = 'random';
+                    updateHeroSourceButtons();
+                    heroList = getShuffledRandomGames(playablePool, 8);
+                }
             } else if (heroSource === 'recent') {
                 heroList = playablePool.filter(g => g.last_played_at || g.play_count > 0);
-                if (heroList.length === 0) heroList = playablePool.slice(0, 8);
+                if (heroList.length === 0) {
+                    heroSource = 'random';
+                    updateHeroSourceButtons();
+                    heroList = getShuffledRandomGames(playablePool, 8);
+                }
             } else if (heroSource === 'custom') {
-                const coll = customCollections.find(c => c.id === activeCustomCollectionId) || customCollections[0];
-                heroList = playablePool.filter(g => coll?.gameIds?.includes(g.id));
-                if (heroList.length === 0) heroList = playablePool.slice(0, 8);
+                const coll = customCollections.find(c => c.id === activeCustomCollectionId) || customCollections.find(c => c.gameIds && c.gameIds.length > 0);
+                heroList = coll ? playablePool.filter(g => coll.gameIds.includes(g.id)) : [];
+                if (heroList.length === 0) {
+                    heroSource = 'random';
+                    updateHeroSourceButtons();
+                    heroList = getShuffledRandomGames(playablePool, 8);
+                }
             } else {
                 // 'random' (A Sorpresa / Gioco Casuale): estrae una selezione fresca e variegata
                 heroList = getShuffledRandomGames(playablePool, 8);
@@ -3675,18 +3725,7 @@
 
         function setHeroSource(src) {
             heroSource = src;
-            document.querySelectorAll('.hero-source-btn').forEach(btn => btn.classList.remove('active'));
-            if (src === 'random' || src === 'featured') {
-                const btn = document.getElementById('heroSrcRandom') || document.getElementById('heroSrcFeatured');
-                if (btn) btn.classList.add('active');
-            } else if (src === 'favorites') {
-                document.getElementById('heroSrcFavorites')?.classList.add('active');
-            } else if (src === 'recent') {
-                document.getElementById('heroSrcRecent')?.classList.add('active');
-            } else if (src === 'custom') {
-                document.getElementById('heroSrcCustom')?.classList.add('active');
-            }
-
+            updateHeroSourceButtons();
             initHeroSpotlight();
             showToast(`Vetrina Hero: ${getSourceLabel(src)}`);
         }
@@ -4138,6 +4177,8 @@
             showToast(isEn ? `🗑️ Local download of ${g.title} removed.` : `🗑️ Copia locale di ${g.title} rimossa.`);
         }
 
+        let lastGameLaunchTime = 0;
+
         async function launchGameById(id) {
             const g = allGames.find(x => x.id === id);
             if (!g) return;
@@ -4161,10 +4202,10 @@
                 if (data.success) {
                     showToast(isEn ? `Game started! Have fun!` : `Partita avviata! Buon divertimento!`);
                     postGameTargetId = id;
-                    const behavior = localStorage.getItem('retrohub_post_game_behavior') || 'ask';
-                    if (behavior === 'ask') {
-                        setTimeout(() => { openPostGameModal(); }, 4000);
-                    }
+                    lastGameLaunchTime = Date.now();
+                    g.last_played_at = Date.now();
+                    g.play_count = (g.play_count || 0) + 1;
+                    updateHeroSourceButtons();
                 } else {
                     showToast(isEn ? `Launch error: ${data.message}` : `Errore avvio: ${data.message}`);
                 }
@@ -4191,6 +4232,10 @@
                 });
             } catch (e) {}
 
+            updateHeroSourceButtons();
+            if (heroSource === 'favorites' && !allGames.some(x => x.is_favorite)) {
+                setHeroSource('random');
+            }
             renderCatalog();
             if (heroList[heroIndex] && heroList[heroIndex].id === id) {
                 renderHeroSlide();
@@ -4401,6 +4446,18 @@
                 showToast('File temporaneo eliminato. Spazio su disco liberato!');
             }
         }
+
+        // Il dialog post-partita viene mostrato solo al rientro dell'utente sul launcher
+        // e solo se ha esplicitamente configurato "ask" nelle impostazioni
+        window.addEventListener('focus', () => {
+            if (postGameTargetId && lastGameLaunchTime > 0 && (Date.now() - lastGameLaunchTime > 25000)) {
+                const behavior = localStorage.getItem('retrohub_post_game_behavior') || 'always_keep';
+                if (behavior === 'ask') {
+                    openPostGameModal();
+                }
+                lastGameLaunchTime = 0;
+            }
+        });
 
         // --------------------------------------------------------------------------
         // 11. GAMEPAD POLLING & CONTROLLER SUPPORT
@@ -4726,12 +4783,14 @@
                 if (saved !== null) {
                     const parsed = JSON.parse(saved);
                     if (Array.isArray(parsed)) {
-                        customCollections = parsed;
+                        // Rimuove qualsiasi mock fittizio di default precedente
+                        customCollections = parsed.filter(c => c && c.id !== 1 && !c.name?.toLowerCase().includes('capcom arcade'));
                     }
                 }
             } catch (e) {
                 console.warn('Errore lettura raccolte da localStorage:', e);
             }
+            updateHeroSourceButtons();
         }
 
         function saveCurrentViewToCollection() {
@@ -4765,6 +4824,7 @@
             });
             saveCustomCollectionsToStorage();
             renderCollectionsList();
+            updateHeroSourceButtons();
             showToast(`✅ Raccolta "${name.trim()}" salvata con ${gameIds.length} giochi!`);
         }
 
@@ -5219,6 +5279,7 @@
             input.value = '';
             saveCustomCollectionsToStorage();
             renderCollectionsList();
+            updateHeroSourceButtons();
             showToast(`Raccolta "${name}" creata!`);
         }
         function deleteCustomCollection(id) {
@@ -5234,6 +5295,10 @@
                     if (activeCustomCollectionId === id) {
                         activeCustomCollectionId = null;
                         renderCatalog();
+                    }
+                    updateHeroSourceButtons();
+                    if (heroSource === 'custom' && (!customCollections || customCollections.length === 0)) {
+                        setHeroSource('random');
                     }
                     showToast(`Raccolta eliminata.`);
                 }
@@ -5251,13 +5316,11 @@
         function projectCollectionOnHero(id) {
             const coll = customCollections.find(c => c.id === id);
             if (!coll) return;
+            activeCustomCollectionId = id;
             heroSource = 'custom';
-            heroList = allGames.filter(g => coll.gameIds.includes(g.id));
-            if (heroList.length === 0) heroList = allGames.slice(0, 8);
-            heroIndex = 0;
+            updateHeroSourceButtons();
+            initHeroSpotlight();
             closeCustomCollectionsModal();
-            renderHeroPills();
-            renderHeroSlide();
             window.scrollTo({ top: 0, behavior: 'smooth' });
             showToast(`🌟 Vetrina Hero impostata sulla raccolta: ${coll.name}`);
         }
@@ -5302,7 +5365,7 @@
             if (heroRotSel) heroRotSel.value = heroTimerDuration.toString();
 
             const postGameSel = document.getElementById('settingsPostGameBehavior');
-            if (postGameSel) postGameSel.value = localStorage.getItem('retrohub_post_game_behavior') || 'ask';
+            if (postGameSel) postGameSel.value = localStorage.getItem('retrohub_post_game_behavior') || 'always_keep';
 
             // 2. Rileva gamepad attivi
             updateSettingsGamepadDisplay();
@@ -5624,7 +5687,7 @@
             localStorage.setItem('retrohub_typographic', 'false');
             localStorage.setItem('retrohub_predownload_covers', 'true');
             localStorage.setItem('retrohub_hero_timer', '8000');
-            localStorage.setItem('retrohub_post_game_behavior', 'ask');
+            localStorage.setItem('retrohub_post_game_behavior', 'always_keep');
 
             const langSel = document.getElementById('settingsLanguageSelect');
             if (langSel) langSel.value = 'it';
@@ -5639,7 +5702,7 @@
             if (heroRotSel) heroRotSel.value = '8000';
 
             const postGameSel = document.getElementById('settingsPostGameBehavior');
-            if (postGameSel) postGameSel.value = 'ask';
+            if (postGameSel) postGameSel.value = 'always_keep';
 
             applyLanguage('it');
             startHeroRotation();

@@ -291,17 +291,19 @@ impl Launcher {
             let dl_mame = std::env::current_dir()
                 .unwrap_or_else(|_| PathBuf::from("."))
                 .join("downloads/mame");
-            let rompaths = format!(r#"roms;{};C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\mame\roms"#, dl_mame.display());
-            let cmd = format!(
-                r#"$p = Start-Process -FilePath ".\mame.exe" -ArgumentList "{} -video bgfx -rompath '{}'" -WorkingDirectory "{}" -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
-                rom.trim(),
-                rompaths,
-                mame_dir.display()
-            );
-            Command::new("powershell")
-                .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &cmd])
-                .spawn()
-                .map_err(|e| format!("Errore avvio MAME: {}", e))?;
+            let rompaths = format!(r#"roms;{};{}"#, dl_mame.display(), mame_dir.join("roms").display());
+
+            let mame_exe = mame_dir.join("mame.exe");
+            let mut cmd = Command::new(&mame_exe);
+            cmd.arg(rom.trim())
+                .arg("-video")
+                .arg("bgfx")
+                .arg("-skip_gameinfo")
+                .arg("-rompath")
+                .arg(&rompaths)
+                .current_dir(&mame_dir);
+
+            cmd.spawn().map_err(|e| format!("Errore avvio MAME: {}", e))?;
             return Ok(format!("Avviato MAME (ROM: {})", rom));
         }
 
