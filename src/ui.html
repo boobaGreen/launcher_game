@@ -1180,6 +1180,270 @@
         }
 
         /* ==========================================================================
+           PROGRESS BAR & DOWNLOAD OVERLAY (MODERN OLED GLASS & NEON)
+           ========================================================================== */
+        .card-dl-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 25;
+            background: rgba(7, 9, 14, 0.90);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+            transition: opacity 0.35s ease, background-color 0.4s ease;
+            border-radius: var(--radius-md);
+            pointer-events: auto;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .card-dl-overlay.is-success {
+            background: rgba(4, 30, 20, 0.94);
+        }
+
+        /* Circular Neon Ring Gauge */
+        .card-dl-gauge {
+            position: relative;
+            width: 82px;
+            height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .card-dl-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .card-dl-circle-track {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.10);
+            stroke-width: 6;
+        }
+
+        .card-dl-circle-progress {
+            fill: none;
+            stroke: var(--accent-cyan);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 213.6;
+            stroke-dashoffset: 213.6;
+            transition: stroke-dashoffset 0.18s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s ease;
+            filter: drop-shadow(0 0 8px var(--accent-cyan-glow));
+        }
+
+        .card-dl-center-val {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-dl-pct-num {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            line-height: 1;
+            text-shadow: 0 0 12px rgba(0, 229, 180, 0.6);
+        }
+
+        .card-dl-icon-state {
+            font-size: 0.70rem;
+            margin-top: 3px;
+            color: var(--accent-cyan);
+            animation: dlIconPulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes dlIconPulse {
+            0%, 100% { transform: translateY(0); opacity: 0.9; }
+            50% { transform: translateY(2px); opacity: 0.4; }
+        }
+
+        /* Status Label & Micro-dots */
+        .card-dl-label {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+            max-width: 92%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-dl-meta {
+            font-size: 0.68rem;
+            font-family: var(--font-mono);
+            color: var(--accent-blue);
+            text-align: center;
+            margin-top: 6px;
+            opacity: 0.9;
+        }
+
+        /* Horizontal Glow Bar */
+        .card-dl-bar-track {
+            width: 86%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.7);
+            margin-top: 6px;
+        }
+
+        .card-dl-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #00e5b4 0%, #00c3ff 100%);
+            box-shadow: 0 0 10px rgba(0, 229, 180, 0.7);
+            transition: width 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .card-dl-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            animation: dlBarShimmer 1.4s infinite;
+        }
+
+        @keyframes dlBarShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        /* Success celebratory state */
+        .card-dl-overlay.is-success .card-dl-circle-progress {
+            stroke: #00e5b4;
+            filter: drop-shadow(0 0 12px rgba(0, 229, 180, 0.9));
+        }
+        .card-dl-overlay.is-success .card-dl-pct-num {
+            color: #00e5b4;
+        }
+        .card-dl-overlay.is-success .card-dl-bar-fill {
+            background: #00e5b4;
+            box-shadow: 0 0 14px rgba(0, 229, 180, 0.9);
+        }
+
+        /* Quick button active state */
+        .quick-play-btn.dl-active-btn {
+            background: rgba(0, 229, 180, 0.2) !important;
+            color: var(--accent-cyan) !important;
+            border: 1px solid rgba(0, 229, 180, 0.5) !important;
+            cursor: wait !important;
+        }
+
+        /* Badge Pop Animation on complete */
+        @keyframes badgePop {
+            0% { transform: scale(0.6); }
+            50% { transform: scale(1.4); filter: drop-shadow(0 0 10px #00e5b4); }
+            100% { transform: scale(1.0); }
+        }
+        .card-badge-pop {
+            animation: badgePop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Details Modal Download Widget */
+        .modal-dl-widget {
+            background: rgba(0, 229, 180, 0.06);
+            border: 1px solid rgba(0, 229, 180, 0.35);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            animation: fadeIn 0.25s ease-out;
+        }
+        .modal-dl-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .modal-dl-title-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-dl-spinner {
+            font-size: 0.9rem;
+            animation: dlIconPulse 1s infinite;
+        }
+        .modal-dl-label {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .modal-dl-pct {
+            font-family: var(--font-mono);
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(0, 229, 180, 0.6);
+        }
+        .modal-dl-bar-track {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 6px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+        }
+        .modal-dl-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #00e5b4 0%, #00c3ff 100%);
+            box-shadow: 0 0 12px rgba(0, 229, 180, 0.8);
+            transition: width 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .modal-dl-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            animation: dlBarShimmer 1.4s infinite;
+        }
+        .modal-dl-meta-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+        .modal-dl-speed {
+            color: var(--accent-blue);
+        }
+
+        /* ==========================================================================
            6. MODALI & POPUP (WIZARD, ARENA, ROULETTE, DETAILS, POST-GAME)
            ========================================================================== */
         .modal-backdrop {
@@ -2274,6 +2538,24 @@
                     </div>
                 </div>
 
+                <!-- Barra di Progresso Download nel Modale -->
+                <div id="detailsDlWidget" class="modal-dl-widget" style="display: none;">
+                    <div class="modal-dl-header">
+                        <div class="modal-dl-title-box">
+                            <span class="modal-dl-spinner">⏳</span>
+                            <span class="modal-dl-label" id="modalDlLabel">Scaricamento in corso...</span>
+                        </div>
+                        <span class="modal-dl-pct" id="modalDlPct">0%</span>
+                    </div>
+                    <div class="modal-dl-bar-track">
+                        <div class="modal-dl-bar-fill" id="modalDlFill" style="width: 0%;"></div>
+                    </div>
+                    <div class="modal-dl-meta-row">
+                        <span id="modalDlMeta">Ricezione pacchetto da archivio cloud...</span>
+                        <span id="modalDlSpeed" class="modal-dl-speed">-- MB/s</span>
+                    </div>
+                </div>
+
                 <!-- Footer Azioni -->
                 <div style="display: flex; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
                     <button type="button" class="btn btn-secondary" style="flex:1;" id="detailsCloseBtn" data-i18n="details_btn_close" onclick="closeGameDetailsModal()">Chiudi</button>
@@ -2706,6 +2988,15 @@
                 "toast_fav_removed": "Rimosso dai Preferiti",
                 "toast_download_start": "Download avviato per",
                 "toast_download_done": "Download completato con successo!",
+                "dl_connecting": "Connessione al Cloud...",
+                "dl_transferring": "Scaricamento pacchetto...",
+                "dl_verifying": "Verifica integrità file...",
+                "dl_finalizing": "Salvataggio locale...",
+                "dl_completed": "Download completato!",
+                "dl_toast_offline": "salvato localmente per il gioco offline!",
+                "dl_toast_launching": "Download completato! Avvio in corso...",
+                "dl_btn_progress": "SCARICAMENTO",
+                "badge_downloaded": "Installato su PC",
                 "toast_download_removed": "Download rimosso dal PC",
                 "toast_settings_saved": "Tutte le preferenze sono state salvate!",
                 "toast_cache_cleared": "Cache immagini svuotata con successo!"
@@ -2910,6 +3201,15 @@
                 "toast_fav_removed": "Removed from Favorites",
                 "toast_download_start": "Download started for",
                 "toast_download_done": "Download completed successfully!",
+                "dl_connecting": "Connecting to Cloud...",
+                "dl_transferring": "Downloading package...",
+                "dl_verifying": "Verifying file integrity...",
+                "dl_finalizing": "Finalizing local save...",
+                "dl_completed": "Download complete!",
+                "dl_toast_offline": "saved locally for offline play!",
+                "dl_toast_launching": "Download complete! Starting...",
+                "dl_btn_progress": "DOWNLOADING",
+                "badge_downloaded": "Installed Locally",
                 "toast_download_removed": "Download removed from PC",
                 "toast_settings_saved": "All preferences have been saved!",
                 "toast_cache_cleared": "Image cache cleared successfully!"
@@ -3114,6 +3414,15 @@
                 "toast_fav_removed": "Eliminado de Favoritos",
                 "toast_download_start": "Descarga iniciada para",
                 "toast_download_done": "¡Descarga completada con éxito!",
+                "dl_connecting": "Conectando al Cloud...",
+                "dl_transferring": "Descargando paquete...",
+                "dl_verifying": "Verificando integridad...",
+                "dl_finalizing": "Guardando localmente...",
+                "dl_completed": "¡Descarga completada!",
+                "dl_toast_offline": "¡guardado localmente para jugar sin conexión!",
+                "dl_toast_launching": "¡Descarga completada! Iniciando...",
+                "dl_btn_progress": "DESCARGANDO",
+                "badge_downloaded": "Instalado en PC",
                 "toast_download_removed": "Descarga eliminada del PC",
                 "toast_settings_saved": "¡Todas las preferencias han sido guardadas!",
                 "toast_cache_cleared": "¡Caché de portadas vaciada con éxito!"
@@ -3616,7 +3925,18 @@
             const isInstalled = !!g.is_installed;
             const isEn = (currentLang === 'en');
             const playBtn = document.getElementById('heroPlayBtn');
-            playBtn.innerText = isInstalled ? t('hero_play_now') : t('hero_download_play');
+            if (activeDownloads.has(g.id)) {
+                const dlInfo = activeDownloads.get(g.id);
+                playBtn.innerText = `⏳ ${t('dl_btn_progress')} (${Math.round(dlInfo.progress)}%)...`;
+                playBtn.disabled = true;
+                playBtn.style.opacity = '0.7';
+                playBtn.style.cursor = 'not-allowed';
+            } else {
+                playBtn.innerText = isInstalled ? t('hero_play_now') : t('hero_download_play');
+                playBtn.disabled = false;
+                playBtn.style.opacity = '1';
+                playBtn.style.cursor = 'pointer';
+            }
 
             const favBtn = document.getElementById('heroFavBtn');
             favBtn.innerText = g.is_favorite ? t('hero_fav_added') : t('hero_fav_add');
@@ -4082,6 +4402,14 @@
                 const brandColor = pInfo ? pInfo.color : '#00e5b4';
                 const isInstalled = !!g.is_installed;
 
+                const isDownloading = activeDownloads.has(g.id);
+                const dlItem = isDownloading ? activeDownloads.get(g.id) : null;
+                const dlPct = dlItem ? Math.round(dlItem.progress) : 0;
+                const dlOffset = 213.628 - (213.628 * (dlPct / 100));
+                const dlStage = dlItem ? getDownloadStageText(dlPct) : '';
+                const dlLoadedMb = dlItem ? (dlItem.estTotalMb * (dlPct / 100)).toFixed(1) : '0.0';
+                const dlMetaStr = dlItem ? `${dlLoadedMb} / ${dlItem.estTotalMb.toFixed(1)} MB` : '';
+
                 return `
                     <div class="game-card" style="--card-glow: ${brandColor}; --card-glow-shadow: ${brandColor}40;" onclick="launchGameById(${g.id})">
                         ${isTypographicMode || !g.cover_url ? `
@@ -4105,7 +4433,7 @@
                             <span class="card-platform-badge" style="border-color: ${brandColor};">${g.system_code}</span>
                             <div class="card-status-badges">
                                 ${g.is_favorite ? '<span class="card-status-pill" style="color:var(--accent-gold);">⭐</span>' : ''}
-                                <span class="card-status-pill">${isInstalled ? '💾' : '☁️'}</span>
+                                <span class="card-status-pill" id="card-badge-${g.id}">${isInstalled ? '💾' : '☁️'}</span>
                             </div>
                         </div>
 
@@ -4114,8 +4442,30 @@
                             <div class="card-subtext">${g.year} • ${escapeHtml(g.developer || g.genre)}</div>
                         </div>
 
+                        <!-- Modern OLED Download Progress Overlay -->
+                        <div class="card-dl-overlay ${isDownloading && dlPct >= 100 ? 'is-success' : ''}" 
+                             id="card-dl-overlay-${g.id}" 
+                             style="${isDownloading ? 'display:flex; opacity:1;' : 'display:none;'}"
+                             onclick="event.stopPropagation();">
+                            <div class="card-dl-gauge">
+                                <svg class="card-dl-svg" viewBox="0 0 80 80">
+                                    <circle class="card-dl-circle-track" cx="40" cy="40" r="34" />
+                                    <circle class="card-dl-circle-progress" id="card-dl-circle-${g.id}" cx="40" cy="40" r="34" style="stroke-dashoffset: ${dlOffset};" />
+                                </svg>
+                                <div class="card-dl-center-val">
+                                    <span class="card-dl-pct-num" id="card-dl-pct-${g.id}">${isDownloading && dlPct >= 100 ? '✓' : dlPct + '%'}</span>
+                                    <span class="card-dl-icon-state">⚡</span>
+                                </div>
+                            </div>
+                            <div class="card-dl-label" id="card-dl-status-${g.id}">${dlStage || t('dl_transferring')}</div>
+                            <div class="card-dl-bar-track">
+                                <div class="card-dl-bar-fill" id="card-dl-bar-${g.id}" style="width: ${dlPct}%;"></div>
+                            </div>
+                            <div class="card-dl-meta" id="card-dl-meta-${g.id}">${dlMetaStr}</div>
+                        </div>
+
                         <div class="card-quick-actions" onclick="event.stopPropagation();">
-                            <button class="quick-play-btn" onclick="launchGameById(${g.id})">${isInstalled ? t('card_play') : t('card_download')}</button>
+                            <button class="quick-play-btn ${isDownloading ? 'dl-active-btn' : ''}" id="card-quick-btn-${g.id}" onclick="launchGameById(${g.id})" ${isDownloading ? 'disabled' : ''}>${isDownloading ? `⏳ ${dlPct}%` : (isInstalled ? t('card_play') : t('card_download'))}</button>
                             <button class="quick-fav-btn ${g.is_favorite ? 'is-fav' : ''}" onclick="toggleGameFavorite(${g.id})">★</button>
                             <button class="quick-fav-btn" style="color:var(--accent-cyan);" title="${t('card_details_title')}" onclick="openGameDetailsModalById(${g.id})">ℹ️</button>
                         </div>
@@ -4125,35 +4475,276 @@
         }
 
         // --------------------------------------------------------------------------
-        // 5. AZIONI DI LANCIO & PREFERITI
+        // 5. AZIONI DI LANCIO & DOWNLOAD ON-DEMAND CON BARRA DI PROGRESSIONE 60FPS
         // --------------------------------------------------------------------------
+        const activeDownloads = new Map();
+
+        function getEstimatedRomSize(platform) {
+            switch ((platform || '').toUpperCase()) {
+                case 'NES': return 0.5;
+                case 'SNES': return 3.2;
+                case 'MEGADRIVE': case 'GENESIS': return 2.8;
+                case 'GBA': return 8.5;
+                case 'N64': return 24.0;
+                case 'PSX': case 'PS1': return 540.0;
+                case 'MAME': case 'ARCADE': case 'NEOGEO': return 18.5;
+                case 'PINBALL': return 35.0;
+                case 'HYPSEUS': return 920.0;
+                case 'INDIE': case 'PC': return 280.0;
+                default: return 12.0;
+            }
+        }
+
+        function getDownloadStageText(pct) {
+            if (pct < 18) return t('dl_connecting');
+            if (pct < 82) return t('dl_transferring');
+            if (pct < 95) return t('dl_verifying');
+            if (pct < 100) return t('dl_finalizing');
+            return t('dl_completed');
+        }
+
+        function updateDownloadUI(id) {
+            const item = activeDownloads.get(id);
+            if (!item) return;
+
+            const pct = Math.min(100, Math.max(0, item.progress));
+            const roundPct = Math.round(pct);
+            const stageText = getDownloadStageText(pct);
+            const estMb = item.estTotalMb;
+            const loadedMb = (estMb * (pct / 100)).toFixed(1);
+            const metaStr = `${loadedMb} / ${estMb.toFixed(1)} MB`;
+            const speedStr = `${item.speedMbps.toFixed(1)} MB/s`;
+
+            // 1. Aggiorna overlay su Card (se presente nel DOM corrente)
+            const overlay = document.getElementById(`card-dl-overlay-${id}`);
+            if (overlay) {
+                overlay.style.display = 'flex';
+                overlay.style.opacity = '1';
+                
+                const circle = document.getElementById(`card-dl-circle-${id}`);
+                if (circle) {
+                    const offset = 213.628 - (213.628 * (pct / 100));
+                    circle.style.strokeDashoffset = `${offset}`;
+                }
+                const pctEl = document.getElementById(`card-dl-pct-${id}`);
+                if (pctEl) pctEl.innerText = `${roundPct}%`;
+
+                const barEl = document.getElementById(`card-dl-bar-${id}`);
+                if (barEl) barEl.style.width = `${pct}%`;
+
+                const statusEl = document.getElementById(`card-dl-status-${id}`);
+                if (statusEl) statusEl.innerText = stageText;
+
+                const metaEl = document.getElementById(`card-dl-meta-${id}`);
+                if (metaEl) metaEl.innerText = `${metaStr} • ${speedStr}`;
+
+                const quickBtn = document.getElementById(`card-quick-btn-${id}`);
+                if (quickBtn) {
+                    quickBtn.innerText = `⏳ ${roundPct}%`;
+                    quickBtn.disabled = true;
+                    quickBtn.classList.add('dl-active-btn');
+                }
+            }
+
+            // 2. Aggiorna modale dettagli se aperta per questo gioco
+            if (activeDetailsGame && activeDetailsGame.id === id) {
+                const modalWidget = document.getElementById('detailsDlWidget');
+                if (modalWidget) {
+                    modalWidget.style.display = 'block';
+                    const modalPct = document.getElementById('modalDlPct');
+                    if (modalPct) modalPct.innerText = `${roundPct}%`;
+                    const modalFill = document.getElementById('modalDlFill');
+                    if (modalFill) modalFill.style.width = `${pct}%`;
+                    const modalLabel = document.getElementById('modalDlLabel');
+                    if (modalLabel) modalLabel.innerText = stageText;
+                    const modalMeta = document.getElementById('modalDlMeta');
+                    if (modalMeta) modalMeta.innerText = metaStr;
+                    const modalSpeed = document.getElementById('modalDlSpeed');
+                    if (modalSpeed) modalSpeed.innerText = speedStr;
+                }
+                const playBtn = document.getElementById('detailsPlayBtn');
+                if (playBtn) {
+                    playBtn.innerText = `⏳ ${t('dl_btn_progress')} (${roundPct}%)...`;
+                    playBtn.disabled = true;
+                    playBtn.style.opacity = '0.7';
+                    playBtn.style.cursor = 'not-allowed';
+                }
+            }
+
+            // 3. Aggiorna Hero se questo gioco è attualmente in primo piano
+            const heroGame = heroList[heroIndex];
+            if (heroGame && heroGame.id === id) {
+                const heroPlayBtn = document.getElementById('heroPlayBtn');
+                if (heroPlayBtn) {
+                    heroPlayBtn.innerText = `⏳ ${t('dl_btn_progress')} (${roundPct}%)...`;
+                    heroPlayBtn.disabled = true;
+                    heroPlayBtn.style.opacity = '0.7';
+                    heroPlayBtn.style.cursor = 'not-allowed';
+                }
+            }
+        }
+
+        function completeDownload(id) {
+            const item = activeDownloads.get(id);
+            if (!item) return;
+
+            if (item.intervalId) clearInterval(item.intervalId);
+
+            item.progress = 100;
+            updateDownloadUI(id);
+
+            const g = allGames.find(x => x.id === id);
+            if (!g) {
+                activeDownloads.delete(id);
+                return;
+            }
+
+            // Effetti visivi di completamento (emerald checkmark & glow)
+            const overlay = document.getElementById(`card-dl-overlay-${id}`);
+            if (overlay) {
+                overlay.classList.add('is-success');
+                const pctEl = document.getElementById(`card-dl-pct-${id}`);
+                if (pctEl) pctEl.innerText = '✓';
+                const statusEl = document.getElementById(`card-dl-status-${id}`);
+                if (statusEl) statusEl.innerText = t('dl_completed');
+            }
+
+            // Aggiorna stato applicazione
+            g.is_installed = true;
+            downloadedGameIds.add(g.id);
+            saveDownloadedGamesToStorage();
+            updateCounters();
+
+            // Aggiorna badge card istantaneamente nel DOM
+            const badgeEl = document.getElementById(`card-badge-${id}`);
+            if (badgeEl) {
+                badgeEl.innerText = '💾';
+                badgeEl.classList.add('card-badge-pop');
+            }
+
+            // Aggiorna pulsante rapido card
+            const quickBtn = document.getElementById(`card-quick-btn-${id}`);
+            if (quickBtn) {
+                quickBtn.innerText = t('card_play');
+                quickBtn.disabled = false;
+                quickBtn.classList.remove('dl-active-btn');
+            }
+
+            // Aggiorna modale se aperta
+            if (activeDetailsGame && activeDetailsGame.id === id) {
+                const storageBadge = document.getElementById('detailsStorageBadge');
+                if (storageBadge) {
+                    storageBadge.className = 'status-badge downloaded';
+                    storageBadge.innerText = t('details_badge_installed');
+                }
+                const removeBtn = document.getElementById('detailsRemoveBtn');
+                if (removeBtn) removeBtn.style.display = 'inline-flex';
+                const playBtn = document.getElementById('detailsPlayBtn');
+                if (playBtn) {
+                    playBtn.innerText = t('details_btn_play_installed');
+                    playBtn.disabled = false;
+                    playBtn.style.opacity = '1';
+                    playBtn.style.cursor = 'pointer';
+                }
+                const modalWidget = document.getElementById('detailsDlWidget');
+                if (modalWidget) {
+                    setTimeout(() => { modalWidget.style.display = 'none'; }, 1000);
+                }
+            }
+
+            // Aggiorna Hero se in primo piano
+            const heroGame = heroList[heroIndex];
+            if (heroGame && heroGame.id === id) {
+                const heroPlayBtn = document.getElementById('heroPlayBtn');
+                if (heroPlayBtn) {
+                    heroPlayBtn.innerText = t('hero_play_now');
+                    heroPlayBtn.disabled = false;
+                    heroPlayBtn.style.opacity = '1';
+                    heroPlayBtn.style.cursor = 'pointer';
+                }
+            }
+
+            // Notifica toast
+            if (item.andLaunchAfter) {
+                showToast(t('dl_toast_launching'));
+            } else {
+                showToast(`✅ ${g.title} ${t('dl_toast_offline')}`);
+            }
+
+            // Dissolvenza dell'overlay su card dopo 550ms
+            setTimeout(() => {
+                if (overlay) {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        overlay.classList.remove('is-success');
+                        activeDownloads.delete(id);
+                    }, 350);
+                } else {
+                    activeDownloads.delete(id);
+                }
+
+                if (item.andLaunchAfter) {
+                    setTimeout(() => { launchGameById(id); }, 300);
+                }
+            }, 550);
+        }
+
         function downloadGameOnDemand(id, andLaunchAfter = false) {
+            if (activeDownloads.has(id)) return;
+
             const g = allGames.find(x => x.id === id);
             if (!g) return;
 
-            const isEn = (currentLang === 'en');
-            showToast(isEn ? `Downloading ${g.title}...` : `Download in corso: ${g.title}...`);
+            const estTotalMb = getEstimatedRomSize(g.system_code);
+            const speedMbps = +(14.5 + Math.random() * 8.0).toFixed(1);
 
-            let progress = 0;
-            const progressInterval = setInterval(() => {
-                progress += 25;
-                if (progress >= 100) {
-                    clearInterval(progressInterval);
-                    g.is_installed = true;
-                    downloadedGameIds.add(g.id);
-                    saveDownloadedGamesToStorage();
-                    updateCounters();
-                    renderCatalog();
-                    renderHeroSlide();
-                    if (activeDetailsGame && activeDetailsGame.id === g.id) {
-                        openGameDetails(g);
-                    }
-                    showToast(isEn ? `✅ ${g.title} downloaded and ready for offline play!` : `✅ ${g.title} salvato localmente per il gioco offline!`);
-                    if (andLaunchAfter) {
-                        setTimeout(() => { launchGameById(id); }, 300);
-                    }
+            const downloadItem = {
+                id: id,
+                progress: 0,
+                estTotalMb: estTotalMb,
+                speedMbps: speedMbps,
+                andLaunchAfter: andLaunchAfter,
+                intervalId: null
+            };
+            activeDownloads.set(id, downloadItem);
+
+            updateDownloadUI(id);
+            const isEn = (currentLang === 'en');
+            const isEs = (currentLang === 'es');
+            showToast(isEn ? `Downloading: ${g.title}...` : (isEs ? `Descargando: ${g.title}...` : `Scaricamento: ${g.title}...`));
+
+            let backendDone = false;
+            fetch('/api/library/download', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ game_id: id })
+            }).then(res => res.json()).then(data => {
+                backendDone = true;
+            }).catch(err => {
+                backendDone = true;
+            });
+
+            const startTime = Date.now();
+            const targetDurationMs = Math.min(3800, Math.max(1600, estTotalMb * 55));
+
+            downloadItem.intervalId = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                let naturalProgress = (elapsed / targetDurationMs) * 100;
+
+                if (!backendDone && naturalProgress > 92) {
+                    naturalProgress = 92;
                 }
-            }, 200);
+
+                downloadItem.speedMbps = +(speedMbps + (Math.random() * 3.0 - 1.5)).toFixed(1);
+                downloadItem.progress = Math.min(100, naturalProgress);
+                updateDownloadUI(id);
+
+                if (downloadItem.progress >= 100) {
+                    clearInterval(downloadItem.intervalId);
+                    completeDownload(id);
+                }
+            }, 35);
         }
 
         function removeCurrentDetailsDownload() {
@@ -4182,6 +4773,11 @@
         async function launchGameById(id) {
             const g = allGames.find(x => x.id === id);
             if (!g) return;
+
+            if (activeDownloads.has(id)) {
+                // Download già in esecuzione
+                return;
+            }
 
             const isInstalled = !!g.is_installed;
             if (!isInstalled) {
@@ -5005,7 +5601,18 @@
             favBtn.style.color = g.is_favorite ? 'var(--accent-gold)' : '#fff';
 
             const playBtn = document.getElementById('detailsPlayBtn');
-            playBtn.innerText = isInstalled ? t('details_btn_play_installed') : t('details_btn_play_cloud');
+            const modalWidget = document.getElementById('detailsDlWidget');
+            if (activeDownloads.has(g.id)) {
+                updateDownloadUI(g.id);
+            } else {
+                if (modalWidget) modalWidget.style.display = 'none';
+                if (playBtn) {
+                    playBtn.innerText = isInstalled ? t('details_btn_play_installed') : t('details_btn_play_cloud');
+                    playBtn.disabled = false;
+                    playBtn.style.opacity = '1';
+                    playBtn.style.cursor = 'pointer';
+                }
+            }
 
             const removeBtn = document.getElementById('detailsRemoveBtn');
             if (removeBtn) {
