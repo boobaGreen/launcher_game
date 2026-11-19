@@ -106,20 +106,33 @@ fn main() {
     let plugins = load_plugins();
     println!("🔌 Plugin caricati: MAME, Gluiz");
 
-    // Sincronizzazione automatica all'avvio con transazione (<40ms)
-    println!("⏳ Sincronizzazione collezione con il catalogo unificato (1149 giochi)...");
+    // Sincronizzazione catalogo: se emu_root è vuoto (Modalità Vergine), popola la libreria on-demand cloud da zero
     let t0 = std::time::Instant::now();
-    match CatalogLoader::load_from_master_catalog(emu_path) {
-        Ok(games) => {
-            let total = games.len();
-            if let Err(e) = db.upsert_games_batch(&games) {
-                eprintln!("⚠ Errore upsert batch: {}", e);
-            } else {
-                println!("✔ {} giochi caricati e sincronizzati in retro_hub.db in {:?}!", total, t0.elapsed());
-            }
+    let emu_str = emu_path.to_string_lossy();
+    if emu_str.trim().is_empty() || !emu_path.exists() {
+        println!("✨ RetroHub avviato in Modalità Vergine (Nuovo Utente): 0 file locali collegati.");
+        println!("☁️ Inizializzazione Catalogo Cloud On-Demand completo...");
+        let cloud_games = crate::master_catalog::MasterCatalog::get_cloud_catalog(1);
+        let total = cloud_games.len();
+        if let Err(e) = db.reset_catalog(&cloud_games) {
+            eprintln!("⚠ Errore reset catalogo cloud: {}", e);
+        } else {
+            println!("✔ {} giochi Cloud On-Demand inizializzati a 0 byte in {:?}!", total, t0.elapsed());
         }
-        Err(e) => {
-            eprintln!("⚠ Caricamento da catalogo non riuscito: {}", e);
+    } else {
+        println!("⏳ Sincronizzazione collezione da cartella locale: {}...", emu_str);
+        match CatalogLoader::load_from_master_catalog(emu_path) {
+            Ok(games) => {
+                let total = games.len();
+                if let Err(e) = db.upsert_games_batch(&games) {
+                    eprintln!("⚠ Errore upsert batch: {}", e);
+                } else {
+                    println!("✔ {} giochi caricati e sincronizzati in retro_hub.db in {:?}!", total, t0.elapsed());
+                }
+            }
+            Err(e) => {
+                eprintln!("⚠ Caricamento da catalogo non riuscito: {}", e);
+            }
         }
     }
 

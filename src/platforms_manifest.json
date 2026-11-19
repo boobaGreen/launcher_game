@@ -277,6 +277,66 @@
       "extensions": [".exe"],
       "core": "native",
       "is_top_ten": true
+    },
+    {
+      "code": "LASERDISC",
+      "name": "Laserdisc & FMV (Hypseus / Daphne)",
+      "category": "Laserdisc",
+      "manufacturer": "Cinematronics / Various",
+      "year": 1983,
+      "color": "#ec4899",
+      "icon": "📀",
+      "extensions": [".daphne", ".singe"],
+      "core": "hypseus",
+      "is_top_ten": false
+    },
+    {
+      "code": "PINBALL",
+      "name": "Pinball & Flipper (VPX / Future)",
+      "category": "Pinball",
+      "manufacturer": "Various",
+      "year": 1990,
+      "color": "#06b6d4",
+      "icon": "🎯",
+      "extensions": [".vpx", ".fpt"],
+      "core": "vpx",
+      "is_top_ten": false
+    },
+    {
+      "code": "GAMEWATCH",
+      "name": "Nintendo Game & Watch",
+      "category": "LCD",
+      "manufacturer": "Nintendo",
+      "year": 1980,
+      "color": "#84cc16",
+      "icon": "📟",
+      "extensions": [".mgw"],
+      "core": "gw_libretro.dll",
+      "is_top_ten": false
+    },
+    {
+      "code": "MSX",
+      "name": "MSX / MSX2 Home Computer",
+      "category": "Nippon",
+      "manufacturer": "ASCII / Microsoft Japan",
+      "year": 1983,
+      "color": "#f43f5e",
+      "icon": "🗾",
+      "extensions": [".rom", ".dsk"],
+      "core": "fmsx_libretro.dll",
+      "is_top_ten": false
+    },
+    {
+      "code": "VECTREX",
+      "name": "GCE Vectrex Vector Console",
+      "category": "Atari",
+      "manufacturer": "GCE / Milton Bradley",
+      "year": 1982,
+      "color": "#eab308",
+      "icon": "📐",
+      "extensions": [".vec"],
+      "core": "vecx_libretro.dll",
+      "is_top_ten": false
     }
   ]
 }

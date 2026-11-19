@@ -292,6 +292,132 @@
         }
 
         /* ==========================================================================
+           2B. APP LAYOUT & LEFT SIDEBAR (12 MACRO-FAMILIES - STEAM/PLAYNITE HYBRID)
+           ========================================================================== */
+        .app-layout {
+            display: flex;
+            min-height: calc(100vh - 65px);
+        }
+
+        .left-sidebar {
+            width: 68px;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: sticky;
+            top: 65px;
+            height: calc(100vh - 65px);
+            z-index: 90;
+            transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .left-sidebar:hover, .left-sidebar.expanded {
+            width: 255px;
+            box-shadow: 8px 0 32px rgba(0, 0, 0, 0.75);
+        }
+
+        .sidebar-nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding: 10px 8px;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+        .sidebar-nav-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-size: 0.84rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        .sidebar-item:hover {
+            background: var(--bg-surface-elevated);
+            color: #fff;
+        }
+
+        .sidebar-item.active {
+            background: rgba(0, 229, 180, 0.12);
+            color: var(--accent-cyan);
+            border-left: 3px solid var(--accent-cyan);
+        }
+
+        .sidebar-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .sidebar-icon svg {
+            width: 19px;
+            height: 19px;
+            stroke: currentColor;
+        }
+
+        .sidebar-label {
+            opacity: 0;
+            transform: translateX(-6px);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            pointer-events: none;
+            flex: 1;
+        }
+        .left-sidebar:hover .sidebar-label, .left-sidebar.expanded .sidebar-label {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        .sidebar-count {
+            font-size: 0.70rem;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 1px 7px;
+            border-radius: 10px;
+            color: var(--text-muted);
+            opacity: 0;
+            transition: opacity 0.18s ease;
+        }
+        .left-sidebar:hover .sidebar-count, .left-sidebar.expanded .sidebar-count {
+            opacity: 1;
+        }
+        .sidebar-item.active .sidebar-count {
+            background: rgba(0, 229, 180, 0.25);
+            color: #fff;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border-subtle);
+            margin: 6px 8px;
+        }
+
+        .main-viewport {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 40px;
+        }
+
+        /* ==========================================================================
            3. HERO SPOTLIGHT WIDESCREEN (CINEMATIC ROTATION SHOWCASE)
            ========================================================================== */
         .hero-container {
@@ -300,8 +426,8 @@
 
         .hero-banner {
             position: relative;
-            min-height: 420px;
-            max-height: 420px;
+            min-height: 450px;
+            max-height: 450px;
             border-radius: var(--radius-xl);
             overflow: hidden;
             background: linear-gradient(135deg, #0e1422 0%, #070a11 100%);
@@ -310,48 +436,54 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 36px 48px;
+            padding: 32px 48px 60px 48px;
             gap: 36px;
         }
 
-        /* 3-Layer Ambient Backdrop */
+        /* 3-Layer Ambient Backdrop Re-engineered */
         .hero-bg-cover-backdrop {
             position: absolute;
-            inset: -40px;
+            inset: 0;
             background-size: cover;
-            background-position: center;
-            filter: blur(50px) brightness(0.24) saturate(1.8);
-            opacity: 0.95;
-            transition: background-image 0.6s ease-in-out;
+            background-position: right center;
+            opacity: 0.65;
+            transition: background-image 0.5s ease-in-out, opacity 0.4s ease;
             pointer-events: none;
             z-index: 1;
+            filter: contrast(1.08) saturate(1.25);
         }
 
         .hero-bg-glow {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 75% 50%, var(--current-glow, rgba(0, 229, 180, 0.22)) 0%, transparent 65%);
+            background: radial-gradient(circle at 80% 40%, var(--current-glow, rgba(0, 229, 180, 0.28)) 0%, transparent 60%);
             pointer-events: none;
             z-index: 2;
-            transition: background 0.6s ease;
+            transition: background 0.5s ease;
         }
 
         .hero-bg-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to right, rgba(7, 9, 14, 0.98) 0%, rgba(7, 9, 14, 0.72) 55%, rgba(7, 9, 14, 0.90) 100%);
+            background: linear-gradient(to right, 
+                #070a11 0%, 
+                rgba(7, 10, 17, 0.96) 38%, 
+                rgba(7, 10, 17, 0.65) 65%, 
+                rgba(7, 10, 17, 0.30) 85%, 
+                #070a11 100%
+            );
             pointer-events: none;
             z-index: 3;
         }
 
-        /* Contenuto Sinistro */
+        /* Contenuto Sinistro con Posizioni Fisse Anchored */
         .hero-content {
             position: relative;
             z-index: 4;
             max-width: 640px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .hero-super-tags {
@@ -359,6 +491,7 @@
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
+            height: 26px;
         }
 
         .hero-system-pill {
@@ -383,7 +516,7 @@
         }
 
         .hero-title {
-            font-size: 2.5rem;
+            font-size: 2.35rem;
             font-weight: 800;
             line-height: 1.15;
             letter-spacing: -0.8px;
@@ -393,15 +526,18 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            height: 2.3em;
+            max-height: 2.3em;
         }
 
         .hero-meta {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 0.88rem;
+            font-size: 0.86rem;
             color: var(--text-secondary);
             font-weight: 500;
+            height: 22px;
         }
         .hero-meta span {
             color: #cbd5e1;
@@ -409,14 +545,16 @@
         }
 
         .hero-desc {
-            font-size: 0.92rem;
-            line-height: 1.55;
+            font-size: 0.90rem;
+            line-height: 1.45;
             color: #94a3b8;
             max-width: 580px;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            height: 2.9em;
+            max-height: 2.9em;
         }
 
         .hero-controls-hint {
@@ -425,19 +563,21 @@
             gap: 8px;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 6px 12px;
+            padding: 5px 12px;
             border-radius: var(--radius-sm);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #cbd5e1;
             font-family: var(--font-mono);
             width: fit-content;
+            height: 28px;
         }
 
         .hero-actions-row {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-top: 6px;
+            margin-top: 4px;
+            margin-bottom: 8px;
         }
 
         /* Contenuto Destro (Copertina 3D) */
@@ -503,10 +643,10 @@
             line-height: 1.3;
         }
 
-        /* Striscia Inferiore di Navigazione & Timer */
+        /* Striscia Inferiore di Navigazione & Timer (Spaziata & Protetta) */
         .hero-footer-strip {
             position: absolute;
-            bottom: 14px;
+            bottom: 16px;
             left: 48px;
             right: 48px;
             z-index: 5;
@@ -563,19 +703,42 @@
             border-radius: 3px;
         }
 
-        .hero-config-btn {
+        /* Hero 4-Source Segmented Control */
+        .hero-source-segmented {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-pill);
+            padding: 3px;
+            gap: 4px;
+        }
+
+        .hero-source-btn {
             background: transparent;
-            border: none;
+            border: 1px solid transparent;
             color: var(--text-muted);
-            font-size: 0.8rem;
+            font-size: 0.76rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: var(--radius-pill);
             cursor: pointer;
-            display: flex;
+            transition: var(--transition-fast);
+            display: inline-flex;
             align-items: center;
             gap: 6px;
-            transition: var(--transition-fast);
         }
-        .hero-config-btn:hover {
+
+        .hero-source-btn:hover {
             color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-source-btn.active {
+            background: rgba(0, 229, 180, 0.18);
+            color: var(--accent-cyan);
+            border-color: rgba(0, 229, 180, 0.4);
+            box-shadow: 0 0 12px var(--accent-cyan-glow);
         }
 
         /* ==========================================================================
@@ -1119,87 +1282,239 @@
         </div>
 
         <div class="nav-actions">
-            <button class="btn btn-roulette" onclick="triggerRoulette()" title="Sorprendimi con un gioco casuale! (Tasto Y su Gamepad)">
-                <span class="dice-icon">🎲</span> Sorprendimi
+            <button class="btn btn-secondary" onclick="openAdvSearchModal()" title="Filtri Avanzati di Ricerca (Anno, Genere, Sviluppatore)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                Filtri
             </button>
-            <button id="sandboxToggleBtn" class="btn btn-sandbox" onclick="toggleSandboxMode()" title="Simula l'esperienza da nuovo utente a catalogo vuoto">
-                🧪 Simula Nuovo Utente
+            <button class="btn btn-roulette" onclick="triggerRoulette()" title="Sorprendimi con un gioco casuale! (Tasto Y su Gamepad)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="12" cy="12" r="1.5"/></svg>
+                Sorprendimi
             </button>
             <button class="btn btn-secondary" onclick="openArenaModal()" title="Lobby P2P e Classifiche Online">
-                ⚔️ Arena
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="14.5" y1="9.5" x2="19" y2="5"/><polyline points="15 5 19 5 19 9"/><polyline points="14 15 9 20 4 15 9 10 14 15"/><line x1="4.5" y1="9.5" x2="9" y2="5"/></svg>
+                Arena
             </button>
-            <button class="btn btn-secondary" onclick="openWizardModal()" title="Configurazione Guidata Storage & Percorsi">
-                🧙 Wizard
+            <button class="btn btn-primary" onclick="openWizardModal()" title="Configurazione Guidata Storage & Percorsi">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/></svg>
+                Setup Wizard
             </button>
         </div>
     </header>
 
     <!-- ==========================================================================
-         HERO SPOTLIGHT WIDESCREEN BANNER
+         APP TWO-COLUMN WORKSPACE: LEFT SIDEBAR + MAIN VIEWPORT
          ========================================================================== -->
-    <section class="hero-container" id="heroContainer">
-        <div class="hero-banner" id="heroBanner">
-            <!-- 3-Layer Ambient Backdrop -->
-            <div class="hero-bg-cover-backdrop" id="heroBackdrop"></div>
-            <div class="hero-bg-glow" id="heroGlow"></div>
-            <div class="hero-bg-overlay"></div>
+    <div class="app-layout">
+        <!-- LEFT SIDEBAR: 12 MACRO-FAMILIES (~200 SISTEMI) -->
+        <aside class="left-sidebar" id="leftSidebar" title="Tassonomia 12 Macro-Famiglie">
+            <div class="sidebar-nav-list">
+                <div class="sidebar-item active" id="sideNavALL" onclick="selectMacroFamily('ALL')">
+                    <div class="sidebar-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </div>
+                    <span class="sidebar-label">Tutti i Giochi</span>
+                    <span class="sidebar-count" id="sideCountALL">0</span>
+                </div>
 
-            <!-- Content Column -->
-            <div class="hero-content">
-                <div class="hero-super-tags">
-                    <span class="hero-system-pill" id="heroSystemPill">SNES</span>
-                    <span class="hero-source-pill" id="heroSourcePill">👑 CONSIGLIATO DEL GIORNO</span>
+                <div class="sidebar-item" id="sideNavFAV" onclick="selectMacroFamily('FAVORITES')">
+                    <div class="sidebar-icon" style="color: var(--accent-gold);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                    <span class="sidebar-label">I Tuoi Preferiti</span>
+                    <span class="sidebar-count" id="sideCountFAV">0</span>
                 </div>
-                <h1 class="hero-title" id="heroTitle">Super Mario World</h1>
-                <div class="hero-meta" id="heroMeta">
-                    <span>1990</span> • <span>Nintendo</span> • <span>Platformer</span> • <span>👥 2 Giocatori</span>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- 12 Macro-Famiglie Universali -->
+                <div class="sidebar-item" id="sideNavARCADE" onclick="selectMacroFamily('ARCADE')">
+                    <div class="sidebar-icon" style="color: #f97316;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>
+                    </div>
+                    <span class="sidebar-label">Arcade Coin-Op</span>
+                    <span class="sidebar-count" id="sideCountARCADE">0</span>
                 </div>
-                <p class="hero-desc" id="heroDesc">
-                    Il capolavoro assoluto a 16-bit. Esplora Dinosaur Land, scopri 96 uscite segrete e cavalca per la prima volta l'iconico dinosauro Yoshi!
-                </p>
-                <div class="hero-controls-hint" id="heroControlsHint">
-                    🎮 Xbox: A Salto, X Corsa/Sputa, B Giro, Start Pausa
+
+                <div class="sidebar-item" id="sideNavLASERDISC" onclick="selectMacroFamily('LASERDISC')">
+                    <div class="sidebar-icon" style="color: #ec4899;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/></svg>
+                    </div>
+                    <span class="sidebar-label">Laserdisc & FMV</span>
+                    <span class="sidebar-count" id="sideCountLASERDISC">0</span>
                 </div>
-                <div class="hero-actions-row">
-                    <button class="btn btn-primary" id="heroPlayBtn" onclick="launchHeroCurrentGame()">
-                        ▶ GIOCA ORA
-                    </button>
-                    <button class="btn btn-secondary" id="heroFavBtn" onclick="toggleHeroFavorite()">
-                        ★ Preferito
-                    </button>
-                    <button class="btn btn-secondary" onclick="triggerRoulette()">
-                        🎲 Casuale
-                    </button>
-                    <button class="btn btn-secondary" onclick="openHeroGameDetails()">
-                        ℹ️ Dettagli
-                    </button>
+
+                <div class="sidebar-item" id="sideNavPINBALL" onclick="selectMacroFamily('PINBALL')">
+                    <div class="sidebar-icon" style="color: #06b6d4;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 19 21 12 17 5 21 12 2"/><circle cx="12" cy="10" r="2"/></svg>
+                    </div>
+                    <span class="sidebar-label">Pinball & Flipper</span>
+                    <span class="sidebar-count" id="sideCountPINBALL">0</span>
+                </div>
+
+                <div class="sidebar-item" id="sideNavLCD" onclick="selectMacroFamily('LCD')">
+                    <div class="sidebar-icon" style="color: #84cc16;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="8" cy="7.5" r="1.5"/></svg>
+                    </div>
+                    <span class="sidebar-label">LCD & Game & Watch</span>
+                    <span class="sidebar-count" id="sideCountLCD">0</span>
+                </div>
+
+                <div class="sidebar-item" id="sideNavNINTENDO" onclick="selectMacroFamily('NINTENDO')">
+                    <div class="sidebar-icon" style="color: #ef4444;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M12 8a4 4 0 0 1 4 4 4 4 0 0 1-4 4"/></svg>
+                    </div>
+                    <span class="sidebar-label">Nintendo Universe</span>
+                    <span class="sidebar-count" id="sideCountNINTENDO">0</span>
+                </div>
+
+                <div class="sidebar-item" id="sideNavSEGA" onclick="selectMacroFamily('SEGA')">
+                    <div class="sidebar-icon" style="color: #0284c7;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+                    </div>
+                    <span class="sidebar-label">Sega Universe</span>
+                    <span class="sidebar-count" id="sideCountSEGA">0</span>
+                </div>
+
+                <div class="sidebar-item" id="sideNavSONY" onclick="selectMacroFamily('SONY')">
+                    <div class="sidebar-icon" style="color: #3b82f6;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 4 4 18 20 18 12 4"/><circle cx="12" cy="13" r="2"/></svg>
+                    </div>
+                    <span class="sidebar-label">Sony PlayStation</span>
+                    <span class="sidebar-count" id="sideCountSONY">0</span>
+                </div>
+
+                <div class="sidebar-item" id="sideNavATARI" onclick="selectMacroFamily('ATARI')">
+                    <div class="sidebar-icon" style="color: #eab308;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M5 21a14 14 0 0 1 0-18"/><path d="M19 21a14 14 0 0 0 0-18"/></svg>
+                    </div>
+                    <span class="sidebar-label">Atari & Pioneers</span>
+                    <span class="sidebar-count" id="sideCountATARI">0</span>
+                </div>
+
+                <div class="sidebar-item" id="sideNavSNKNEC" onclick="selectMacroFamily('SNKNEC')">
+                    <div class="sidebar-icon" style="color: #a855f7;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <span class="sidebar-label">SNK & NEC Engine</span>
+                    <span class="sidebar-count" id="sideCountSNKNEC">0</span>
+                </div>
+
+                <div class="sidebar-item" id="sideNavCOMPUTER" onclick="selectMacroFamily('COMPUTER')">
+                    <div class="sidebar-icon" style="color: #10b981;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    </div>
+                    <span class="sidebar-label">Computer Occidentali</span>
+                    <span class="sidebar-count" id="sideCountCOMPUTER">0</span>
+                </div>
+
+                <div class="sidebar-item" id="sideNavNIPPON" onclick="selectMacroFamily('NIPPON')">
+                    <div class="sidebar-icon" style="color: #f43f5e;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="14" x="3" y="4" rx="2"/><circle cx="12" cy="11" r="3"/></svg>
+                    </div>
+                    <span class="sidebar-label">Nippon Computers</span>
+                    <span class="sidebar-count" id="sideCountNIPPON">0</span>
+                </div>
+
+                <div class="sidebar-item" id="sideNavPC" onclick="selectMacroFamily('PC')">
+                    <div class="sidebar-icon" style="color: #00e5b4;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
+                    </div>
+                    <span class="sidebar-label">PC Recomp & Indie</span>
+                    <span class="sidebar-count" id="sideCountPC">0</span>
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <div class="sidebar-item" id="sideNavCUSTOM" onclick="openCustomCollectionsModal()">
+                    <div class="sidebar-icon" style="color: #38bdf8;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    </div>
+                    <span class="sidebar-label">Raccolte Custom</span>
+                    <span class="sidebar-count">+</span>
                 </div>
             </div>
+        </aside>
 
-            <!-- Visual Column (Floating 3D Boxart) -->
-            <div class="hero-visual-side">
-                <div class="hero-cover-wrapper" id="heroCoverWrapper">
-                    <img id="heroCoverImg" class="hero-cover-img" src="" alt="Cover" onerror="handleHeroCoverError()">
-                    <div class="hero-cover-fallback" id="heroCoverFallback" style="display:none;">
-                        <div class="hero-fallback-icon">🎮</div>
-                        <div class="hero-fallback-title" id="heroFallbackTitle">Super Mario World</div>
+        <!-- MAIN VIEWPORT CONTAINER -->
+        <div class="main-viewport">
+
+            <!-- ==========================================================================
+                 HERO SPOTLIGHT WIDESCREEN BANNER
+                 ========================================================================== -->
+            <section class="hero-container" id="heroContainer">
+                <div class="hero-banner" id="heroBanner">
+                    <!-- 3-Layer Ambient Backdrop Re-engineered -->
+                    <div class="hero-bg-cover-backdrop" id="heroBackdrop"></div>
+                    <div class="hero-bg-glow" id="heroGlow"></div>
+                    <div class="hero-bg-overlay"></div>
+
+                    <!-- Content Column -->
+                    <div class="hero-content">
+                        <div class="hero-super-tags">
+                            <span class="hero-system-pill" id="heroSystemPill">SNES</span>
+                            <span class="hero-source-pill" id="heroSourcePill">👑 SPOTLIGHT DEL GIORNO</span>
+                        </div>
+                        <h1 class="hero-title" id="heroTitle">Super Mario World</h1>
+                        <div class="hero-meta" id="heroMeta">
+                            <span>1990</span> • <span>Nintendo</span> • <span>Platformer</span> • <span>👥 2 Giocatori</span>
+                        </div>
+                        <p class="hero-desc" id="heroDesc">
+                            Il capolavoro assoluto a 16-bit. Esplora Dinosaur Land, scopri 96 uscite segrete e cavalca per la prima volta l'iconico dinosauro Yoshi!
+                        </p>
+                        <div class="hero-controls-hint" id="heroControlsHint">
+                            🎮 Xbox: A Salto, X Corsa/Sputa, B Giro, Start Pausa
+                        </div>
+                        <div class="hero-actions-row">
+                            <button class="btn btn-primary" id="heroPlayBtn" onclick="launchHeroCurrentGame()">
+                                ▶ GIOCA ORA
+                            </button>
+                            <button class="btn btn-secondary" id="heroFavBtn" onclick="toggleHeroFavorite()">
+                                ★ Preferito
+                            </button>
+                            <button class="btn btn-secondary" onclick="triggerRoulette()">
+                                🎲 Casuale
+                            </button>
+                            <button class="btn btn-secondary" onclick="openHeroGameDetails()">
+                                ℹ️ Dettagli
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visual Column (Floating 3D Boxart) -->
+                    <div class="hero-visual-side">
+                        <div class="hero-cover-wrapper" id="heroCoverWrapper">
+                            <img id="heroCoverImg" class="hero-cover-img" src="" alt="Cover" onerror="handleHeroCoverError()">
+                            <div class="hero-cover-fallback" id="heroCoverFallback" style="display:none;">
+                                <div class="hero-fallback-icon">🎮</div>
+                                <div class="hero-fallback-title" id="heroFallbackTitle">Super Mario World</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Progress & 4 Clean Dedicated Source Buttons -->
+                    <div class="hero-footer-strip">
+                        <div class="hero-nav-dots">
+                            <button class="hero-nav-btn" onclick="prevHeroSlide()">‹</button>
+                            <div id="heroProgressPills" style="display: flex; gap: 8px;"></div>
+                            <button class="hero-nav-btn" onclick="nextHeroSlide()">›</button>
+                        </div>
+                        <div class="hero-source-segmented">
+                            <button class="hero-source-btn active" id="heroSrcFeatured" onclick="setHeroSource('featured')">
+                                👑 Spotlight
+                            </button>
+                            <button class="hero-source-btn" id="heroSrcFavorites" onclick="setHeroSource('favorites')">
+                                ⭐ Preferiti
+                            </button>
+                            <button class="hero-source-btn" id="heroSrcRecent" onclick="setHeroSource('recent')">
+                                ⏱️ Continua
+                            </button>
+                            <button class="hero-source-btn" id="heroSrcCustom" onclick="setHeroSource('custom')">
+                                📁 Custom
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Bottom Progress & Rotation Controls -->
-            <div class="hero-footer-strip">
-                <div class="hero-nav-dots">
-                    <button class="hero-nav-btn" onclick="prevHeroSlide()">‹</button>
-                    <div id="heroProgressPills" style="display: flex; gap: 8px;"></div>
-                    <button class="hero-nav-btn" onclick="nextHeroSlide()">›</button>
-                </div>
-                <button class="hero-config-btn" onclick="openHeroConfigPopover()">
-                    ⚙️ Opzioni Vetrina (<span id="heroSourceLabel">Proposti</span>)
-                </button>
-            </div>
-        </div>
-    </section>
+            </section>
 
     <!-- ==========================================================================
          SMART FILTER & CATEGORY NAVIGATION BAR
@@ -1258,6 +1573,8 @@
             <!-- Populated dynamically via JS -->
         </div>
     </main>
+    </div> <!-- /.main-viewport -->
+    </div> <!-- /.app-layout -->
 
     <!-- ==========================================================================
          MODALE 1: WIZARD DI ONBOARDING (I 4 PROFILI UTENTE)
@@ -1277,54 +1594,59 @@
                     <!-- Profilo 1 -->
                     <div class="wizard-card selected" id="profileCard1" onclick="selectWizardProfile(1)">
                         <div class="wizard-card-icon">🚀</div>
-                        <div class="wizard-card-title">Caso 1: Nuovo Utente Puro</div>
+                        <div class="wizard-card-title">Caso 1: Installazione Pulita & On-Demand</div>
                         <div class="wizard-card-desc">
-                            Zero ROM sul PC. Attiva le 10 Console Regina + Indie Freeware. Scarica on-the-fly solo mentre giochi e libera lo spazio a fine partita.
+                            Che tu sia un nuovo utente o che tu abbia già file sparsi, qui parti da zero pensieri: catalogo cloud completo, zero download preventivi. Scarichi al volo solo il gioco che avvii.
                         </div>
-                        <div class="wizard-card-storage">📦 Spazio iniziale: 0 MB</div>
+                        <div class="wizard-card-storage">📦 Spazio iniziale: 0 MB • Pulizia automatica opzionale</div>
                     </div>
 
                     <!-- Profilo 2 -->
                     <div class="wizard-card" id="profileCard2" onclick="selectWizardProfile(2)">
                         <div class="wizard-card-icon">📂</div>
-                        <div class="wizard-card-title">Caso 2: Collezione Esistente</div>
+                        <div class="wizard-card-title">Caso 2: Collezione Esistente (Zero Spostamenti)</div>
                         <div class="wizard-card-desc">
-                            Hai già le tue ROM e giochi Indie sul PC. Riconosce la cartella radice senza duplicare o spostare un singolo megabyte.
+                            Riconosce i tuoi file dove sono adesso (ROM e Indie). Garantito al 100%: RetroHub NON sposta, NON copia e NON tocca i tuoi file originali. Scansione in sola lettura.
                         </div>
-                        <div class="wizard-card-storage">📦 Sfrutta i tuoi dischi locali</div>
+                        <div class="wizard-card-storage">📦 Sfrutta i tuoi dischi • Zero file duplicati</div>
                     </div>
 
                     <!-- Profilo 3 -->
                     <div class="wizard-card" id="profileCard3" onclick="selectWizardProfile(3)">
                         <div class="wizard-card-icon">⚡</div>
-                        <div class="wizard-card-title">Caso 3: Low Storage / Mini PC</div>
+                        <div class="wizard-card-title">Caso 3: Low Storage / Handheld (Smart Cache)</div>
                         <div class="wizard-card-desc">
-                            Modalità Placeholder Tipografici Vettoriali: zero byte di immagini scaricate. Massima velocità su dischi con poco spazio.
+                            Parte da 0 byte per le immagini con card vettoriali nei colori console. Scarica le copertine SOLO man mano che giochi o assegni la stella ⭐ (limite cache 50-100 MB).
                         </div>
-                        <div class="wizard-card-storage">📦 0 byte per le immagini</div>
+                        <div class="wizard-card-storage">📦 0 byte all'inizio • Cresce solo con i tuoi preferiti</div>
                     </div>
 
                     <!-- Profilo 4 -->
                     <div class="wizard-card" id="profileCard4" onclick="selectWizardProfile(4)">
                         <div class="wizard-card-icon">💎</div>
-                        <div class="wizard-card-title">Caso 4: Full Storage (4TB+)</div>
+                        <div class="wizard-card-title">Caso 4: Full Pack Offline (Console Scelte)</div>
                         <div class="wizard-card-desc">
-                            Desktop con dischi illimitati. Sblocca tutte le ~200 piattaforme e conserva ogni gioco scaricato per sempre sul tuo PC.
+                            Vuoi giocare senza internet? Puoi scaricare il pacchetto completo solo per le console che preferisci (pochi GB per SNES/MD) o per tutto l'archivio. Decidi tu cosa tenere offline.
                         </div>
-                        <div class="wizard-card-storage">📦 Conservazione totale</div>
+                        <div class="wizard-card-storage">📦 Da pochi GB a completo • Conservazione totale</div>
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
-                    <button class="btn btn-secondary" onclick="closeWizardModal()">Annulla</button>
-                    <button class="btn btn-primary" onclick="applyWizardProfile()">Applica Profilo Selezionato</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+                    <button id="sandboxToggleBtn" class="btn btn-sandbox" onclick="toggleSandboxMode()" title="Modalità test: simula catalogo vuoto senza toccare i file reali">
+                        🧪 Simula Catalogo da Vuoto
+                    </button>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary" onclick="closeWizardModal()">Annulla</button>
+                        <button class="btn btn-primary" onclick="applyWizardProfile()">Applica Profilo Selezionato</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- ==========================================================================
-         MODALE 2: ARENA MULTIPLAYER P2P & LEADERBOARDS
+         MODALE 2: ARENA MULTIPLAYER P2P & BOT SIMULATOR
          ========================================================================== -->
     <div class="modal-backdrop" id="arenaModal">
         <div class="modal-window" style="max-width: 680px;">
@@ -1349,7 +1671,21 @@
                 <div id="arenaRoomDisplay" style="display:none; background: rgba(0,229,180,0.1); border: 1px solid var(--accent-cyan); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px; text-align: center;">
                     <div style="font-size: 0.8rem; color: var(--text-secondary);">CODICE STANZA ATTIVA:</div>
                     <div id="arenaRoomCode" style="font-size: 2rem; font-weight: 800; letter-spacing: 4px; color: #fff; font-family: var(--font-mono); margin: 6px 0;">RH-7821</div>
-                    <div style="font-size: 0.78rem; color: var(--accent-cyan);">In attesa dello sfidante... Condividi questo codice!</div>
+                    <div id="arenaRoomStatus" style="font-size: 0.78rem; color: var(--accent-cyan);">In attesa dello sfidante... Condividi questo codice!</div>
+                </div>
+
+                <!-- SIMULATORE BOT P2P (ONE-CLICK TESTING) -->
+                <div style="margin-bottom: 20px; padding: 16px; background: rgba(0, 229, 180, 0.06); border: 1px dashed rgba(0, 229, 180, 0.35); border-radius: var(--radius-md);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-size: 0.82rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px;">🧪 Collaudo Immediato Locale</span>
+                        <span style="font-size: 0.70rem; color: var(--text-muted); font-family: var(--font-mono);">FLAG: ARENA_DEV_SIM</span>
+                    </div>
+                    <p style="font-size: 0.80rem; color: #94a3b8; line-height: 1.4; margin-bottom: 12px;">
+                        Non serve un secondo computer o un amico connesso: simula istantaneamente un avversario virtuale (*RetroBot_99*), handshake a 18ms, conto alla rovescia 3.. 2.. 1.. e avvio di prova.
+                    </p>
+                    <button class="btn btn-primary" style="width: 100%; justify-content: center; gap: 8px;" onclick="simulateArenaMatch()">
+                        🤖 Simula Match con Bot P2P (1 Clic)
+                    </button>
                 </div>
 
                 <div style="border-top: 1px solid var(--border-subtle); padding-top: 18px;">
@@ -1359,6 +1695,83 @@
                         • <strong>Street Fighter II Turbo:</strong> 920.400 pt — <em>KenMasters99</em> (Arcade)<br>
                         • <strong>OutRun:</strong> 52.880.120 pt — <em>CannonBaller</em> (PC Recomp)
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODALE 5: FILTRI AVANZATI DI RICERCA (ANNI, GENERI, DEVELOPER)
+         ========================================================================== -->
+    <div class="modal-backdrop" id="advSearchModal">
+        <div class="modal-window" style="max-width: 580px;">
+            <button class="modal-close-btn" onclick="closeAdvSearchModal()">✕</button>
+            <div style="padding: 32px;">
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 6px;">
+                    🔍 Ricerca Avanzata Multi-Filtro
+                </h2>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">
+                    Combina epoca storica, genere, sviluppatore e caratteristiche per trovare la gemma esatta.
+                </p>
+
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div>
+                        <label style="font-size: 0.80rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 6px; display: block;">Genere di Gioco</label>
+                        <select id="advGenreSelect" style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-card); border-radius: var(--radius-sm); color: #fff; font-family: var(--font-main);">
+                            <option value="ALL">Tutti i Generi</option>
+                            <option value="Platform">Platform / Platform Action</option>
+                            <option value="Picchiaduro">Picchiaduro (1vs1 & Scorrimento)</option>
+                            <option value="Action">Action / Avventura Dinamica</option>
+                            <option value="Shoot">Shoot 'em up / Shmup</option>
+                            <option value="RPG">Action RPG / JRPG</option>
+                            <option value="Corse">Corse / Guida Arcade</option>
+                            <option value="Sport">Sportivi & Calcio</option>
+                            <option value="Puzzle">Puzzle / Rompicapo</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <label style="font-size: 0.80rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Epoca / Anno (<span id="advYearVal">1980 - 2026</span>)</label>
+                        </div>
+                        <input type="range" id="advYearSlider" min="1980" max="2026" value="2026" style="width: 100%; accent-color: var(--accent-cyan);" oninput="updateAdvYearDisplay()">
+                    </div>
+
+                    <div>
+                        <label style="font-size: 0.80rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 6px; display: block;">Sviluppatore / Publisher</label>
+                        <input type="text" id="advDevInput" placeholder="Es. Capcom, Konami, Nintendo, Square, Sega, LocoMalito..." style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-card); border-radius: var(--radius-sm); color: #fff; font-family: var(--font-main);">
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 10px;">
+                        <button class="btn btn-secondary" style="flex:1;" onclick="resetAdvSearchFilters()">Resetta Filtri</button>
+                        <button class="btn btn-primary" style="flex:1;" onclick="applyAdvSearchFilters()">Applica Ricerca</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODALE 6: RACCOLTE CUSTOM (PLAYLIST PERSONALIZZATE)
+         ========================================================================== -->
+    <div class="modal-backdrop" id="customCollectionsModal">
+        <div class="modal-window" style="max-width: 580px;">
+            <button class="modal-close-btn" onclick="closeCustomCollectionsModal()">✕</button>
+            <div style="padding: 32px;">
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 6px;">
+                    📁 Raccolte & Playlist Custom
+                </h2>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">
+                    Organizza i tuoi capolavori in liste a tema e proiettale direttamente sulla Hero in vetrina!
+                </p>
+
+                <div id="collectionsListContainer" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; max-height: 240px; overflow-y: auto;">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="newCollectionNameInput" placeholder="Nome nuova raccolta (es. 'I Miei Platform 90s')..." style="flex:1; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-card); border-radius: var(--radius-sm); color: #fff; font-family: var(--font-main);">
+                    <button class="btn btn-primary" onclick="createNewCollection()">+ Crea</button>
                 </div>
             </div>
         </div>
@@ -1438,28 +1851,57 @@
         // Stato Globale dell'Applicazione
         let allGames = [];
         let allPlatforms = [];
+        let currentMacroFamily = 'ALL';
         let currentPlatform = 'ALL';
         let currentGenre = 'ALL';
+        let advYearMax = 2026;
+        let advDevFilter = '';
         let storageFilter = 'all'; // 'all' (Cloud) | 'downloaded' (Solo Scaricati)
         let activeQuickFilter = null; // 'favorites' | 'multiplayer' | 'freeware'
         let isSandboxMode = false;
-        let isTypographicMode = false; // Attivato nel Profilo Caso 3
+        let isTypographicMode = true; // Inizializzato a TRUE per il look pulito senza immagini provvisorie rotte
+        let customCollections = [
+            { id: 1, name: '⭐ I Miei Preferiti Classici', gameIds: [1, 2, 3] },
+            { id: 2, name: '🕹️ Capcom Arcade 90s', gameIds: [225, 226, 227] },
+            { id: 3, name: '⚡ Recomp 60FPS Porting', gameIds: [] }
+        ];
+        let activeCustomCollectionId = null;
+
+        // Mappa delle 12 Macro-Famiglie -> Codici Piattaforma Corrispondenti
+        const MACRO_FAMILY_MAP = {
+            'ALL': null,
+            'FAVORITES': null,
+            'ARCADE': ['ARCADE', 'MAME', 'NEOGEO', 'NAOMI', 'ATOMISWAVE', 'HIKARU', 'MODEL2', 'MODEL3'],
+            'LASERDISC': ['LASERDISC', 'DAPHNE', 'HYPSEUS', 'ACTIONMAX'],
+            'PINBALL': ['PINBALL', 'VPX', 'FUTUREPINBALL'],
+            'LCD': ['LCD', 'GAMEWATCH', 'TIGER', 'BANDAI_LCD'],
+            'NINTENDO': ['SNES', 'NES', 'N64', 'GAMECUBE', 'GBA', 'GB', 'NDS', '3DS', 'VB'],
+            'SEGA': ['MEGADRIVE', 'MASTERSYSTEM', 'DREAMCAST', 'SATURN', 'GAMEGEAR', 'SEGA32X', 'SEGACD'],
+            'SONY': ['PSX', 'PS2', 'PSP', 'PS3', 'PSVITA'],
+            'ATARI': ['ATARI2600', 'ATARI5200', 'ATARI7800', 'LYNX', 'JAGUAR', 'VECTREX', 'COLECO', 'INTELLIVISION', 'ODYSSEY2'],
+            'SNKNEC': ['NEOGEO', 'NEOGEOCD', 'NGP', 'NGPC', 'PCENGINE', 'SUPERGRAFX', 'PCFX'],
+            'COMPUTER': ['C64', 'AMIGA', 'DOS', 'SCUMMVM', 'ZXSPECTRUM', 'CPC', 'BBCMICRO', 'APPLE2'],
+            'NIPPON': ['X68000', 'MSX', 'MSX2', 'FMTOWNS', 'PC88', 'PC98'],
+            'PC': ['RECOMP', 'INDIE', 'PICO8', 'TIC80']
+        };
 
         // Stato della Hero Spotlight
         let heroList = [];
         let heroIndex = 0;
-        let heroSource = 'featured'; // 'featured' | 'favorites' | 'recent' | 'platform' | 'shuffle'
+        let heroSource = 'featured'; // 'featured' | 'favorites' | 'recent' | 'custom'
         let heroTimerDuration = 8000; // 8 secondi default
         let heroInterval = null;
         let heroProgressInterval = null;
         let heroIsPaused = false;
         let rouletteWinner = null;
         let postGameTargetId = null;
+        const ARENA_DEV_SIMULATION = true;
 
         // Inizializzazione al Caricamento
         window.addEventListener('DOMContentLoaded', async () => {
             initSearch();
             setupHeroHoverEvents();
+            setupPlatformScrollWheel();
             await loadPlatformsManifest();
             await loadGames();
             setupGamepadPolling();
@@ -1497,30 +1939,111 @@
 
         function updateCounters() {
             const downloaded = allGames.filter(g => isSandboxMode ? false : g.is_installed).length;
-            document.getElementById('countCloud').innerText = allGames.length;
-            document.getElementById('countDownloaded').innerText = downloaded;
+            const favCount = allGames.filter(g => g.is_favorite).length;
+
+            const elCloud = document.getElementById('countCloud');
+            if (elCloud) elCloud.innerText = allGames.length;
+            const elDown = document.getElementById('countDownloaded');
+            if (elDown) elDown.innerText = downloaded;
+
+            // Aggiorna contatori sidebar per macro-famiglie
+            const setSide = (id, count) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = count;
+            };
+            setSide('sideCountALL', allGames.length);
+            setSide('sideCountFAV', favCount);
+
+            for (const [key, list] of Object.entries(MACRO_FAMILY_MAP)) {
+                if (!list) continue;
+                const count = allGames.filter(g => list.includes(g.system_code)).length;
+                setSide(`sideCount${key}`, count);
+            }
         }
 
         // --------------------------------------------------------------------------
-        // 2. PIATTAFORME & FILTRI RAPIDI
+        // 2. PIATTAFORME & FILTRI RAPIDI (12 MACRO-FAMIGLIE)
         // --------------------------------------------------------------------------
+        function selectMacroFamily(code) {
+            currentMacroFamily = code;
+            currentPlatform = 'ALL';
+            activeCustomCollectionId = null;
+
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            const activeNav = document.getElementById(`sideNav${code}`);
+            if (activeNav) activeNav.classList.add('active');
+
+            if (code === 'FAVORITES') {
+                activeQuickFilter = 'favorites';
+            } else {
+                activeQuickFilter = null;
+            }
+
+            renderPlatformPills();
+            renderCatalog();
+            updateCatalogTitle();
+        }
+
+        function updateCatalogTitle() {
+            const el = document.getElementById('catalogSectionTitle');
+            if (!el) return;
+            const names = {
+                'ALL': 'Tutti i Giochi',
+                'FAVORITES': '⭐ I Tuoi Preferiti',
+                'ARCADE': '🕹️ Arcade Coin-Op',
+                'LASERDISC': '📀 Laserdisc & FMV',
+                'PINBALL': '🎯 Pinball & Flipper',
+                'LCD': '📟 LCD & Game & Watch',
+                'NINTENDO': '🍄 Nintendo Universe',
+                'SEGA': '🌀 Sega Universe',
+                'SONY': '🎮 Sony PlayStation',
+                'ATARI': '🦅 Atari & Pioneers',
+                'SNKNEC': '⚔️ SNK & NEC Engine',
+                'COMPUTER': '💾 Home Computer Occidentali',
+                'NIPPON': '🗾 Nippon Micro Computers',
+                'PC': '⚡ PC Moderno, Recomp & Indie'
+            };
+            el.innerText = names[currentMacroFamily] || 'Catalogo Giochi';
+        }
+
+        function setupPlatformScrollWheel() {
+            const bar = document.getElementById('platformScroll');
+            if (!bar) return;
+            bar.addEventListener('wheel', (e) => {
+                if (e.deltaY !== 0) {
+                    e.preventDefault();
+                    bar.scrollLeft += e.deltaY * 1.5;
+                }
+            });
+        }
+
         function renderPlatformPills() {
             const bar = document.getElementById('platformScroll');
             if (!bar) return;
 
+            let filteredPlatforms = allPlatforms;
+            if (currentMacroFamily !== 'ALL' && currentMacroFamily !== 'FAVORITES') {
+                const allowed = MACRO_FAMILY_MAP[currentMacroFamily] || [];
+                filteredPlatforms = allPlatforms.filter(p => allowed.includes(p.code));
+            }
+
+            const familyCount = currentMacroFamily === 'ALL' ? allGames.length :
+                                currentMacroFamily === 'FAVORITES' ? allGames.filter(g => g.is_favorite).length :
+                                allGames.filter(g => (MACRO_FAMILY_MAP[currentMacroFamily] || []).includes(g.system_code)).length;
+
             let html = `
                 <div class="platform-pill ${currentPlatform === 'ALL' ? 'active' : ''}" onclick="selectPlatform('ALL')">
                     <span>🌟 Tutte le Console</span>
-                    <span class="platform-count">${allGames.length}</span>
+                    <span class="platform-count">${familyCount}</span>
                 </div>
             `;
 
-            allPlatforms.forEach(p => {
+            filteredPlatforms.forEach(p => {
                 const count = allGames.filter(g => g.system_code === p.code).length;
                 const isActive = currentPlatform === p.code;
                 html += `
                     <div class="platform-pill ${isActive ? 'active' : ''}" onclick="selectPlatform('${p.code}')" style="${isActive ? `--accent-cyan: ${p.color};` : ''}">
-                        <span>${p.icon || '🎮'} ${p.name}</span>
+                        <span>${p.name}</span>
                         <span class="platform-count">${count}</span>
                     </div>
                 `;
@@ -1563,7 +2086,7 @@
         }
 
         // --------------------------------------------------------------------------
-        // 3. MOTORE HERO SPOTLIGHT WIDESCREEN (ROTAZIONE A 5 SORGENTI)
+        // 3. MOTORE HERO SPOTLIGHT WIDESCREEN (4 SORGENTI REALI)
         // --------------------------------------------------------------------------
         function initHeroSpotlight() {
             if (!allGames || allGames.length === 0) return;
@@ -1574,13 +2097,12 @@
             } else if (heroSource === 'recent') {
                 heroList = allGames.filter(g => g.last_played_at || g.play_count > 0);
                 if (heroList.length === 0) heroList = allGames.slice(0, 8);
-            } else if (heroSource === 'platform' && currentPlatform !== 'ALL') {
-                heroList = allGames.filter(g => g.system_code === currentPlatform);
+            } else if (heroSource === 'custom') {
+                const coll = customCollections.find(c => c.id === activeCustomCollectionId) || customCollections[0];
+                heroList = allGames.filter(g => coll?.gameIds?.includes(g.id));
                 if (heroList.length === 0) heroList = allGames.slice(0, 8);
-            } else if (heroSource === 'shuffle') {
-                heroList = [...allGames].sort(() => 0.5 - Math.random()).slice(0, 10);
             } else {
-                // 'featured' (Default): selezione bilanciata capolavori
+                // 'featured' Spotlight: selezione bilanciata capolavori
                 const featuredCodes = ['SNES', 'ARCADE', 'PSX', 'N64', 'RECOMP', 'INDIE', 'MEGADRIVE', 'C64'];
                 heroList = [];
                 featuredCodes.forEach(code => {
@@ -1642,13 +2164,48 @@
             favBtn.innerText = g.is_favorite ? '★ Salvato nei Preferiti' : '★ Aggiungi ai Preferiti';
             favBtn.style.color = g.is_favorite ? 'var(--accent-gold)' : '#fff';
 
-            // Copertina & Sfondo
+            // Sfondo Cinematico Panoramico (Steam 1920x620 library_hero.jpg o cover)
             const coverUrl = g.cover_url || '';
             const backdrop = document.getElementById('heroBackdrop');
             const coverImg = document.getElementById('heroCoverImg');
             const fallback = document.getElementById('heroCoverFallback');
 
-            if (backdrop) backdrop.style.backgroundImage = `url("${coverUrl}")`;
+            let wideArt = coverUrl;
+            const tLow = g.title.toLowerCase();
+            const steamIds = {
+                'ori and the blind forest': '387290',
+                'ori and the will of the wisps': '1057090',
+                'hollow knight': '367520',
+                'celeste': '504230',
+                'cuphead': '268910',
+                'dead cells': '588650',
+                'shovel knight': '250760',
+                'axiom verge': '332200',
+                'sea of stars': '1244090',
+                'undertale': '391540',
+                'hotline miami': '219150',
+                'broforce': '274190',
+                'fez': '224760',
+                'the messenger': '764790',
+                'katana zero': '460950',
+                'ufo 50': '1147860'
+            };
+            for (const [key, id] of Object.entries(steamIds)) {
+                if (tLow.includes(key)) {
+                    wideArt = `https://cdn.akamai.steamstatic.com/steam/apps/${id}/library_hero.jpg`;
+                    break;
+                }
+            }
+
+            if (backdrop) {
+                if (wideArt) {
+                    backdrop.style.backgroundImage = `url("${wideArt}")`;
+                    backdrop.style.opacity = '0.68';
+                } else {
+                    backdrop.style.backgroundImage = 'none';
+                    backdrop.style.opacity = '0';
+                }
+            }
 
             if (coverUrl && !isTypographicMode) {
                 coverImg.src = coverUrl;
@@ -1665,6 +2222,25 @@
         }
 
         function getSourceLabel(src) {
+            switch(src) {
+                case 'favorites': return '⭐ PREFERITI';
+                case 'recent': return '⏱️ CONTINUA A GIOCARE';
+                case 'custom': return '📁 RACCOLTA CUSTOM';
+                default: return '👑 SPOTLIGHT DEL GIORNO';
+            }
+        }
+
+        function setHeroSource(src) {
+            heroSource = src;
+            document.querySelectorAll('.hero-source-btn').forEach(btn => btn.classList.remove('active'));
+            if (src === 'featured') document.getElementById('heroSrcFeatured').classList.add('active');
+            else if (src === 'favorites') document.getElementById('heroSrcFavorites').classList.add('active');
+            else if (src === 'recent') document.getElementById('heroSrcRecent').classList.add('active');
+            else if (src === 'custom') document.getElementById('heroSrcCustom').classList.add('active');
+
+            initHeroSpotlight();
+            showToast(`Vetrina impostata su: ${getSourceLabel(src)}`);
+        }
             switch(src) {
                 case 'favorites': return '⭐ I TUOI PREFERITI';
                 case 'recent': return '⏱️ CONTINUA A GIOCARE';
@@ -1739,17 +2315,6 @@
             document.getElementById('heroCoverFallback').style.display = 'flex';
         }
 
-        function openHeroConfigPopover() {
-            const current = heroSource;
-            const next = current === 'featured' ? 'favorites' :
-                         current === 'favorites' ? 'recent' :
-                         current === 'recent' ? 'shuffle' : 'featured';
-            heroSource = next;
-            document.getElementById('heroSourceLabel').innerText = getSourceLabel(next);
-            initHeroSpotlight();
-            showToast(`Sorgente Vetrina cambiata in: ${getSourceLabel(next)}`);
-        }
-
         // --------------------------------------------------------------------------
         // 4. RENDERING GRIGLIA GIOCHI (ASPECT RATIO 2:3 & TYPOGRAPHIC FALLBACK)
         // --------------------------------------------------------------------------
@@ -1758,7 +2323,19 @@
             const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
 
             let filtered = allGames.filter(g => {
-                // Filtro Piattaforma
+                // Filtro Macro-Famiglia Sidebar
+                if (currentMacroFamily !== 'ALL' && currentMacroFamily !== 'FAVORITES') {
+                    const allowed = MACRO_FAMILY_MAP[currentMacroFamily];
+                    if (allowed && !allowed.includes(g.system_code)) return false;
+                }
+
+                // Filtro Raccolta Custom attiva
+                if (activeCustomCollectionId) {
+                    const coll = customCollections.find(c => c.id === activeCustomCollectionId);
+                    if (coll && !coll.gameIds.includes(g.id)) return false;
+                }
+
+                // Filtro Piattaforma specifica
                 if (currentPlatform !== 'ALL' && g.system_code !== currentPlatform) return false;
 
                 // Filtro Storage
@@ -1771,6 +2348,10 @@
 
                 // Filtro Genere
                 if (currentGenre !== 'ALL' && !g.genre.toLowerCase().includes(currentGenre.toLowerCase())) return false;
+
+                // Filtri Ricerca Avanzata (Anno max & Dev)
+                if (g.year > advYearMax) return false;
+                if (advDevFilter && !g.developer.toLowerCase().includes(advDevFilter.toLowerCase())) return false;
 
                 // Ricerca Testuale
                 if (searchVal.length > 0) {
@@ -2139,6 +2720,113 @@
             t.innerText = msg;
             t.classList.add('show');
             setTimeout(() => { t.classList.remove('show'); }, 3000);
+        }
+
+        // Modalità Ricerca Avanzata Multi-Filtro
+        function openAdvSearchModal() {
+            document.getElementById('advSearchModal').classList.add('open');
+        }
+        function closeAdvSearchModal() {
+            document.getElementById('advSearchModal').classList.remove('open');
+        }
+        function updateAdvYearDisplay() {
+            const val = document.getElementById('advYearSlider').value;
+            advYearMax = parseInt(val, 10);
+            document.getElementById('advYearVal').innerText = `1980 - ${advYearMax}`;
+        }
+        function applyAdvSearchFilters() {
+            const gen = document.getElementById('advGenreSelect').value;
+            currentGenre = gen;
+            advDevFilter = document.getElementById('advDevInput').value.trim();
+            closeAdvSearchModal();
+            renderCatalog();
+            showToast('Filtri di ricerca avanzata applicati!');
+        }
+        function resetAdvSearchFilters() {
+            currentGenre = 'ALL';
+            document.getElementById('advGenreSelect').value = 'ALL';
+            document.getElementById('advYearSlider').value = 2026;
+            document.getElementById('advDevInput').value = '';
+            advYearMax = 2026;
+            advDevFilter = '';
+            updateAdvYearDisplay();
+            closeAdvSearchModal();
+            renderCatalog();
+            showToast('Filtri avanzati resettati.');
+        }
+
+        // Gestione Raccolte & Playlist Custom
+        function openCustomCollectionsModal() {
+            renderCollectionsList();
+            document.getElementById('customCollectionsModal').classList.add('open');
+        }
+        function closeCustomCollectionsModal() {
+            document.getElementById('customCollectionsModal').classList.remove('open');
+        }
+        function renderCollectionsList() {
+            const container = document.getElementById('collectionsListContainer');
+            if (!container) return;
+            container.innerHTML = customCollections.map(c => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:rgba(255,255,255,0.05); border:1px solid var(--border-card); border-radius:var(--radius-sm);">
+                    <div>
+                        <div style="font-weight:700; color:#fff;">${escapeHtml(c.name)}</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted);">${c.gameIds.length} titoli inclusi</div>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="activateCollection(${c.id})">Apri</button>
+                        <button class="btn btn-primary" style="padding:4px 10px; font-size:0.75rem;" onclick="projectCollectionOnHero(${c.id})">Vetrina</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        function createNewCollection() {
+            const input = document.getElementById('newCollectionNameInput');
+            const name = input.value.trim();
+            if (!name) return;
+            const newId = Date.now();
+            const favIds = allGames.filter(g => g.is_favorite).map(g => g.id);
+            customCollections.push({ id: newId, name, gameIds: favIds.length > 0 ? favIds : [1, 2, 3] });
+            input.value = '';
+            renderCollectionsList();
+            showToast(`Raccolta "${name}" creata!`);
+        }
+        function activateCollection(id) {
+            activeCustomCollectionId = id;
+            closeCustomCollectionsModal();
+            renderCatalog();
+            showToast('Raccolta custom visualizzata nella griglia.');
+        }
+        function projectCollectionOnHero(id) {
+            const coll = customCollections.find(c => c.id === id);
+            if (!coll) return;
+            activeCustomCollectionId = id;
+            heroSource = 'custom';
+            heroList = allGames.filter(g => coll.gameIds.includes(g.id));
+            if (heroList.length === 0) heroList = allGames.slice(0, 8);
+            heroIndex = 0;
+            closeCustomCollectionsModal();
+            renderHeroPills();
+            renderHeroSlide();
+            showToast(`Vetrina Hero impostata su raccolta: ${coll.name}`);
+        }
+
+        // Simulatore Bot P2P per Arena (Debug & Collaudo)
+        function simulateArenaMatch() {
+            if (!ARENA_DEV_SIMULATION) return;
+            showToast('🤖 Connessione virtuale a RetroBot_99 in corso...');
+            const statusEl = document.getElementById('arenaRoomStatus');
+            if (statusEl) statusEl.innerHTML = '<span style="color:#00e5b4; font-weight:700;">● CONNESSO CON BOT P2P (Ping: 18ms)</span>';
+            setTimeout(() => {
+                showToast('⚔️ Handshake P2P riuscito! Countdown: 3... 2... 1...');
+            }, 1200);
+            setTimeout(() => {
+                showToast('🚀 Avvio simulato sessione multiplayer locale!');
+                closeArenaModal();
+                const sampleGame = allGames.find(g => g.system_code === 'ARCADE' || g.system_code === 'SNES' || g.system_code === 'RECOMP');
+                if (sampleGame) {
+                    launchGameById(sampleGame.id);
+                }
+            }, 3000);
         }
 
         function escapeHtml(str) {

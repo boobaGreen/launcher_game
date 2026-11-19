@@ -27,10 +27,17 @@ impl MasterCatalog {
         macro_rules! add_game {
             ($sys:expr, $plat:expr, $title:expr, $year:expr, $genre:expr, $dev:expr, $subpath:expr) => {
                 let clean_title = $title.replace(':', " -").replace('/', " -");
+                let suffixed = if clean_title.ends_with(')') {
+                    clean_title.clone()
+                } else if $sys == "C64" || $sys == "AMIGA" {
+                    format!("{} (Europe)", clean_title)
+                } else {
+                    format!("{} (USA)", clean_title)
+                };
                 let cover = format!(
                     "https://raw.githubusercontent.com/libretro-thumbnails/{}/master/Named_Boxarts/{}.png",
                     $subpath,
-                    url_encode(&clean_title)
+                    url_encode(&suffixed)
                 );
                 games.push(Game {
                     id,
@@ -188,6 +195,46 @@ impl MasterCatalog {
         add_game!("C64", "Commodore 64", "Wizball", 1987, "Shoot 'em up", "Sensible Software", c64_sub);
         add_game!("C64", "Commodore 64", "California Games", 1987, "Sport", "Epyx", c64_sub);
         add_game!("C64", "Commodore 64", "Paradroid", 1985, "Azione / Fantascienza", "Graftgold", c64_sub);
+
+        // ==========================================
+        // LASERDISC & FMV INTERACTIVE MOVIE
+        // ==========================================
+        let fmv_sub = "MAME";
+        add_game!("LASERDISC", "Laserdisc FMV", "Dragon's Lair", 1983, "Interactive Movie", "Cinematronics", fmv_sub);
+        add_game!("LASERDISC", "Laserdisc FMV", "Space Ace", 1984, "Interactive Movie", "Cinematronics", fmv_sub);
+        add_game!("LASERDISC", "Laserdisc FMV", "Mad Dog McCree", 1990, "Live-Action Lightgun", "American Laser Games", fmv_sub);
+
+        // ==========================================
+        // PINBALL & FLIPPER ELETTRONICI
+        // ==========================================
+        let pin_sub = "MAME";
+        add_game!("PINBALL", "Pinball Simulator", "Medieval Madness", 1997, "Pinball Classic", "Williams", pin_sub);
+        add_game!("PINBALL", "Pinball Simulator", "The Addams Family", 1992, "Pinball Classic", "Midway / Bally", pin_sub);
+        add_game!("PINBALL", "Pinball Simulator", "Attack from Mars", 1995, "Pinball Classic", "Bally", pin_sub);
+
+        // ==========================================
+        // NINTENDO GAME & WATCH & TABLETOP
+        // ==========================================
+        let gw_sub = "Nintendo_-_Game_Boy";
+        add_game!("GAMEWATCH", "Game & Watch", "Donkey Kong (Multi Screen)", 1982, "LCD Handheld", "Nintendo", gw_sub);
+        add_game!("GAMEWATCH", "Game & Watch", "Ball (Silver Series)", 1980, "LCD Handheld", "Nintendo", gw_sub);
+        add_game!("GAMEWATCH", "Game & Watch", "Zelda (Multi Screen)", 1989, "LCD Handheld", "Nintendo", gw_sub);
+
+        // ==========================================
+        // NIPPON MICRO COMPUTERS (MSX)
+        // ==========================================
+        let msx_sub = "Microsoft_-_MSX";
+        add_game!("MSX", "MSX Home Computer", "Metal Gear", 1987, "Stealth Action", "Konami", msx_sub);
+        add_game!("MSX", "MSX Home Computer", "Vampire Killer", 1986, "Action Adventure", "Konami", msx_sub);
+        add_game!("MSX", "MSX Home Computer", "Nemesis 2", 1987, "Shoot 'em up", "Konami", msx_sub);
+
+        // ==========================================
+        // GCE VECTREX VECTOR CONSOLE
+        // ==========================================
+        let vec_sub = "GCE_-_Vectrex";
+        add_game!("VECTREX", "GCE Vectrex", "Scramble", 1982, "Vector Shmup", "GCE", vec_sub);
+        add_game!("VECTREX", "GCE Vectrex", "Space Wars", 1982, "Vector Space Combat", "GCE", vec_sub);
+        add_game!("VECTREX", "GCE Vectrex", "Clean Sweep", 1982, "Vector Maze Action", "GCE", vec_sub);
 
         // ==========================================
         // PC INDIE & LOCOMALITO - Built-in Manifest

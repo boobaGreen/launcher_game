@@ -101,6 +101,11 @@ impl Database {
         Ok(())
     }
 
+    pub fn reset_catalog(&self, games: &[Game]) -> Result<()> {
+        let _ = self.conn.execute("DELETE FROM games;", []);
+        self.upsert_games_batch(games)
+    }
+
     pub fn upsert_games_batch(&self, games: &[Game]) -> Result<()> {
         self.conn.execute_batch("BEGIN TRANSACTION;")?;
         {
