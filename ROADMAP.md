@@ -52,9 +52,10 @@
 ## 📌 FASE 4: Personalizzazione Libreria, Enciclopedia Immagini & Onboarding Vergine (In Corso 🚀)
 *Obiettivo: Separazione netta tra Scheletro visivo (copertine HD in locale a 60 FPS offline) e Muscolo (ROM a 0 Byte sul disco, scaricate solo ed esclusivamente al click `▶ GIOCA`).*
 
-### **4.1 Paradigma Architetturale 1G1R Pulito & Separazione Ruoli (Utente al Centro)**
-- [x] **Il Romset di Riferimento Ufficiale è il Set 1G1R Mondiale Pulito:**
+### **4.1 Paradigma Architetturale Senza Duplicati & Separazione Ruoli (Utente al Centro)**
+- [x] **Il Romset di Riferimento Ufficiale è il Set Mondiale Senza Duplicati (Standard 1G1R):**
   - Standard universale: 1 solo gioco per titolo, escludendo rigorosamente doppioni regionali ridondanti (JAP/USA/EUR), cloni pirata, BIOS e diagnostica hardware.
+  - Microcopy UX approvata: label utente **`Senza Duplicati`** (`No Duplicates` / `Sin Duplicados`), con dicitura tecnica *"Standard 1G1R"* confinata ai tooltip di aiuto.
   - Il catalogo di riferimento mondiale conta **~11.500 titoli commerciali autentici** (~2.500 Arcade, 725 SNES, 715 NES, 1.050 GBA, 1.450 PSX, ecc.).
 - [x] **Nessuna Selezione Arbitraria Imposta: La Selezione la Fa l'Utente:**
   - Rimossa qualsiasi divisione artificiale rigida ("Hall of Fame vs 1G1R") che generava confusione e numeri identici.
@@ -76,10 +77,16 @@
   - Prompt di chiusura integrato: `[ 💾 TIENI SUL PC ]` vs `[ 🗑️ ELIMINA PER FARE SPAZIO ]`.
 
 ### **4.3 Wizard di Onboarding & Strategie di Storage (I 4 Profili Ufficiali)**
-- [x] **Caso 1: Smart On-Demand Standard (Default Consigliato):** Copertine HD scaricate in locale per le console scelte (~350-450 MB per 5 console); **0 Byte ROM su disco** a monte con download on-demand al click ed eliminazione opzionale post-partita.
-- [x] **Caso 2: Collezione Esistente (Zero Spostamenti):** Scansione in sola lettura della cartella radice utente (`roms/<console>`) senza mai duplicare o spostare file.
-- [x] **Caso 3: Low Storage / Handheld (Zero Byte Immagini):** 0 Byte per le copertine a monte (card tipografiche vettoriali con colori console); copertina reale scaricata solo per Preferiti ⭐ o giochi avviati (cache 50-100 MB).
-- [x] **Caso 4: Full Pack Offline (Console Scelte):** Download preventivo sia del pacchetto copertine sia dell'intero set di ROM per le console selezionate (giocabile 100% offline ovunque).
+- [x] **Setup Wizard Obbligatorio al Primo Avvio (Bloccante Nuovo Utente):**
+  - Se non configurato (`!retrohub_wizard_completed`), il wizard non è chiudibile via tasto ✕, Annulla o ESC: l'utente deve selezionare un profilo per impostare RetroHub.
+  - Rieseguibile in qualunque momento dal pannello `⚙️ Opzioni`.
+- [x] **Default del Pre-Download Copertine nei 4 Profili:**
+  - **Caso 1: Smart On-Demand Standard (Default Consigliato):** Pre-Download Copertine = **ATTIVO** (~350-450 MB per 5 console scelte a 60 FPS offline); **0 Byte ROM su disco** a monte con download al click `▶ GIOCA` ed eliminazione opzionale post-partita.
+  - **Caso 2: Collezione Esistente (Zero Spostamenti):** Pre-Download Copertine = **ATTIVO** (per rivestire con artwork HD i file trovati); scansione in sola lettura senza duplicare o spostare file utente.
+  - **Caso 3: Low Storage / Handheld (Zero Byte Immagini):** Pre-Download Copertine = **DISATTIVO** (0 Byte all'inizio, card tipografiche vettoriali ad alta efficienza; copertina reale scaricata solo per Preferiti ⭐ o on-demand).
+  - **Caso 4: Full Pack Offline (Console Scelte):** Pre-Download Copertine & ROM = **ATTIVO** (copertine HD + set ROM completo scaricato in anticipo per giocare 100% offline).
+- [x] **Toggle Pre-Download Automatico nelle Opzioni:**
+  - Switch esplicito in `⚙️ Opzioni` (`#settingsPreDownloadToggle`) per personalizzare il comportamento in qualsiasi momento.
 
 ### **4.4 Strategia MAME Curato (1G1R Parent-Only vs Cloni)**
 - [x] **Default Pulito 1G1R (~950 Titoli Parent):** Esclusione di cloni, bootleg, mahjong e slot machine; 105 MB copertine, ~28 GB ROM on-demand.

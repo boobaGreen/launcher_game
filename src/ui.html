@@ -1235,6 +1235,15 @@
             transform: scale(1) translateY(0);
         }
 
+        @keyframes modalShake {
+            0%, 100% { transform: scale(1) translateX(0); }
+            20%, 60% { transform: scale(1) translateX(-8px); }
+            40%, 80% { transform: scale(1) translateX(8px); }
+        }
+        .shake-anim {
+            animation: modalShake 0.4s ease;
+        }
+
         .modal-close-btn {
             position: absolute;
             top: 20px;
@@ -1866,13 +1875,13 @@
          MODALE 1: WIZARD DI ONBOARDING (I 4 PROFILI UTENTE)
          ========================================================================== -->
     <div class="modal-backdrop" id="wizardModal">
-        <div class="modal-window">
-            <button class="modal-close-btn" onclick="closeWizardModal()">✕</button>
+        <div class="modal-window" id="wizardModalWindow">
+            <button class="modal-close-btn" id="wizardCloseBtn" onclick="closeWizardModal()">✕</button>
             <div style="padding: 32px;">
-                <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 6px;">
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 6px;" data-i18n="wizard_title">
                     🧙 Configurazione Guidata RetroHub
                 </h2>
-                <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">
+                <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;" data-i18n="wizard_subtitle">
                     Seleziona il profilo di archiviazione perfetto per il tuo PC. Potrai sempre cambiarlo in seguito.
                 </p>
 
@@ -1884,7 +1893,7 @@
                         <div class="wizard-card-desc" data-i18n="wizard_p1_desc">
                             Sblocca le console che preferisci con le copertine HD salvate in locale (~80-170 MB/console) per navigare a 60 FPS offline. ROM a 0 byte su disco: scarichi al volo solo il gioco che avvii, con pulizia automatica opzionale.
                         </div>
-                        <div class="wizard-card-storage" data-i18n="wizard_p1_storage">📦 Copertine in locale • 0 Byte ROM a monte • Pulizia opzionale</div>
+                        <div class="wizard-card-storage" data-i18n="wizard_p1_storage">📦 Pre-Download Copertine HD ATTIVO • 0 Byte ROM a monte • 60 FPS offline</div>
                     </div>
 
                     <!-- Profilo 2 -->
@@ -1894,7 +1903,7 @@
                         <div class="wizard-card-desc" data-i18n="wizard_p2_desc">
                             Riconosce i tuoi file dove sono adesso (ROM e Indie). Garantito al 100%: RetroHub NON sposta, NON copia e NON tocca i tuoi file originali. Scansione in sola lettura con sblocco console.
                         </div>
-                        <div class="wizard-card-storage" data-i18n="wizard_p2_storage">📦 Sfrutta i tuoi dischi • Zero file duplicati</div>
+                        <div class="wizard-card-storage" data-i18n="wizard_p2_storage">📦 Pre-Download Copertine HD ATTIVO • Sfrutta ROM su disco • Zero duplicati</div>
                     </div>
 
                     <!-- Profilo 3 -->
@@ -1904,7 +1913,7 @@
                         <div class="wizard-card-desc" data-i18n="wizard_p3_desc">
                             0 Byte per le immagini a monte: usa card tipografiche vettoriali dinamiche nei colori console. La copertina reale HD viene scaricata SOLO per i preferiti ⭐ o giochi avviati (cache 50-100 MB).
                         </div>
-                        <div class="wizard-card-storage" data-i18n="wizard_p3_storage">📦 0 Byte all'inizio • Cresce solo con i tuoi preferiti</div>
+                        <div class="wizard-card-storage" data-i18n="wizard_p3_storage">📦 Pre-Download Copertine DISATTIVO (0 Byte) • Card Vettoriali • Cache minima</div>
                     </div>
 
                     <!-- Profilo 4 -->
@@ -1914,7 +1923,7 @@
                         <div class="wizard-card-desc" data-i18n="wizard_p4_desc">
                             Vuoi giocare al 100% senza internet? Scarica in locale sia il pacchetto copertine HD sia il set completo di ROM per le console che preferisci (pochi GB per SNES/MD) o per l'intero archivio.
                         </div>
-                        <div class="wizard-card-storage" data-i18n="wizard_p4_storage">📦 Da pochi GB a set completo • Conservazione totale</div>
+                        <div class="wizard-card-storage" data-i18n="wizard_p4_storage">📦 Pre-Download Totale Copertine & ROM ATTIVO • 100% Giocabile Offline</div>
                     </div>
                 </div>
 
@@ -1923,8 +1932,8 @@
                         🧪 Simula Catalogo da Vuoto
                     </button>
                     <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-secondary" data-i18n="wizard_btn_cancel" onclick="closeWizardModal()">Annulla</button>
-                        <button class="btn btn-primary" data-i18n="wizard_btn_apply" onclick="applyWizardProfile()">Applica Profilo Selezionato</button>
+                        <button class="btn btn-secondary" id="wizardCancelBtn" data-i18n="wizard_btn_cancel" onclick="closeWizardModal()">Annulla</button>
+                        <button class="btn btn-primary" id="wizardApplyBtn" data-i18n="wizard_btn_apply" onclick="applyWizardProfile()">Applica Profilo Selezionato</button>
                     </div>
                 </div>
             </div>
@@ -2406,6 +2415,13 @@
                             </div>
                             <input type="checkbox" id="settingsTypographicToggle" style="accent-color: var(--accent-cyan); width: 18px; height: 18px; cursor: pointer;" onchange="toggleSettingsTypographic()">
                         </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-top: 1px solid var(--border-subtle); padding-top: 10px;">
+                            <div>
+                                <div style="font-size: 0.84rem; font-weight: 700; color: #fff;" data-i18n="settings_predownload_title">Pre-Download Automatico Copertine HD</div>
+                                <div style="font-size: 0.74rem; color: var(--text-muted);" data-i18n="settings_predownload_desc">Scarica preventivamente le copertine per navigare a 60 FPS senza attese. Attivo per default nei Profili 1, 2 e 4.</div>
+                            </div>
+                            <input type="checkbox" id="settingsPreDownloadToggle" style="accent-color: var(--accent-cyan); width: 18px; height: 18px; cursor: pointer;" onchange="toggleSettingsPreDownload()">
+                        </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 10px;">
                             <span style="font-size: 0.74rem; color: var(--text-muted);" data-i18n="settings_clear_cache_desc">Svuota i file temporanei delle copertine per liberare spazio su disco.</span>
                             <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.75rem; color: var(--accent-danger); border-color: rgba(255,75,75,0.4);" data-i18n="settings_btn_clear_cache" onclick="clearImageCache()">🧹 Svuota Cache Immagini</button>
@@ -2532,8 +2548,7 @@
                 "hero_src_favorites": "⭐ Preferiti",
                 "hero_src_recent": "⏱️ Continua",
                 "hero_src_custom": "📁 Custom",
-                "mode_curated": "🌟 Hall of Fame",
-                "mode_full": "📚 Collezione 1G1R",
+                "mode_unique": "✨ Senza Duplicati",
                 "sub_all_cloud": "🔓 Tutto l'Archivio Cloud",
                 "sub_only_down": "💾 Solo Scaricati",
                 "sub_fav": "⭐ Preferiti",
@@ -2662,20 +2677,22 @@
                 "post_game_desc": "Cosa desideri fare con il gioco scaricato on-demand per questa sessione?",
                 "post_game_keep": "💾 Conserva sul PC",
                 "post_game_delete": "🗑️ Elimina (Libera Spazio)",
+                "settings_predownload_title": "Pre-Download Automatico Copertine HD",
+                "settings_predownload_desc": "Scarica preventivamente il pacchetto copertine quando sblocchi una piattaforma (Consigliato per 60 FPS). Attivo nei Profili 1, 2 e 4.",
                 "wizard_title": "🧙 Configurazione Guidata RetroHub",
                 "wizard_subtitle": "Seleziona il profilo di archiviazione perfetto per il tuo PC. Potrai sempre cambiarlo in seguito.",
                 "wizard_p1_title": "Caso 1: Smart On-Demand Standard (Consigliato)",
                 "wizard_p1_desc": "Sblocca le console che preferisci con le copertine HD salvate in locale (~80-170 MB/console) per navigare a 60 FPS offline. ROM a 0 byte su disco: scarichi al volo solo il gioco che avvii, con pulizia automatica opzionale.",
-                "wizard_p1_storage": "📦 Copertine in locale • 0 Byte ROM a monte • Pulizia opzionale",
+                "wizard_p1_storage": "📦 Pre-Download Copertine HD ATTIVO • 0 Byte ROM a monte • 60 FPS offline",
                 "wizard_p2_title": "Caso 2: Collezione Esistente (Zero Spostamenti)",
                 "wizard_p2_desc": "Riconosce i tuoi file dove sono adesso (ROM e Indie). Garantito al 100%: RetroHub NON sposta, NON copia e NON tocca i tuoi file originali. Scansione in sola lettura con sblocco console.",
-                "wizard_p2_storage": "📦 Sfrutta i tuoi dischi • Zero file duplicati",
+                "wizard_p2_storage": "📦 Pre-Download Copertine HD ATTIVO • Sfrutta ROM su disco • Zero duplicati",
                 "wizard_p3_title": "Caso 3: Ultra-Low Storage / Handheld (Zero Byte Immagini)",
                 "wizard_p3_desc": "0 Byte per le immagini a monte: usa card tipografiche vettoriali dinamiche nei colori console. La copertina reale HD viene scaricata SOLO per i preferiti ⭐ o giochi avviati (cache 50-100 MB).",
-                "wizard_p3_storage": "📦 0 Byte all'inizio • Cresce solo con i tuoi preferiti",
+                "wizard_p3_storage": "📦 Pre-Download Copertine DISATTIVO (0 Byte) • Card Vettoriali • Cache minima",
                 "wizard_p4_title": "Caso 4: Full Pack Offline (Console Scelte)",
                 "wizard_p4_desc": "Vuoi giocare al 100% senza internet? Scarica in locale sia il pacchetto copertine HD sia il set completo di ROM per le console che preferisci (pochi GB per SNES/MD) o per l'intero archivio.",
-                "wizard_p4_storage": "📦 Da pochi GB a set completo • Conservazione totale",
+                "wizard_p4_storage": "📦 Pre-Download Totale Copertine & ROM ATTIVO • 100% Giocabile Offline",
                 "wizard_sandbox_btn": "🧪 Simula Catalogo da Vuoto",
                 "wizard_btn_cancel": "Annulla",
                 "wizard_btn_apply": "Applica Profilo Selezionato",
@@ -2735,8 +2752,7 @@
                 "hero_src_favorites": "⭐ Favorites",
                 "hero_src_recent": "⏱️ Continue",
                 "hero_src_custom": "📁 Custom",
-                "mode_curated": "🌟 Hall of Fame",
-                "mode_full": "📚 1G1R Collection",
+                "mode_unique": "✨ No Duplicates",
                 "sub_all_cloud": "🔓 All Cloud Games",
                 "sub_only_down": "💾 Downloaded Only",
                 "sub_fav": "⭐ Favorites",
@@ -2865,20 +2881,22 @@
                 "post_game_desc": "What would you like to do with the game downloaded on-demand for this session?",
                 "post_game_keep": "💾 Keep on PC",
                 "post_game_delete": "🗑️ Delete (Free Space)",
+                "settings_predownload_title": "Automatic HD Cover Pre-Download",
+                "settings_predownload_desc": "Pre-downloads cover packages when unlocking a platform (Recommended for 60 FPS). Enabled in Profiles 1, 2, and 4.",
                 "wizard_title": "🧙 RetroHub Guided Setup",
                 "wizard_subtitle": "Select the perfect storage profile for your PC. You can change it anytime later.",
                 "wizard_p1_title": "Case 1: Smart On-Demand Standard (Recommended)",
                 "wizard_p1_desc": "Unlock your preferred consoles with local HD covers (~80-170 MB/console) for 60 FPS offline browsing. 0 Byte ROMs on disk: download on the fly only when you play, with optional post-game cleanup.",
-                "wizard_p1_storage": "📦 Local covers • 0 Byte prior ROMs • Optional cleanup",
+                "wizard_p1_storage": "📦 HD Cover Pre-Download ON • 0 Byte initial ROMs • 60 FPS offline",
                 "wizard_p2_title": "Case 2: Existing Collection (Zero Moves)",
                 "wizard_p2_desc": "Recognizes your files right where they are now (ROMs and Indies). 100% Guaranteed: RetroHub NEVER moves, copies, or alters your original files. Read-only scan with console unlock.",
-                "wizard_p2_storage": "📦 Uses your existing disks • Zero duplicated files",
+                "wizard_p2_storage": "📦 HD Cover Pre-Download ON • Uses ROMs on disk • Zero duplicated files",
                 "wizard_p3_title": "Case 3: Ultra-Low Storage / Handheld (Zero Byte Images)",
                 "wizard_p3_desc": "0 Byte prior images: uses stylish vector typographic cards in console theme colors. Real HD boxart is downloaded ONLY for favorites ⭐ or played games (cache 50-100 MB).",
-                "wizard_p3_storage": "📦 0 Byte at startup • Grows only with your favorites",
+                "wizard_p3_storage": "📦 Cover Pre-Download OFF (0 Byte) • Vector Cards • Cache 50-100 MB",
                 "wizard_p4_title": "Case 4: Full Pack Offline (Selected Consoles)",
                 "wizard_p4_desc": "Want to play 100% offline without internet? Download both the HD cover pack and the complete ROM set locally for your chosen consoles (a few GB for SNES/MD) or the full archive.",
-                "wizard_p4_storage": "📦 From a few GB to full set • Complete local preservation",
+                "wizard_p4_storage": "📦 Full Cover & ROM Pre-Download ON • 100% Playable Offline",
                 "wizard_sandbox_btn": "🧪 Simulate Empty Catalog",
                 "wizard_btn_cancel": "Cancel",
                 "wizard_btn_apply": "Apply Selected Profile",
@@ -2938,8 +2956,7 @@
                 "hero_src_favorites": "⭐ Favoritos",
                 "hero_src_recent": "⏱️ Continuar",
                 "hero_src_custom": "📁 Personalizado",
-                "mode_curated": "🌟 Hall of Fame",
-                "mode_full": "📚 Colección 1G1R",
+                "mode_unique": "✨ Sin Duplicados",
                 "sub_all_cloud": "🔓 Todo el Archivo Cloud",
                 "sub_only_down": "💾 Solo Descargados",
                 "sub_fav": "⭐ Favoritos",
@@ -3068,20 +3085,22 @@
                 "post_game_desc": "¿Qué deseas hacer con el juego descargado on-demand para esta sesión?",
                 "post_game_keep": "💾 Conservar en PC",
                 "post_game_delete": "🗑️ Eliminar (Liberar Espacio)",
+                "settings_predownload_title": "Pre-Descarga Automática Portadas HD",
+                "settings_predownload_desc": "Descarga previamente los paquetes de portadas al desbloquear una consola (Recomendado para 60 FPS). Activo en Perfiles 1, 2 y 4.",
                 "wizard_title": "🧙 Asistente de Configuración RetroHub",
                 "wizard_subtitle": "Selecciona el perfil de almacenamiento perfecto para tu PC. Podrás cambiarlo cuando quieras.",
                 "wizard_p1_title": "Caso 1: Smart On-Demand Estándar (Recomendado)",
                 "wizard_p1_desc": "Desbloquea tus consolas con portadas HD guardadas en local (~80-170 MB/consola) para explorar a 60 FPS offline. ROMs a 0 bytes en disco: descarga al vuelo solo lo que juegues, con limpieza opcional.",
-                "wizard_p1_storage": "📦 Portadas en local • 0 Bytes ROMs previas • Limpieza opcional",
+                "wizard_p1_storage": "📦 Pre-Descarga Portadas HD ACTIVA • 0 Bytes ROMs previas • 60 FPS offline",
                 "wizard_p2_title": "Caso 2: Colección Existente (Cero Movimientos)",
                 "wizard_p2_desc": "Reconoce tus archivos justo donde están ahora (ROMs e Indies). 100% Garantizado: RetroHub NUNCA mueve, copia ni altera tus archivos originales. Escaneo en solo lectura con desbloqueo de consolas.",
-                "wizard_p2_storage": "📦 Aprovecha tus discos • Cero archivos duplicados",
+                "wizard_p2_storage": "📦 Pre-Descarga Portadas HD ACTIVA • Aprovecha ROMs en disco • Cero duplicados",
                 "wizard_p3_title": "Caso 3: Poco Almacenamiento / Portátil (Cero Bytes Imágenes)",
                 "wizard_p3_desc": "0 Bytes de imágenes iniciales: usa tarjetas vectoriales tipográficas en los colores oficiales de la consola. La portada HD real se descarga SOLO para favoritos ⭐ o juegos iniciados (caché 50-100 MB).",
-                "wizard_p3_storage": "📦 0 Bytes al inicio • Crece solo con tus favoritos",
+                "wizard_p3_storage": "📦 Pre-Descarga Portadas DESACTIVADA (0 Bytes) • Tarjetas Vectoriales • Caché 50-100 MB",
                 "wizard_p4_title": "Caso 4: Paquete Completo Offline (Consolas Elegidas)",
                 "wizard_p4_desc": "¿Quieres jugar al 100% sin internet? Descarga en local tanto el paquete de portadas HD como el set completo de ROMs para tus consolas elegidas (pocos GB para SNES/MD) o todo el archivo.",
-                "wizard_p4_storage": "📦 De pocos GB al set completo • Conservación total",
+                "wizard_p4_storage": "📦 Pre-Descarga Total Portadas y ROMs ACTIVA • 100% Jugable Offline",
                 "wizard_sandbox_btn": "🧪 Simular Catálogo Vacío",
                 "wizard_btn_cancel": "Cancelar",
                 "wizard_btn_apply": "Aplicar Perfil Seleccionado",
@@ -3124,11 +3143,11 @@
         let currentMacroFamily = 'ALL';
         let currentPlatform = 'ALL';
         let currentGenre = 'ALL';
-        let catalogMode = 'curated'; // 'curated' (🌟 Hall of Fame) | 'full' (📚 Collezione 1G1R Completa)
         let storageFilter = 'all'; // 'all' (Cloud) | 'downloaded' (Solo Scaricati)
         let activeQuickFilter = null; // 'favorites' | 'multiplayer'
         let isSandboxMode = false;
         let isTypographicMode = false; // Mostra boxart grafiche reali; fallback tipografico su 404/errore
+        let preDownloadCovers = true; // Pre-download automatico copertine HD allo sblocco piattaforma (Default: ON nei Casi 1, 2, 4; OFF nel Caso 3)
         let currentLang = 'it';
         let downloadedGameIds = new Set();
 
@@ -3211,9 +3230,9 @@
             await loadGames();
             applyLanguage(currentLang);
             setupGamepadPolling();
-            // Primo Avvio Nuovo Utente: Se il wizard non è mai stato completato, apri automaticamente il Setup Wizard
+            // Primo Avvio Nuovo Utente: Se il wizard non è mai stato completato, apri obbligatoriamente il Setup Wizard
             if (!localStorage.getItem('retrohub_wizard_completed')) {
-                setTimeout(() => openWizardModal(), 350);
+                setTimeout(() => openWizardModal(true), 350);
             }
             // Keepalive Heartbeat: invia un ping periodico ogni 4 secondi per mantenere attivo il server locale
             setInterval(() => { fetch('/api/ping', { method: 'POST' }).catch(() => {}); }, 4000);
@@ -3443,9 +3462,6 @@
         }
 
         function setCatalogMode(mode) {
-            catalogMode = mode;
-            document.getElementById('toggleModeCurated')?.classList.toggle('active', mode === 'curated');
-            document.getElementById('toggleModeFull')?.classList.toggle('active', mode === 'full');
             updateCatalogTitle();
             renderCatalog();
         }
@@ -3822,11 +3838,6 @@
             // Regola d'oro: nessun BIOS, firmware o file di test hardware deve mai apparire nella libreria
             const tLow = g.title.toLowerCase();
             if (tLow.includes('bios') || tLow.includes('firmware') || tLow.includes('diagnostic')) return false;
-
-            // 0. Catalog Mode: Hall of Fame (Curata) vs Collezione Completa (1G1R)
-            if (!ignoreCatalogMode && !isModalPreview && catalogMode === 'curated') {
-                if (g.is_curated === false) return false;
-            }
 
             // 1. Macro-Famiglia Sidebar (applicata solo alla griglia principale)
             if (!isModalPreview) {
@@ -4220,13 +4231,45 @@
         // 8. WIZARD ONBOARDING (I 4 PROFILI)
         // --------------------------------------------------------------------------
         let selectedWizardProfileId = 1;
+        let isWizardMandatory = false;
 
-        function openWizardModal() {
+        function openWizardModal(isMandatory = false) {
+            isWizardMandatory = !!isMandatory;
+            const closeBtn = document.getElementById('wizardCloseBtn');
+            const cancelBtn = document.getElementById('wizardCancelBtn');
+            const applyBtn = document.getElementById('wizardApplyBtn');
+
+            if (closeBtn) closeBtn.style.display = isWizardMandatory ? 'none' : 'flex';
+            if (cancelBtn) cancelBtn.style.display = isWizardMandatory ? 'none' : 'inline-block';
+            if (applyBtn) {
+                if (isWizardMandatory) {
+                    applyBtn.innerText = currentLang === 'en' ? '🚀 Start with RetroHub' : (currentLang === 'es' ? '🚀 Comenzar con RetroHub' : '🚀 Inizia con RetroHub');
+                } else {
+                    applyBtn.innerText = (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang]['wizard_btn_apply']) || 'Applica Profilo Selezionato';
+                }
+            }
             document.getElementById('wizardModal').classList.add('open');
         }
-        function closeWizardModal() {
+
+        function closeWizardModal(force = false) {
+            if (isWizardMandatory && !force) {
+                const win = document.getElementById('wizardModalWindow');
+                if (win) {
+                    win.classList.remove('shake-anim');
+                    void win.offsetWidth;
+                    win.classList.add('shake-anim');
+                }
+                showToast(currentLang === 'en' 
+                    ? '⚠️ Please select a storage profile to configure RetroHub!' 
+                    : (currentLang === 'es' 
+                        ? '⚠️ ¡Selecciona un perfil de almacenamiento para configurar RetroHub!' 
+                        : '⚠️ Per iniziare, seleziona uno dei 4 profili di archiviazione!'));
+                return;
+            }
             document.getElementById('wizardModal').classList.remove('open');
+            isWizardMandatory = false;
         }
+
         function selectWizardProfile(id) {
             selectedWizardProfileId = id;
             for (let i = 1; i <= 4; i++) {
@@ -4235,31 +4278,70 @@
         }
 
         function applyWizardProfile() {
-            closeWizardModal();
             try {
                 localStorage.setItem('retrohub_wizard_completed', 'true');
             } catch (e) {}
+
             if (selectedWizardProfileId === 1) {
-                // Caso 1: Nuovo Utente Puro
+                // Caso 1: Smart On-Demand Standard (Consigliato)
+                preDownloadCovers = true;
                 isTypographicMode = false;
                 storageFilter = 'all';
                 currentPlatform = 'ALL';
-                showToast('Profilo 1 Applicato: Catalogo Cloud On-Demand attivo (0 Byte ROM a monte)!');
+                localStorage.setItem('retrohub_predownload_covers', 'true');
+                localStorage.setItem('retrohub_typographic', 'false');
+                showToast(currentLang === 'en' 
+                    ? 'Profile 1: Smart On-Demand active (Cover Pre-Download ON, 0-byte ROMs)!' 
+                    : (currentLang === 'es' 
+                        ? '¡Perfil 1: Smart On-Demand activo (Pre-Descarga de portadas ACTIVA, ROMs a 0 bytes)!' 
+                        : 'Profilo 1 Applicato: Smart On-Demand attivo (Pre-Download Copertine ATTIVO, ROM a 0 Byte)!'));
             } else if (selectedWizardProfileId === 2) {
-                // Caso 2: Collezione Esistente
+                // Caso 2: Collezione Esistente (Zero Spostamenti)
+                preDownloadCovers = true;
                 isTypographicMode = false;
                 storageFilter = 'downloaded';
-                showToast('Profilo 2 Applicato: Mostra le ROM e giochi PC rilevati localmente.');
+                localStorage.setItem('retrohub_predownload_covers', 'true');
+                localStorage.setItem('retrohub_typographic', 'false');
+                showToast(currentLang === 'en' 
+                    ? 'Profile 2: Existing Collection (Cover Pre-Download ON for detected games)!' 
+                    : (currentLang === 'es' 
+                        ? '¡Perfil 2: Colección Existente (Pre-Descarga de portadas ACTIVA para juegos locales)!' 
+                        : 'Profilo 2 Applicato: Collezione Esistente (Pre-Download Copertine ATTIVO per giochi locali)!'));
             } else if (selectedWizardProfileId === 3) {
-                // Caso 3: Low Storage (Placeholder Tipografici)
+                // Caso 3: Ultra-Low Storage / Handheld (Zero Byte Immagini)
+                preDownloadCovers = false;
                 isTypographicMode = true;
-                showToast('Profilo 3 Applicato: Modalità Tipografica Vettoriale (0 byte immagini).');
+                storageFilter = 'all';
+                localStorage.setItem('retrohub_predownload_covers', 'false');
+                localStorage.setItem('retrohub_typographic', 'true');
+                showToast(currentLang === 'en' 
+                    ? 'Profile 3: Ultra-Low Storage (Cover Pre-Download OFF, Vector Typographic 0-byte mode)!' 
+                    : (currentLang === 'es' 
+                        ? '¡Perfil 3: Poco Almacenamiento (Pre-Descarga DESACTIVADA, Modo Tipográfico 0 Bytes)!' 
+                        : 'Profilo 3 Applicato: Ultra-Low Storage (Pre-Download Copertine DISATTIVATO, Card Tipografiche 0 Byte)!'));
             } else if (selectedWizardProfileId === 4) {
-                // Caso 4: Full Storage (Desktop 4TB+)
+                // Caso 4: Full Pack Offline (Console Scelte)
+                preDownloadCovers = true;
                 isTypographicMode = false;
                 storageFilter = 'all';
-                showToast('Profilo 4 Applicato: Tutte le piattaforme sbloccate con conservazione locale.');
+                localStorage.setItem('retrohub_predownload_covers', 'true');
+                localStorage.setItem('retrohub_typographic', 'false');
+                showToast(currentLang === 'en' 
+                    ? 'Profile 4: Full Pack Offline (Total Cover & ROM Pre-Download ON)!' 
+                    : (currentLang === 'es' 
+                        ? '¡Perfil 4: Paquete Offline Total (Pre-Descarga de Portadas y ROMs ACTIVA)!' 
+                        : 'Profilo 4 Applicato: Full Pack Offline (Pre-Download Totale Copertine & ROM ATTIVO)!'));
             }
+
+            const preDownloadToggle = document.getElementById('settingsPreDownloadToggle');
+            if (preDownloadToggle) preDownloadToggle.checked = preDownloadCovers;
+            const typoToggle = document.getElementById('settingsTypographicToggle');
+            if (typoToggle) typoToggle.checked = isTypographicMode;
+
+            const preDownloadToggle = document.getElementById('settingsPreDownloadToggle');
+            if (preDownloadToggle) preDownloadToggle.checked = preDownloadCovers;
+
+            closeWizardModal(true);
             renderCatalog();
             renderHeroSlide();
         }
@@ -4367,6 +4449,10 @@
 
             window.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
+                    if (isWizardMandatory) {
+                        closeWizardModal(false);
+                        return;
+                    }
                     clearSearch();
                     closeWizardModal();
                     closeArenaModal();
@@ -5163,6 +5249,9 @@
             const typoToggle = document.getElementById('settingsTypographicToggle');
             if (typoToggle) typoToggle.checked = isTypographicMode;
 
+            const preDownloadToggle = document.getElementById('settingsPreDownloadToggle');
+            if (preDownloadToggle) preDownloadToggle.checked = preDownloadCovers;
+
             const heroRotSel = document.getElementById('settingsHeroRotationSelect');
             if (heroRotSel) heroRotSel.value = heroTimerDuration.toString();
 
@@ -5273,6 +5362,17 @@
             }
         }
 
+        function toggleSettingsPreDownload() {
+            const cb = document.getElementById('settingsPreDownloadToggle');
+            if (cb) {
+                preDownloadCovers = cb.checked;
+                localStorage.setItem('retrohub_predownload_covers', preDownloadCovers ? 'true' : 'false');
+                showToast(preDownloadCovers
+                    ? (currentLang === 'en' ? 'Cover Pre-Download enabled.' : (currentLang === 'es' ? 'Pre-descarga de portadas activada.' : 'Pre-Download Copertine abilitato.'))
+                    : (currentLang === 'en' ? 'Cover Pre-Download disabled (On-demand streaming).' : (currentLang === 'es' ? 'Pre-descarga de portadas desactivada.' : 'Pre-Download Copertine disabilitato (streaming on-demand).')));
+            }
+        }
+
         function onSettingsHeroRotationChanged() {
             const sel = document.getElementById('settingsHeroRotationSelect');
             if (!sel) return;
@@ -5371,6 +5471,7 @@
             if (langSel) localStorage.setItem('retrohub_lang', langSel.value);
             if (postGameSel) localStorage.setItem('retrohub_post_game_behavior', postGameSel.value);
             localStorage.setItem('retrohub_typographic', isTypographicMode ? 'true' : 'false');
+            localStorage.setItem('retrohub_predownload_covers', preDownloadCovers ? 'true' : 'false');
             localStorage.setItem('retrohub_hero_timer', heroTimerDuration.toString());
 
             closeSettingsModal();
@@ -5379,10 +5480,12 @@
 
         function resetSettingsToDefaults() {
             isTypographicMode = false;
+            preDownloadCovers = true;
             heroTimerDuration = 8000;
             currentLang = 'it';
             localStorage.setItem('retrohub_lang', 'it');
             localStorage.setItem('retrohub_typographic', 'false');
+            localStorage.setItem('retrohub_predownload_covers', 'true');
             localStorage.setItem('retrohub_hero_timer', '8000');
             localStorage.setItem('retrohub_post_game_behavior', 'ask');
 
@@ -5391,6 +5494,9 @@
 
             const typoToggle = document.getElementById('settingsTypographicToggle');
             if (typoToggle) typoToggle.checked = false;
+
+            const preToggle = document.getElementById('settingsPreDownloadToggle');
+            if (preToggle) preToggle.checked = true;
 
             const heroRotSel = document.getElementById('settingsHeroRotationSelect');
             if (heroRotSel) heroRotSel.value = '8000';
@@ -5405,8 +5511,8 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Se la versione salvata differisce da v0.40.0, pulizia totale dello stato per Nuovo Utente Pulito
-                const currentAppVer = '0.40.0';
+                // Controllo Versione: Se la versione salvata differisce da v0.41.0, pulizia totale dello stato per Nuovo Utente Pulito
+                const currentAppVer = '0.41.0';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.removeItem('retrohub_downloaded_ids');
@@ -5428,6 +5534,12 @@
                 const savedTypo = localStorage.getItem('retrohub_typographic');
                 if (savedTypo !== null) {
                     isTypographicMode = (savedTypo === 'true');
+                }
+                const savedPre = localStorage.getItem('retrohub_predownload_covers');
+                if (savedPre !== null) {
+                    preDownloadCovers = (savedPre === 'true');
+                } else {
+                    preDownloadCovers = true;
                 }
                 const savedTimer = localStorage.getItem('retrohub_hero_timer');
                 if (savedTimer !== null) {
