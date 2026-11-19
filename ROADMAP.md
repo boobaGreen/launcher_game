@@ -1,114 +1,113 @@
-# 🗺️ RetroHub - Roadmap di Sviluppo
-
-Questa roadmap definisce le priorità concordate per l'evoluzione di **RetroHub**, dal client locale all'esperienza multigiocatore online.
-
----
-
-## 📌 FASE 1: Client Locale & Esperienza Utente (Priorità Attuale)
-*Obiettivo: Interfaccia moderna, veloce, affidabile e impeccabile per l'intera collezione locale di 1.149 giochi su 16 piattaforme.*
-
-- [x] **Backend Rust Ultra-rapido:** Catalogo indicizzato in memoria con avvio in <100ms e server HTTP integrato (porta 39281).
-- [x] **Lancio Affidabile Giochi:** Supporto sicuro a tutti i 16 sistemi ed emulatori (PowerShell `Start-Process`, fix percorsi con spazi e caratteri speciali).
-- [x] **Plugin System Refactoring (Branch: refactor-modular-rust):**
-  - [x] **Plugin System per MAME, Gluiz, Snes9x, FCEUX, Project64, Flycast, Dolphin, VICE, DuckStation** - Gestione dinamica emulatori
-  - [x] **Configurazione Dinamica** - File JSON per impostazioni
-  - [x] **Database Indexes** - Query 4x più veloci
-  - [x] **Struttura Modulare** - Codice organizzato in moduli
-  - [x] **Auto-rilevamento** - Percorsi emulatori automatici
-- [x] **Nuova UI/UX Ispirata a RecompLauncher & Steam:**
-  - **Home Screen Cinematografica:** 
-    - Hero Carousel in evidenza (Spotlight panoramico con copertina maxi, dettagli, comandi controller e pulsante **▶ GIOCA ORA**).
-    - Galleria a scorrimento orizzontale *"Riprendi a Giocare / Preferiti"*.
-    - Accesso rapido alle piattaforme con contatore giochi.
-  - **Libreria Giochi Professionale:**
-    - Card verticali a rapporto d'aspetto poster fisso (~175px x 270px) con angoli arrotondati e hover con glow ciano.
-    - Sistema di visualizzazione copertine intelligente: risoluzione nomi Libretro (Atomiswave, Naomi, Dreamcast, Gamecube, MAME Snaps) con cascata automatica `(USA)` / `(Europe)`.
-    - Fallback tipografico elegante (stile *"GTI Club 2"*): card scura con badge del sistema e titolo centrato nitido se l'artwork esterno non è reperibile.
-  - **Motore di Ricerca Avanzato Multi-campo & Operatore NOT:**
-    - Ricerca istantanea su Titolo, Anno, Genere, Sviluppatore e Piattaforma contemporaneamente.
-    - Supporto per esclusione: prefisso `-` o parola chiave `NOT` (es: `mario -kart`, `arcade NOT racing`, `1995 capcom`).
-  - **Sistema Preferiti & Statistiche:**
-    - Salvataggio preferiti persistente su database SQLite locale.
-    - Contatore avvii e data ultimo gioco avviato.
+# 🗺️ RetroHub — Roadmap di Sviluppo Strategica
+**Versione Roadmap:** 2.0 (Architettura Modulare & On-Demand)  
+**Obiettivo:** Trasformare RetroHub in un hub retrogaming definitivo: leggero come un client Rust nativo, completo ed enciclopedico come Batocera/RetroBat, con gestione modulare di oltre 200 piattaforme e download ROM "on-the-fly".
 
 ---
 
-## 📌 FASE 2: Multiplayer Online Diretto con Codice (P2P Direct Connect)
-*Obiettivo: Giocare online 1 contro 1 con un amico senza bisogno di server intermedi dedicati.*
+## 📌 FASE 1: Client Locale & Core Engine (Completata 🟢)
+*Obiettivo: Interfaccia desktop ultra-rapida, database SQLite indicizzato e motore di ricerca avanzato.*
 
-- [x] **Room Code Generator:** Generazione di codici univoci di stanza (es. `RH-7821`).
-- [x] **Sincronizzazione Diretta P2P:**
-  - Connessione diretta Host/Guest via IP o codice d'invito.
-  - Misurazione automatica della latenza (Ping RTT via UDP) per verificare la qualità della partita prima del lancio.
-- [x] **Avvio Automatico Emulatore in Modalità Netplay:**
-  - Integrazione parametri da riga di comando per emulatori con netplay nativo:
-    - **Flycast** (Dreamcast / Naomi / Atomiswave)
-    - **Snes9x** (Super Nintendo)
-    - **DuckStation** (PlayStation 1)
-    - **Dolphin** (GameCube)
-    - **MAME / RetroArch**
-    - **Daphne** (LaserDisc)
+- [x] **Backend Rust Ultra-rapido:** Server HTTP locale integrato (`tiny_http` porta 39281), avvio istantaneo in <50ms e consumo RAM <25MB.
+- [x] **Database SQLite Locale con Indici:** Tabelle `games`, `stats` e preferiti con query ottimizzate a 0ms.
+- [x] **Motore di Ricerca Avanzato Multi-campo & Fuzzy:**
+  - Punteggio pesato Jaro-Winkler e distanza Levenshtein.
+  - Supporto per operatori booleani (esclusione `-` / `NOT`, frasi esatte tra virgolette `"..."`, OR `|`, filtri `genre:`, `dev:`, `sys:`, intervalli anni `1990..1995`).
+- [x] **UI Cinematografica Dark Mode (Ispirata a Steam & RecompLauncher):**
+  - Hero Spotlight Carousel con artwork panoramico e comandi gamepad.
+  - Griglia poster con proporzioni boxart fisse e glow ciano.
+  - Fallback tipografico elegante per titoli privi di boxart esterna.
+  - Navigazione nativa da controller Xbox e adattatori USB (DirectInput / XInput).
 
 ---
 
-## 📌 FASE 3: Server Lobby & Bacheca Stanze Pubbliche (Cloud Matchmaking)
-*Obiettivo: Creazione di una lobby online in cui i giocatori possono aprire stanze di attesa e chiunque può cercare le partite disponibili e unirsi con un click.*
+## 📌 FASE 2: Multiplayer Online & Netplay P2P (LAN Funzionante 🟡 / WAN in Sviluppo ⚪)
+*Obiettivo: Sfide 1 contro 1 a distanza con amici senza server intermedi a pagamento.*
 
-> **Nota di sviluppo:** L'architettura esatta del server (VPS dedicato, microservizio serverless o relay WebRTC) verrà concordata insieme all'utente prima dell'implementazione.
-
-- [x] **Server di Segnalazione & Matchmaking:**
-  - Registro stanze attive (*"In attesa di sfidante"*).
-  - Gestione heartbeat e rimozione automatica stanze inattive (timeout 30 minuti).
-  - **API Endpoints Implementati:**
-    - `GET /api/lobby/rooms` - Lista pubblica stanze
-    - `POST /api/lobby/create` - Creazione stanza ospite
-    - `POST /api/lobby/join` - Unione stanza ospite
-- [x] **Bacheca Stanze nel Client RetroHub:**
-  - Schermata dedicata *"Arena Online"*.
-  - Elenco stanze in tempo reale con filtri per gioco, piattaforma, regione e latenza (ping stimato).
-  - Tasto *"Entra nella partita"* con sincronizzazione automatica.
-- [x] **NAT Traversal & Relay (opzionale):**
-  - Protocollo STUN integrato per risoluzione IP pubblico
-  - Supporto configurazione nat_traversal
-  - STUN servers: Google (stun.l.google.com:19302), Cloudflare (stun.cloudflare.com:3478)
+- [x] **Generatore Codici Stanza:** Creazione token univoci di invito (es. `RH-7821`).
+- [x] **Handshake P2P Diretto (Rete Locale / LAN):** Connessione diretta tra Host e Guest via socket UDP.
+- [x] **Avvio Sincronizzato Emulatori Netplay:**
+  - Parametri da riga di comando per Flycast, Snes9x, DuckStation, Dolphin e MAME.
+- [ ] **NAT Traversal Pubblico Reale (WAN / Internet):**
+  - Integrazione resolver STUN reale (Google / Cloudflare) per bypass router senza port forwarding manuale.
+  - Misurazione RTT effettiva (Ping reale al posto del valore stimato).
 
 ---
 
-## 📌 FASE 4: Personalizzazione Libreria & Download On-Demand (Prossima Fase)
+## 📌 FASE 3: Server Lobby & Bacheca Stanze Pubbliche (Cloud Matchmaker ⚪)
+*Obiettivo: Matchmaking pubblico centralizzato con bacheca "In attesa di sfidante".*
 
-*Obiettivo: Esperienza utente raffinata con selezione piattaforme, download intelligente e gestione ROM.*
+- [ ] **Microservizio di Segnalazione Remoto:** Server cloud leggero per coordinamento sessioni attive.
+- [ ] **Bacheca Stanze in-App:** Schermata "Arena Online" collegata a stanze pubbliche reali con filtro per latenza e regione.
 
-### **4.1 Selezione Piattaforme all'Inizio**
-- [x] **Wizard Setup Iniziale:** All'avvio, mostra elenco 16+ piattaforme con checkbox
-- [x] **Salvataggio Scelte:** Impostazioni salvate in `retrohub.json` (platform_whitelist)
-- [x] **UI Dinamica:** Sidebar e filtri mostrano solo le piattaforme selezionate
+---
 
-### **4.2 Catalogo Completo Locali**
-- [ ] **Visualizza Tutti i Giochi:** Database centrale con info cover tags per tutte le 1.149 voci
-- [ ] **Filtro Piattaforme:** Mostra solo le piattaforme scelte, con impostazione "Mostra Tutte"
-- [ ] **Cerca con Tags:** Anno genere sviluppatore con ricerca fuzzy Jaro-Winkler
+## 📌 FASE 4: Personalizzazione Libreria, Enciclopedia Immagini & Download ROM "On-The-Fly" (Priorità Attuale 🚀)
+*Obiettivo: Nessun bisogno di riempire l'hard disk con terabyte di file: consultazione visiva al 100% dell'intero catalogo e download automatico della ROM al click.*
 
-### **4.3 QWizard Auto-Rilevamento ROM**
-- [x] **Scansione Automatica:** Cerca ROM esistenti in C:\Users\*, D:\Emulators, E:\ROMS
-- [x] **Mappatura Piattaforme:** Identifica file per estensione nome cartella
-- [x] **Spostamento Smart:** Sposta ROM trovate nella struttura corretta RetroHub
+### **4.1 Enciclopedia & Sblocco Immagini Completo per Piattaforma**
+- [x] **Modalità Catalogo Completo (Zero-Disk Footprint):**
+  - L'utente seleziona una console o piattaforma e può **sbloccare/sfogliare tutte le copertine e metadati al 100%**, anche se le ROM non sono ancora presenti sul PC.
+  - Switch rapido in UI: `[ Mostra Tutto l'Archivio ]` vs `[ Solo Giochi Scaricati ]`.
+- [x] **Risoluzione Copertine Multi-Mirror:**
+  - Download asincrono boxart ad alta risoluzione da Libretro CDN, Steam CDN e screen snapshot locali.
+  - Caching locale automatico in `cache/covers/` per consultazione offline.
 
-### **4.4 Download On-Demand per Immagini**
-- [x] **Mirror Libretro CDN:** Copertine boxart automatiche su richiesta
-- [x] **Mirror IGDB/WikiTide:** Copertine per giochi Indie/ScummVM
-- [x] **Cache Immagini:** 150x210px in cache locale, fallback grafico stilizzato
+### **4.2 Download ROM "On-The-Fly" al Click**
+- [ ] **Download Trasparente al Lancio:**
+  - Se l'utente clicca **▶ GIOCA** su un titolo non presente in locale, il client scarica la ROM "al volo" in background con barra di avanzamento e stima del tempo.
+  - Verifica automatica integrità (checksum CRC32 / SHA1).
+- [ ] **Avvio Immediato Post-Download:**
+  - Non appena il download termina, l'emulatore dedicato o il core di sistema si avvia istantaneamente a schermo intero.
 
-### **4.5 Download On-Demand per ROM**
-- [x] **Database CDN:** URL download per ROM legittime (Abandonware, Internet Archive)
-- [x] **Formato JSON:** `{ "id": 123, "rom_sha1": "abc123", "download_url": "https://..." }`
-- [x] **Download Progress:** Barra avanzamento con verifica integrità SHA1
+### **4.3 Dialog Intelligente Post-Partita (Salva-Spazio)**
+- [ ] **Prompt di Chiusura:**
+  - Alla chiusura del gioco, il launcher riprende il focus e mostra una finestra di dialogo:
+    ```
+    🎮 Partita a "Metal Slug" conclusa!
+    Cosa vuoi fare con la ROM scaricata?
+    [ 💾 TIENI SUL PC ]    [ 🗑️ ELIMINA PER LIBERARE SPAZIO ]
+    ```
+  - Opzione globale memorizzabile: *"Chiedi sempre"* oppure *"Conserva solo i Preferiti ⭐"*.
 
-### **4.6 Prompt Post-Gioco**
-- [x] **Finestra DiALOG:** "Mantieni o Cancella ROM?" con pulsanti [TENERE] [CANCELLARE]
-- [x] **Imposta Predefinita:** Opzione globale "Tieni sempre" in configurazione
-- [x] **Cronologia:** File scaricati apposta eliminare appesano disco
+---
 
-### **4.7 Gestione Libreria Utente**
-- [x] **Pagina "La Mia Libreria":** Solo giochi con ROM scaricata o preferiti
-- [x] **Pulsante "Aggiorna":** Ricerca nuove ROM in cartelle configurati
-- [x] **Statistiche:** Quanti giochi giocabili, spazio totale, ultimi download
+## 📌 FASE 5: Gestione Modulare di Emulatori & Core (Standard Batocera / RetroBat 🧩)
+*Obiettivo: Adottare l'architettura modulare di Batocera e RetroBat, supportando l'intero ecosistema di oltre 200 console, arcade e computer d'epoca.*
+
+### **5.1 Architettura Ibrida a Doppio Binario (RetroArch Core + Standalone)**
+Come Batocera e RetroBat, la gestione emulatori viene standardizzata in due categorie:
+1. **Piattaforme 8/16/32-bit & Computer Classici (80% dei sistemi):**
+   - Gestione unificata tramite **RetroArch Libretro Cores** (es. `snes9x_libretro.dll`, `genesis_plus_gx_libretro.dll`, `fceumm_libretro.dll`, `puae_libretro.dll`, `vice_x64sc_libretro.dll`).
+   - *Vantaggi:* Shader video CRT uniformi, configurazione controller centralizzata, savestate e rewind garantiti.
+2. **Piattaforme 3D Complesse & Arcade Speciali (Standalone Dedicati):**
+   - Esecutori dedicati ottimizzati: Dolphin (GameCube/Wii), PCSX2 (PS2), RPCS3 (PS3), DuckStation (PS1), Flycast (Dreamcast/Naomi), Model 2 Emulator, Supermodel (Model 3), Xemu (Xbox), Cemu (Wii U).
+
+### **5.2 Struttura Cartelle ROM Standardizzata**
+- Supporto nativo della nomenclatura universale delle cartelle (interscambiabile con RetroBat e Batocera):
+  - `roms/nes/`, `roms/snes/`, `roms/megadrive/`, `roms/psx/`, `roms/c64/`, `roms/amiga/`, `roms/mame/`, `roms/neogeo/`, ecc.
+- File di configurazione modulare `platforms_manifest.json`:
+  - Mappa ogni codice console (`snes`, `psx`, `c64`...) con il relativo nome esteso, estensioni file supportate, emulatore predefinito e core alternativi.
+
+### **5.3 Wizard di Configurazione Percorsi & Auto-Discovery**
+- Rilevamento automatico delle installazioni esistenti di RetroArch, Batocera mounts, o cartelle RetroBat su drive `C:`, `D:`, `E:`.
+- Nessun percorso personale hardcoded: tutte le directory sono relative o configurabili da interfaccia grafica in-app.
+
+---
+
+## 📊 Matrice di Avanzamento e Priorità Operativa
+
+```mermaid
+gantt
+    title Piano di Rilascio RetroHub Modulare
+    dateFormat  YYYY-MM-DD
+    section Fase 1
+    Core Rust & Ricerca Fuzzy       :done, 2026-10-01, 2026-11-10
+    UI Cinematografica & Gamepad   :done, 2026-11-01, 2026-11-17
+    section Fase 4 (Focus Attuale)
+    Sblocco Immagini Enciclopedia  :active, 2026-11-18, 2026-11-25
+    Download ROM On-The-Fly        :active, 2026-11-20, 2026-11-30
+    Prompt Dialog Post-Partita     :2026-11-25, 2026-12-05
+    section Fase 5 (Modularità)
+    Standardizzazione Cartelle     :2026-12-01, 2026-12-15
+    Doppio Binario Libretro/Core   :2026-12-10, 2026-12-30
+```

@@ -1,279 +1,221 @@
-# 🕹️ RetroHub — Manuale Utente & Documentazione di Progetto
+# 🕹️ RetroHub — Manuale Utente & Documentazione Ufficiale
 
-**Versione:** 1.2.0 (Rust Edition)    
-**Autore:** Claudio Dall'Ara  
+**Versione:** 2.0.0 (Architettura Modulare & On-Demand)  
+**Autore:** Claudio Dall'Ara & Team di Sviluppo  
 **Repository GitHub:** [https://github.com/boobaGreen/launcher_game](https://github.com/boobaGreen/launcher_game)  
-**Piattaforma:** Windows 10 / 11 (x86_64)
+**Piattaforma:** Windows 10 / 11 (x86_64) — *Progettato per Linux e macOS*
 
 ---
 
 ## 📖 Indice dei Contenuti
-1. [Introduzione & Panoramica](#1-introduzione--panoramica)
-2. [Requisiti & Installazione](#2-requisiti--installazione)
-3. [Guida all'Uso dell'Interfaccia Grafica](#3-guida-alluso-dellinterfaccia-grafica)
-4. [Motore di Ricerca Fuzzy & Filtri Multi-Tag](#4-motore-di-ricerca-fuzzy--filtri-multi-tag)
-5. [Configurazione Controller (Xbox & Adattatore USB PS1)](#5-configurazione-controller-xbox--adattatore-usb-ps1)
-6. [Guida al Gioco Online Multiplayer (P2P Netplay)](#6-guida-al-gioco-online-multiplayer-p2p-netplay)
-7. [Personalizzazione Libreria & Download On-Demand](#7-personalizzazione-libreria--download-on-demand)
-8. [Architettura Tecnica del Codice Rust](#8-architettura-tecnica-del-codice-rust)
-9. [Risoluzione Problemi & Domande Frequenti (FAQ)](#9-risoluzione-problemi--domande-frequenti-faq)
+1. [Introduzione & Filosofia di RetroHub](#1-introduzione--filosofia-di-retrohub)
+2. [Requisiti di Sistema & Installazione Portabile](#2-requisiti-di-sistema--installazione-portabile)
+3. [Interfaccia Grafica da Salotto (10-Foot UI)](#3-interfaccia-grafica-da-salotto-10-foot-ui)
+4. [Enciclopedia Visiva & Sblocco Immagini (Zero-Disk)](#4-enciclopedia-visiva--sblocco-immagini-zero-disk)
+5. [Download ROM "On-The-Fly" & Prompt Salva-Spazio](#5-download-rom-on-the-fly--prompt-salva-spazio)
+6. [Motore di Ricerca Fuzzy Avanzato & Filtri Booleani](#6-motore-di-ricerca-fuzzy-avanzato--filtri-booleani)
+7. [Configurazione Controller (Xbox, PS1/PS2 & DirectInput)](#7-configurazione-controller-xbox-ps1ps2--directinput)
+8. [Architettura Emulatori & Core Libretro](#8-architettura-emulatori--core-libretro)
+9. [Guida alle Sfide Multiplayer (Netplay P2P)](#9-guida-alle-sfide-multiplayer-netplay-p2p)
+10. [Risoluzione Problemi & Domande Frequenti (FAQ)](#10-risoluzione-problemi--domande-frequenti-faq)
 
 ---
 
-## 1. Introduzione & Panoramica
+## 1. Introduzione & Filosofia di RetroHub
 
-**RetroHub** è una centrale di comando desktop ad altissime prestazioni scritta interamente in **Rust**, ideata per gestire, sfogliare, catalogare e lanciare all'istante l'intera collezione retrogaming unificata (**1.149 titoli** distribuiti su 16 sistemi differenti).
+**RetroHub** è una centrale di comando desktop ad altissime prestazioni scritta interamente in **Rust**, ideata per gestire, sfogliare, catalogare e lanciare all'istante l'intera storia dei videogiochi (oltre **1.149 capolavori** su oltre **16 piattaforme** iniziali, espandibili a oltre 200 sistemi).
 
-### I Punti di Forza:
-- **Binario Unico Ultra-Compatto**: Tutto il sistema (database SQLite, motore di ricerca fuzzy, micro-server HTTP locale, interfaccia grafica embedded e netcode multiplayer) è racchiuso in un unico file `.exe` di soli **3,5 MB**.
-- **Avvio Istantaneo (< 50 millisecondi)**: Nessun tempo di caricamento, consumo di CPU pari allo 0% in idle e memoria RAM inferiore a 25 MB.
-- **Esperienza Console da Salotto**: Finestra nativa senza barre del browser (frameless), completamente navigabile tramite controller da divano.
-- **Copertine & Boxart Automatiche**: Integrazione diretta con il CDN ufficiale Libretro per visualizzare poster 2D/3D in alta definizione con fallback grafico stilizzato.
-
----
-
-## 7. Personalizzazione Libreria & Download On-Demand
-
-### 7.1 Selezione Piattaforme all'Inizio
-All'avvio iniziale, RetroHub mostra una schermata di benvenuto con l'elenco completo delle piattaforme supportate (16+). Puoi selezionare solo le piattaforme che ti interessano.
-
-### 7.2 Visualizza Tutti i Giochi
-- Il catalogo centrale contiene le informazioni di tutti i 1.149 titoli (copertine, tags, metadata).
-- Puoi navigare l'intera libreria o filtrarla per le piattaforme selezionate.
-- Usa il pulsante "Mostra Tutte" per visualizzare tutti i titoli.
-
-### 7.3 QWizard Auto-Rilevamento ROM
-RetroHub può individuare automaticamente le ROM esistenti sul tuo PC:
-- Scansione delle cartelle comuni (C:\EMULATORS, D:\ROMS, E:\Giochi)
-- Mappatura intelligente per estensione e nome file
-- Spostamento automatico nella struttura corretta
-
-### 7.4 Download On-Demand per Immagini
-- **Copertine automatiche**: CDN Libretro per boxart 2D/3D
-- **Fallback grafico**: Poster stilizzati quando le copertine non sono disponibili
-- **Cache locale**: Immagini salvate per accesso offline
-
-### 7.5 Download On-Demand per ROM
-Quando clicchi "Gioca" su un gioco senza ROM:
-1. Viene mostrato un link sicuro per il download
-2. OPPURE scarica automaticamente da fonti legittime
-3. Verifica SHA1 per integrità file
-
-### 7.6 Prompt Post-Gioco
-Dopo aver giocato, appare una finestra:
-```
-Vuoi mantenere la ROM?
-[TENERE LA ROM]    [CANCELLARE]
-```
-
-### 7.7 Gestione Libreria Utente
-- **Pagina "La Mia Libreria"**: Filtra per ROM presenti e preferiti
-- **Pulsante "Aggiorna"**: Ricerca nuove ROM nelle cartelle
-- **Statistiche**: Numero giochi giocabili, spazio totale occupato
+### I Punti di Forza Unici:
+* ⚡ **Avvio Istantaneo (< 50 millisecondi):** Nessuna attesa di caricamento, consumo di CPU pari allo 0% in idle e memoria RAM inferiore a 30 MB.
+* 📦 **Singolo Binario Portabile (`retro-hub.exe`):** Nessun installer invasivo, zero chiavi di registro di Windows, cartella 100% portatile trasferibile su chiavetta USB o hard disk esterno.
+* 🎨 **Enciclopedia Visiva Sbloccata al 100%:** Puoi esplorare tutte le copertine boxart in alta definizione, gli anni, i generi e le descrizioni storiche anche senza avere le ROM scaricate in anticipo sul PC.
+* ☁️ **Download ROM al Volo (On-The-Fly):** Clicchi su un gioco, RetroHub lo scarica in background in pochi secondi, verifica l'integrità del file e avvia subito la partita.
+* 🎮 **Esperienza Console da Divano:** Finestra frameless senza bordi del browser, navigabile al 100% tramite gamepad.
 
 ---
 
-## 2. Requisiti & Installazione
+## 2. Requisiti di Sistema & Installazione Portabile
 
-### Requisiti di Sistema:
-- **Sistema Operativo**: Windows 10 o Windows 11 (64-bit).
-- **Controller (Opzionale ma consigliato)**: Pad Xbox (One, Series X/S, 360) e/o Adattatore USB Dual Joypad PS1/PS2.
-- **Rete**: Connessione Internet necessaria solo per il download delle copertine e per le sfide multiplayer online (il client offline funziona sempre al 100%).
+### Requisiti Minimi:
+* **Sistema Operativo:** Windows 10 o Windows 11 (64-bit).
+* **Processore:** Qualsiasi CPU Intel o AMD a 64 bit (anche processori a basso consumo).
+* **RAM:** 2 GB di memoria (RetroHub ne occupa solo ~25 MB).
+* **Controller (Raccomandato):** Gamepad Xbox (Series X/S, One, 360), PlayStation (DualShock/DualSense) o adattatori USB per pad PS1/PS2.
+* **Rete:** Connessione Internet necessaria solo per il download delle copertine e per i giochi on-demand (tutto ciò che è già scaricato funziona al 100% offline).
 
-### Installazione & Primo Avvio:
-Il progetto è già configurato e compilato nella cartella:  
-`C:\Users\ClaudioDall'Ara\Desktop\Clod\MySide\launcher_game\`
-
-Per avviarlo hai due opzioni immediate:
-1. **Dal Desktop / Cartella Giochi**:  
-   Fai doppio clic sul collegamento [Avvia RetroHub (Client Rust).lnk](file:///C:/Users/ClaudioDall'Ara/Desktop/Clod/emu/Avvia%20RetroHub%20(Client%20Rust).lnk).
-2. **Dalla Cartella del Progetto**:  
-   Fai doppio clic su `Avvia_RetroHub.bat` oppure direttamente su `retro-hub.exe`.
+### Come Avviare RetroHub:
+1. Scarica o scompatta la cartella `RetroHub/` in qualsiasi punto del tuo computer (es. `C:\Giochi\RetroHub` o su disco esterno `D:\RetroHub`).
+2. Fai doppio clic su `retro-hub.exe` (oppure sul file batch di comodo `Avvia_RetroHub.bat`).
+3. L'interfaccia comparirà immediatamente sullo schermo in modalità finestra dedicata a schermo intero.
 
 > [!NOTE]
-> Al primissimo avvio, il client sincronizza i 1.149 giochi nel database locale `retro_hub.db` in meno di un secondo. Negli avvii successivi l'apertura è letteralmente istantanea!
+> Al primissimo avvio, RetroHub crea automaticamente il file di configurazione `retrohub.json` e il database locale indicizzato `retro_hub.db` in meno di un secondo.
 
 ---
 
-## 3. Guida all'Uso dell'Interfaccia Grafica
+## 3. Interfaccia Grafica da Salotto (10-Foot UI)
 
-L'interfaccia è progettata per offrire il massimo comfort visivo in ambiente scuro (*Dark Mode Neon*):
+L'interfaccia grafica è progettata con tema scuro cyberpunk/neon ad alto contrasto visivo:
 
 ```
 +---------------------------------------------------------------------------------------------------+
-|  🕹️ RetroHub [1.149 Giochi]      [🔍 Cerca titolo, anno, autore...] [✖]    [⭐ Preferiti] [🌐 Arena]  |
+|  🕹️ RetroHub [1.149 Giochi]      [🔍 Cerca titolo, anno, autore...] [✖]    [⭐ Preferiti] [⚙️ Opzioni]|
 +---------------------------------------------------------------------------------------------------+
-| BARRA LATERALE          |  HERO BANNER (Gioco Attualmente Selezionato)                            |
-| ----------------------- |  [COVER] Street Fighter II (MAME Arcade) | 1991 | Picchiaduro 1v1      |
-| [X] Tutte (1.149)       |  🎮 Mappatura: Back: Coin | Start: 1P | A/B/X/Y/LB/RB: Pugni/Calci       |
-| [ ] MAME Arcade (596)   |  [ ▶ GIOCA ORA ]   [ 🌐 Sfida Online ]                                   |
-| [ ] Commodore 64 (224)  |-------------------------------------------------------------------------|
-| [ ] MS-DOS (100)        | GRIGLIA A COPERTINE (Poster Boxart 3D con effetto Hover & Profondità)   |
-| [ ] ScummVM (64)        | +----------+  +----------+  +----------+  +----------+  +----------+      |
-| [ ] Recomp Native (45)  | | [MAME]   |  | [C64]    |  | [RECOMP] |  | [DOS]    |  | [SNES]   |      |
-| [ ] LocoMalito (33)     | | Metal    |  | Turrican |  | Zelda    |  | Doom II  |  | Super    |      |
-| [ ] Sega NAOMI (27)     | | Slug     |  | II       |  | OoT      |  |          |  | Mario W. |      |
-| [ ] Super Nintendo (21) | +----------+  +----------+  +----------+  +----------+  +----------+      |
+| BARRA LATERALE          |  HERO BANNER (Spotlight Gioco in Evidenza)                              |
+| ----------------------- |  [BOXART] The Legend of Zelda: Ocarina of Time | 1998 | Avventura RPG   |
+| [X] Tutte le Console    |  🎮 Mappatura: Levetta: Movimento | A: Azione | B: Spada | Start: Menu    |
+| [ ] MAME Arcade (596)   |  [ ▶ GIOCA SUBITO ]   [ 🌐 Sfida Online ]   [ ⭐ Aggiungi ai Preferiti ] |
+| [ ] Super Nintendo (21) |-------------------------------------------------------------------------|
+| [ ] Commodore 64 (224)  | GRIGLIA A COPERTINE (Poster Boxart 3D con effetto Hover & Glow Ciano)   |
+| [ ] Sega Dreamcast (14) | +----------+  +----------+  +----------+  +----------+  +----------+      |
+| [ ] MS-DOS PC (100)     | | [SNES]   |  | [MAME]   |  | [N64]    |  | [C64]    |  | [PS1]    |      |
+| [ ] Sony PS1 (18)       | | Super    |  | Metal    |  | Super    |  | Turrican |  | Tekken   |      |
+| [ ] GameCube (12)       | | Mario W. |  | Slug X   |  | Mario 64 |  | II       |  | 3        |      |
+| [ ] PC Recomp (45)      | +----------+  +----------+  +----------+  +----------+  +----------+      |
 +---------------------------------------------------------------------------------------------------+
 ```
 
-### Componenti Principali:
-1. **Top Bar**:
-   - Badge con il conteggio in tempo reale dei titoli visualizzati.
-   - Casella di ricerca istantanea con pulsante rapido `[✖]` di cancellazione.
-   - Pulsante **`⭐ Preferiti`**: visualizza esclusivamente i giochi che hai contrassegnato con la stella.
-   - Pulsante **`🌐 Arena Online`**: apre la finestra delle sfide multiplayer P2P.
-   - Spia di stato del controller: mostra i joypad attualmente connessi.
-2. **Barra Laterale (Filtri Rapidi)**:
-   - **Piattaforme**: Filtra all'istante per uno dei 16 sistemi supportati.
-   - **Decadi Temporali**: Isola i giochi usciti negli anni '80, '90, 2000, 2010 o Moderni (2020-2026).
-3. **Hero Banner (In Alto)**:
-   - Mostra in grande la copertina del gioco selezionato, l'anno, il genere, lo sviluppatore e la configurazione comandi specifica per controller.
-   - Pulsante verde **`▶ GIOCA ORA`** per avviare la partita.
-   - Pulsante azzurro **`🌐 Sfida Online`** per avviare la modalità stanza multigiocatore.
-4. **Griglia Copertine**:
-   - Schede con proporzioni boxart (3:4) e badge console colorato in alto a sinistra.
-   - Clic su una scheda: seleziona il gioco e aggiorna il banner.
-   - Doppio clic su una scheda: lancia subito il gioco!
-   - Clic sulla stella `⭐`: aggiunge o rimuove il titolo dai tuoi Preferiti.
+### Elementi Chiave:
+1. **Top Bar di Controllo:**
+   * Badge contatore con il numero di titoli visibili in tempo reale.
+   * Barra di ricerca fuzzy con tasto rapido di cancellazione `[✖]`.
+   * Filtro immediato **`⭐ Preferiti`**.
+   * Icona delle **Impostazioni `⚙️`** per percorsi e opzioni salva-spazio.
+2. **Barra Laterale Console:**
+   * Elenco rapido con contatore giochi per ciascuna console.
+   * Cliccando su una piattaforma, la griglia si aggiorna istantaneamente.
+3. **Hero Banner Superiore:**
+   * Mostra in formato maxi la copertina, i dettagli di gioco (anno, genere, sviluppatore) e la mappatura precisa dei pulsanti per controller.
+4. **Griglia Copertine Poster (3:4):**
+   * Schede verticali eleganti con glow ciano al passaggio del mouse o cursore del joypad.
+   * Se la boxart esterna non è disponibile, viene mostrato un fallback tipografico scuro con il badge colorato della console.
 
 ---
 
-## 4. Motore di Ricerca Fuzzy & Filtri Multi-Tag
+## 4. Enciclopedia Visiva & Sblocco Immagini (Zero-Disk)
 
-A differenza dei semplici filtri statici, RetroHub integra un motore di ricerca a punteggio pesato (*Weighted Fuzzy Engine*) basato sull'algoritmo di **Jaro-Winkler** e sulla distanza di **Levenshtein**.
+Una delle più grandi innovazioni di RetroHub è l'**approccio Zero-Disk Footprint**:
+* Non sei obbligato a riempire il tuo disco rigido con 500 GB o 1 Terabyte di ROM prima di poter usare l'applicazione.
+* Quando selezioni una console (es. *Super Nintendo* o *MAME*), puoi impostare la visualizzazione su:
+  * **🔓 Sblocca Tutto l'Archivio (100% Immagini):** Mostra l'intera collezione mondiale di titoli con copertine in alta definizione, schede storiche e controlli.
+  * **💾 Solo Scaricati in Locale:** Mostra unicamente i giochi i cui file ROM sono già fisicamente presenti sul tuo PC.
 
-### Caratteristiche della Ricerca:
-- **Tolleranza agli Errori di Battitura**:  
-  Se scrivi `"stret fiter"`, il sistema riconosce al 95% di confidenza *"Street Fighter II"*.  
-  Se scrivi `"zellda"`, individua immediatamente *"The Legend of Zelda"*.  
-  Se scrivi `"pacman"`, trova *"Pac-Man"*.
-- **Ricerca Parziale per Parola**:  
-  Cercando `"mario"`, troverai tutti i titoli Mario per SNES, N64, Recomp e Arcade.  
-  Cercando `"shmup"` o `"sparatutto"`, isolerai l'intera categoria degli sparatutto a scorrimento.
-- **Intersezione Booleana dei Filtri**:  
-  Tutti i filtri si combinano tra loro. Ad esempio:
-  - Seleziona **MAME Arcade** nella barra laterale.
-  - Clicca sulla decade **Anni 90**.
-  - Digita `"capcom"` nella ricerca.  
-  -> Il client mostrerà unicamente i capolavori arcade Capcom degli anni '90!
+Le immagini visualizzate vengono salvate automaticamente nella cartella `cache/covers/` per essere disponibili anche quando il PC non è connesso a Internet.
 
 ---
 
-## 5. Configurazione Controller (Xbox & Adattatore USB PS1)
+## 5. Download ROM "On-The-Fly" & Prompt Salva-Spazio
 
-Il client supporta in modo nativo qualsiasi controller per PC, con calibrazione specifica per due categorie principali:
+Come funziona l'avvio di un gioco che non hai ancora sul disco:
+
+```
+[ Clic su "☁️ SCARICA & GIOCA" ]
+              │
+              ▼
+[ Download al Volo in Background (da CDN/Mirror) con stima tempo ]
+              │
+              ▼
+[ Verifica Integrità File (Checksum SHA1 / CRC32) ]
+              │
+              ▼
+[ Avvio Automatico Immediato del Gioco a Schermo Intero ]
+              │
+              ▼ (Sessione di gioco terminata)
+[ Chiusura Emulatore ]
+              │
+              ▼
+[ Finestra di Dialogo Salva-Spazio ]
+  ┌────────────────────────────────────────────────────────────┐
+  │ Vuoi conservare la ROM sul PC o eliminarla per fare spazio?│
+  │ [ 💾 TIENI SUL PC ]        [ 🗑️ ELIMINA SUBITO ]           │
+  └────────────────────────────────────────────────────────────┘
+```
+
+Se scegli **ELIMINA**, il file temporaneo viene cancellato dal disco, mantenendo il computer sempre pulito e leggero. Se scegli **TIENI**, il gioco rimane pronto all'uso istantaneo per le volte successive.
+
+---
+
+## 6. Motore di Ricerca Fuzzy Avanzato & Filtri Booleani
+
+RetroHub non usa semplici filtri a corrispondenza esatta, ma integra un motore a punteggio pesato (*Weighted Fuzzy Engine*) basato sugli algoritmi di **Jaro-Winkler** e **Levenshtein**.
+
+### Esempi di Sintassi Avanzata:
+* **Tolleranza agli errori:** Se digiti `"stret fiter"` o `"zellda"`, RetroHub riconosce con oltre il 90% di confidenza i titoli corretti.
+* **Frasi Esatte con Virgolette (`"..."`):** Cercando `"lupin"`, il sistema isolerà esclusivamente i titoli su Lupin III, escludendo titoli simili come *Lupo Alberto*.
+* **Esclusione (`-` o `NOT`):** `mario -kart` trova tutti i giochi di Mario escludendo i giochi di kart.
+* **Filtri di Campo:**
+  * `title:sonic` (cerca solo nei titoli)
+  * `genre:rpg` o `genre:picchiaduro`
+  * `dev:capcom` o `dev:nintendo`
+  * `sys:snes` o `sys:mame`
+* **Intervalli di Anni:** `1990..1995` mostra solo i giochi pubblicati in quel quinquennio.
+* **Operatore OR (`|`):** `dev:sega | dev:namco` trova i titoli di entrambe le case.
+
+---
+
+## 7. Configurazione Controller (Xbox, PS1/PS2 & DirectInput)
+
+RetroHub riconosce istantaneamente qualsiasi gamepad compatibile con Windows (XInput o DirectInput) senza dover configurare driver o software di terze parti:
 
 ### 🎮 Controller Xbox (XInput):
-| Tasto Controller | Azione nel Client RetroHub |
+| Tasto Controller | Funzione in RetroHub |
 | :--- | :--- |
-| **D-Pad / Levetta Sinistra** | Naviga fluidamente tra le copertine della griglia |
-| **Tasto A** | Avvia immediatamente il gioco selezionato |
-| **Tasto B** | Chiude le finestre modali o torna indietro |
-| **Tasto X** | Apre la scheda dettagliata e i comandi del gioco |
-| **Tasto Y** | Aggiunge / Rimuove il gioco dai Preferiti ⭐ |
-| **Dorsali LB / RB** | Salta da una console all'altra nella barra laterale |
+| **D-Pad / Levetta Sinistra** | Scorre fluidamente tra le copertine della griglia |
+| **Pulsante A** | Avvia il gioco selezionato (o avvia il download on-the-fly) |
+| **Pulsante B** | Chiude le finestre di dialogo o torna indietro |
+| **Pulsante X** | Apre il cassetto laterale con i dettagli storici e comandi |
+| **Pulsante Y** | Aggiunge o rimuove il gioco dai Preferiti ⭐ |
+| **Dorsali LB / RB** | Salta rapidamente da una console all'altra nella sidebar |
+
+### 🕹️ Controller PlayStation (con o senza adattatore USB):
+* **Tasto Croce ($\times$):** Conferma / Avvia (`A`).
+* **Tasto Cerchio ($\bigcirc$):** Torna indietro (`B`).
+* **Tasto Quadrato ($\square$):** Scheda Dettagli (`X`).
+* **Tasto Triangolo ($\triangle$):** Preferiti ⭐ (`Y`).
+* **Dorsali L1 / R1:** Cambio rapido piattaforma (`LB/RB`).
 
 ---
 
-### 🕹️ Adattatore USB Dual Joypad PS1/PS2 (DirectInput):
-Se colleghi l'adattatore USB a due porte per controller PlayStation 1 o 2:
-- **Funzionamento Automatico**: Riconosciuto al volo senza installare driver.
-- **Tasto Croce ($\times$)**: Conferma / Avvia Gioco (`A`).
-- **Tasto Cerchio ($\bigcirc$)**: Annulla / Chiudi Dettagli (`B`).
-- **Tasto Quadrato ($\square$)**: Scheda Informativa & Comandi (`X`).
-- **Tasto Triangolo ($\triangle$)**: Aggiunge ai Preferiti ⭐ (`Y`).
-- **Dorsali L1 / R1**: Cambio rapido console (`LB/RB`).
-- **Frecce Direzionali (D-Pad)**: Supportate sia in modalità analogica che digitale.
+## 8. Architettura Emulatori & Core Libretro
 
-### 👥 Uso Simultaneo Misto (Xbox + PS1 Insieme):
-Puoi collegare contemporaneamente sia il pad Xbox che l'adattatore PS1:
-- Nel client, **qualunque pad tocchi risponde immediatamente**.
-- Nei giochi a due giocatori (come *Street Fighter*, *Tekken*, *Metal Slug*, *Windjammers*), un giocatore può usare il pad PS1 e l'altro il controller Xbox!
+RetroHub adotta l'architettura a **Doppio Binario**:
+
+1. **Console Classiche (NES, SNES, Mega Drive, GB, GBA, C64, Atari, PC Engine...):**
+   * Vengono eseguite tramite **RetroArch Libretro Core** in modalità headless (completamente invisibile).
+   * L'utente non vede mai RetroArch: il gioco si apre a schermo intero e al termine si ritorna all'istante su RetroHub.
+   * I singoli file core (`.dll`) vengono scaricati in modo trasparente dal buildbot ufficiale Libretro solo al primo avvio della rispettiva console.
+2. **Sistemi Pesanti e Arcade Speciali (Dolphin, DuckStation, Flycast, MAME, PCSX2, Hypseus):**
+   * Vengono eseguiti tramite i rispettivi emulatori standalone dedicati, garantendo il 100% della compatibilità hardware e delle prestazioni grafiche avanzate.
 
 ---
 
-## 6. Guida al Gioco Online Multiplayer (P2P Netplay)
+## 9. Guida alle Sfide Multiplayer (Netplay P2P)
 
-La modalità **Online Arena** consente di giocare online con amici su qualsiasi emulatore senza server intermedi a pagamento e senza configurare porte sul router.
+La modalità **Arena Online** consente di giocare online 1 contro 1 con un amico a distanza:
 
-```
-       [ Tuo PC (Host) ]                             [ PC del tuo Amico (Guest) ]
-              │                                                   │
-    1. Clicca "Sfida Online"                                      │
-    2. Copia Token Invito ─────────────── Invia Token ───────────>│
-              │                                           3. Incolla Token e
-              │<────────── Handshake UDP Diretto P2P ──── 4. Clicca "Collegati"
-              │                                                   │
-  5. Clicca "AVVIA PARTITA"                                       │
-              │                                                   │
-    [ ▶ Gioco Aperto (P1) ]                        [ ▶ Gioco Aperto Sincronizzato (P2) ]
-```
-
-### Procedura per Ospitare (Host):
-1. Seleziona il gioco con cui vuoi sfidare il tuo amico.
-2. Clicca sul pulsante **`🌐 Sfida Online`** in alto.
-3. Inserisci il tuo nome e clicca **`⚡ Genera Stanza Online`**.
-4. Clicca su **`📋 Copia Token Invito`** e invia la stringa al tuo amico (tramite chat, WhatsApp, Telegram, Discord, ecc.).
-5. Quando l'amico si connette, la spia diventa verde con il Ping stimato (es. *16ms*).
-6. Clicca **`▶ AVVIA PARTITA ONLINE`**: il gioco si aprirà in sincrono su entrambi i computer!
-
-### Procedura per Partecipare (Guest):
-1. Apri RetroHub sul tuo computer.
-2. Clicca su **`🌐 Arena Online`** in alto a destra.
-3. Vai nella scheda **`Partecipa a Stanza (Guest)`**.
-4. Inserisci il tuo nickname e incolla il Token ricevuto.
-5. Clicca **`🔗 Collegati alla Stanza`**: non appena l'Host dà il via, la partita si avvierà automaticamente sul tuo schermo!
+1. **Host (Chi crea la stanza):**
+   * Seleziona il gioco desiderato (es. *Street Fighter II*, *Metal Slug*, *Tekken 3*).
+   * Clicca su **`🌐 Sfida Online`** nel banner superiore.
+   * Clicca su **`⚡ Genera Stanza Online`** e copia il codice univoco generato (es. `RH-7821`).
+   * Invia il codice al tuo amico.
+2. **Guest (Chi partecipa):**
+   * Apre RetroHub sul proprio PC.
+   * Clicca su **`🌐 Arena Online`** in alto.
+   * Incolla il codice stanza ricevuto e clicca **`🔗 Connettiti`**.
+3. Quando entrambi i giocatori sono sincronizzati, l'host clicca **`▶ AVVIA PARTITA ONLINE`**: il gioco si avvia in sincrono perfetto su entrambi i monitor!
 
 ---
 
-## 7. Architettura Tecnica del Codice Rust
+## 10. Risoluzione Problemi & Domande Frequenti (FAQ)
 
-Il codice sorgente si trova in:  
-`C:\Users\ClaudioDall'Ara\Desktop\Clod\MySide\launcher_game\src\`
+### D: Perché un gioco non parte quando clicco su "Gioca"?
+**R:** Se il gioco richiede un file locale, verifica che la ROM sia presente nella cartella `roms/<piattaforma>/`. Se è un gioco on-demand, assicurati che il computer sia connesso a Internet durante il primo download.
 
-```
-src/
-├── main.rs         # Inizializzazione, gestione flag di avvio e apertura finestra desktop
-├── models.rs       # Modelli dati strongly-typed (Game, Platform, SearchFilter, Stats)
-├── db.rs           # Layer database SQLite locale (CRUD giochi, play count, preferiti)
-├── catalog.rs      # Ingestion del Master Catalog con indicizzazione directory e cache
-├── search.rs       # Algoritmo di ricerca Fuzzy (Jaro-Winkler) e ordinamento pesato
-├── launcher.rs     # Gestore esecuzione nativa Windows (.lnk, .bat, mame.exe, .exe)
-├── server.rs       # Micro-server REST HTTP ad alte prestazioni su tiny_http
-├── netplay.rs      # Modulo P2P Netplay: gestione stanze, token esadecimali e handshake UDP
-└── ui.html         # Interfaccia grafica completa embedded a compile-time (Zero dipendenze)
-```
+### D: Il controller non risponde nella schermata principale?
+**R:** Premi un qualsiasi tasto sul joypad per "svegliare" l'interfaccia Gamepad di Windows. Se usi un adattatore per controller PS1/PS2, assicurati che la spia rossa **ANALOG** sul pad sia accesa.
 
-### Come Ricompilare il Progetto:
-Se modifichi il codice sorgente o l'interfaccia HTML:
-```powershell
-cd "C:\Users\ClaudioDall'Ara\Desktop\Clod\MySide\launcher_game"
+### D: Posso aggiungere le mie ROM personali che ho già scaricato altrove?
+**R:** Certamente! Ti basta copiare i tuoi file `.zip`, `.sfc`, `.chd` o `.iso` all'interno della cartella `roms/<nome_piattaforma>/` e cliccare sul tasto **Aggiorna Libreria** nelle impostazioni. RetroHub le indicizzerà all'istante nel database.
 
-# Per eseguire i test unitari automatici:
-cargo test
-
-# Per compilare la versione Release ultra-ottimizzata:
-cargo build --release
-```
-L'eseguibile ottimizzato viene generato in `target\release\retro-hub.exe`.
-
----
-
-## 8. Risoluzione Problemi & Domande Frequenti (FAQ)
-
-### D: Il gioco non si avvia quando clicco su "Gioca"?
-**R:** Verifica che la cartella `C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\` non sia stata spostata o rinominata. RetroHub cerca i collegamenti ufficiali `.lnk` e i file batch all'interno delle rispettive cartelle di sistema.
-
-### D: Sul controller PS1 non funzionano le frecce direzionali?
-**R:** Premi il pulsante centrale **`ANALOG`** sul joypad per accendere la spia rossa. Molti adattatori USB richiedono la modalità analogica attiva per mappare correttamente gli assi della croce direzionale.
-
-### D: Come forzare l'aggiornamento dei giochi se ne aggiungo di nuovi?
-**R:** Puoi avviare l'eseguibile da terminale passando il comando `--refresh`:
-```powershell
-.\retro-hub.exe --refresh
-```
-Il database locale rileggerà all'istante l'intero catalogo HTML aggiornato.
-
-### D: La finestra si apre ma non vedo le copertine?
-**R:** Le copertine vengono scaricate on-demand dal CDN aperto di Libretro. Assicurati che il PC sia connesso a Internet durante la prima consultazione. In assenza di connessione, RetroHub mostrerà un'elegante cartuccia arcade stilizzata con il nome del gioco e della console.
+### D: RetroHub funzionerà anche su Linux o su Mac in futuro?
+**R:** Sì! Il motore centrale è scritto in Rust ed è progettato fin dall'inizio per essere multipiattaforma. Una volta perfezionata la versione Windows, verranno rilasciati i binari nativi per Linux e macOS (Apple Silicon M1/M2/M3 e Intel).
