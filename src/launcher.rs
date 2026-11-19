@@ -324,10 +324,12 @@ impl Launcher {
 
             if is_direct_executable {
                 // Avvio garantito di collegamenti .lnk, script .bat e file eseguibili
+                let dir = target_file.parent().unwrap_or(Path::new("."));
                 let escaped = target_file.to_string_lossy().replace('\'', "''");
+                let dir_escaped = dir.to_string_lossy().replace('\'', "''");
                 let script = format!(
-                    r#"$p = Start-Process -FilePath '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
-                    escaped
+                    r#"$p = Start-Process -FilePath '{}' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
+                    escaped, dir_escaped
                 );
                 Command::new("powershell")
                     .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
@@ -364,10 +366,12 @@ impl Launcher {
             }
 
             // Fallback diretto Windows
+            let dir = target_file.parent().unwrap_or(Path::new("."));
             let escaped = target_file.to_string_lossy().replace('\'', "''");
+            let dir_escaped = dir.to_string_lossy().replace('\'', "''");
             let script = format!(
-                r#"$p = Start-Process -FilePath '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
-                escaped
+                r#"$p = Start-Process -FilePath '{}' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
+                escaped, dir_escaped
             );
             Command::new("powershell")
                 .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
