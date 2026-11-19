@@ -106,9 +106,10 @@ flowchart TD
 ### 👤 Caso 1: Il Nuovo Utente (Zero ROM sul PC)
 * **Esigenza:** Installare ed essere in gioco in 60 secondi, senza scaricare romset giganti e senza manuali tecnici.
 * **Scelta Consigliata nel Wizard:**
-  * Piattaforme consigliate all'avvio: **Top 5 o Top 10 Regina**.
+  * Piattaforme consigliate all'avvio: **Top 5 o Top 10 Regina + PC INDIE (Freeware)**.
   * Download iniziale immagini: **0 MB** (Streaming lazy).
   * Gestione post-partita: **Eliminazione automatica dalla cache temporanea** (tranne i Preferiti ⭐).
+  * **PC Indie nel Profilo Nuovo Utente:** Di default sono visibili solo i titoli freeware immediatamente scaricabili in 3 secondi (LocoMalito, AM2R, Cave Story, Spelunky, ecc., totale ~350 MB per tutta la collezione). I titoli commerciali non compaiono come download per non generare frustrazione o problemi di licenza.
 * **Impatto su disco:** **Meno di 25 MB totali** (solo il database e il client nativo).
 
 ---
@@ -121,9 +122,11 @@ flowchart TD
     L'utente indica **UNA cartella radice** (es. `C:\Users\...\Desktop\Clod\emu` oppure `D:\ROMS` o `./roms`).
     All'interno, RetroHub cerca le cartelle console standard universali:
     * `roms/snes/`, `roms/megadrive/`, `roms/nes/`, `roms/mame/`, `roms/c64/`, `roms/psx/`, `roms/gba/`, ecc.
+    * **Riconoscimento Automatico Indie & LocoMalito:** Rileva all'istante sottocartelle come `roms/indie/` o `LocoMalito & Indie/`, mappando automaticamente sia i titoli commerciali (Hollow Knight, Celeste, UFO 50) sia i freeware con le copertine verticali Steam 600x900 e i metadati completi.
+    * **Pulsante Collega Eseguibile:** Se un gioco commerciale è installato altrove (es. su SSD secondario `D:\Games\Hollow Knight`), l'utente usa il comando `[ 📂 Collega Gioco PC ]` selezionando l'eseguibile, con associazione automatica istantanea.
   * **Compatibilità Multipiattaforma Garantita:** Questo schema è identico su Windows (`roms\snes`), Linux (`roms/snes`) e macOS (`roms/snes`), rendendo la migrazione futura istantanea.
   * **Visualizzazione a Video:**
-    * In `[ 💾 Solo Scaricati ]`: mostra esclusivamente le ROM trovate nelle cartelle locali.
+    * In `[ 💾 Solo Scaricati ]`: mostra esclusivamente le ROM e i giochi PC trovati localmente.
     * In `[ 🔓 Tutto l'Archivio ]`: mostra i locali in verde `▶ GIOCA` e l'intero catalogo mondiale non posseduto in ciano `☁️ SCARICA & GIOCA`.
 
 ---

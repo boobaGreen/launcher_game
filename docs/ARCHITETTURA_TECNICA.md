@@ -249,22 +249,31 @@ Dall'analisi del catalogo reale (33 titoli censiti), emergono due categorie dist
      - **Manifest Curato (`indie_manifest.json`):** Mappa puntuale dell'eseguibile primario per i titoli noti (es. `Doukutsu.exe` per Cave Story, con menu secondario contestuale `[ ⚙️ Configura ]` per `DoConfig.exe`).
      - **Working Directory Obbligatoria:** Il launcher imposta sempre `current_dir` alla cartella del gioco, condizione vitale affinché DLL, file `data.win` e salvataggi funzionino.
 
-2. **Tassonomia e Navigazione UI:**
+2. **Tassonomia e Navigazione UI (Scelta Architetturale Ufficiale: Piattaforma Unificata):**
    * Codice Piattaforma Unificato: `pc_indie` (Colore Sociale: Viola Neon `#a371f7` o Corallo `#ff7b72`).
-   * **Tag Pills Filtrabili nella UI:**
-     - `#locomalito` (filtra la collezione completa dell'autore spagnolo)
-     - `#fan-remake` (AM2R, SoRR, Cave Story)
-     - `#commercial-indie` (Celeste, Hollow Knight, UFO 50)
-     - `#pixel-8bit` / `#pixel-16bit` (per stile visivo)
+   * Riconoscimento immediato con badge elegante `PC INDIE`.
+   * **Barra di Navigazione Rapida a Pillole (Pills):**
+     - `[ Tutti ]` (mostra l'intero catalogo PC Indie)
+     - `[ LocoMalito ]` (filtro dedicato all'autore: Maldita Castilla, Hydorah, Darkula, ecc.)
+     - `[ Fan Remake ]` (AM2R, Streets of Rage Remake v5.2, Cave Story)
+     - `[ Commerciali ]` (Hollow Knight, Celeste, UFO 50, ecc.)
+     - `#pixel-8bit` / `#pixel-16bit` / `#metroidvania` (per stile visivo e genere)
 
 3. **Boxart Standardizzate & Vertical Capsules:**
    * Per i titoli commerciali/Steam: Utilizzo automatico della CDN ufficiale Steam Vertical Capsule (formato 2:3 a 600x900 px): `https://cdn.akamai.steamstatic.com/steam/apps/<appid>/library_600x900.jpg`.
    * Per LocoMalito & Freeware: Boxart verticali ufficiali dell'autore o fornite localmente in `covers/pc_indie/<game_id>.webp`.
    * Modalità Placeholder Tipografica (Caso 3 Low-Storage): Nessun download di immagini; card vettoriale gradient con nome del titolo e tag di genere.
 
-4. **On-Demand & Download Storage:**
-   * *Freeware:* Download immediato dello zip pre-estratto in `roms/indie/<Titolo>/` con barra di avanzamento e lancio istantaneo.
-   * *Commerciali Non Posseduti:* Mostrati in catalogo con metadati e recensione, ma con badge `[ 🛒 Acquista su Steam/GOG ]` e pulsante `[ 📂 Collega Cartella Locale ]` per mappare l'installazione locale dell'utente.
+4. **On-Demand & Gestione Commerciali (Zero Frustrazione & 100% Legale):**
+   * **Catalogo Cloud di Default (Solo Freeware & Fan Remake):**
+     - Al primo avvio o da libreria vuota, l'utente vede subito i titoli **immediatamente scaricabili e giocabili** (i 7 LocoMalito, AM2R, Cave Story, Spelunky, SoRR, ecc.). Peso complessivo: appena ~350 MB per tutta la collezione.
+     - L'utente clicca `[ SCARICA & GIOCA ]` e il gioco parte in pochi secondi senza configurazioni.
+   * **Workflow per i Titoli Commerciali (Hollow Knight, Celeste, ecc.):**
+     - I titoli commerciali appaiono nella libreria solo quando l'utente:
+       a) Esegue la scansione automatica della cartella esistente (es. `roms/indie/` o `emu/LocoMalito & Indie/`), OPPURE:
+       b) Usa il pulsante in-app `[ 📂 Collega Gioco PC / Eseguibile ]`: l'utente indica il percorso del file `.exe` o della cartella sul proprio disco; RetroHub associa automaticamente i metadati ufficiali e la boxart Steam 600x900, rendendo la card indistinguibile e perfettamente omogenea rispetto alle altre.
+   * **Pulsante Opzioni / Setup per Utility Ausiliarie:**
+     - Per giochi che contengono tool di configurazione tasti o editor (es. `DoConfig.exe` in Cave Story o `SorMaker.exe` in SoRR), la scheda del gioco espone accanto al pulsante verde `[ GIOCA ]` un'azione secondaria discreta `[ ⚙️ Setup / Opzioni ]`.
 
 5. **Portabilità Cross-Platform (Windows ➔ Linux / Steam Deck ➔ macOS):**
    * Astrazione del launcher tramite `GameRunner::NativeExecutable`:
