@@ -275,23 +275,6 @@
             transition: transform 0.4s var(--ease-elastic);
         }
 
-        .btn-sandbox {
-            background: rgba(245, 158, 11, 0.12);
-            color: var(--accent-gold);
-            border-color: rgba(245, 158, 11, 0.35);
-        }
-        .btn-sandbox.active {
-            background: var(--accent-gold);
-            color: #000;
-            font-weight: 800;
-            box-shadow: 0 0 20px var(--accent-gold-glow);
-            animation: pulseSandbox 2s infinite;
-        }
-        @keyframes pulseSandbox {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.82; }
-        }
-
         /* ==========================================================================
            2B. APP LAYOUT & LEFT SIDEBAR (12 MACRO-FAMILIES - STEAM/PLAYNITE HYBRID)
            ========================================================================== */
@@ -1547,7 +1530,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">v0.42</div>
+            <div class="brand-badge">v0.43</div>
         </div>
 
         <div class="nav-search-container">
@@ -1927,14 +1910,9 @@
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
-                    <button id="sandboxToggleBtn" class="btn btn-sandbox" onclick="toggleSandboxMode()" title="Modalità test: simula catalogo vuoto senza toccare i file reali">
-                        🧪 Simula Catalogo da Vuoto
-                    </button>
-                    <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-secondary" id="wizardCancelBtn" data-i18n="wizard_btn_cancel" onclick="closeWizardModal()">Annulla</button>
-                        <button class="btn btn-primary" id="wizardApplyBtn" data-i18n="wizard_btn_apply" onclick="applyWizardProfile()">Applica Profilo Selezionato</button>
-                    </div>
+                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 24px;">
+                    <button class="btn btn-secondary" id="wizardCancelBtn" data-i18n="wizard_btn_cancel" onclick="closeWizardModal()">Annulla</button>
+                    <button class="btn btn-primary" id="wizardApplyBtn" data-i18n="wizard_btn_apply" onclick="applyWizardProfile()">Applica Profilo Selezionato</button>
                 </div>
             </div>
         </div>
@@ -2487,6 +2465,21 @@
                     <button type="button" class="btn btn-secondary" style="flex:1;" data-i18n="settings_btn_reset" onclick="resetSettingsToDefaults()">Ripristina Predefiniti</button>
                     <button type="button" class="btn btn-primary" style="flex:1.4;" data-i18n="settings_btn_save" onclick="saveAndCloseSettingsModal()">Salva Preferenze</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         MODALE 9: DIALOG DI CONFERMA & AVVISO CUSTOM (SOSTITUISCE CONFIRM/ALERT NATIVI)
+         ========================================================================== -->
+    <div class="modal-backdrop" id="confirmModal" style="z-index: 350;">
+        <div class="modal-window" style="max-width: 480px; text-align: center; padding: 32px 24px; border: 1px solid var(--border-card);">
+            <div id="confirmModalIcon" style="font-size: 2.8rem; margin-bottom: 12px; filter: drop-shadow(0 0 16px rgba(255, 85, 85, 0.4));">⚠️</div>
+            <h3 id="confirmModalTitle" style="font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 8px;">Conferma Operazione</h3>
+            <p id="confirmModalMessage" style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; white-space: pre-line;"></p>
+            <div style="display: flex; justify-content: center; gap: 12px;">
+                <button type="button" class="btn btn-secondary" id="confirmModalCancelBtn" style="padding: 8px 20px; font-size: 0.82rem;" onclick="closeConfirmModal(false)">Annulla</button>
+                <button type="button" class="btn btn-primary" id="confirmModalOkBtn" style="padding: 8px 22px; font-size: 0.82rem;" onclick="closeConfirmModal(true)">Conferma</button>
             </div>
         </div>
     </div>
@@ -3145,11 +3138,11 @@
         let currentGenre = 'ALL';
         let storageFilter = 'all'; // 'all' (Cloud) | 'downloaded' (Solo Scaricati)
         let activeQuickFilter = null; // 'favorites' | 'multiplayer'
-        let isSandboxMode = false;
         let isTypographicMode = false; // Mostra boxart grafiche reali; fallback tipografico su 404/errore
         let preDownloadCovers = true; // Pre-download automatico copertine HD allo sblocco piattaforma (Default: ON nei Casi 1, 2, 4; OFF nel Caso 3)
         let currentLang = 'it';
         let downloadedGameIds = new Set();
+        let confirmModalResolve = null;
 
         function loadDownloadedGamesFromStorage() {
             try {
@@ -3226,8 +3219,10 @@
             initSearch();
             setupHeroHoverEvents();
             setupPlatformScrollWheel();
-            await loadPlatformsManifest();
-            await loadGames();
+            // Caricamento simultaneo di manifest e catalogo per eliminare qualsiasi race condition sui contatori
+            await Promise.all([loadPlatformsManifest(), loadGames()]);
+            updateCounters();
+            renderPlatformPills();
             applyLanguage(currentLang);
             setupGamepadPolling();
             // Primo Avvio Nuovo Utente: Se il wizard non è mai stato completato, apri obbligatoriamente il Setup Wizard
@@ -3247,7 +3242,6 @@
                 if (res.ok) {
                     const data = await res.json();
                     allPlatforms = data.platforms || [];
-                    renderPlatformPills();
                 }
             } catch (e) {
                 console.warn('Uso piattaforme di default');
@@ -3267,7 +3261,6 @@
                         });
                     }
                     updateCounters();
-                    renderPlatformPills();
                     initHeroSpotlight();
                     renderCatalog();
                 }
@@ -3277,7 +3270,7 @@
         }
 
         function updateCounters() {
-            const downloaded = allGames.filter(g => isSandboxMode ? false : g.is_installed).length;
+            const downloaded = allGames.filter(g => g.is_installed).length;
             const favCount = allGames.filter(g => g.is_favorite).length;
 
             const elCloud = document.getElementById('countCloud');
@@ -3298,6 +3291,9 @@
                 const count = allGames.filter(g => list.includes(g.system_code)).length;
                 setSide(`sideCount${key}`, count);
             }
+
+            // Allinea i badge contatori di tutte le piattaforme nella barra orizzontale
+            renderPlatformPills();
         }
 
         // --------------------------------------------------------------------------
@@ -3571,7 +3567,7 @@
                 `Esperienza retrogaming per ${g.platform}.`;
 
             // Pulsanti Azione
-            const isInstalled = isSandboxMode ? false : g.is_installed;
+            const isInstalled = !!g.is_installed;
             const isEn = (currentLang === 'en');
             const playBtn = document.getElementById('heroPlayBtn');
             playBtn.innerText = isInstalled ? t('hero_play_now') : t('hero_download_play');
@@ -3809,19 +3805,55 @@
         }
 
         function handleCardCoverError(img) {
-            if (!img.dataset.retryLevel) {
+            const level = parseInt(img.dataset.retryLevel || '0', 10);
+            
+            // Level 0 -> 1: Try Named_Titles
+            if (level === 0) {
                 img.dataset.retryLevel = '1';
                 if (img.src.includes('Named_Boxarts')) {
                     img.src = img.src.replace('Named_Boxarts', 'Named_Titles');
                     return;
                 }
-            } else if (img.dataset.retryLevel === '1') {
+            }
+            // Level 1 -> 2: Try Named_Snaps
+            if (level === 1) {
                 img.dataset.retryLevel = '2';
                 if (img.src.includes('Named_Titles')) {
                     img.src = img.src.replace('Named_Titles', 'Named_Snaps');
                     return;
                 }
             }
+            // Level 2 -> 3: Try (World)
+            if (level === 2) {
+                img.dataset.retryLevel = '3';
+                if (img.src.includes('(USA)')) {
+                    img.src = img.src.replace('(USA)', '(World)').replace('Named_Snaps', 'Named_Boxarts');
+                    return;
+                } else if (img.src.includes('%28USA%29')) {
+                    img.src = img.src.replace('%28USA%29', '%28World%29').replace('Named_Snaps', 'Named_Boxarts');
+                    return;
+                }
+            }
+            // Level 3 -> 4: Try (USA, Europe)
+            if (level === 3) {
+                img.dataset.retryLevel = '4';
+                if (img.src.includes('(World)')) {
+                    img.src = img.src.replace('(World)', '(USA,%20Europe)');
+                    return;
+                } else if (img.src.includes('%28World%29')) {
+                    img.src = img.src.replace('%28World%29', '%28USA%2C%20Europe%29');
+                    return;
+                }
+            }
+            // Level 4 -> 5: Try (Japan)
+            if (level === 4) {
+                img.dataset.retryLevel = '5';
+                if (img.src.includes('USA')) {
+                    img.src = img.src.replace('USA', 'Japan');
+                    return;
+                }
+            }
+            // Fallback finale tipografico
             img.style.display = 'none';
             if (img.nextElementSibling) {
                 img.nextElementSibling.style.display = 'flex';
@@ -3861,7 +3893,7 @@
 
             // 3. Stato Storage (Cloud vs Solo Scaricati)
             if (!ignoreStorage) {
-                const isInstalled = isSandboxMode ? false : g.is_installed;
+                const isInstalled = !!g.is_installed;
                 const targetStorage = isModalPreview ? advStorageFilter : (advStorageFilter === 'downloaded' || storageFilter === 'downloaded' ? 'downloaded' : 'all');
                 if (targetStorage === 'downloaded' && !isInstalled) return false;
             }
@@ -3953,7 +3985,7 @@
             // 1. Dynamic Scope Calculation (Macro-family, platform, search query, genre, year, multiplayer, etc.)
             const scopedGames = allGames.filter(g => gameMatchesFilters(g, false, true));
             const scopeCloudCount = scopedGames.length;
-            const scopeDownCount = scopedGames.filter(g => isSandboxMode ? false : g.is_installed).length;
+            const scopeDownCount = scopedGames.filter(g => g.is_installed).length;
             
             const countCloudEl = document.getElementById('countCloud');
             if (countCloudEl) countCloudEl.innerText = scopeCloudCount.toLocaleString('it-IT');
@@ -3963,7 +3995,7 @@
             // 2. Filter games according to the active storage filter (Cloud vs Only Downloaded)
             const isOnlyDownloaded = (storageFilter === 'downloaded' || advStorageFilter === 'downloaded');
             const filtered = scopedGames.filter(g => {
-                if (isOnlyDownloaded) return isSandboxMode ? false : g.is_installed;
+                if (isOnlyDownloaded) return !!g.is_installed;
                 return true;
             });
             currentFilteredGames = filtered;
@@ -4013,7 +4045,7 @@
             grid.innerHTML = filtered.map(g => {
                 const pInfo = allPlatforms.find(p => p.code === g.system_code);
                 const brandColor = pInfo ? pInfo.color : '#00e5b4';
-                const isInstalled = isSandboxMode ? false : g.is_installed;
+                const isInstalled = !!g.is_installed;
 
                 return `
                     <div class="game-card" style="--card-glow: ${brandColor}; --card-glow-shadow: ${brandColor}40;" onclick="launchGameById(${g.id})">
@@ -4114,7 +4146,7 @@
             const g = allGames.find(x => x.id === id);
             if (!g) return;
 
-            const isInstalled = isSandboxMode ? false : g.is_installed;
+            const isInstalled = !!g.is_installed;
             if (!isInstalled) {
                 downloadGameOnDemand(id, true);
                 return;
@@ -4213,24 +4245,6 @@
                 closeRouletteModal();
                 launchGameById(rouletteWinner.id);
             }
-        }
-
-        // --------------------------------------------------------------------------
-        // 7. SANDBOX SIMULAZIONE NUOVO UTENTE
-        // --------------------------------------------------------------------------
-        function toggleSandboxMode() {
-            isSandboxMode = !isSandboxMode;
-            const btn = document.getElementById('sandboxToggleBtn');
-            btn.classList.toggle('active', isSandboxMode);
-            btn.innerText = isSandboxMode ? '🧪 SIMULAZIONE ATTIVA' : '🧪 Simula Nuovo Utente';
-
-            updateCounters();
-            renderCatalog();
-            renderHeroSlide();
-
-            showToast(isSandboxMode ? 
-                'Modalità Simulazione Attiva: tutti i giochi appaiono on-demand (zero modifiche reali).' : 
-                'Modalità Normale ripristinata.');
         }
 
         // --------------------------------------------------------------------------
@@ -4369,7 +4383,7 @@
             if (code) {
                 showToast(`Connessione P2P alla stanza ${code.toUpperCase()} in corso...`);
                 setTimeout(() => {
-                    alert(`Handshake P2P completato! Ping RTT: 18ms. Avvio sincronizzato di RetroArch Netplay.`);
+                    showToast(`🎮 Handshake P2P completato! Ping RTT: 18ms. Avvio sincronizzato RetroArch Netplay.`);
                 }, 1000);
             }
         }
@@ -4901,7 +4915,7 @@
             sysPill.style.color = brandColor;
 
             const storageBadge = document.getElementById('detailsStorageBadge');
-            const isInstalled = isSandboxMode ? false : g.is_installed;
+            const isInstalled = !!g.is_installed;
             const isEn = (currentLang === 'en');
             storageBadge.className = isInstalled ? 'status-badge downloaded' : 'status-badge cloud';
             storageBadge.innerText = isInstalled ? t('details_badge_installed') : t('details_badge_cloud');
@@ -5065,7 +5079,7 @@
         function launchCurrentDetailsGame() {
             if (!activeDetailsGame) return;
             const g = activeDetailsGame;
-            const isInstalled = isSandboxMode ? false : g.is_installed;
+            const isInstalled = !!g.is_installed;
             if (!isInstalled) {
                 downloadGameOnDemand(g.id, false);
             } else {
@@ -5319,34 +5333,106 @@
             }
         }
 
+        // --------------------------------------------------------------------------
+        // MODALE DI CONFERMA & DIALOG CUSTOM (SOSTITUISCE CONFIRM/ALERT NATIVI)
+        // --------------------------------------------------------------------------
+        function showCustomConfirm({ title, message, icon = '⚠️', okText = 'Conferma', cancelText = 'Annulla', isDanger = false }) {
+            return new Promise((resolve) => {
+                confirmModalResolve = resolve;
+                const modal = document.getElementById('confirmModal');
+                const titleEl = document.getElementById('confirmModalTitle');
+                const msgEl = document.getElementById('confirmModalMessage');
+                const iconEl = document.getElementById('confirmModalIcon');
+                const okBtn = document.getElementById('confirmModalOkBtn');
+                const cancelBtn = document.getElementById('confirmModalCancelBtn');
+
+                if (titleEl) titleEl.innerText = title;
+                if (msgEl) msgEl.innerText = message;
+                if (iconEl) iconEl.innerText = icon;
+                if (okBtn) {
+                    okBtn.innerText = okText;
+                    if (isDanger) {
+                        okBtn.style.background = 'linear-gradient(135deg, #ff4444, #cc0000)';
+                        okBtn.style.borderColor = '#ff5555';
+                    } else {
+                        okBtn.style.background = '';
+                        okBtn.style.borderColor = '';
+                    }
+                }
+                if (cancelBtn) cancelBtn.innerText = cancelText;
+
+                if (modal) modal.classList.add('active');
+            });
+        }
+
+        function closeConfirmModal(result) {
+            const modal = document.getElementById('confirmModal');
+            if (modal) modal.classList.remove('active');
+            if (confirmModalResolve) {
+                confirmModalResolve(result);
+                confirmModalResolve = null;
+            }
+        }
+
         async function clearImageCache() {
+            const isEn = (currentLang === 'en');
+            const isEs = (currentLang === 'es');
+            const title = isEn ? 'Clear Boxart Cache' : (isEs ? 'Vaciar Caché de Portadas' : 'Svuota Cache Copertine');
+            const msg = isEn
+                ? 'Are you sure you want to delete all cached boxarts from disk?\n\nThey will be automatically re-downloaded when viewed.'
+                : (isEs
+                    ? '¿Estás seguro de que deseas eliminar todas las portadas en caché del disco?\n\nSe volverán a descargar automáticamente cuando se visualicen.'
+                    : 'Vuoi eliminare tutte le copertine salvate nella cache locale?\n\nVerranno riscaricate automaticamente alla visualizzazione.');
+
+            const ok = await showCustomConfirm({
+                title,
+                message: msg,
+                icon: '🧹',
+                okText: isEn ? 'Clear Cache' : (isEs ? 'Vaciar' : 'Svuota Cache'),
+                cancelText: isEn ? 'Cancel' : (isEs ? 'Cancelar' : 'Annulla'),
+                isDanger: false
+            });
+            if (!ok) return;
+
             try {
                 const res = await fetch('/api/cache/clear', { method: 'POST' });
                 if (res.ok) {
                     const data = await res.json();
-                    showToast(data.message || '🧹 Cache immagini ripulita!');
+                    showToast(data.message || (isEn ? '🧹 Image cache cleared!' : '🧹 Cache immagini ripulita!'));
                     const badge = document.getElementById('settingsCacheSizeBadge');
                     if (badge) badge.innerText = '0.0 MB (0 file)';
                 }
             } catch (e) {
-                showToast('🧹 Cache locale svuotata.');
+                showToast(isEn ? '🧹 Local cache cleared.' : '🧹 Cache locale svuotata.');
             }
         }
 
         async function factoryResetNewUser() {
-            const confirmMsg = currentLang === 'en'
-                ? 'Are you sure you want to reset RetroHub to a clean new-user state? This will clear local cache and re-open the Setup Wizard. Your ROM files on disk will NOT be touched.'
-                : (currentLang === 'es'
-                    ? '¿Estás seguro de que deseas restablecer RetroHub al estado de nuevo usuario? Esto borrará la caché local y reabrirá el asistente. Tus archivos ROM en disco NO se tocarán.'
-                    : 'Sei sicuro di voler ripristinare RetroHub allo stato di nuovo utente? Questo azzererà la cache locale e riaprirà il Setup Wizard. Le tue ROM sul disco NON verranno toccate.');
-            if (!confirm(confirmMsg)) return;
+            const isEn = (currentLang === 'en');
+            const isEs = (currentLang === 'es');
+            const title = isEn ? 'Factory Reset & Restart Wizard' : (isEs ? 'Restablecer y Reiniciar Asistente' : 'Ripristino Stato Nuovo Utente');
+            const confirmMsg = isEn
+                ? 'Are you sure you want to reset RetroHub to a clean new-user state?\n\nThis will clear local cache and re-open the Setup Wizard. Your ROM files on disk will NOT be touched.'
+                : (isEs
+                    ? '¿Estás seguro de que deseas restablecer RetroHub al estado de nuevo usuario?\n\nEsto borrará la caché local y reabrirá el asistente. Tus archivos ROM en disco NO se tocarán.'
+                    : 'Sei sicuro di voler ripristinare RetroHub allo stato di nuovo utente?\n\nQuesto azzererà la cache locale e riaprirà il Setup Wizard. Le tue ROM sul disco NON verranno toccate.');
+
+            const ok = await showCustomConfirm({
+                title,
+                message: confirmMsg,
+                icon: '🔄',
+                okText: isEn ? 'Reset Everything' : (isEs ? 'Restablecer Todo' : 'Azzera Tutto'),
+                cancelText: isEn ? 'Cancel' : (isEs ? 'Cancelar' : 'Annulla'),
+                isDanger: true
+            });
+            if (!ok) return;
 
             try {
                 await fetch('/api/factory-reset', { method: 'POST' }).catch(() => {});
                 localStorage.clear();
-                localStorage.setItem('retrohub_app_version', '0.37.0');
+                localStorage.setItem('retrohub_app_version', '0.43.0');
                 closeSettingsModal();
-                showToast(currentLang === 'en' ? '🔄 Reset complete: restarting as clean new user...' : '🔄 Reset completato: riavvio in modalità nuovo utente...');
+                showToast(isEn ? '🔄 Reset complete: restarting as clean new user...' : (isEs ? '🔄 Restablecimiento completo: reiniciando...' : '🔄 Reset completato: riavvio in modalità nuovo utente...'));
                 setTimeout(() => {
                     window.location.reload();
                 }, 600);
@@ -5481,7 +5567,26 @@
             showToast(currentLang === 'en' ? '✅ All preferences saved!' : '✅ Tutte le preferenze sono state salvate!');
         }
 
-        function resetSettingsToDefaults() {
+        async function resetSettingsToDefaults() {
+            const isEn = (currentLang === 'en');
+            const isEs = (currentLang === 'es');
+            const title = isEn ? 'Reset Settings to Defaults' : (isEs ? 'Restablecer Ajustes Predeterminados' : 'Ripristino Impostazioni Predefinite');
+            const msg = isEn
+                ? 'Restore all settings (language, hero timer, typographic mode, pre-download) to factory defaults?'
+                : (isEs
+                    ? '¿Deseas restaurar todos los ajustes (idioma, rotación hero, modo tipográfico, pre-descarga) a los valores predeterminados?'
+                    : 'Vuoi ripristinare tutte le impostazioni (lingua, rotazione hero, modalità tipografica, pre-download) ai valori predefiniti?');
+
+            const ok = await showCustomConfirm({
+                title,
+                message: msg,
+                icon: '⚙️',
+                okText: isEn ? 'Restore Defaults' : (isEs ? 'Restablecer' : 'Ripristina'),
+                cancelText: isEn ? 'Cancel' : (isEs ? 'Cancelar' : 'Annulla'),
+                isDanger: false
+            });
+            if (!ok) return;
+
             isTypographicMode = false;
             preDownloadCovers = true;
             heroTimerDuration = 8000;
@@ -5509,13 +5614,13 @@
 
             applyLanguage('it');
             startHeroRotation();
-            showToast('Preferenze ripristinate ai valori di fabbrica.');
+            showToast(isEn ? 'Settings restored to factory defaults.' : (isEs ? 'Ajustes restaurados a los valores de fábrica.' : 'Preferenze ripristinate ai valori di fabbrica.'));
         }
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Se la versione salvata differisce da v0.42.0, pulizia totale dello stato per Nuovo Utente Pulito
-                const currentAppVer = '0.42.0';
+                // Controllo Versione: Se la versione salvata differisce da v0.43.0, pulizia totale dello stato per Nuovo Utente Pulito
+                const currentAppVer = '0.43.0';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.removeItem('retrohub_downloaded_ids');
