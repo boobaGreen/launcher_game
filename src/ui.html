@@ -603,8 +603,7 @@
                         0 0 30px var(--current-glow, var(--accent-cyan-glow));
             border: 1px solid rgba(255, 255, 255, 0.16);
             overflow: hidden;
-            background: rgba(15, 21, 34, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(11, 16, 26, 0.95);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -618,7 +617,22 @@
                         0 0 40px var(--current-glow, var(--accent-cyan-glow));
         }
 
+        .hero-cover-ambient {
+            position: absolute;
+            inset: -20px;
+            background-size: cover;
+            background-position: center;
+            filter: blur(28px) saturate(2) brightness(0.65);
+            opacity: 0.65;
+            transform: scale(1.15);
+            pointer-events: none;
+            z-index: 1;
+            transition: opacity 0.4s ease, background-image 0.4s ease;
+        }
+
         .hero-cover-img {
+            position: relative;
+            z-index: 2;
             max-width: 100%;
             max-height: 100%;
             width: auto;
@@ -627,6 +641,7 @@
             display: block;
             margin: auto;
             border-radius: var(--radius-sm);
+            filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.9));
         }
 
         /* Fallback Tipografico Hero */
@@ -1451,7 +1466,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">WIN v0.38</div>
+            <div class="brand-badge">WIN v0.39</div>
         </div>
 
         <div class="nav-search-container">
@@ -1660,6 +1675,7 @@
                     <!-- Visual Column (Floating 3D Boxart) -->
                     <div class="hero-visual-side">
                         <div class="hero-cover-wrapper" id="heroCoverWrapper">
+                            <div class="hero-cover-ambient" id="heroCoverAmbient"></div>
                             <img id="heroCoverImg" class="hero-cover-img" src="" alt="Cover" onerror="handleHeroCoverError()">
                             <div class="hero-cover-fallback" id="heroCoverFallback" style="display:none;">
                                 <div class="hero-fallback-icon">🎮</div>
@@ -3369,28 +3385,34 @@
 
             const isSteamWide = wideArt.includes('steamstatic.com') || wideArt.includes('library_hero');
             if (backdrop) {
-                if (wideArt) {
+                if (isSteamWide) {
                     backdrop.style.backgroundImage = `url("${wideArt}")`;
-                    if (isSteamWide) {
-                        backdrop.style.filter = 'contrast(1.1) saturate(1.25)';
-                        backdrop.style.opacity = '0.65';
-                    } else {
-                        // Per le boxart retro verticali, crea un'aura ambientale d'atmosfera con bokeh profondo
-                        backdrop.style.filter = 'blur(45px) saturate(1.6) brightness(0.5)';
-                        backdrop.style.opacity = '0.45';
-                    }
+                    backdrop.style.filter = 'contrast(1.1) saturate(1.25)';
+                    backdrop.style.opacity = '0.65';
+                } else if (coverUrl && !isTypographicMode) {
+                    backdrop.style.backgroundImage = `url("${coverUrl}")`;
+                    backdrop.style.filter = 'blur(55px) saturate(2) brightness(0.42)';
+                    backdrop.style.opacity = '0.55';
                 } else {
-                    backdrop.style.backgroundImage = 'none';
-                    backdrop.style.opacity = '0';
+                    backdrop.style.backgroundImage = `radial-gradient(circle at 75% 35%, ${brandColor}40 0%, rgba(10, 14, 23, 0.95) 75%)`;
+                    backdrop.style.filter = 'none';
+                    backdrop.style.opacity = '1';
                 }
             }
 
+            const ambientCover = document.getElementById('heroCoverAmbient');
             if (coverUrl && !isTypographicMode) {
                 coverImg.src = coverUrl;
                 coverImg.style.display = 'block';
+                if (ambientCover) {
+                    ambientCover.style.backgroundImage = `url("${coverUrl}")`;
+                    ambientCover.style.display = 'block';
+                    ambientCover.style.opacity = '0.65';
+                }
                 fallback.style.display = 'none';
             } else {
                 coverImg.style.display = 'none';
+                if (ambientCover) ambientCover.style.display = 'none';
                 fallback.style.display = 'flex';
                 document.getElementById('heroFallbackTitle').innerText = g.title;
             }
@@ -3490,6 +3512,8 @@
 
         function handleHeroCoverError() {
             document.getElementById('heroCoverImg').style.display = 'none';
+            const ambientCover = document.getElementById('heroCoverAmbient');
+            if (ambientCover) ambientCover.style.display = 'none';
             document.getElementById('heroCoverFallback').style.display = 'flex';
         }
 
@@ -4975,8 +4999,8 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Se la versione salvata differisce da v0.38.0, pulizia totale dello stato per Nuovo Utente Pulito
-                const currentAppVer = '0.38.0';
+                // Controllo Versione: Se la versione salvata differisce da v0.39.0, pulizia totale dello stato per Nuovo Utente Pulito
+                const currentAppVer = '0.39.0';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.removeItem('retrohub_downloaded_ids');
