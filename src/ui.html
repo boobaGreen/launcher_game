@@ -2827,7 +2827,7 @@
                 <button type="button" class="btn btn-primary" id="emuSetupWebBtn" style="padding: 10px 16px; font-size: 0.88rem; font-weight: 700;" onclick="launchCurrentGameWebSimulator()" data-i18n="emu_setup_web_btn">
                     🌐 Gioca Subito nel Browser (Web Simulator)
                 </button>
-                <button type="button" class="btn btn-secondary" style="padding: 9px 16px; font-size: 0.84rem; font-weight: 700; color: var(--accent-cyan); border-color: rgba(0, 243, 255, 0.35);" onclick="openSettingsModalToEmulators()" data-i18n="emu_setup_options_btn">
+                <button type="button" class="btn btn-secondary" id="emuSetupOptionsBtn" style="padding: 9px 16px; font-size: 0.84rem; font-weight: 700; color: var(--accent-cyan); border-color: rgba(0, 243, 255, 0.35);" onclick="openSettingsModalToEmulators()" data-i18n="emu_setup_options_btn">
                     ⚙️ Configura Percorso nelle Opzioni
                 </button>
                 <div style="display: flex; gap: 8px; margin-top: 4px;">
@@ -6285,6 +6285,7 @@
             const badgeEl = document.getElementById('emuSetupGameBadge');
             const descEl = document.getElementById('emuSetupDesc');
             const webBtn = document.getElementById('emuSetupWebBtn');
+            const optionsBtn = document.getElementById('emuSetupOptionsBtn');
 
             if (game.system_code === 'GAMEWATCH' || game.system_code === 'LCD') {
                 if (iconEl) iconEl.innerText = '📟';
@@ -6298,6 +6299,12 @@
                             : `Per avviare questo capolavoro Game & Watch con la simulazione fisica originale, configura RetroArch (core Handheld) nelle Opzioni, oppure gioca subito online tramite il simulatore web autentico.`);
                 }
                 if (webBtn) webBtn.style.display = 'block';
+                if (optionsBtn) {
+                    optionsBtn.className = 'btn btn-secondary';
+                    optionsBtn.style.color = 'var(--accent-cyan)';
+                    optionsBtn.style.borderColor = 'rgba(0, 243, 255, 0.35)';
+                    optionsBtn.style.background = 'rgba(255, 255, 255, 0.06)';
+                }
             } else if (game.system_code === 'PINBALL') {
                 if (iconEl) iconEl.innerText = '🎯';
                 if (titleEl) titleEl.innerText = t('emu_setup_title');
@@ -6305,15 +6312,29 @@
                 if (descEl) {
                     descEl.innerText = (currentLang === 'en')
                         ? `Visual Pinball X (VPinballX64.exe) is required to run this pinball table with full physics simulation. Configure its path in Options.`
-                        : `È richiesto Visual Pinball X (VPinballX64.exe) per simulare la fisica e la grafica di questo tavolo. Configura il percorso nelle Opzioni.`;
+                        : ((currentLang === 'es')
+                            ? `Se requiere Visual Pinball X (VPinballX64.exe) para simular la física y los gráficos de esta mesa. Configura la ruta en Opciones.`
+                            : `È richiesto Visual Pinball X (VPinballX64.exe) per simulare la fisica e la grafica di questo tavolo. Configura il percorso nelle Opzioni.`);
                 }
                 if (webBtn) webBtn.style.display = 'none';
+                if (optionsBtn) {
+                    optionsBtn.className = 'btn btn-primary';
+                    optionsBtn.style.color = '#05080e';
+                    optionsBtn.style.borderColor = 'transparent';
+                    optionsBtn.style.background = 'linear-gradient(135deg, var(--accent-cyan) 0%, #00b4d8 100%)';
+                }
             } else {
                 if (iconEl) iconEl.innerText = '🕹️';
                 if (titleEl) titleEl.innerText = t('emu_setup_title');
                 if (badgeEl) badgeEl.innerText = `${game.platform} — ${game.title}`;
                 if (descEl) descEl.innerText = rawMsg;
                 if (webBtn) webBtn.style.display = 'none';
+                if (optionsBtn) {
+                    optionsBtn.className = 'btn btn-primary';
+                    optionsBtn.style.color = '#05080e';
+                    optionsBtn.style.borderColor = 'transparent';
+                    optionsBtn.style.background = 'linear-gradient(135deg, var(--accent-cyan) 0%, #00b4d8 100%)';
+                }
             }
 
             document.getElementById('emulatorSetupModal').classList.add('open');
