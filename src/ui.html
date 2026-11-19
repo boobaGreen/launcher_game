@@ -1412,31 +1412,31 @@
 
         <div class="nav-search-container">
             <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" class="search-input" placeholder="Cerca titolo, sviluppatore, anno o genere (es. 'zelda oot')..." autocomplete="off">
+            <input type="text" id="searchInput" class="search-input" data-i18n-placeholder="search_placeholder" placeholder="Cerca titolo, sviluppatore, anno o genere (es. 'zelda oot')..." autocomplete="off">
             <button id="searchClearBtn" class="search-clear-btn" onclick="clearSearch()">✕</button>
         </div>
 
         <div class="nav-actions">
-            <button class="btn btn-secondary" id="advFilterBtn" onclick="openAdvSearchModal()" title="Filtri Avanzati di Ricerca (Anno, Genere, Sviluppatore)">
+            <button class="btn btn-secondary" id="advFilterBtn" onclick="openAdvSearchModal()" data-i18n-title="nav_filters_title" title="Filtri Avanzati di Ricerca (Anno, Genere, Sviluppatore)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-                <span id="navFiltersLabel">Filtri</span>
+                <span id="navFiltersLabel" data-i18n="nav_filters">Filtri</span>
                 <span id="advFilterBadge" style="display:none; background:var(--accent-cyan); color:#000; font-size:0.65rem; font-weight:800; padding:1px 6px; border-radius:10px; margin-left:4px;">0</span>
             </button>
-            <button class="btn btn-roulette" onclick="triggerRoulette()" title="Sorprendimi con un gioco casuale! (Tasto Y su Gamepad)">
+            <button class="btn btn-roulette" onclick="triggerRoulette()" data-i18n-title="nav_surprise_title" title="Sorprendimi con un gioco casuale! (Tasto Y su Gamepad)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="12" cy="12" r="1.5"/></svg>
-                <span id="navSurpriseLabel">Sorprendimi</span>
+                <span id="navSurpriseLabel" data-i18n="nav_surprise">Sorprendimi</span>
             </button>
-            <button class="btn btn-secondary" onclick="openArenaModal()" title="Lobby P2P e Classifiche Online">
+            <button class="btn btn-secondary" onclick="openArenaModal()" data-i18n-title="nav_arena_title" title="Lobby P2P e Classifiche Online">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="14.5" y1="9.5" x2="19" y2="5"/><polyline points="15 5 19 5 19 9"/><polyline points="14 15 9 20 4 15 9 10 14 15"/><line x1="4.5" y1="9.5" x2="9" y2="5"/></svg>
-                <span id="navArenaLabel">Arena</span>
+                <span id="navArenaLabel" data-i18n="nav_arena">Arena</span>
             </button>
-            <button class="btn btn-primary" onclick="openWizardModal()" title="Configurazione Guidata Storage & Percorsi">
+            <button class="btn btn-primary" onclick="openWizardModal()" data-i18n-title="nav_wizard_title" title="Configurazione Guidata Storage & Percorsi">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/></svg>
-                <span id="navWizardLabel">Setup Wizard</span>
+                <span id="navWizardLabel" data-i18n="nav_wizard">Setup Wizard</span>
             </button>
-            <button class="btn btn-secondary" onclick="openSettingsModal()" title="Impostazioni, Lingua, Cache e Percorsi">
+            <button class="btn btn-secondary" onclick="openSettingsModal()" data-i18n-title="nav_settings_title" title="Impostazioni, Lingua, Cache e Percorsi">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                <span id="navSettingsLabel">Opzioni</span>
+                <span id="navSettingsLabel" data-i18n="nav_settings">Opzioni</span>
             </button>
         </div>
     </header>
@@ -1452,7 +1452,7 @@
                     <div class="sidebar-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     </div>
-                    <span class="sidebar-label">Tutti i Giochi</span>
+                    <span class="sidebar-label" data-i18n="side_all">Tutti i Giochi</span>
                     <span class="sidebar-count" id="sideCountALL">0</span>
                 </div>
 
@@ -1460,7 +1460,7 @@
                     <div class="sidebar-icon" style="color: var(--accent-gold);">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                     </div>
-                    <span class="sidebar-label">I Tuoi Preferiti</span>
+                    <span class="sidebar-label" data-i18n="side_fav">I Tuoi Preferiti</span>
                     <span class="sidebar-count" id="sideCountFAV">0</span>
                 </div>
 
@@ -1471,7 +1471,7 @@
                     <div class="sidebar-icon" style="color: #f97316;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>
                     </div>
-                    <span class="sidebar-label">Arcade Coin-Op</span>
+                    <span class="sidebar-label" data-i18n="side_arcade">Arcade Coin-Op</span>
                     <span class="sidebar-count" id="sideCountARCADE">0</span>
                 </div>
 
@@ -1519,7 +1519,7 @@
                     <div class="sidebar-icon" style="color: #3b82f6;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 4 4 18 20 18 12 4"/><circle cx="12" cy="13" r="2"/></svg>
                     </div>
-                    <span class="sidebar-label">Sony PlayStation</span>
+                    <span class="sidebar-label" data-i18n="side_sony">Sony PlayStation</span>
                     <span class="sidebar-count" id="sideCountSONY">0</span>
                 </div>
 
@@ -1543,7 +1543,7 @@
                     <div class="sidebar-icon" style="color: #10b981;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                     </div>
-                    <span class="sidebar-label">Computer Occidentali</span>
+                    <span class="sidebar-label" data-i18n="side_computers">Computer Occidentali</span>
                     <span class="sidebar-count" id="sideCountCOMPUTER">0</span>
                 </div>
 
@@ -1667,10 +1667,10 @@
             <div class="filter-switches">
                 <div class="toggle-switch-group">
                     <button id="toggleAllCloud" class="toggle-btn active" onclick="setStorageFilter('all')">
-                        🔓 Tutto l'Archivio Cloud (<span id="countCloud">0</span>)
+                        <span data-i18n="sub_all_cloud">🔓 Tutto l'Archivio Cloud</span> (<span id="countCloud">0</span>)
                     </button>
                     <button id="toggleOnlyDownloaded" class="toggle-btn" onclick="setStorageFilter('downloaded')">
-                        💾 Solo Scaricati (<span id="countDownloaded">0</span>)
+                        <span data-i18n="sub_only_down">💾 Solo Scaricati</span> (<span id="countDownloaded">0</span>)
                     </button>
                 </div>
             </div>
@@ -1687,7 +1687,7 @@
                 <button class="filter-tag-pill" onclick="filterGenre('Fighting')">Picchiaduro</button>
                 <button class="filter-tag-pill" onclick="filterGenre('Shoot')">Shmup</button>
                 <button class="filter-tag-pill" onclick="filterGenre('RPG')">RPG</button>
-                <button class="filter-tag-pill" id="btnResetFiltersPill" onclick="filterGenre('ALL')">✕ Resetta Filtri</button>
+                <button class="filter-tag-pill" id="btnResetFiltersPill" data-i18n="sub_reset" onclick="filterGenre('ALL')">✕ Resetta Filtri</button>
             </div>
         </div>
     </section>
@@ -1704,16 +1704,16 @@
             <div style="display:flex; align-items:center; gap:10px;">
                 <button class="btn btn-secondary" onclick="saveCurrentViewToCollection()" title="Salva i giochi attualmente visibili come Raccolta Personalizzata">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                    <span id="saveCollectionLabel">Salva Selezione in Raccolta</span>
+                    <span id="saveCollectionLabel" data-i18n="catalog_save_collection">Salva Selezione in Raccolta</span>
                 </button>
             </div>
         </div>
 
         <!-- Striscia Breadcrumb Filtri Attivi (Rimozione con 1 Clic) -->
         <div id="activeFiltersBreadcrumb" class="active-filters-strip" style="display: none;">
-            <span class="active-filters-label">FILTRI ATTIVI:</span>
+            <span class="active-filters-label" data-i18n="active_filters_label">FILTRI ATTIVI:</span>
             <div id="activeFilterChipsContainer" class="active-filter-chips"></div>
-            <button type="button" class="btn-clear-all-chips" id="btnClearAllChips" onclick="resetAdvSearchFilters()">✕ Azzera Tutti</button>
+            <button type="button" class="btn-clear-all-chips" id="btnClearAllChips" data-i18n="clear_all_chips" onclick="resetAdvSearchFilters()">✕ Azzera Tutti</button>
         </div>
 
         <div class="games-grid" id="gamesGrid">
@@ -1784,8 +1784,8 @@
                         🧪 Simula Catalogo da Vuoto
                     </button>
                     <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-secondary" onclick="closeWizardModal()">Annulla</button>
-                        <button class="btn btn-primary" onclick="applyWizardProfile()">Applica Profilo Selezionato</button>
+                        <button class="btn btn-secondary" data-i18n="wizard_btn_cancel" onclick="closeWizardModal()">Annulla</button>
+                        <button class="btn btn-primary" data-i18n="wizard_btn_apply" onclick="applyWizardProfile()">Applica Profilo Selezionato</button>
                     </div>
                 </div>
             </div>
@@ -1857,10 +1857,10 @@
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
                     <div>
                         <h2 style="font-size: 1.45rem; font-weight: 800; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
-                            <span>🔍</span> Ricerca Avanzata & Filtri Combinati
+                            <span data-i18n="adv_title"><span>🔍</span> Ricerca Avanzata & Filtri Combinati</span>
                         </h2>
                         <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0;">
-                            Esplora l'archivio combinando epoca storica, generi multipli, publisher e piattaforma.
+                            <span data-i18n="adv_subtitle">Esplora l'archivio combinando epoca storica, generi multipli, publisher e piattaforma.</span>
                         </p>
                     </div>
                     <div id="advLiveCountBadge" style="background: rgba(0, 229, 180, 0.12); border: 1px solid rgba(0, 229, 180, 0.35); color: var(--accent-cyan); font-size: 0.78rem; font-weight: 700; padding: 6px 14px; border-radius: 20px; white-space: nowrap;">
@@ -1873,26 +1873,26 @@
                     <div class="adv-section-card">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-                                <span>📅</span> Epoca Storica & Intervallo Anni
+                                <span data-i18n="adv_sec_era"><span>📅</span> Epoca Storica & Intervallo Anni</span>
                             </label>
                             <span id="advYearRangeLabel" style="font-size: 0.82rem; font-weight: 700; color: #fff;">1972 – 2026</span>
                         </div>
                         <div class="adv-chip-row" style="margin-bottom: 10px;">
-                            <button type="button" class="adv-chip active" id="chipDecade_ALL" onclick="setAdvDecadeRange('ALL')">Tutte le Epoche</button>
-                            <button type="button" class="adv-chip" id="chipDecade_70s" onclick="setAdvDecadeRange('70s')">Anni '70 (1972-79)</button>
-                            <button type="button" class="adv-chip" id="chipDecade_80s" onclick="setAdvDecadeRange('80s')">Anni '80 (1980-89)</button>
-                            <button type="button" class="adv-chip" id="chipDecade_90s" onclick="setAdvDecadeRange('90s')">Anni '90 Golden Era (1990-99)</button>
-                            <button type="button" class="adv-chip" id="chipDecade_2000s" onclick="setAdvDecadeRange('2000s')">Anni 2000 (2000-09)</button>
-                            <button type="button" class="adv-chip" id="chipDecade_modern" onclick="setAdvDecadeRange('modern')">Moderni / Indie (2010-26)</button>
+                            <button type="button" class="adv-chip active" id="chipDecade_ALL" data-i18n="adv_chip_all_eras" onclick="setAdvDecadeRange('ALL')">Tutte le Epoche</button>
+                            <button type="button" class="adv-chip" id="chipDecade_70s" data-i18n="adv_chip_70s" onclick="setAdvDecadeRange('70s')">Anni '70 (1972-79)</button>
+                            <button type="button" class="adv-chip" id="chipDecade_80s" data-i18n="adv_chip_80s" onclick="setAdvDecadeRange('80s')">Anni '80 (1980-89)</button>
+                            <button type="button" class="adv-chip" id="chipDecade_90s" data-i18n="adv_chip_90s" onclick="setAdvDecadeRange('90s')">Anni '90 Golden Era (1990-99)</button>
+                            <button type="button" class="adv-chip" id="chipDecade_2000s" data-i18n="adv_chip_2000s" onclick="setAdvDecadeRange('2000s')">Anni 2000 (2000-09)</button>
+                            <button type="button" class="adv-chip" id="chipDecade_modern" data-i18n="adv_chip_modern" onclick="setAdvDecadeRange('modern')">Moderni / Indie (2010-26)</button>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <div style="flex: 1;">
-                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">ANNO MINIMO (DA)</span>
+                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="adv_year_min">ANNO MINIMO (DA)</span>
                                 <input type="number" id="advYearMinInput" min="1972" max="2026" value="1972" class="adv-input-field" oninput="onAdvYearInputChanged()">
                             </div>
                             <span style="color: var(--text-muted); font-size: 1.2rem; padding-top: 16px;">—</span>
                             <div style="flex: 1;">
-                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">ANNO MASSIMO (A)</span>
+                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="adv_year_max">ANNO MASSIMO (A)</span>
                                 <input type="number" id="advYearMaxInput" min="1972" max="2026" value="2026" class="adv-input-field" oninput="onAdvYearInputChanged()">
                             </div>
                         </div>
@@ -1902,12 +1902,12 @@
                     <div class="adv-section-card">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-                                <span>🏷️</span> Generi di Gioco (Combinabili a scelta)
+                                <span data-i18n="adv_sec_genres"><span>🏷️</span> Generi di Gioco (Combinabili a scelta)</span>
                             </label>
-                            <button type="button" style="background: none; border: none; color: var(--text-muted); font-size: 0.72rem; cursor: pointer; text-decoration: underline;" onclick="clearSelectedGenres()">Deseleziona tutti</button>
+                            <button type="button" style="background: none; border: none; color: var(--text-muted); font-size: 0.72rem; cursor: pointer; text-decoration: underline;" data-i18n="adv_deselect_all" onclick="clearSelectedGenres()">Deseleziona tutti</button>
                         </div>
                         <div class="adv-chip-row" id="advGenreChipsContainer">
-                            <button type="button" class="adv-chip active" id="chipGenre_ALL" onclick="toggleAdvGenre('ALL')">Tutti i Generi</button>
+                            <button type="button" class="adv-chip active" id="chipGenre_ALL" data-i18n="adv_genre_all" onclick="toggleAdvGenre('ALL')">Tutti i Generi</button>
                             <button type="button" class="adv-chip" id="chipGenre_Platform" onclick="toggleAdvGenre('Platform')">Platform</button>
                             <button type="button" class="adv-chip" id="chipGenre_Action" onclick="toggleAdvGenre('Action')">Azione / Avventura</button>
                             <button type="button" class="adv-chip" id="chipGenre_Picchiaduro" onclick="toggleAdvGenre('Picchiaduro')">Picchiaduro (1vs1 & Scorrimento)</button>
@@ -1923,7 +1923,7 @@
                     <!-- 3. Produttore / Sviluppatore (Anti-Password Autofill & Chip Rapidi) -->
                     <div class="adv-section-card">
                         <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                            <span>🏢</span> Produttore / Sviluppatore (Software House)
+                            <span data-i18n="adv_sec_dev"><span>🏢</span> Produttore / Sviluppatore (Software House)</span>
                         </label>
                         <div style="position: relative; margin-bottom: 8px;">
                             <input type="search"
@@ -1936,7 +1936,7 @@
                                    data-lpignore="true"
                                    data-form-type="other"
                                    data-bwignore="true"
-                                   placeholder="Digita o seleziona un publisher (es. Capcom, Konami, Nintendo, Sega...)"
+                                   data-i18n-placeholder="adv_dev_placeholder" placeholder="Digita o seleziona un publisher (es. Capcom, Konami, Nintendo, Sega...)"
                                    class="adv-input-field"
                                    oninput="onAdvDevInputChanged()">
                         </div>
@@ -1959,35 +1959,35 @@
                     <!-- 4. Piattaforma & Disponibilità Storage -->
                     <div class="adv-section-card">
                         <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                            <span>🎮</span> Piattaforma & Opzioni Aggiuntive
+                            <span data-i18n="adv_sec_platform"><span>🎮</span> Piattaforma & Opzioni Aggiuntive</span>
                         </label>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px;">
                             <div>
-                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">PIATTAFORMA</span>
+                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="adv_label_platform">PIATTAFORMA</span>
                                 <select id="advPlatformSelect" class="adv-input-field" onchange="onAdvFilterChanged()">
-                                    <option value="ALL">🌐 Tutte le Piattaforme</option>
+                                    <option value="ALL" data-i18n="adv_plat_all">🌐 Tutte le Piattaforme</option>
                                 </select>
                             </div>
                             <div>
-                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">STATO STORAGE</span>
+                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="adv_label_storage">STATO STORAGE</span>
                                 <select id="advStorageSelect" class="adv-input-field" onchange="onAdvFilterChanged()">
-                                    <option value="all">🔓 Tutto l'Archivio (Cloud & Locale)</option>
-                                    <option value="downloaded">💾 Solo Scaricati / Installati</option>
+                                    <option value="all" data-i18n="adv_storage_all">🔓 Tutto l'Archivio (Cloud & Locale)</option>
+                                    <option value="downloaded" data-i18n="adv_storage_downloaded">💾 Solo Scaricati / Installati</option>
                                 </select>
                             </div>
                         </div>
                         <div class="adv-chip-row">
-                            <button type="button" class="adv-chip" id="advOptFavorites" onclick="toggleAdvOption('favorites')">⭐ Solo Preferiti</button>
-                            <button type="button" class="adv-chip" id="advOptMultiplayer" onclick="toggleAdvOption('multiplayer')">👥 Solo 2+ Giocatori (Co-op / VS)</button>
+                            <button type="button" class="adv-chip" id="advOptFavorites" data-i18n="adv_opt_fav" onclick="toggleAdvOption('favorites')">⭐ Solo Preferiti</button>
+                            <button type="button" class="adv-chip" id="advOptMultiplayer" data-i18n="adv_opt_multi" onclick="toggleAdvOption('multiplayer')">👥 Solo 2+ Giocatori (Co-op / VS)</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Footer Azioni -->
                 <div style="display: flex; gap: 10px; margin-top: 18px; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
-                    <button type="button" class="btn btn-secondary" style="flex:1;" onclick="resetAdvSearchFilters()">✕ Resetta</button>
-                    <button type="button" class="btn btn-secondary" style="flex:1.4;" onclick="saveCurrentViewToCollection(); closeAdvSearchModal();">💾 Salva in Raccolta</button>
-                    <button type="button" class="btn btn-primary" id="advApplyBtn" style="flex:1.5;" onclick="applyAdvSearchFilters()">🔍 Mostra Giochi Trovati</button>
+                    <button type="button" class="btn btn-secondary" style="flex:1;" data-i18n="adv_btn_reset" onclick="resetAdvSearchFilters()">✕ Resetta</button>
+                    <button type="button" class="btn btn-secondary" style="flex:1.4;" data-i18n="adv_btn_save" onclick="saveCurrentViewToCollection(); closeAdvSearchModal();">💾 Salva in Raccolta</button>
+                    <button type="button" class="btn btn-primary" id="advApplyBtn" style="flex:1.5;" data-i18n="adv_btn_apply" onclick="applyAdvSearchFilters()">🔍 Mostra Giochi Trovati</button>
                 </div>
             </div>
         </div>
@@ -2012,8 +2012,8 @@
                 </div>
 
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="newCollectionNameInput" placeholder="Nome nuova raccolta (es. 'I Miei Platform 90s')..." style="flex:1; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-card); border-radius: var(--radius-sm); color: #fff; font-family: var(--font-main);">
-                    <button class="btn btn-primary" onclick="createNewCollection()">+ Crea</button>
+                    <input type="text" id="newCollectionNameInput" data-i18n-placeholder="col_input_placeholder" placeholder="Nome nuova raccolta (es. 'I Miei Platform 90s')..." style="flex:1; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-card); border-radius: var(--radius-sm); color: #fff; font-family: var(--font-main);">
+                    <button class="btn btn-primary" data-i18n="col_btn_create" onclick="createNewCollection()">+ Crea</button>
                 </div>
             </div>
         </div>
@@ -2039,8 +2039,8 @@
                 </div>
 
                 <div style="display: flex; gap: 12px; margin-top: 24px;">
-                    <button class="btn btn-secondary" style="flex:1;" onclick="closeRouletteModal()">Chiudi</button>
-                    <button class="btn btn-primary" id="roulettePlayBtn" style="flex:1;" onclick="launchRouletteWinner()" disabled>▶ Gioca Subito</button>
+                    <button class="btn btn-secondary" style="flex:1;" data-i18n="roulette_btn_close" onclick="closeRouletteModal()">Chiudi</button>
+                    <button class="btn btn-primary" id="roulettePlayBtn" style="flex:1;" data-i18n="roulette_btn_play" onclick="launchRouletteWinner()" disabled>▶ Gioca Subito</button>
                 </div>
             </div>
         </div>
@@ -2103,9 +2103,9 @@
                 <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid var(--border-card); border-radius: var(--radius-md); padding: 14px; margin-bottom: 16px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;">
                         <div style="display: flex; gap: 6px;">
-                            <button type="button" class="adv-chip active" id="tabMediaBoxart" onclick="switchDetailsMediaTab('boxart')">🖼️ Copertina Boxart</button>
-                            <button type="button" class="adv-chip" id="tabMediaSnap" onclick="switchDetailsMediaTab('snap')">📸 Screenshot In-Game</button>
-                            <button type="button" class="adv-chip" id="tabMediaTitle" onclick="switchDetailsMediaTab('title')">📺 Schermata Titolo</button>
+                            <button type="button" class="adv-chip active" id="tabMediaBoxart" data-i18n="details_tab_boxart" onclick="switchDetailsMediaTab('boxart')">🖼️ Copertina Boxart</button>
+                            <button type="button" class="adv-chip" id="tabMediaSnap" data-i18n="details_tab_snap" onclick="switchDetailsMediaTab('snap')">📸 Screenshot In-Game</button>
+                            <button type="button" class="adv-chip" id="tabMediaTitle" data-i18n="details_tab_title" onclick="switchDetailsMediaTab('title')">📺 Schermata Titolo</button>
                         </div>
                         <span id="detailsMediaLabel" style="font-size: 0.70rem; color: var(--text-muted); font-family: var(--font-mono); text-transform: uppercase;">BOXART NATequation</span>
                     </div>
@@ -2148,9 +2148,9 @@
 
                 <!-- Footer Azioni -->
                 <div style="display: flex; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 14px;">
-                    <button type="button" class="btn btn-secondary" style="flex:1;" id="detailsCloseBtn" onclick="closeGameDetailsModal()">Chiudi</button>
+                    <button type="button" class="btn btn-secondary" style="flex:1;" id="detailsCloseBtn" data-i18n="details_btn_close" onclick="closeGameDetailsModal()">Chiudi</button>
                     <button type="button" class="btn btn-secondary" id="detailsFavBtn" style="flex:1.2;" onclick="toggleCurrentDetailsFavorite()">★ Preferito</button>
-                    <button type="button" class="btn btn-secondary" id="detailsCollectionBtn" style="flex:1.2;" onclick="addCurrentDetailsToCollection()">📁 In Raccolta</button>
+                    <button type="button" class="btn btn-secondary" id="detailsCollectionBtn" style="flex:1.2;" data-i18n="details_btn_collection" onclick="addCurrentDetailsToCollection()">📁 In Raccolta</button>
                     <button type="button" class="btn btn-secondary" id="detailsRemoveBtn" style="flex:1.2; display:none; color:var(--accent-danger); border-color:rgba(255,75,75,0.4);" onclick="removeCurrentDetailsDownload()">🗑️ Rimuovi</button>
                     <button type="button" class="btn btn-primary" id="detailsPlayBtn" style="flex:1.6;" onclick="launchCurrentDetailsGame()">▶ GIOCA ORA</button>
                 </div>
@@ -2167,10 +2167,10 @@
             <div style="padding: 28px 32px; overflow-y: auto;">
                 <div style="margin-bottom: 20px;">
                     <h2 style="font-size: 1.45rem; font-weight: 800; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
-                        <span>⚙️</span> Opzioni & Impostazioni
+                        <span data-i18n="settings_title"><span>⚙️</span> Opzioni & Impostazioni</span>
                     </h2>
                     <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0;">
-                        Personalizza lingua, gestione archiviazione, cache boxart e comportamento dell'interfaccia.
+                        <span data-i18n="settings_subtitle">Personalizza lingua, gestione archiviazione, cache boxart e comportamento dell'interfaccia.</span>
                     </p>
                 </div>
 
@@ -2179,38 +2179,38 @@
                     <div class="adv-section-card">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-                                <span>🌐</span> Lingua dell'Interfaccia / Language
+                                <span data-i18n="settings_sec_lang"><span>🌐</span> Lingua dell'Interfaccia / Language</span>
                             </label>
                             <span style="font-size: 0.70rem; color: var(--text-muted); font-family: var(--font-mono);">i18n ENGINE</span>
                         </div>
                         <select id="settingsLanguageSelect" class="adv-input-field" onchange="onSettingsLanguageChanged()">
-                            <option value="it">🇮🇹 Italiano (Predefinito / Attivo al 100%)</option>
-                            <option value="en">🇬🇧 English (Fase 1 Roadmap - Anteprima)</option>
-                            <option value="es">🇪🇸 Español (Fase 2 Roadmap - In arrivo)</option>
+                            <option value="it" data-i18n="settings_lang_it">🇮🇹 Italiano (Attivo al 100%)</option>
+                            <option value="en" data-i18n="settings_lang_en">🇬🇧 English (Active 100%)</option>
+                            <option value="es" data-i18n="settings_lang_es">🇪🇸 Español (Activo 100%)</option>
                         </select>
                         <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4;">
-                            Attualmente l'interfaccia opera in Italiano nativo. I dizionari per le lingue aggiuntive verranno integrati progressivamente secondo roadmap.
+                            <span data-i18n="settings_lang_desc">L'interfaccia, i messaggi e le schede informative operano nella lingua selezionata.</span>
                         </div>
                     </div>
 
                     <!-- 2. Cartelle & Storage On-Demand -->
                     <div class="adv-section-card">
                         <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                            <span>📁</span> Percorsi & Archiviazione ROMs
+                            <span data-i18n="settings_sec_storage"><span>📁</span> Percorsi & Archiviazione ROMs</span>
                         </label>
                         <div style="margin-bottom: 8px;">
-                            <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">CARTELLA DOWNLOAD ROMS ON-DEMAND</span>
+                            <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="settings_label_down_folder">CARTELLA DOWNLOAD ROMS ON-DEMAND</span>
                             <div style="display: flex; gap: 8px;">
                                 <input type="text" id="settingsDownloadsPathInput" class="adv-input-field" readonly value="retro_downloads/" style="flex:1; cursor: default;">
-                                <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.78rem; white-space: nowrap;" onclick="openDownloadsFolderInExplorer()">📂 Apri Cartella</button>
+                                <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.78rem; white-space: nowrap;" data-i18n="settings_btn_open_folder" onclick="openDownloadsFolderInExplorer()">📂 Apri Cartella</button>
                             </div>
                         </div>
                         <div>
-                            <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">COMPORTAMENTO SALVA-SPAZIO POST-PARTITA</span>
+                            <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="settings_label_post_game">COMPORTAMENTO SALVA-SPAZIO POST-PARTITA</span>
                             <select id="settingsPostGameBehavior" class="adv-input-field">
-                                <option value="ask">Chiedi sempre dopo ogni partita (Conserva o Elimina per fare spazio)</option>
-                                <option value="always_keep">Conserva sempre su disco (Modalità Collezionista)</option>
-                                <option value="always_delete">Elimina sempre dopo la sessione (Zero MB su disco occupati)</option>
+                                <option value="ask" data-i18n="settings_post_ask">Chiedi sempre dopo ogni partita (Conserva o Elimina per fare spazio)</option>
+                                <option value="always_keep" data-i18n="settings_post_keep">Conserva sempre su disco (Modalità Collezionista)</option>
+                                <option value="always_delete" data-i18n="settings_post_delete">Elimina sempre dopo la sessione (Zero MB su disco occupati)</option>
                             </select>
                         </div>
                     </div>
@@ -2219,40 +2219,40 @@
                     <div class="adv-section-card">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-                                <span>🖼️</span> Cache Immagini & Modalità Grafica
+                                <span data-i18n="settings_sec_cache"><span>🖼️</span> Cache Immagini & Modalità Grafica</span>
                             </label>
                             <span id="settingsCacheSizeBadge" style="font-size: 0.72rem; color: var(--accent-cyan); font-family: var(--font-mono); font-weight: 700;">0.0 MB</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                             <div>
-                                <div style="font-size: 0.84rem; font-weight: 700; color: #fff;">Modalità Boxart Tipografica (0 Byte)</div>
-                                <div style="font-size: 0.74rem; color: var(--text-muted);">Usa poster vettoriali stilizzati invece di scaricare immagini reali da internet.</div>
+                                <div style="font-size: 0.84rem; font-weight: 700; color: #fff;" data-i18n="settings_typographic_title">Modalità Boxart Tipografica (0 Byte)</div>
+                                <div style="font-size: 0.74rem; color: var(--text-muted);" data-i18n="settings_typographic_desc">Usa poster vettoriali stilizzati invece di scaricare immagini reali da internet.</div>
                             </div>
                             <input type="checkbox" id="settingsTypographicToggle" style="accent-color: var(--accent-cyan); width: 18px; height: 18px; cursor: pointer;" onchange="toggleSettingsTypographic()">
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 10px;">
-                            <span style="font-size: 0.74rem; color: var(--text-muted);">Svuota i file temporanei delle copertine per liberare spazio su disco.</span>
-                            <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.75rem; color: var(--accent-danger); border-color: rgba(255,75,75,0.4);" onclick="clearImageCache()">🧹 Svuota Cache Immagini</button>
+                            <span style="font-size: 0.74rem; color: var(--text-muted);" data-i18n="settings_clear_cache_desc">Svuota i file temporanei delle copertine per liberare spazio su disco.</span>
+                            <button type="button" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.75rem; color: var(--accent-danger); border-color: rgba(255,75,75,0.4);" data-i18n="settings_btn_clear_cache" onclick="clearImageCache()">🧹 Svuota Cache Immagini</button>
                         </div>
                     </div>
 
                     <!-- 4. Hero & Interfaccia -->
                     <div class="adv-section-card">
                         <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                            <span>⏱️</span> Vetrina Hero & Gamepad
+                            <span data-i18n="settings_sec_hero"><span>⏱️</span> Vetrina Hero & Gamepad</span>
                         </label>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
                             <div>
-                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">ROTAZIONE AUTOMATICA HERO</span>
+                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="settings_label_hero_rot">ROTAZIONE AUTOMATICA HERO</span>
                                 <select id="settingsHeroRotationSelect" class="adv-input-field" onchange="onSettingsHeroRotationChanged()">
-                                    <option value="4000">Veloce (4 secondi)</option>
-                                    <option value="8000" selected>Standard (8 secondi - Consigliata)</option>
-                                    <option value="15000">Lenta (15 secondi)</option>
-                                    <option value="0">Disattivata (Pausa fissa sul gioco attuale)</option>
+                                    <option value="4000" data-i18n="settings_hero_fast">Veloce (4 secondi)</option>
+                                    <option value="8000" selected data-i18n="settings_hero_standard">Standard (8 secondi - Consigliata)</option>
+                                    <option value="15000" data-i18n="settings_hero_slow">Lenta (15 secondi)</option>
+                                    <option value="0" data-i18n="settings_hero_disabled">Disattivata (Pausa fissa sul gioco attuale)</option>
                                 </select>
                             </div>
                             <div>
-                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">STATO CONTROLLER GAMEPAD</span>
+                                <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="settings_label_gamepad">STATO CONTROLLER GAMEPAD</span>
                                 <div id="settingsGamepadStatus" style="font-size: 0.80rem; font-weight: 700; color: #fff; padding: 9px 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); border: 1px solid var(--border-card); display: flex; align-items: center; gap: 6px;">
                                     <span>🎮</span> In ascolto su porta USB / XInput
                                 </div>
@@ -2263,8 +2263,8 @@
 
                 <!-- Footer Azioni -->
                 <div style="display: flex; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 16px; margin-top: 18px;">
-                    <button type="button" class="btn btn-secondary" style="flex:1;" onclick="resetSettingsToDefaults()">Ripristina Predefiniti</button>
-                    <button type="button" class="btn btn-primary" style="flex:1.4;" onclick="saveAndCloseSettingsModal()">Salva Preferenze</button>
+                    <button type="button" class="btn btn-secondary" style="flex:1;" data-i18n="settings_btn_reset" onclick="resetSettingsToDefaults()">Ripristina Predefiniti</button>
+                    <button type="button" class="btn btn-primary" style="flex:1.4;" data-i18n="settings_btn_save" onclick="saveAndCloseSettingsModal()">Salva Preferenze</button>
                 </div>
             </div>
         </div>
@@ -2288,6 +2288,607 @@
          JAVASCRIPT ENGINE (CLEAN REBIRTH ARCHITECTURE)
          ========================================================================== -->
     <script>
+        // ==========================================================================
+        // RETROHUB 3-LANGUAGE i18n SYSTEM (Italiano / English / Español)
+        // ==========================================================================
+        const TRANSLATIONS = {
+        "it": {
+                "search_placeholder": "Cerca titolo, sviluppatore, anno o genere (es. 'zelda oot')...",
+                "nav_filters": "Filtri",
+                "nav_filters_title": "Filtri Avanzati di Ricerca (Anno, Genere, Sviluppatore)",
+                "nav_surprise": "Sorprendimi",
+                "nav_surprise_title": "Sorprendimi con un gioco casuale! (Tasto Y su Gamepad)",
+                "nav_arena": "Arena",
+                "nav_arena_title": "Lobby P2P e Classifiche Online",
+                "nav_wizard": "Setup Wizard",
+                "nav_wizard_title": "Configurazione Guidata Storage & Percorsi",
+                "nav_settings": "Opzioni",
+                "nav_settings_title": "Impostazioni, Lingua, Cache e Percorsi",
+                "side_hdr_main": "NAVIGAZIONE PRINCIPALE",
+                "side_hdr_consoles": "PIATTAFORME & CONSOLE",
+                "side_hdr_collections": "RACCOLTE TEMATICHE",
+                "side_all": "Tutti i Giochi",
+                "side_fav": "I Tuoi Preferiti",
+                "side_recent": "Cronologia Recenti",
+                "side_arcade": "Arcade Coin-Op",
+                "side_nintendo": "Mondo Nintendo",
+                "side_sega": "Galassia SEGA",
+                "side_sony": "Sony PlayStation",
+                "side_computers": "Computer Occidentali",
+                "side_indie": "PC Indie & Recomp",
+                "side_custom": "Raccolte Personalizzate",
+                "hero_play_now": "▶ GIOCA ORA",
+                "hero_download_play": "☁️ SCARICA & GIOCA",
+                "hero_fav_added": "★ Salvato nei Preferiti",
+                "hero_fav_add": "★ Aggiungi ai Preferiti",
+                "hero_details": "ℹ️ Dettagli",
+                "hero_roulette": "🎲 Casuale",
+                "hero_src_random": "🎲 A Sorpresa",
+                "hero_src_favorites": "⭐ Preferiti",
+                "hero_src_recent": "⏱️ Continua",
+                "hero_src_custom": "📁 Custom",
+                "sub_all_cloud": "🔓 Tutto l'Archivio Cloud",
+                "sub_only_down": "💾 Solo Scaricati",
+                "sub_fav": "⭐ Preferiti",
+                "sub_multi": "👥 2 Giocatori (Co-op/VS)",
+                "sub_genre_platform": "Platform",
+                "sub_genre_action": "Azione",
+                "sub_genre_fighting": "Picchiaduro",
+                "sub_genre_shmup": "Shmup",
+                "sub_genre_rpg": "RPG",
+                "sub_reset": "✕ Resetta Filtri",
+                "catalog_title_all": "Tutti i Giochi",
+                "catalog_title_down": "💾 Giochi Scaricati / Installati",
+                "catalog_save_collection": "Salva Selezione in Raccolta",
+                "active_filters_label": "FILTRI ATTIVI:",
+                "clear_all_chips": "✕ Azzera Tutti",
+                "catalog_stats_visible": "giochi visibili",
+                "card_play": "▶ GIOCA",
+                "card_download": "☁️ SCARICA",
+                "card_details_title": "Dettagli & Screenshot",
+                "empty_down_title": "Nessun Gioco Scaricato Localmente",
+                "empty_down_desc": "Tutti i titoli sono attualmente disponibili in modalità Cloud On-Demand. Fai clic su un gioco o sulla scheda dettagli per scaricarlo localmente per giocare offline, oppure torna all'archivio completo.",
+                "empty_down_btn": "🔓 Mostra Tutto l'Archivio Cloud",
+                "empty_search_title": "Nessun gioco trovato",
+                "empty_search_desc": "Prova a modificare i filtri avanzati o la barra di ricerca.",
+                "empty_search_btn": "✕ Azzera Tutti i Filtri",
+                "adv_title": "🔍 Ricerca Avanzata & Filtri Combinati",
+                "adv_subtitle": "Esplora l'archivio combinando epoca storica, generi multipli, publisher e piattaforma.",
+                "adv_found_badge": "giochi trovati",
+                "adv_sec_era": "📅 Epoca Storica & Intervallo Anni",
+                "adv_chip_all_eras": "Tutte le Epoche",
+                "adv_chip_70s": "Anni '70 (1972-79)",
+                "adv_chip_80s": "Anni '80 (1980-89)",
+                "adv_chip_90s": "Anni '90 Golden Era (1990-99)",
+                "adv_chip_2000s": "Anni 2000 (2000-09)",
+                "adv_chip_modern": "Moderni / Indie (2010-26)",
+                "adv_year_min": "ANNO MINIMO (DA)",
+                "adv_year_max": "ANNO MASSIMO (A)",
+                "adv_sec_genres": "🏷️ Generi di Gioco (Combinabili a scelta)",
+                "adv_deselect_all": "Deseleziona tutti",
+                "adv_genre_all": "Tutti i Generi",
+                "adv_genre_platform": "Platform",
+                "adv_genre_action": "Azione / Avventura",
+                "adv_genre_fighting": "Picchiaduro (1vs1 & Scorrimento)",
+                "adv_genre_shoot": "Shoot 'em up / FPS",
+                "adv_genre_rpg": "RPG / JRPG",
+                "adv_genre_racing": "Corse & Guida Arcade",
+                "adv_genre_sports": "Sportivi & Calcio",
+                "adv_genre_adventure": "Avventura Grafica",
+                "adv_genre_arcade": "Arcade Classico & Puzzle",
+                "adv_sec_dev": "🏢 Produttore / Sviluppatore (Software House)",
+                "adv_dev_placeholder": "Digita o seleziona un publisher (es. Capcom, Konami, Nintendo, Sega...)",
+                "adv_sec_platform": "🎮 Piattaforma & Opzioni Aggiuntive",
+                "adv_label_platform": "PIATTAFORMA",
+                "adv_plat_all": "🌐 Tutte le Piattaforme",
+                "adv_label_storage": "STATO STORAGE",
+                "adv_storage_all": "🔓 Tutto l'Archivio (Cloud & Locale)",
+                "adv_storage_downloaded": "💾 Solo Scaricati / Installati",
+                "adv_opt_fav": "⭐ Solo Preferiti",
+                "adv_opt_multi": "👥 Solo 2+ Giocatori (Co-op / VS)",
+                "adv_btn_reset": "✕ Resetta",
+                "adv_btn_save": "💾 Salva in Raccolta",
+                "adv_btn_apply": "🔍 Mostra Giochi Trovati",
+                "settings_title": "⚙️ Opzioni & Impostazioni",
+                "settings_subtitle": "Personalizza lingua, gestione archiviazione, cache boxart e comportamento dell'interfaccia.",
+                "settings_sec_lang": "🌐 Lingua dell'Interfaccia / Language",
+                "settings_lang_it": "🇮🇹 Italiano (Attivo al 100%)",
+                "settings_lang_en": "🇬🇧 English (Active 100%)",
+                "settings_lang_es": "🇪🇸 Español (Activo 100%)",
+                "settings_lang_desc": "L'interfaccia, i messaggi e le schede informative operano nella lingua selezionata.",
+                "settings_sec_storage": "📁 Percorsi & Archiviazione ROMs",
+                "settings_label_down_folder": "CARTELLA DOWNLOAD ROMS ON-DEMAND",
+                "settings_btn_open_folder": "📂 Apri Cartella",
+                "settings_label_post_game": "COMPORTAMENTO SALVA-SPAZIO POST-PARTITA",
+                "settings_post_ask": "Chiedi sempre dopo ogni partita (Conserva o Elimina per fare spazio)",
+                "settings_post_keep": "Conserva sempre su disco (Modalità Collezionista)",
+                "settings_post_delete": "Elimina sempre dopo la sessione (Zero MB su disco occupati)",
+                "settings_sec_cache": "🖼️ Cache Immagini & Modalità Grafica",
+                "settings_typographic_title": "Modalità Boxart Tipografica (0 Byte)",
+                "settings_typographic_desc": "Usa poster vettoriali stilizzati invece di scaricare immagini reali da internet.",
+                "settings_clear_cache_desc": "Svuota i file temporanei delle copertine per liberare spazio su disco.",
+                "settings_btn_clear_cache": "🧹 Svuota Cache Immagini",
+                "settings_sec_hero": "⏱️ Vetrina Hero & Gamepad",
+                "settings_label_hero_rot": "ROTAZIONE AUTOMATICA HERO",
+                "settings_hero_fast": "Veloce (4 secondi)",
+                "settings_hero_standard": "Standard (8 secondi - Consigliata)",
+                "settings_hero_slow": "Lenta (15 secondi)",
+                "settings_hero_disabled": "Disattivata (Pausa fissa sul gioco attuale)",
+                "settings_label_gamepad": "STATO CONTROLLER GAMEPAD",
+                "settings_gamepad_listening": "In ascolto su porta USB / XInput",
+                "settings_btn_reset": "Ripristina Predefiniti",
+                "settings_btn_save": "Salva Preferenze",
+                "details_tab_boxart": "🖼️ Copertina Boxart",
+                "details_tab_snap": "📸 Screenshot In-Game",
+                "details_tab_title": "📺 Schermata Titolo",
+                "details_overview_hdr": "📖 Panoramica & Storia del Titolo",
+                "details_tech_res_label": "Risoluzione & Refresh",
+                "details_tech_core_label": "Core / Backend",
+                "details_tech_ctrl_label": "Configurazione Joypad",
+                "details_btn_close": "Chiudi",
+                "details_btn_fav": "★ Preferito",
+                "details_btn_collection": "📁 In Raccolta",
+                "details_btn_remove": "🗑️ Rimuovi",
+                "details_btn_play_installed": "▶ GIOCA SUBITO",
+                "details_btn_play_cloud": "☁️ SCARICA & AVVIA",
+                "details_badge_installed": "💾 Installato su PC",
+                "details_badge_cloud": "☁️ Cloud On-Demand",
+                "details_players_coinop": "👥 2P Coin-Op",
+                "details_players_standard": "👥 1-2 Giocatori",
+                "col_title": "📁 Raccolte & Playlist Custom",
+                "col_desc": "Organizza i tuoi capolavori in liste a tema e proiettale direttamente sulla Hero in vetrina!",
+                "col_input_placeholder": "Nome nuova raccolta (es. 'I Miei Platform 90s')...",
+                "col_btn_create": "+ Crea",
+                "roulette_title": "Retro-Roulette",
+                "roulette_desc": "Estrazione casuale dal catalogo...",
+                "roulette_rolling": "In rotazione...",
+                "roulette_waiting": "Attendi l'esito",
+                "roulette_btn_close": "Chiudi",
+                "roulette_btn_play": "▶ Gioca Subito",
+                "post_game_title": "Partita Conclusa!",
+                "post_game_desc": "Cosa desideri fare con il gioco scaricato on-demand per questa sessione?",
+                "post_game_keep": "💾 Conserva sul PC",
+                "post_game_delete": "🗑️ Elimina (Libera Spazio)",
+                "wizard_title": "🧙 Configurazione Guidata RetroHub",
+                "wizard_subtitle": "Seleziona il profilo di archiviazione perfetto per il tuo PC. Potrai sempre cambiarlo in seguito.",
+                "wizard_p1_title": "Caso 1: Installazione Pulita & On-Demand",
+                "wizard_p1_desc": "Che tu sia un nuovo utente o che tu abbia già file sparsi, qui parti da zero pensieri: catalogo cloud completo, zero download preventivi. Scarichi al volo solo il gioco che avvii.",
+                "wizard_p1_storage": "📦 Spazio iniziale: 0 MB • Pulizia automatica opzionale",
+                "wizard_p2_title": "Caso 2: Collezione Esistente (Zero Spostamenti)",
+                "wizard_p2_desc": "Riconosce i tuoi file dove sono adesso (ROM e Indie). Garantito al 100%: RetroHub NON sposta, NON copia e NON tocca i tuoi file originali. Scansione in sola lettura.",
+                "wizard_p2_storage": "📦 Sfrutta i tuoi dischi • Zero file duplicati",
+                "wizard_p3_title": "Caso 3: Low Storage / Handheld (Smart Cache)",
+                "wizard_p3_desc": "Parte da 0 byte per le immagini con card vettoriali nei colori console. Scarica le copertine SOLO man mano che giochi o assegni la stella ⭐ (limite cache 50-100 MB).",
+                "wizard_p3_storage": "📦 0 byte all'inizio • Cresce solo con i tuoi preferiti",
+                "wizard_p4_title": "Caso 4: Full Pack Offline (Console Scelte)",
+                "wizard_p4_desc": "Vuoi giocare senza internet? Puoi scaricare il pacchetto completo solo per le console che preferisci (pochi GB per SNES/MD) o per tutto l'archivio. Decidi tu cosa tenere offline.",
+                "wizard_p4_storage": "📦 Da pochi GB a completo • Conservazione totale",
+                "wizard_sandbox_btn": "🧪 Simula Catalogo da Vuoto",
+                "wizard_btn_cancel": "Annulla",
+                "wizard_btn_apply": "Applica Profilo Selezionato",
+                "arena_title": "⚔️ Arena Online P2P & Classifiche",
+                "arena_subtitle": "Sfida amici a distanza senza server centralizzati e registra i tuoi record mondiali Arcade.",
+                "arena_btn_create": "➕ Crea Nuova Stanza",
+                "arena_btn_join": "🔑 Entra con Codice Invito",
+                "arena_bot_badge": "🧪 Collaudo Immediato Locale",
+                "arena_bot_desc": "Non serve un secondo computer o un amico connesso: simula istantaneamente un avversario virtuale (*RetroBot_99*), handshake a 18ms, conto alla rovescia 3.. 2.. 1.. e avvio di prova.",
+                "arena_bot_btn": "🤖 Simula Match con Bot P2P (1 Clic)",
+                "arena_hof_title": "🏆 Hall of Fame (Punteggi Verificati)",
+                "gamepad_hud_select": "Seleziona/Gioca",
+                "gamepad_hud_back": "Indietro",
+                "gamepad_hud_fav": "Preferito ⭐",
+                "gamepad_hud_surprise": "🎲 Sorprendimi",
+                "gamepad_hud_console": "Console",
+                "toast_fav_added": "⭐ Aggiunto ai Preferiti",
+                "toast_fav_removed": "Rimosso dai Preferiti",
+                "toast_download_start": "Download avviato per",
+                "toast_download_done": "Download completato con successo!",
+                "toast_download_removed": "Download rimosso dal PC",
+                "toast_settings_saved": "Tutte le preferenze sono state salvate!",
+                "toast_cache_cleared": "Cache immagini svuotata con successo!"
+        },
+        "en": {
+                "search_placeholder": "Search title, developer, year or genre (e.g. 'zelda oot')...",
+                "nav_filters": "Filters",
+                "nav_filters_title": "Advanced Search Filters (Year, Genre, Developer)",
+                "nav_surprise": "Surprise Me",
+                "nav_surprise_title": "Surprise me with a random game! (Y button on Gamepad)",
+                "nav_arena": "Arena",
+                "nav_arena_title": "P2P Lobby & Online Leaderboards",
+                "nav_wizard": "Setup Wizard",
+                "nav_wizard_title": "Guided Setup for Storage & Paths",
+                "nav_settings": "Settings",
+                "nav_settings_title": "Settings, Language, Cache and Paths",
+                "side_hdr_main": "MAIN NAVIGATION",
+                "side_hdr_consoles": "PLATFORMS & CONSOLES",
+                "side_hdr_collections": "THEMATIC COLLECTIONS",
+                "side_all": "All Games",
+                "side_fav": "Your Favorites",
+                "side_recent": "Recent History",
+                "side_arcade": "Arcade Coin-Op",
+                "side_nintendo": "Nintendo World",
+                "side_sega": "SEGA Galaxy",
+                "side_sony": "Sony PlayStation",
+                "side_computers": "Western Computers",
+                "side_indie": "PC Indie & Recomp",
+                "side_custom": "Custom Playlists",
+                "hero_play_now": "▶ PLAY NOW",
+                "hero_download_play": "☁️ DOWNLOAD & PLAY",
+                "hero_fav_added": "★ Favorited",
+                "hero_fav_add": "★ Add to Favorites",
+                "hero_details": "ℹ️ Details",
+                "hero_roulette": "🎲 Random",
+                "hero_src_random": "🎲 Surprise",
+                "hero_src_favorites": "⭐ Favorites",
+                "hero_src_recent": "⏱️ Continue",
+                "hero_src_custom": "📁 Custom",
+                "sub_all_cloud": "🔓 All Cloud Games",
+                "sub_only_down": "💾 Downloaded Only",
+                "sub_fav": "⭐ Favorites",
+                "sub_multi": "👥 2 Players (Co-op/VS)",
+                "sub_genre_platform": "Platform",
+                "sub_genre_action": "Action",
+                "sub_genre_fighting": "Fighting",
+                "sub_genre_shmup": "Shmup",
+                "sub_genre_rpg": "RPG",
+                "sub_reset": "✕ Reset Filters",
+                "catalog_title_all": "All Games",
+                "catalog_title_down": "💾 Downloaded / Installed Games",
+                "catalog_save_collection": "Save View to Collection",
+                "active_filters_label": "ACTIVE FILTERS:",
+                "clear_all_chips": "✕ Clear All",
+                "catalog_stats_visible": "games visible",
+                "card_play": "▶ PLAY",
+                "card_download": "☁️ GET",
+                "card_details_title": "Details & Screenshots",
+                "empty_down_title": "No Games Downloaded Locally Yet",
+                "empty_down_desc": "All titles are currently available via Cloud On-Demand streaming. Click any game or detail card to download it locally for offline play, or switch back to the complete archive.",
+                "empty_down_btn": "🔓 Show All Cloud Games",
+                "empty_search_title": "No games found",
+                "empty_search_desc": "Try adjusting your advanced filters or search bar.",
+                "empty_search_btn": "✕ Clear All Filters",
+                "adv_title": "🔍 Advanced Search & Combined Filters",
+                "adv_subtitle": "Explore the archive combining historical era, multiple genres, publisher, and platform.",
+                "adv_found_badge": "games found",
+                "adv_sec_era": "📅 Historical Era & Year Range",
+                "adv_chip_all_eras": "All Eras",
+                "adv_chip_70s": "'70s (1972-79)",
+                "adv_chip_80s": "'80s (1980-89)",
+                "adv_chip_90s": "'90s Golden Era (1990-99)",
+                "adv_chip_2000s": "2000s (2000-09)",
+                "adv_chip_modern": "Modern / Indie (2010-26)",
+                "adv_year_min": "MIN YEAR (FROM)",
+                "adv_year_max": "MAX YEAR (TO)",
+                "adv_sec_genres": "🏷️ Game Genres (Combinable)",
+                "adv_deselect_all": "Deselect all",
+                "adv_genre_all": "All Genres",
+                "adv_genre_platform": "Platform",
+                "adv_genre_action": "Action / Adventure",
+                "adv_genre_fighting": "Fighting (1vs1 & Beat 'em up)",
+                "adv_genre_shoot": "Shoot 'em up / FPS",
+                "adv_genre_rpg": "RPG / JRPG",
+                "adv_genre_racing": "Racing & Arcade Driving",
+                "adv_genre_sports": "Sports & Soccer",
+                "adv_genre_adventure": "Graphic Adventure",
+                "adv_genre_arcade": "Classic Arcade & Puzzle",
+                "adv_sec_dev": "🏢 Developer / Publisher (Software House)",
+                "adv_dev_placeholder": "Type or select a publisher (e.g. Capcom, Konami, Nintendo, Sega...)",
+                "adv_sec_platform": "🎮 Platform & Additional Options",
+                "adv_label_platform": "PLATFORM",
+                "adv_plat_all": "🌐 All Platforms",
+                "adv_label_storage": "STORAGE STATUS",
+                "adv_storage_all": "🔓 All Games (Cloud & Local)",
+                "adv_storage_downloaded": "💾 Downloaded / Installed Only",
+                "adv_opt_fav": "⭐ Favorites Only",
+                "adv_opt_multi": "👥 2+ Players Only (Co-op / VS)",
+                "adv_btn_reset": "✕ Reset",
+                "adv_btn_save": "💾 Save to Collection",
+                "adv_btn_apply": "🔍 Show Found Games",
+                "settings_title": "⚙️ Options & Settings",
+                "settings_subtitle": "Customize language, storage management, boxart cache, and interface behavior.",
+                "settings_sec_lang": "🌐 Interface Language / Idioma",
+                "settings_lang_it": "🇮🇹 Italiano (Attivo al 100%)",
+                "settings_lang_en": "🇬🇧 English (Active 100%)",
+                "settings_lang_es": "🇪🇸 Español (Activo 100%)",
+                "settings_lang_desc": "The entire interface, messages, and info sheets operate in the selected language.",
+                "settings_sec_storage": "📁 Paths & ROM Storage",
+                "settings_label_down_folder": "ON-DEMAND ROMS DOWNLOAD FOLDER",
+                "settings_btn_open_folder": "📂 Open Folder",
+                "settings_label_post_game": "POST-GAME SPACE SAVING BEHAVIOR",
+                "settings_post_ask": "Always ask after each game (Keep or Delete to save space)",
+                "settings_post_keep": "Always keep on disk (Collector Mode)",
+                "settings_post_delete": "Always delete after session (Zero MB used on disk)",
+                "settings_sec_cache": "🖼️ Image Cache & Graphic Mode",
+                "settings_typographic_title": "Typographic Boxart Mode (0 Byte)",
+                "settings_typographic_desc": "Use styled vector posters instead of downloading real images from the internet.",
+                "settings_clear_cache_desc": "Clear temporary cover files to free up disk space.",
+                "settings_btn_clear_cache": "🧹 Clear Image Cache",
+                "settings_sec_hero": "⏱️ Hero Showcase & Gamepad",
+                "settings_label_hero_rot": "HERO AUTO-ROTATION",
+                "settings_hero_fast": "Fast (4 seconds)",
+                "settings_hero_standard": "Standard (8 seconds - Recommended)",
+                "settings_hero_slow": "Slow (15 seconds)",
+                "settings_hero_disabled": "Disabled (Fixed pause on current game)",
+                "settings_label_gamepad": "GAMEPAD CONTROLLER STATUS",
+                "settings_gamepad_listening": "Listening on USB port / XInput",
+                "settings_btn_reset": "Reset to Defaults",
+                "settings_btn_save": "Save Preferences",
+                "details_tab_boxart": "🖼️ Boxart Cover",
+                "details_tab_snap": "📸 In-Game Snap",
+                "details_tab_title": "📺 Title Screen",
+                "details_overview_hdr": "📖 Historical Overview & Gameplay",
+                "details_tech_res_label": "Resolution & Refresh",
+                "details_tech_core_label": "Core / Backend",
+                "details_tech_ctrl_label": "Gamepad Configuration",
+                "details_btn_close": "Close",
+                "details_btn_fav": "★ Favorite",
+                "details_btn_collection": "📁 In Collection",
+                "details_btn_remove": "🗑️ Remove",
+                "details_btn_play_installed": "▶ PLAY NOW",
+                "details_btn_play_cloud": "☁️ DOWNLOAD & PLAY",
+                "details_badge_installed": "💾 Installed Locally",
+                "details_badge_cloud": "☁️ Cloud On-Demand",
+                "details_players_coinop": "👥 2P Coin-Op",
+                "details_players_standard": "👥 1-2 Players",
+                "col_title": "📁 Custom Playlists & Collections",
+                "col_desc": "Organize your masterpieces into themed lists and display them on the Hero showcase!",
+                "col_input_placeholder": "New collection name (e.g. 'My 90s Platformers')...",
+                "col_btn_create": "+ Create",
+                "roulette_title": "Retro-Roulette",
+                "roulette_desc": "Random pick from catalog...",
+                "roulette_rolling": "Spinning...",
+                "roulette_waiting": "Waiting for result",
+                "roulette_btn_close": "Close",
+                "roulette_btn_play": "▶ Play Now",
+                "post_game_title": "Game Session Ended!",
+                "post_game_desc": "What would you like to do with the game downloaded on-demand for this session?",
+                "post_game_keep": "💾 Keep on PC",
+                "post_game_delete": "🗑️ Delete (Free Space)",
+                "wizard_title": "🧙 RetroHub Guided Setup",
+                "wizard_subtitle": "Select the perfect storage profile for your PC. You can change it anytime later.",
+                "wizard_p1_title": "Case 1: Clean Install & On-Demand",
+                "wizard_p1_desc": "Whether you are a new user or already have scattered files, start with zero worries: complete cloud catalog, zero prior downloads. Download on the fly only what you play.",
+                "wizard_p1_storage": "📦 Initial space: 0 MB • Optional auto-cleanup",
+                "wizard_p2_title": "Case 2: Existing Collection (Zero Moves)",
+                "wizard_p2_desc": "Recognizes your files right where they are now (ROMs and Indies). 100% Guaranteed: RetroHub NEVER moves, copies, or alters your original files. Read-only scan.",
+                "wizard_p2_storage": "📦 Leverages your drives • Zero duplicate files",
+                "wizard_p3_title": "Case 3: Low Storage / Handheld (Smart Cache)",
+                "wizard_p3_desc": "Starts at 0 bytes for artwork with console-themed vector cards. Downloads covers ONLY as you play or star favorites (50-100 MB cache limit).",
+                "wizard_p3_storage": "📦 0 bytes at startup • Grows only with your favorites",
+                "wizard_p4_title": "Case 4: Full Pack Offline (Selected Consoles)",
+                "wizard_p4_desc": "Want to play completely offline? Download the complete pack only for chosen consoles (a few GB for SNES/MD) or the entire archive. You decide what stays offline.",
+                "wizard_p4_storage": "📦 A few GB to full set • Complete preservation",
+                "wizard_sandbox_btn": "🧪 Simulate Empty Catalog",
+                "wizard_btn_cancel": "Cancel",
+                "wizard_btn_apply": "Apply Selected Profile",
+                "arena_title": "⚔️ Online P2P Arena & Leaderboards",
+                "arena_subtitle": "Challenge friends remotely without central servers and record your Arcade world records.",
+                "arena_btn_create": "➕ Create New Room",
+                "arena_btn_join": "🔑 Join with Invite Code",
+                "arena_bot_badge": "🧪 Immediate Local Test",
+                "arena_bot_desc": "No second computer or online friend needed: instantly simulates a virtual opponent (*RetroBot_99*), 18ms handshake, 3.. 2.. 1.. countdown and test run.",
+                "arena_bot_btn": "🤖 Simulate Match with P2P Bot (1-Click)",
+                "arena_hof_title": "🏆 Hall of Fame (Verified Scores)",
+                "gamepad_hud_select": "Select/Play",
+                "gamepad_hud_back": "Back",
+                "gamepad_hud_fav": "Favorite ⭐",
+                "gamepad_hud_surprise": "🎲 Surprise Me",
+                "gamepad_hud_console": "Console",
+                "toast_fav_added": "⭐ Added to Favorites",
+                "toast_fav_removed": "Removed from Favorites",
+                "toast_download_start": "Download started for",
+                "toast_download_done": "Download completed successfully!",
+                "toast_download_removed": "Download removed from PC",
+                "toast_settings_saved": "All preferences have been saved!",
+                "toast_cache_cleared": "Image cache cleared successfully!"
+        },
+        "es": {
+                "search_placeholder": "Buscar título, desarrollador, año o género (ej. 'zelda oot')...",
+                "nav_filters": "Filtros",
+                "nav_filters_title": "Filtros de Búsqueda Avanzada (Año, Género, Desarrollador)",
+                "nav_surprise": "Sorpréndeme",
+                "nav_surprise_title": "¡Sorpréndeme con un juego aleatorio! (Botón Y en Gamepad)",
+                "nav_arena": "Arena",
+                "nav_arena_title": "Lobby P2P y Tablas de Clasificación Online",
+                "nav_wizard": "Setup Wizard",
+                "nav_wizard_title": "Configuración Guiada de Almacenamiento y Rutas",
+                "nav_settings": "Opciones",
+                "nav_settings_title": "Ajustes, Idioma, Caché y Rutas",
+                "side_hdr_main": "NAVEGACIÓN PRINCIPAL",
+                "side_hdr_consoles": "PLATAFORMAS Y CONSOLAS",
+                "side_hdr_collections": "COLECCIONES TEMÁTICAS",
+                "side_all": "Todos los Juegos",
+                "side_fav": "Tus Favoritos",
+                "side_recent": "Historial Reciente",
+                "side_arcade": "Recreativas Arcade",
+                "side_nintendo": "Mundo Nintendo",
+                "side_sega": "Galaxia SEGA",
+                "side_sony": "Sony PlayStation",
+                "side_computers": "Ordenadores Clásicos",
+                "side_indie": "PC Indie y Recomp",
+                "side_custom": "Listas Personalizadas",
+                "hero_play_now": "▶ JUGAR AHORA",
+                "hero_download_play": "☁️ DESCARGAR Y JUGAR",
+                "hero_fav_added": "★ Guardado en Favoritos",
+                "hero_fav_add": "★ Añadir a Favoritos",
+                "hero_details": "ℹ️ Detalles",
+                "hero_roulette": "🎲 Aleatorio",
+                "hero_src_random": "🎲 Sorpresa",
+                "hero_src_favorites": "⭐ Favoritos",
+                "hero_src_recent": "⏱️ Continuar",
+                "hero_src_custom": "📁 Personalizado",
+                "sub_all_cloud": "🔓 Todo el Archivo Cloud",
+                "sub_only_down": "💾 Solo Descargados",
+                "sub_fav": "⭐ Favoritos",
+                "sub_multi": "👥 2 Jugadores (Co-op/VS)",
+                "sub_genre_platform": "Plataformas",
+                "sub_genre_action": "Acción",
+                "sub_genre_fighting": "Lucha",
+                "sub_genre_shmup": "Disparos",
+                "sub_genre_rpg": "Rol",
+                "sub_reset": "✕ Restablecer Filtros",
+                "catalog_title_all": "Todos los Juegos",
+                "catalog_title_down": "💾 Juegos Descargados / Instalados",
+                "catalog_save_collection": "Guardar Selección en Colección",
+                "active_filters_label": "FILTROS ACTIVOS:",
+                "clear_all_chips": "✕ Borrar Todos",
+                "catalog_stats_visible": "juegos visibles",
+                "card_play": "▶ JUGAR",
+                "card_download": "☁️ OBTENER",
+                "card_details_title": "Detalles y Capturas",
+                "empty_down_title": "No hay Juegos Descargados Localmente",
+                "empty_down_desc": "Todos los títulos están disponibles en streaming Cloud On-Demand. Haz clic en un juego o en la ficha de detalles para descargarlo localmente y jugar sin conexión, o vuelve al archivo completo.",
+                "empty_down_btn": "🔓 Mostrar Todo el Archivo Cloud",
+                "empty_search_title": "No se encontraron juegos",
+                "empty_search_desc": "Intenta modificar los filtros avanzados o la barra de búsqueda.",
+                "empty_search_btn": "✕ Restablecer Todos los Filtros",
+                "adv_title": "🔍 Búsqueda Avanzada y Filtros Combinados",
+                "adv_subtitle": "Explora el archivo combinando época histórica, múltiples géneros, distribuidor y plataforma.",
+                "adv_found_badge": "juegos encontrados",
+                "adv_sec_era": "📅 Época Histórica y Rango de Años",
+                "adv_chip_all_eras": "Todas las Épocas",
+                "adv_chip_70s": "Años 70 (1972-79)",
+                "adv_chip_80s": "Años 80 (1980-89)",
+                "adv_chip_90s": "Años 90 Época Dorada (1990-99)",
+                "adv_chip_2000s": "Años 2000 (2000-09)",
+                "adv_chip_modern": "Modernos / Indie (2010-26)",
+                "adv_year_min": "AÑO MÍNIMO (DESDE)",
+                "adv_year_max": "AÑO MÁXIMO (HASTA)",
+                "adv_sec_genres": "🏷️ Géneros de Juego (Combinables a elección)",
+                "adv_deselect_all": "Deseleccionar todos",
+                "adv_genre_all": "Todos los Géneros",
+                "adv_genre_platform": "Plataformas",
+                "adv_genre_action": "Acción / Aventura",
+                "adv_genre_fighting": "Lucha (1vs1 y Beat 'em up)",
+                "adv_genre_shoot": "Shoot 'em up / FPS",
+                "adv_genre_rpg": "Rol / JRPG",
+                "adv_genre_racing": "Carreras y Conducción Arcade",
+                "adv_genre_sports": "Deportes y Fútbol",
+                "adv_genre_adventure": "Aventura Gráfica",
+                "adv_genre_arcade": "Arcade Clásico y Puzles",
+                "adv_sec_dev": "🏢 Desarrollador / Distribuidor (Software House)",
+                "adv_dev_placeholder": "Escribe o selecciona una compañía (ej. Capcom, Konami, Nintendo, Sega...)",
+                "adv_sec_platform": "🎮 Plataforma y Opciones Adicionales",
+                "adv_label_platform": "PLATAFORMA",
+                "adv_plat_all": "🌐 Todas las Plataformas",
+                "adv_label_storage": "ESTADO DE ALMACENAMIENTO",
+                "adv_storage_all": "🔓 Todo el Archivo (Cloud y Local)",
+                "adv_storage_downloaded": "💾 Solo Descargados / Instalados",
+                "adv_opt_fav": "⭐ Solo Favoritos",
+                "adv_opt_multi": "👥 Solo 2+ Jugadores (Co-op / VS)",
+                "adv_btn_reset": "✕ Restablecer",
+                "adv_btn_save": "💾 Guardar en Colección",
+                "adv_btn_apply": "🔍 Mostrar Juegos Encontrados",
+                "settings_title": "⚙️ Opciones y Ajustes",
+                "settings_subtitle": "Personaliza idioma, gestión de almacenamiento, caché de portadas y comportamiento de la interfaz.",
+                "settings_sec_lang": "🌐 Idioma de la Interfaz / Language",
+                "settings_lang_it": "🇮🇹 Italiano (Attivo al 100%)",
+                "settings_lang_en": "🇬🇧 English (Active 100%)",
+                "settings_lang_es": "🇪🇸 Español (Activo 100%)",
+                "settings_lang_desc": "Toda la interfaz, los avisos y las fichas de datos funcionan en el idioma seleccionado.",
+                "settings_sec_storage": "📁 Rutas y Almacenamiento de ROMs",
+                "settings_label_down_folder": "CARPETA DE DESCARGA DE ROMS ON-DEMAND",
+                "settings_btn_open_folder": "📂 Abrir Carpeta",
+                "settings_label_post_game": "COMPORTAMIENTO DE AHORRO DE ESPACIO TRAS JUGAR",
+                "settings_post_ask": "Preguntar siempre tras cada partida (Conservar o Eliminar para ahorrar espacio)",
+                "settings_post_keep": "Conservar siempre en disco (Modo Coleccionista)",
+                "settings_post_delete": "Eliminar siempre tras la sesión (Cero MB ocupados en disco)",
+                "settings_sec_cache": "🖼️ Caché de Imágenes y Modo Gráfico",
+                "settings_typographic_title": "Modo Portada Tipográfica (0 Bytes)",
+                "settings_typographic_desc": "Usa pósteres vectoriales estilizados en lugar de descargar imágenes de internet.",
+                "settings_clear_cache_desc": "Vacía los archivos temporales de portadas para liberar espacio en disco.",
+                "settings_btn_clear_cache": "🧹 Vaciar Caché de Portadas",
+                "settings_sec_hero": "⏱️ Escaparate Hero y Gamepad",
+                "settings_label_hero_rot": "ROTACIÓN AUTOMÁTICA DE HERO",
+                "settings_hero_fast": "Rápida (4 segundos)",
+                "settings_hero_standard": "Estándar (8 segundos - Recomendada)",
+                "settings_hero_slow": "Lenta (15 segundos)",
+                "settings_hero_disabled": "Desactivada (Pausa fija en el juego actual)",
+                "settings_label_gamepad": "ESTADO DEL MANDO GAMEPAD",
+                "settings_gamepad_listening": "Escuchando en puerto USB / XInput",
+                "settings_btn_reset": "Restablecer Valores Predeterminados",
+                "settings_btn_save": "Guardar Preferencias",
+                "details_tab_boxart": "🖼️ Portada Boxart",
+                "details_tab_snap": "📸 Captura In-Game",
+                "details_tab_title": "📺 Pantalla de Título",
+                "details_overview_hdr": "📖 Descripción e Historia del Título",
+                "details_tech_res_label": "Resolución y Frecuencia",
+                "details_tech_core_label": "Núcleo / Motor",
+                "details_tech_ctrl_label": "Configuración de Mando",
+                "details_btn_close": "Cerrar",
+                "details_btn_fav": "★ Favorito",
+                "details_btn_collection": "📁 En Colección",
+                "details_btn_remove": "🗑️ Eliminar",
+                "details_btn_play_installed": "▶ JUGAR AHORA",
+                "details_btn_play_cloud": "☁️ DESCARGAR Y JUGAR",
+                "details_badge_installed": "💾 Instalado en PC",
+                "details_badge_cloud": "☁️ Cloud On-Demand",
+                "details_players_coinop": "👥 2P Coin-Op",
+                "details_players_standard": "👥 1-2 Jugadores",
+                "col_title": "📁 Colecciones y Listas Personalizadas",
+                "col_desc": "¡Organiza tus obras maestras en listas temáticas y muéstralas en el escaparate Hero!",
+                "col_input_placeholder": "Nombre de nueva colección (ej. 'Mis Plataformas 90s')...",
+                "col_btn_create": "+ Crear",
+                "roulette_title": "Retro-Ruleta",
+                "roulette_desc": "Sorteo aleatorio del catálogo...",
+                "roulette_rolling": "Girando...",
+                "roulette_waiting": "Espera el resultado",
+                "roulette_btn_close": "Cerrar",
+                "roulette_btn_play": "▶ Jugar Ahora",
+                "post_game_title": "¡Partida Terminada!",
+                "post_game_desc": "¿Qué deseas hacer con el juego descargado on-demand para esta sesión?",
+                "post_game_keep": "💾 Conservar en PC",
+                "post_game_delete": "🗑️ Eliminar (Liberar Espacio)",
+                "wizard_title": "🧙 Asistente de Configuración RetroHub",
+                "wizard_subtitle": "Selecciona el perfil de almacenamiento perfecto para tu PC. Podrás cambiarlo cuando quieras.",
+                "wizard_p1_title": "Caso 1: Instalación Limpia y On-Demand",
+                "wizard_p1_desc": "Tanto si eres un nuevo usuario como si ya tienes archivos dispersos, empieza sin preocupaciones: catálogo cloud completo, cero descargas previas. Descarga sobre la marcha solo lo que juegues.",
+                "wizard_p1_storage": "📦 Espacio inicial: 0 MB • Limpieza automática opcional",
+                "wizard_p2_title": "Caso 2: Colección Existente (Cero Movimientos)",
+                "wizard_p2_desc": "Reconoce tus archivos justo donde están ahora (ROMs e Indies). 100% Garantizado: RetroHub NUNCA mueve, copia ni altera tus archivos originales. Escaneo en solo lectura.",
+                "wizard_p2_storage": "📦 Aprovecha tus discos • Cero archivos duplicados",
+                "wizard_p3_title": "Caso 3: Poco Almacenamiento / Portátil (Caché Inteligente)",
+                "wizard_p3_desc": "Comienza en 0 bytes para el arte con tarjetas vectoriales con colores de consola. Descarga portadas SOLO a medida que juegas o marcas favoritos (límite caché 50-100 MB).",
+                "wizard_p3_storage": "📦 0 bytes al inicio • Crece solo con tus favoritos",
+                "wizard_p4_title": "Caso 4: Paquete Completo Offline (Consolas Elegidas)",
+                "wizard_p4_desc": "¿Quieres jugar sin conexión? Descarga el paquete completo solo para las consolas que elijas (pocos GB para SNES/MD) o para todo el archivo. Tú decides qué conservar.",
+                "wizard_p4_storage": "📦 De pocos GB al set completo • Conservación total",
+                "wizard_sandbox_btn": "🧪 Simular Catálogo Vacío",
+                "wizard_btn_cancel": "Cancelar",
+                "wizard_btn_apply": "Aplicar Perfil Seleccionado",
+                "arena_title": "⚔️ Arena Online P2P y Clasificaciones",
+                "arena_subtitle": "Desafía a amigos a distancia sin servidores centralizados y registra tus récords mundiales Arcade.",
+                "arena_btn_create": "➕ Crear Nueva Sala",
+                "arena_btn_join": "🔑 Entrar con Código de Invitación",
+                "arena_bot_badge": "🧪 Prueba Inmediata Local",
+                "arena_bot_desc": "No necesitas un segundo ordenador ni un amigo conectado: simula al instante un rival virtual (*RetroBot_99*), enlace a 18ms, cuenta atrás 3.. 2.. 1.. e inicio de prueba.",
+                "arena_bot_btn": "🤖 Simular Partida con Bot P2P (1 Clic)",
+                "arena_hof_title": "🏆 Hall of Fame (Puntuaciones Verificadas)",
+                "gamepad_hud_select": "Seleccionar/Jugar",
+                "gamepad_hud_back": "Atrás",
+                "gamepad_hud_fav": "Favorito ⭐",
+                "gamepad_hud_surprise": "🎲 Sorpréndeme",
+                "gamepad_hud_console": "Consola",
+                "toast_fav_added": "⭐ Añadido a Favoritos",
+                "toast_fav_removed": "Eliminado de Favoritos",
+                "toast_download_start": "Descarga iniciada para",
+                "toast_download_done": "¡Descarga completada con éxito!",
+                "toast_download_removed": "Descarga eliminada del PC",
+                "toast_settings_saved": "¡Todas las preferencias han sido guardadas!",
+                "toast_cache_cleared": "¡Caché de portadas vaciada con éxito!"
+        }
+};
+
+        function t(key, fallback = '') {
+            if (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) {
+                return TRANSLATIONS[currentLang][key];
+            }
+            if (TRANSLATIONS['it'] && TRANSLATIONS['it'][key]) {
+                return TRANSLATIONS['it'][key];
+            }
+            return fallback || key;
+        }
+
         // Stato Globale dell'Applicazione
         let allGames = [];
         let allPlatforms = [];
@@ -2378,10 +2979,10 @@
             setupPlatformScrollWheel();
             await loadPlatformsManifest();
             await loadGames();
-            if (currentLang !== 'it') {
-                applyLanguage(currentLang);
-            }
+            applyLanguage(currentLang);
             setupGamepadPolling();
+            // Keepalive Heartbeat: invia un ping periodico ogni 4 secondi per mantenere attivo il server locale
+            setInterval(() => { fetch('/api/ping', { method: 'POST' }).catch(() => {}); }, 4000);
         });
 
         // --------------------------------------------------------------------------
@@ -2654,10 +3255,10 @@
             const isInstalled = isSandboxMode ? false : g.is_installed;
             const isEn = (currentLang === 'en');
             const playBtn = document.getElementById('heroPlayBtn');
-            playBtn.innerText = isInstalled ? (isEn ? '▶ PLAY NOW' : '▶ GIOCA ORA') : (isEn ? '☁️ DOWNLOAD & PLAY' : '☁️ SCARICA & GIOCA');
+            playBtn.innerText = isInstalled ? t('hero_play_now') : t('hero_download_play');
 
             const favBtn = document.getElementById('heroFavBtn');
-            favBtn.innerText = g.is_favorite ? (isEn ? '★ Favorited' : '★ Salvato nei Preferiti') : (isEn ? '★ Add to Favorites' : '★ Aggiungi ai Preferiti');
+            favBtn.innerText = g.is_favorite ? t('hero_fav_added') : t('hero_fav_add');
             favBtn.style.color = g.is_favorite ? 'var(--accent-gold)' : '#fff';
 
             // Sfondo Cinematico Panoramico (Steam 1920x620 library_hero.jpg o cover)
@@ -2929,7 +3530,7 @@
             currentFilteredGames = filtered;
 
             const isEn = (currentLang === 'en');
-            document.getElementById('catalogStatsBadge').innerText = isEn ? `${filtered.length} games visible` : `${filtered.length} giochi visibili`;
+            document.getElementById('catalogStatsBadge').innerText = isEn ? `${filtered.length} ${t('catalog_stats_visible')}` : `${filtered.length} ${t('catalog_stats_visible')}`;
             updateAdvFilterButtonBadge();
             renderActiveFilterBreadcrumbs();
 
@@ -2940,13 +3541,13 @@
                         <div style="grid-column: 1/-1; padding: 60px 20px; text-align: center; color: var(--text-muted); background: rgba(0,0,0,0.25); border-radius: var(--radius-md); border: 1px dashed var(--border-card);">
                             <div style="font-size: 2.8rem; margin-bottom: 12px;">💾</div>
                             <div style="font-size: 1.15rem; font-weight: 800; color: #fff; margin-bottom: 6px;">
-                                ${isEn ? 'No Local Games Downloaded Yet' : 'Nessun Gioco Scaricato Localmente'}
+                                ${t('empty_down_title')}
                             </div>
                             <div style="font-size: 0.86rem; max-width: 500px; margin: 0 auto 16px; line-height: 1.5;">
-                                ${isEn ? 'All titles are currently streamed via Cloud On-Demand. Click any game card or detail sheet to download it for offline play, or switch back to the complete archive.' : 'Tutti i titoli sono attualmente pronti in modalità Cloud On-Demand. Clicca su un gioco o sulla scheda dettagli per scaricarlo in locale per il gioco offline, oppure torna all\'archivio completo.'}
+                                ${t('empty_down_desc')}
                             </div>
                             <button class="btn btn-primary" onclick="setStorageFilter('all')">
-                                ${isEn ? '🔓 Show All Cloud Games' : '🔓 Mostra Tutto l\'Archivio Cloud'}
+                                ${t('empty_down_btn')}
                             </button>
                         </div>
                     `;
@@ -2955,13 +3556,13 @@
                         <div style="grid-column: 1/-1; padding: 60px; text-align: center; color: var(--text-muted);">
                             <div style="font-size: 2.5rem; margin-bottom: 12px;">🔍</div>
                             <div style="font-size: 1.1rem; font-weight: 700; color: #fff;">
-                                ${isEn ? 'No games found' : 'Nessun gioco trovato'}
+                                ${t('empty_search_title')}
                             </div>
                             <div style="font-size: 0.85rem; margin-top: 4px;">
-                                ${isEn ? 'Try adjusting your search criteria or clearing active filters.' : 'Prova a modificare i filtri avanzati o la barra di ricerca.'}
+                                ${t('empty_search_desc')}
                             </div>
                             <button class="btn btn-secondary" style="margin-top: 14px;" onclick="resetAdvSearchFilters()">
-                                ${isEn ? '✕ Clear All Filters' : '✕ Azzera Tutti i Filtri'}
+                                ${t('empty_search_btn')}
                             </button>
                         </div>
                     `;
@@ -3007,9 +3608,9 @@
                         </div>
 
                         <div class="card-quick-actions" onclick="event.stopPropagation();">
-                            <button class="quick-play-btn" onclick="launchGameById(${g.id})">${isInstalled ? (isEn ? '▶ PLAY' : '▶ GIOCA') : (isEn ? '☁️ GET' : '☁️ SCARICA')}</button>
+                            <button class="quick-play-btn" onclick="launchGameById(${g.id})">${isInstalled ? t('card_play') : t('card_download')}</button>
                             <button class="quick-fav-btn ${g.is_favorite ? 'is-fav' : ''}" onclick="toggleGameFavorite(${g.id})">★</button>
-                            <button class="quick-fav-btn" style="color:var(--accent-cyan);" title="${isEn ? 'Details & Screenshots' : 'Dettagli & Screenshot'}" onclick="openGameDetailsModalById(${g.id})">ℹ️</button>
+                            <button class="quick-fav-btn" style="color:var(--accent-cyan);" title="${t('card_details_title')}" onclick="openGameDetailsModalById(${g.id})">ℹ️</button>
                         </div>
                     </div>
                 `;
@@ -3787,11 +4388,11 @@
             const isInstalled = isSandboxMode ? false : g.is_installed;
             const isEn = (currentLang === 'en');
             storageBadge.className = isInstalled ? 'status-badge downloaded' : 'status-badge cloud';
-            storageBadge.innerText = isInstalled ? (isEn ? '💾 Installed Locally' : '💾 Installato su PC') : (isEn ? '☁️ Cloud On-Demand' : '☁️ Cloud On-Demand');
+            storageBadge.innerText = isInstalled ? t('details_badge_installed') : t('details_badge_cloud');
 
             const favBadge = document.getElementById('detailsFavBadge');
             favBadge.style.display = g.is_favorite ? 'inline-block' : 'none';
-            favBadge.innerText = isEn ? '★ Favorite' : '★ Preferito';
+            favBadge.innerText = t('details_btn_fav');
 
             document.getElementById('detailsGameTitle').innerText = g.title;
             document.getElementById('detailsYear').innerText = g.year;
@@ -3814,16 +4415,16 @@
 
             // Action Buttons
             const favBtn = document.getElementById('detailsFavBtn');
-            favBtn.innerText = g.is_favorite ? (isEn ? '★ Saved in Favorites' : '★ Salvato nei Preferiti') : (isEn ? '★ Add to Favorites' : '★ Aggiungi ai Preferiti');
+            favBtn.innerText = g.is_favorite ? t('hero_fav_added') : t('hero_fav_add');
             favBtn.style.color = g.is_favorite ? 'var(--accent-gold)' : '#fff';
 
             const playBtn = document.getElementById('detailsPlayBtn');
-            playBtn.innerText = isInstalled ? (isEn ? '▶ PLAY NOW' : '▶ GIOCA SUBITO') : (isEn ? '☁️ DOWNLOAD & PLAY' : '☁️ SCARICA & AVVIA');
+            playBtn.innerText = isInstalled ? t('details_btn_play_installed') : t('details_btn_play_cloud');
 
             const removeBtn = document.getElementById('detailsRemoveBtn');
             if (removeBtn) {
                 removeBtn.style.display = isInstalled ? 'inline-flex' : 'none';
-                removeBtn.innerText = isEn ? '🗑️ Remove' : '🗑️ Rimuovi';
+                removeBtn.innerText = t('details_btn_remove');
             }
 
             const closeBtn = document.getElementById('detailsCloseBtn');
@@ -4157,128 +4758,81 @@
         }
 
         function applyLanguage(lang) {
-            currentLang = lang;
-            const isEn = (lang === 'en');
+            currentLang = (lang === 'en' || lang === 'es') ? lang : 'it';
 
-            // 1. Top Navbar
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.placeholder = isEn ? 
-                    "Search title, developer, year or genre (e.g. 'zelda oot')..." : 
-                    "Cerca titolo, sviluppatore, anno o genere (es. 'zelda oot')...";
-            }
-            const navFilters = document.getElementById('navFiltersLabel');
-            if (navFilters) navFilters.innerText = isEn ? "Filters" : "Filtri";
-            const navSurprise = document.getElementById('navSurpriseLabel');
-            if (navSurprise) navSurprise.innerText = isEn ? "Surprise Me" : "Sorprendimi";
-            const navArena = document.getElementById('navArenaLabel');
-            if (navArena) navArena.innerText = isEn ? "Arena" : "Arena";
-            const navWizard = document.getElementById('navWizardLabel');
-            if (navWizard) navWizard.innerText = isEn ? "Setup Wizard" : "Setup Wizard";
-            const navSettings = document.getElementById('navSettingsLabel');
-            if (navSettings) navSettings.innerText = isEn ? "Settings" : "Opzioni";
+            // 1. Walk through all data-i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (key && TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) {
+                    el.innerHTML = TRANSLATIONS[currentLang][key];
+                }
+            });
 
-            // 2. Sidebar Main Navigation
-            const sideNavAllLabel = document.querySelector('#sideNavALL .sidebar-label');
-            if (sideNavAllLabel) sideNavAllLabel.innerText = isEn ? "All Games" : "Tutti i Giochi";
-            const sideNavFavLabel = document.querySelector('#sideNavFAV .sidebar-label');
-            if (sideNavFavLabel) sideNavFavLabel.innerText = isEn ? "Your Favorites" : "I Tuoi Preferiti";
-            const sideNavCompLabel = document.querySelector('#sideNavCOMPUTER .sidebar-label');
-            if (sideNavCompLabel) sideNavCompLabel.innerText = isEn ? "Western Computers" : "Computer Occidentali";
+            // 2. Walk through all data-i18n-placeholder elements
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (key && TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) {
+                    el.placeholder = TRANSLATIONS[currentLang][key];
+                }
+            });
 
-            // 3. Sub-bar Switches & Pills
-            const cloudBtn = document.getElementById('toggleAllCloud');
-            if (cloudBtn) {
-                const count = document.getElementById('countCloud')?.innerText || '0';
-                cloudBtn.innerHTML = `🔓 ${isEn ? "All Cloud Games" : "Tutto l'Archivio Cloud"} (<span id="countCloud">${count}</span>)`;
-            }
-            const downBtn = document.getElementById('toggleOnlyDownloaded');
-            if (downBtn) {
-                const count = document.getElementById('countDownloaded')?.innerText || '0';
-                downBtn.innerHTML = `💾 ${isEn ? "Downloaded Only" : "Solo Scaricati"} (<span id="countDownloaded">${count}</span>)`;
-            }
-            const pillFav = document.getElementById('pillFav');
-            if (pillFav) pillFav.innerText = isEn ? "⭐ Favorites" : "⭐ Preferiti";
-            const pillMulti = document.getElementById('pillMulti');
-            if (pillMulti) pillMulti.innerText = isEn ? "👥 2 Players (Co-op/VS)" : "👥 2 Giocatori (Co-op/VS)";
-            const btnResetFilters = document.getElementById('btnResetFiltersPill');
-            if (btnResetFilters) btnResetFilters.innerText = isEn ? "✕ Reset Filters" : "✕ Resetta Filtri";
+            // 3. Walk through all data-i18n-title elements
+            document.querySelectorAll('[data-i18n-title]').forEach(el => {
+                const key = el.getAttribute('data-i18n-title');
+                if (key && TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) {
+                    el.title = TRANSLATIONS[currentLang][key];
+                }
+            });
 
-            // 4. Hero Section
-            const heroCategoryBadge = document.getElementById('heroSourcePill');
-            if (heroCategoryBadge) {
-                heroCategoryBadge.innerText = `${getSourceLabel(heroSource)} • ${heroIndex + 1}/${heroList.length}`;
-            }
-            const heroRouletteBtn = document.getElementById('heroRouletteBtn');
-            if (heroRouletteBtn) heroRouletteBtn.innerText = isEn ? "🎲 Random" : "🎲 Casuale";
-            const heroDetailsBtn = document.getElementById('heroDetailsBtn');
-            if (heroDetailsBtn) heroDetailsBtn.innerText = isEn ? "ℹ️ Details" : "ℹ️ Dettagli";
-            const heroSrcRandom = document.getElementById('heroSrcRandom');
-            if (heroSrcRandom) heroSrcRandom.innerText = isEn ? "🎲 Surprise" : "🎲 A Sorpresa";
-            const heroSrcFav = document.getElementById('heroSrcFavorites');
-            if (heroSrcFav) heroSrcFav.innerText = isEn ? "⭐ Favorites" : "⭐ Preferiti";
-            const heroSrcRec = document.getElementById('heroSrcRecent');
-            if (heroSrcRec) heroSrcRec.innerText = isEn ? "⏱️ Continue" : "⏱️ Continua";
-
-            // 5. Catalog Title & Actions
+            // 4. Update dynamic composite elements
             const catTitle = document.getElementById('catalogSectionTitle');
             if (catTitle) {
                 if (storageFilter === 'downloaded' || advStorageFilter === 'downloaded') {
-                    catTitle.innerText = isEn ? "💾 Downloaded / Local Games" : "💾 Giochi Scaricati / Installati";
+                    catTitle.innerText = t('catalog_title_down');
                 } else {
-                    catTitle.innerText = isEn ? "All Games" : "Tutti i Giochi";
+                    catTitle.innerText = t('catalog_title_all');
                 }
             }
-            const saveColLabel = document.getElementById('saveCollectionLabel');
-            if (saveColLabel) saveColLabel.innerText = isEn ? "Save View to Collection" : "Salva Selezione in Raccolta";
-            const clearAllChips = document.getElementById('btnClearAllChips');
-            if (clearAllChips) clearAllChips.innerText = isEn ? "✕ Clear All" : "✕ Azzera Tutti";
-            const activeFiltersLabel = document.querySelector('.active-filters-label');
-            if (activeFiltersLabel) activeFiltersLabel.innerText = isEn ? "ACTIVE FILTERS:" : "FILTRI ATTIVI:";
 
-            // 6. Details Modal
-            const tabBox = document.getElementById('tabMediaBoxart');
-            if (tabBox) tabBox.innerText = isEn ? "🖼️ Boxart Cover" : "🖼️ Copertina Boxart";
-            const tabSnap = document.getElementById('tabMediaSnap');
-            if (tabSnap) tabSnap.innerText = isEn ? "📸 In-Game Snap" : "📸 Screenshot In-Game";
-            const tabTitle = document.getElementById('tabMediaTitle');
-            if (tabTitle) tabTitle.innerText = isEn ? "📺 Title Screen" : "📺 Schermata Titolo";
-            const overviewHeader = document.getElementById('detailsOverviewHeader');
-            if (overviewHeader) overviewHeader.innerText = isEn ? "📖 Historical Overview & Gameplay" : "📖 Panoramica & Storia del Titolo";
-            const resLabel = document.getElementById('detailsTechResLabel');
-            if (resLabel) resLabel.innerText = isEn ? "Resolution & Framerate" : "Risoluzione & Refresh";
-            const coreLabel = document.getElementById('detailsTechCoreLabel');
-            if (coreLabel) coreLabel.innerText = isEn ? "Core / Backend Engine" : "Core / Backend";
-            const ctrlLabel = document.getElementById('detailsTechControlsLabel');
-            if (ctrlLabel) ctrlLabel.innerText = isEn ? "Gamepad Configuration" : "Configurazione Joypad";
-            const closeBtn = document.getElementById('detailsCloseBtn');
-            if (closeBtn) closeBtn.innerText = isEn ? "Close" : "Chiudi";
-            const colBtn = document.getElementById('detailsCollectionBtn');
-            if (colBtn) colBtn.innerText = isEn ? "📁 In Collection" : "📁 In Raccolta";
-
-            // Sincronizza selettore opzioni
-            const langSel = document.getElementById('settingsLanguageSelect');
-            if (langSel && langSel.value !== lang) {
-                langSel.value = lang;
+            const cloudCount = document.getElementById('countCloud')?.innerText || '0';
+            const downCount = document.getElementById('countDownloaded')?.innerText || '0';
+            const cloudBtn = document.getElementById('toggleAllCloud');
+            if (cloudBtn) {
+                cloudBtn.innerHTML = `<span data-i18n="sub_all_cloud">${t('sub_all_cloud')}</span> (<span id="countCloud">${cloudCount}</span>)`;
+            }
+            const downBtn = document.getElementById('toggleOnlyDownloaded');
+            if (downBtn) {
+                downBtn.innerHTML = `<span data-i18n="sub_only_down">${t('sub_only_down')}</span> (<span id="countDownloaded">${downCount}</span>)`;
             }
 
-            renderCatalog();
-            renderHeroSlide();
+            const heroCategoryBadge = document.getElementById('heroSourcePill');
+            if (heroCategoryBadge && heroList.length > 0) {
+                heroCategoryBadge.innerText = `${getSourceLabel(heroSource)} • ${heroIndex + 1}/${heroList.length}`;
+            }
+
+            // Sync settings select
+            const langSel = document.getElementById('settingsLanguageSelect');
+            if (langSel) langSel.value = currentLang;
+
+            // Re-render catalog and hero slide if loaded
+            if (allGames && allGames.length > 0) {
+                renderCatalog();
+                renderHeroSlide();
+            }
         }
 
         function onSettingsLanguageChanged() {
             const sel = document.getElementById('settingsLanguageSelect');
             if (!sel) return;
             const lang = sel.value;
+            applyLanguage(lang);
+            localStorage.setItem('retrohub_lang', lang);
             if (lang === 'en') {
-                applyLanguage('en');
-                showToast('🇬🇧 Language switched to English (Phase 1 Roadmap).');
+                showToast('🇬🇧 English language activated.');
             } else if (lang === 'es') {
-                showToast('🇪🇸 Lingua Spagnola: In arrivo nella Fase 2 della Roadmap!');
-                sel.value = currentLang;
+                showToast('🇪🇸 Idioma Español activado.');
             } else {
-                applyLanguage('it');
-                showToast('🇮🇹 Lingua Italiana attiva al 100%.');
+                showToast('🇮🇹 Lingua Italiana attivata.');
             }
         }
 

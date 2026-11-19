@@ -73,9 +73,9 @@ impl HttpServer {
                 break;
             }
 
-            // Heartbeat timeout: se il browser non manda ping per 15 secondi (finestra chiusa), spegni il server
+            // Heartbeat timeout: se il browser non manda ping per 60 secondi (finestra chiusa), spegni il server
             let last = self.last_ping.load(Ordering::SeqCst);
-            if last > 0 && now_secs().saturating_sub(last) > 15 {
+            if last > 0 && now_secs().saturating_sub(last) > 60 {
                 break;
             }
 

@@ -53,16 +53,11 @@ fn open_app_window(url: &str) {
         r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
     ];
 
-    let user_data = std::env::var("LOCALAPPDATA")
-        .unwrap_or_else(|_| r"C:\Temp".to_string())
-        + r"\RetroHub\edge_profile";
-
     for path in &edge_paths {
         if Path::new(path).exists() {
             if Command::new(path)
                 .args(&[
                     &format!("--app={}", url),
-                    &format!("--user-data-dir={}", user_data),
                     "--window-size=1440,900",
                 ])
                 .spawn()
