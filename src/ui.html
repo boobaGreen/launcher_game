@@ -3328,7 +3328,8 @@
             const isEn = (currentLang === 'en');
             const isEs = (currentLang === 'es');
 
-            const searchVal = document.getElementById('searchInput')?.value.trim() || '';
+            const searchInputEl = document.getElementById('searchInput');
+            const searchVal = (searchInputEl && searchInputEl.value ? searchInputEl.value : '').trim();
             if (searchVal.length > 0) {
                 el.innerText = isEn ? `🔍 Results for "${searchVal}"` : 
                                (isEs ? `🔍 Resultados para "${searchVal}"` : `🔍 Risultati per "${searchVal}"`);
@@ -3647,19 +3648,21 @@
 
             const ambientCover = document.getElementById('heroCoverAmbient');
             if (coverUrl && !isTypographicMode) {
-                coverImg.dataset.retryLevel = '';
-                coverImg.src = coverUrl;
-                coverImg.style.display = 'block';
+                if (coverImg) {
+                    if (coverImg.dataset) coverImg.dataset.retryLevel = '';
+                    coverImg.src = coverUrl;
+                    coverImg.style.display = 'block';
+                }
                 if (ambientCover) {
                     ambientCover.style.backgroundImage = `url("${coverUrl}")`;
                     ambientCover.style.display = 'block';
                     ambientCover.style.opacity = '0.65';
                 }
-                fallback.style.display = 'none';
+                if (fallback) fallback.style.display = 'none';
             } else {
-                coverImg.style.display = 'none';
+                if (coverImg) coverImg.style.display = 'none';
                 if (ambientCover) ambientCover.style.display = 'none';
-                fallback.style.display = 'flex';
+                if (fallback) fallback.style.display = 'flex';
             }
 
             // Aggiorna pillole attive
@@ -3897,19 +3900,21 @@
             }
 
             // 8. Produttore / Developer (Ricerca libera o chip)
-            const devQuery = (isModalPreview ? (document.getElementById('advDevInput')?.value || '') : advDevFilter).trim().toLowerCase();
+            const rawDev = isModalPreview ? document.getElementById('advDevInput')?.value : advDevFilter;
+            const devQuery = (rawDev || '').trim().toLowerCase();
             if (devQuery.length > 0) {
-                if (!g.developer.toLowerCase().includes(devQuery)) return false;
+                if (!g.developer || !g.developer.toLowerCase().includes(devQuery)) return false;
             }
 
             // 9. Ricerca Testuale della barra principale (se non in modale)
             if (!isModalPreview) {
-                const searchVal = document.getElementById('searchInput')?.value.trim().toLowerCase() || '';
+                const searchInputEl = document.getElementById('searchInput');
+                const searchVal = (searchInputEl && searchInputEl.value ? searchInputEl.value : '').trim().toLowerCase();
                 if (searchVal.length > 0) {
-                    const match = g.title.toLowerCase().includes(searchVal) ||
-                                  g.developer.toLowerCase().includes(searchVal) ||
-                                  g.genre.toLowerCase().includes(searchVal) ||
-                                  g.year.toString().includes(searchVal);
+                    const match = (g.title && g.title.toLowerCase().includes(searchVal)) ||
+                                  (g.developer && g.developer.toLowerCase().includes(searchVal)) ||
+                                  (g.genre && g.genre.toLowerCase().includes(searchVal)) ||
+                                  (g.year && g.year.toString().includes(searchVal));
                     if (!match) return false;
                 }
             }
@@ -4619,7 +4624,7 @@
         }
 
         function onAdvDevInputChanged() {
-            const val = document.getElementById('advDevInput').value.trim().toLowerCase();
+            const val = (document.getElementById('advDevInput')?.value || '').trim().toLowerCase();
             document.querySelectorAll('[id^="chipDev_"]').forEach(el => {
                 el.classList.toggle('active', val.length > 0 && el.innerText.toLowerCase() === val);
             });
@@ -4644,7 +4649,7 @@
         }
 
         function applyAdvSearchFilters() {
-            advDevFilter = document.getElementById('advDevInput')?.value.trim() || '';
+            advDevFilter = (document.getElementById('advDevInput')?.value || '').trim();
             advPlatformFilter = document.getElementById('advPlatformSelect')?.value || 'ALL';
             advStorageFilter = document.getElementById('advStorageSelect')?.value || 'all';
 
@@ -5186,7 +5191,7 @@
         }
         function createNewCollection() {
             const input = document.getElementById('newCollectionNameInput');
-            const name = input.value.trim();
+            const name = (input && input.value ? input.value : '').trim();
             if (!name) return;
             const newId = Date.now();
             const favIds = allGames.filter(g => g.is_favorite).map(g => g.id);
