@@ -13,6 +13,7 @@
            1. DESIGN SYSTEM TOKENS & RESET (DARK LUXURY OLED-READY)
            ========================================================================== */
         :root {
+            color-scheme: dark;
             /* Superfici & Fondi */
             --bg-void: #07090e;
             --bg-base: #0b0f17;
@@ -1262,21 +1263,64 @@
         }
         .adv-input-field {
             width: 100%;
-            padding: 9px 14px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-card);
+            padding: 10px 14px;
+            background: rgba(11, 16, 27, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             border-radius: var(--radius-sm);
-            color: #fff;
+            color: #f8fafc;
             font-family: var(--font-main);
             font-size: 0.85rem;
             outline: none;
             transition: var(--transition-fast);
             box-sizing: border-box;
+            color-scheme: dark;
+        }
+        .adv-input-field:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(15, 23, 42, 0.85);
         }
         .adv-input-field:focus {
             border-color: var(--accent-cyan);
-            box-shadow: 0 0 12px var(--accent-cyan-glow);
-            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 0 2px rgba(0, 229, 180, 0.2), 0 0 16px var(--accent-cyan-glow);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        /* Menu a tendina (Select Dropdowns) ad altissima leggibilità e design OLED */
+        select.adv-input-field {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: #0d1424;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2300e5b4' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 14px;
+            padding-right: 42px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #f1f5f9;
+        }
+        select.adv-input-field:hover {
+            border-color: rgba(0, 229, 180, 0.45);
+            background-color: #121c32;
+        }
+        select.adv-input-field:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 229, 180, 0.22);
+            background-color: #121c32;
+        }
+        select.adv-input-field option {
+            background-color: #0b111f !important;
+            color: #f8fafc !important;
+            padding: 12px 14px;
+            font-size: 0.86rem;
+            font-family: var(--font-main);
+        }
+        select.adv-input-field option:checked,
+        select.adv-input-field option:hover,
+        select.adv-input-field option:focus {
+            background-color: #16243f !important;
+            color: var(--accent-cyan) !important;
         }
 
         /* Active Filter Breadcrumbs Strip */
@@ -2177,12 +2221,9 @@
                 <div style="display: flex; flex-direction: column; gap: 14px;">
                     <!-- 1. Lingua Interfaccia (i18n) -->
                     <div class="adv-section-card">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-                                <span data-i18n="settings_sec_lang"><span>🌐</span> Lingua dell'Interfaccia / Language</span>
-                            </label>
-                            <span style="font-size: 0.70rem; color: var(--text-muted); font-family: var(--font-mono);">i18n ENGINE</span>
-                        </div>
+                        <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                            <span data-i18n="settings_sec_lang"><span>🌐</span> Lingua dell'Interfaccia / Language</span>
+                        </label>
                         <select id="settingsLanguageSelect" class="adv-input-field" onchange="onSettingsLanguageChanged()">
                             <option value="it" data-i18n="settings_lang_it">🇮🇹 Italiano (Attivo al 100%)</option>
                             <option value="en" data-i18n="settings_lang_en">🇬🇧 English (Active 100%)</option>
