@@ -451,6 +451,9 @@ fn get_badge_color(sys: &str) -> &'static str {
         "HYPSEUS" => "#f0883e",
         "HIKARU" => "#f0883e",
         "NES" => "#f778ba",
+        "MEGADRIVE" => "#38bdf8",
+        "GBA" => "#a855f7",
+        "NEOGEO" => "#ef4444",
         _ => "#8b949e",
     }
 }

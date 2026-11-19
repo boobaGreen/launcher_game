@@ -15,6 +15,7 @@ pub mod library_config;
 pub mod platform_wizard;
 pub mod rom_scanner;
 pub mod download_manager;
+pub mod master_catalog;
 
 use std::path::Path;
 use std::process::Command;

@@ -20,16 +20,20 @@
 
 ---
 
-## 📌 FASE 2: Multiplayer Online & Netplay P2P (LAN Funzionante 🟡 / WAN in Sviluppo ⚪)
-*Obiettivo: Sfide 1 contro 1 a distanza con amici senza server intermedi a pagamento.*
+## 📌 FASE 2: Arena Multiplayer P2P & Leaderboard Standardizzata (In Sviluppo 🟡)
+*Obiettivo: Sfide 1 contro 1 a distanza con amici senza server intermedi e classifica globale dei record Arcade.*
 
 - [x] **Generatore Codici Stanza:** Creazione token univoci di invito (es. `RH-7821`).
 - [x] **Handshake P2P Diretto (Rete Locale / LAN):** Connessione diretta tra Host e Guest via socket UDP.
 - [x] **Avvio Sincronizzato Emulatori Netplay:**
   - Parametri da riga di comando per Flycast, Snes9x, DuckStation, Dolphin e MAME.
+- [ ] **Dashboard Interattiva Arena Online:**
+  - Schermata grafica a schede per Creazione Stanza, Unione tramite Codice e Monitoraggio Latenza (Ping RTT in tempo reale).
+- [ ] **Leaderboard Standardizzata & Hall of Fame (High Scores):**
+  - Estrazione automatica punteggio record al Game Over per Arcade (MAME / Neo-Geo) e classici a punti.
+  - Classifica locale offline su PC + invio sicuro alla Leaderboard Globale RetroHub del mese.
 - [ ] **NAT Traversal Pubblico Reale (WAN / Internet):**
   - Integrazione resolver STUN reale (Google / Cloudflare) per bypass router senza port forwarding manuale.
-  - Misurazione RTT effettiva (Ping reale al posto del valore stimato).
 
 ---
 
@@ -69,24 +73,39 @@
     ```
   - Rimozione sicura del file scaricato via `POST /api/library/delete` con aggiornamento immediato della libreria.
 
+### **4.4 Wizard di Onboarding & Strategie di Storage (4 Profili Utente)**
+- [ ] **Wizard Iniziale Guidato (Step-by-Step):**
+  - *Caso 1 (Nuovo Utente / Zero ROM):* Attivazione Top 5/10 Regina, zero download preventivo, eliminazione automatica a fine partita.
+  - *Caso 2 (Collezione Locale Esistente):* Auto-Discovery su cartella radice standard (`roms/<console>/`).
+  - *Caso 3 (Low Storage / Handheld):* Modalità **Placeholder Tipografici Vettoriali** (0 byte immagini a monte, boxart scaricata solo per giochi scaricati o preferiti).
+  - *Caso 4 (Full Storage / 4TB+):* Download persistente e attivazione totale delle ~200 piattaforme con interruttore ON/OFF.
+- [ ] **Sandbox di Test "Simula Nuovo Utente":**
+  - Toggle a video per testare l'esperienza da vuoto (tutti i giochi in `☁️ ON-DEMAND`) senza cancellare o alterare un singolo file reale dal disco.
+
 ---
 
 ## 📌 FASE 5: Gestione Modulare di Emulatori & Core (Standard Batocera / RetroBat 🧩)
 *Obiettivo: Adottare l'architettura modulare di Batocera e RetroBat, supportando l'intero ecosistema di oltre 200 console, arcade e computer d'epoca.*
 
-### **5.1 Architettura Ibrida a Doppio Binario (RetroArch Core + Standalone)**
-Come Batocera e RetroBat, la gestione emulatori viene standardizzata in due categorie:
+### **5.1 Architettura Ibrida a Triplo Binario (RetroArch Core + Standalone + PC Recomp Nativo)**
+Come Batocera e RetroBat (e con il supporto esclusivo per i port nativi PC), la gestione dei motori di gioco viene standardizzata in tre categorie:
 1. **Piattaforme 8/16/32-bit & Computer Classici (80% dei sistemi):**
    - Gestione unificata tramite **RetroArch Libretro Cores** (es. `snes9x_libretro.dll`, `genesis_plus_gx_libretro.dll`, `fceumm_libretro.dll`, `puae_libretro.dll`, `vice_x64sc_libretro.dll`).
    - *Vantaggi:* Shader video CRT uniformi, configurazione controller centralizzata, savestate e rewind garantiti.
 2. **Piattaforme 3D Complesse & Arcade Speciali (Standalone Dedicati):**
    - Esecutori dedicati ottimizzati: Dolphin (GameCube/Wii), PCSX2 (PS2), RPCS3 (PS3), DuckStation (PS1), Flycast (Dreamcast/Naomi), Model 2 Emulator, Supermodel (Model 3), Xemu (Xbox), Cemu (Wii U).
+3. **PC Recompilations & Decompilazioni Native (Terzo Binario Nativo):**
+   - Gestione nativa per porting PC a 60/144 FPS (*Ship of Harkinian, CannonBall OutRun, OpenGOAL, Mario 64 PC, Namco System 22, KOF '98 Recomp*).
+   - Doppia visibilità: compaiono sia nella sezione "PC Recomp" che nella console originale con badge `⚡ 4K RECOMP`.
+   - Verifica automatica integrità asset tramite hash SHA256 e lancio nativo diretto con supporto display Ultra-Wide.
 
-### **5.2 Struttura Cartelle ROM Standardizzata**
-- Supporto nativo della nomenclatura universale delle cartelle (interscambiabile con RetroBat e Batocera):
-  - `roms/nes/`, `roms/snes/`, `roms/megadrive/`, `roms/psx/`, `roms/c64/`, `roms/amiga/`, `roms/mame/`, `roms/neogeo/`, ecc.
-- File di configurazione modulare `platforms_manifest.json`:
-  - Mappa ogni codice console (`snes`, `psx`, `c64`...) con il relativo nome esteso, estensioni file supportate, emulatore predefinito e core alternativi.
+### **5.2 Struttura Cartelle ROM Standardizzata & Manifest 200+ Piattaforme**
+- **Nomenclatura Standard Universale (Multiplatform Win/Linux/Mac):**
+  - Cartella radice configurabile + sottocartelle convenzionali: `roms/nes/`, `roms/snes/`, `roms/megadrive/`, `roms/psx/`, `roms/c64/`, `roms/amiga/`, `roms/mame/`, `roms/neogeo/`, ecc.
+- **File Modulare `platforms_manifest.json` (200+ Piattaforme):**
+  - Mappa per ciascuna console: codice, nome esteso, produttore, categoria, estensioni supportate, core predefinito, badge e colori sociali.
+- **Filtri di Sottosezione Metadati (Riduzione Scheletro):**
+  - Selezione per Top 50/100, edizioni in lingua italiana, generi primari o finestre temporali d'oro (`1991..1996`).
 
 ### **5.3 Wizard di Configurazione Percorsi & Auto-Discovery**
 - Rilevamento automatico delle installazioni esistenti di RetroArch, Batocera mounts, o cartelle RetroBat su drive `C:`, `D:`, `E:`.

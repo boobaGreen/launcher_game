@@ -76,7 +76,8 @@ impl CatalogLoader {
     pub fn load_from_master_catalog(emu_root: &Path) -> Result<Vec<Game>, String> {
         let cat_path = emu_root.join("CATALOGO GENERALE RETROGAMING.html");
         if !cat_path.exists() {
-            return Err(format!("File catalogo non trovato in: {:?}", cat_path));
+            println!("🌐 File catalogo master locale non trovato: caricamento Enciclopedia Cloud on-demand...");
+            return Ok(crate::master_catalog::MasterCatalog::get_cloud_catalog(1));
         }
 
         let content = fs::read_to_string(&cat_path)
@@ -187,6 +188,17 @@ impl CatalogLoader {
                 last_played_at: None,
                 is_installed: !launch_target.is_empty(),
             });
+        }
+
+        // Integra i titoli dell'Enciclopedia Cloud on-demand per consentire la consultazione al 100%
+        let cloud_games = crate::master_catalog::MasterCatalog::get_cloud_catalog(2000);
+        let existing_titles: std::collections::HashSet<String> = games.iter().map(|g| format!("{}:{}", g.system_code, g.title.to_lowercase())).collect();
+
+        for cg in cloud_games {
+            let key = format!("{}:{}", cg.system_code, cg.title.to_lowercase());
+            if !existing_titles.contains(&key) {
+                games.push(cg);
+            }
         }
 
         Ok(games)

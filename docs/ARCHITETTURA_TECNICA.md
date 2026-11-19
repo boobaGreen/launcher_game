@@ -196,6 +196,36 @@ Per supportare l'intero archivio di oltre 200 console senza disperdere risorse, 
 
 ---
 
+## ⚡ 5.1 Il Terzo Binario: Gestione dei Port Nativi De-compilati (PC Recomp)
+
+Accanto ai **Core Libretro** (Binario 1 per 8/16-bit) e agli **Emulatori Standalone Dedicati** (Binario 2 per 3D pesante), RetroHub introduce un'innovazione architetturale esclusiva rispetto a Batocera e RetroBat: il **Terzo Binario Nativo PC (Recomp / Decomp)**.
+
+### A. Che cos'è un Recomp e perché è Rivoluzionario
+Un Recomp non è un gioco emulato: è il codice sorgente originale disassemblato o de-compilato e ricompilato nativamente come eseguibile a 64 bit (x86_64 su Windows/Linux, Apple Silicon su macOS).
+* **Vantaggi Tecnici:** Zero overhead di CPU, framerate nativo sbloccato a 60/120/144 FPS, rendering moderno via DirectX 11/12, Vulkan o Metal, supporto display Ultra-Wide (21:9 e 32:9), zero input-lag e supporto texture HD/Ray Tracing.
+* **Esempi nel Progetto:** *Ship of Harkinian* (Zelda OoT), *2 Ship 2 Harkinian* (Zelda MM), *CannonBall DX* (OutRun Arcade), *OpenGOAL* (Jak & Daxter), *Mario 64 PC Port*, *Namco System 22 Decompile* (Ridge Racer 2, Rave Racer, Time Crisis), *SegaSonic Native*, *KOF '98 Recomp*.
+
+### B. Risoluzione delle 4 Sfide di Omogeneità UI/UX
+Per far convivere i Recomp in modo perfettamente uniforme con i giochi emulati classici, RetroHub adotta le seguenti soluzioni:
+
+1. **Tag & Metadati Duali (Doppia Appartenenza):**
+   * Nel database, un Recomp possiede:
+     * `system_code = "RECOMP"` (per raggrupparli nella categoria "PC Recomp Nativo").
+     * `original_system = "N64" | "ARCADE" | "PS1" | "SATURN"` (per visualizzarli anche all'interno della console di appartenenza con un badge dorato `4K RECOMP`).
+   * Tag arricchiti dedicati: `Engine` (es. *CannonBall*, *OpenGOAL*, *N64Recomp*), `Graphics API` (*Vulkan*, *DirectX 12*), `Features` (*144 FPS, Ultrawide, Modding*).
+2. **Immagini & Copertine Uniformi:**
+   * Condividono le medesime proporzioni boxart verticali (300x420 px) del catalogo storico originale Libretro o le Steam vertical capsule ad alta definizione (600x900 px).
+   * Badge visivo elegante in alto a destra: `⚡ PC NATIVE`.
+3. **Gestione Asset & ROM Originale (Verifica SHA256):**
+   * Per rispetto del copyright, i Recomp richiedono i file audio/grafica estratti dalla ROM originale.
+   * RetroHub sfrutta il file `manifest.json` e `copie-verificate-sha256.json`:
+     * Se gli asset estratti sono già presenti (es. `game.otr` o cartella `data/`): avvio immediato.
+     * Se mancano: RetroHub scarica la ROM originale verificata e lancia silenziosamente il tool di asset extraction, rendendo il gioco pronto in meno di 3 secondi!
+4. **Ciclo di Lancio Nativo:**
+   * Il launcher riconosce il tipo Recomp ed esegue direttamente il processo `.exe` con parametri grafici nativi, senza passare da emulatori intermedi, forzando la working directory locale e il focus in primo piano.
+
+---
+
 ## 🌐 6. Specifiche API REST Backend (`server.rs`)
 
 | Metodo | Endpoint | Parametri | Descrizione |

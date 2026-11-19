@@ -2134,6 +2134,15 @@
                 </div>
             </div>
             <div class="header-actions">
+                <button class="fav-filter-btn" onclick="openWelcomeWizard()" id="wizardBtn" title="Apri il Wizard di Benvenuto e Configurazione Nuovo Utente" style="border-color: rgba(234, 179, 8, 0.5);">
+                    <span>🧙</span>
+                    <span>Wizard Iniziale</span>
+                </button>
+                <button class="fav-filter-btn" onclick="toggleSimulateNewUser()" id="simulateNewUserBtn" title="Attiva la modalità test 'Nuovo Utente (Zero ROM)' senza toccare i file su disco" style="border-color: rgba(168, 85, 247, 0.4);">
+                    <span id="simIcon">🧪</span>
+                    <span id="simLabel">Simula Nuovo Utente</span>
+                    <span class="fav-status-badge" id="simBadge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">OFF</span>
+                </button>
                 <button class="fav-filter-btn" onclick="toggleArchiveMode()" id="archiveToggleBtn" title="Passa da 'Tutto l'Archivio (100% Immagini)' a 'Solo Giochi Scaricati in Locale'" style="border-color: rgba(56, 189, 248, 0.4);">
                     <span id="archiveIcon">🔓</span>
                     <span id="archiveLabel">Tutto l'Archivio</span>
