@@ -89,7 +89,8 @@ fn main() {
     let db_path = "retro_hub.db";
     let db = Database::open(db_path).expect("Inizializzazione database fallita");
 
-    let emu_path = Path::new(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu");
+    let emu_path_buf = config.emu_root();
+    let emu_path = emu_path_buf.as_path();
     
     // Salva configurazione se non esiste
     if !Path::new("retrohub.json").exists() {

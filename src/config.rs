@@ -170,6 +170,10 @@ fn retrohub_json() -> String {
 
 // Helper per ottenere il percorso emulatore
 impl RetroHubConfig {
+    pub fn emu_root(&self) -> PathBuf {
+        PathBuf::from(&self.server.emu_root)
+    }
+
     pub fn get_emulator_path(&self, name: &str) -> Option<&str> {
         match name {
             "MAME" => self.emulator_paths.mame.as_deref(),

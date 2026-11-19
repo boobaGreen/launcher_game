@@ -275,7 +275,7 @@ impl HttpServer {
                         Ok(r) => {
                             let db = self.db.lock().unwrap();
                             if let Ok(Some(game)) = db.get_game_by_id(r.game_id) {
-                                match Launcher::launch(&game.launch_target) {
+                                match Launcher::launch_game(&game) {
                                     Ok(msg) => {
                                         let play_count = db.record_play(r.game_id).unwrap_or(game.play_count + 1);
                                         LaunchResponse {
