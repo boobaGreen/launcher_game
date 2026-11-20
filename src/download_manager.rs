@@ -38,6 +38,34 @@ impl DownloadManager {
             }
         }
 
+        // Ricerca ricorsiva nelle sottocartelle per gioco (es. Amiga: Lemmings (1991)/lemmings.adf)
+        let roms_base = format!(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\{}\roms", platform.to_uppercase());
+        if let Ok(rd) = fs::read_dir(&roms_base) {
+            for entry in rd.flatten() {
+                let sub = entry.path();
+                if sub.is_dir() {
+                    let sub_name = sub.file_name().and_then(|n| n.to_str()).unwrap_or("").to_lowercase();
+                    let clean_lower = clean_name.to_lowercase();
+                    let clean_stem = clean_lower.split('(').next().unwrap_or(&clean_lower).trim();
+                    if sub_name.contains(&clean_stem) || clean_stem.contains(&sub_name) {
+                        if let Ok(sub_rd) = fs::read_dir(&sub) {
+                            for file in sub_rd.flatten() {
+                                let f = file.path();
+                                if f.is_file() {
+                                    let ext = f.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+                                    let fname = f.file_name().and_then(|n| n.to_str()).unwrap_or("").to_lowercase();
+                                    let valid_exts = ["adf", "dms", "ipf", "hdf", "lha", "zip", "d64", "t64", "prg", "crt", "nes", "sfc", "md", "gen", "gb", "gbc", "gba", "z64", "n64", "iso", "cue", "bin"];
+                                    if valid_exts.contains(&ext.as_str()) || fname.ends_with(".lnk") || fname.ends_with(".bat") {
+                                        return Ok(f);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         let url = Self::get_rom_url(clean_name, platform);
         let client = reqwest::blocking::Client::builder()
             .timeout(std::time::Duration::from_secs(6))
@@ -52,10 +80,10 @@ impl DownloadManager {
                     file.write_all(&bytes).map_err(|e| e.to_string())?;
                     Ok(rom_path)
                 } else {
-                    Err(format!("File '{}' al momento non presente nell'archivio cloud. Puoi copiare la ROM direttamente in downloads/{}/{}.", clean_name, platform.to_lowercase(), clean_name))
+                    Err(format!("❌ Download fallito per '{}' ({}). Il file non è disponibile nell'archivio cloud né in locale. Copia manualmente la ROM in downloads/{}/{} o in emu/{}/roms/.", clean_name, platform.to_uppercase(), platform.to_lowercase(), clean_name, platform.to_uppercase()))
                 }
             }
-            Err(_e) => Err(format!("Download cloud momentaneamente non disponibile per '{}'. Colloca il file in downloads/{}/{}.", clean_name, platform.to_lowercase(), clean_name)),
+            Err(_e) => Err(format!("❌ Impossibile contattare il server cloud per '{}'. Verifica la connessione internet o copia manualmente la ROM in downloads/{}/{}.", clean_name, platform.to_lowercase(), clean_name)),
         }
     }
 

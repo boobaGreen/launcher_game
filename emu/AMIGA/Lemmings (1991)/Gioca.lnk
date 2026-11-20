@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Lemmings Amiga
+Icon=game
+Exec="C:/Program Files/WinUAE/winUAE.exe" -f "lemmings.utm"
+Terminal=false
+Categories=Game;
+Comment=Lemmings per Amiga

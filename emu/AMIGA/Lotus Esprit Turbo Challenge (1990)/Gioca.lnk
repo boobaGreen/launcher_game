@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Lotus Esprit Turbo Challenge Amiga
+Icon=game
+Exec="C:/Program Files/WinUAE/winUAE.exe" -f "lotus.utm"
+Terminal=false
+Categories=Game;
+Comment=Lotus Esprit Turbo Challenge per Amiga
