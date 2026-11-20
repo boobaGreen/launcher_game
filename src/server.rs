@@ -368,11 +368,20 @@ impl HttpServer {
 
                     let res = match req {
                         Ok(r) => {
-                            let db = self.db.lock().unwrap();
-                            if let Ok(Some(game)) = db.get_game_by_id(r.game_id) {
+                            let game_opt = if let Ok(db) = self.db.lock() {
+                                db.get_game_by_id(r.game_id).ok().flatten()
+                            } else {
+                                None
+                            };
+
+                            if let Some(game) = game_opt {
                                 match Launcher::launch_game(&game) {
                                     Ok(msg) => {
-                                        let play_count = db.record_play(r.game_id).unwrap_or(game.play_count + 1);
+                                        let play_count = if let Ok(db) = self.db.lock() {
+                                            db.record_play(r.game_id).unwrap_or(game.play_count + 1)
+                                        } else {
+                                            game.play_count + 1
+                                        };
                                         LaunchResponse {
                                             success: true,
                                             message: format!("{}: {}", game.title, msg),
@@ -408,16 +417,15 @@ impl HttpServer {
 
                 (&Method::Post, "/api/favorite") => {
                     let body = read_request_body(&mut request);
-                    eprintln!("Favorite API body: {:?}", body);
                     let req: Result<LaunchRequest, _> = serde_json::from_str(&body);
-                    if let Err(ref e) = req {
-                        eprintln!("Favorite JSON parse error: {}", e);
-                    }
 
                     let (status, is_fav) = match req {
                         Ok(r) => {
-                            let db = self.db.lock().unwrap();
-                            let is_fav = db.toggle_favorite(r.game_id).unwrap_or(false);
+                            let is_fav = if let Ok(db) = self.db.lock() {
+                                db.toggle_favorite(r.game_id).unwrap_or(false)
+                            } else {
+                                false
+                            };
                             (StatusCode(200), is_fav)
                         }
                         Err(_) => (StatusCode(400), false),
@@ -696,10 +704,75 @@ impl HttpServer {
                             let _ = config.save();
                         }
                     }
+
+                    // Flashes the selected monitor with OSD
+                    let script_path = std::path::PathBuf::from("scripts").join("identify_displays.ps1");
+                    let target_arg = new_target.clone();
+                    std::thread::spawn(move || {
+                        #[cfg(windows)]
+                        {
+                            use std::os::windows::process::CommandExt;
+                            let _ = std::process::Command::new("powershell")
+                                .arg("-NoProfile")
+                                .arg("-NonInteractive")
+                                .arg("-WindowStyle")
+                                .arg("Hidden")
+                                .arg("-ExecutionPolicy")
+                                .arg("Bypass")
+                                .arg("-File")
+                                .arg(script_path)
+                                .arg("-TargetId")
+                                .arg(target_arg)
+                                .creation_flags(0x08000000)
+                                .spawn();
+                        }
+                    });
+
                     let resp = serde_json::json!({
                         "success": true,
                         "target_display": new_target,
                         "message": "Schermo di destinazione aggiornato con successo"
+                    });
+                    let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
+                    let response = Response::from_string(resp.to_string()).with_header(header);
+                    let _ = request.respond(response);
+                }
+
+                // MULTI-MONITOR API - Visual OSD Identification of screens
+                (&Method::Post, "/api/system/displays/identify") => {
+                    let body = read_request_body(&mut request);
+                    let mut target_id = "".to_string();
+                    if let Ok(val) = serde_json::from_str::<serde_json::Value>(&body) {
+                        if let Some(t) = val.get("target_display").or_else(|| val.get("display_id")).and_then(|v| v.as_str()) {
+                            target_id = t.trim().to_string();
+                        }
+                    }
+
+                    let script_path = std::path::PathBuf::from("scripts").join("identify_displays.ps1");
+                    let target_arg = target_id.clone();
+                    std::thread::spawn(move || {
+                        #[cfg(windows)]
+                        {
+                            use std::os::windows::process::CommandExt;
+                            let _ = std::process::Command::new("powershell")
+                                .arg("-NoProfile")
+                                .arg("-NonInteractive")
+                                .arg("-WindowStyle")
+                                .arg("Hidden")
+                                .arg("-ExecutionPolicy")
+                                .arg("Bypass")
+                                .arg("-File")
+                                .arg(script_path)
+                                .arg("-TargetId")
+                                .arg(target_arg)
+                                .creation_flags(0x08000000)
+                                .spawn();
+                        }
+                    });
+
+                    let resp = serde_json::json!({
+                        "success": true,
+                        "message": "Identificazione visiva inviata agli schermi con successo"
                     });
                     let header = Header::from_bytes(&b"Content-Type"[..], &b"application/json"[..]).unwrap();
                     let response = Response::from_string(resp.to_string()).with_header(header);

@@ -220,8 +220,16 @@ pub fn detect_system_displays() -> Vec<DisplayInfo> {
         );
     }
 
-    // Ordina per coordinata X da sinistra a destra (disposizione fisica)
+    // Ordina per coordinata X da sinistra a destra (disposizione fisica naturale)
     list.sort_by_key(|m: &DisplayInfo| m.x);
+    for (i, d) in list.iter_mut().enumerate() {
+        let idx = i + 1;
+        d.name = if d.is_primary {
+            format!("Schermo {} (Laptop / Principale)", idx)
+        } else {
+            format!("Monitor Esterno {}", idx)
+        };
+    }
     list
 }
 

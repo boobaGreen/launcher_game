@@ -27,6 +27,8 @@ impl MasterCatalog {
                 && !t.starts_with("motorola mc") && !t.starts_with("texas instruments")
                 && !t.contains("qsound") && !t.contains("votrax") && !t.contains("ym2413") && !t.contains("ym2608")
                 && !t.contains("bsmt2000") && !t.contains("system gx") && !t.contains("g net")
+                && !t.contains("namco c65") && !t.contains("namco c69") && !t.contains("namco c75")
+                && !t.contains("86c325") && !t.contains("315-6146")
         });
 
         // Verifica automatica presenza locale su disco (MAME, NAOMI, PSX, DOS, Recomp, Indie)

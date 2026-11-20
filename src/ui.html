@@ -2128,7 +2128,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">v0.46</div>
+            <div class="brand-badge">v0.47</div>
         </div>
 
         <div class="nav-search-container">
@@ -2260,7 +2260,7 @@
                     <div class="sidebar-icon" style="color: #3b82f6;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
                     </div>
-                    <span class="sidebar-label" data-i18n="side_commodore">Commodore 8-Bit</span>
+                    <span class="sidebar-label" data-i18n="side_commodore">Commodore & Amiga</span>
                     <span class="sidebar-count" id="sideCountCOMMODORE">0</span>
                 </div>
 
@@ -2466,19 +2466,21 @@
                 <button type="button" class="sort-pill" id="decadePill2000s" onclick="setDecadeFilter('2000s')">2000+ Modern</button>
             </div>
 
-            <!-- Ordinamento Dinamico & Shuffle -->
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <!-- Ordinamento Dinamico Avanzato (Campo + Direzione Universale + Shuffle) -->
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Ordina per:</span>
-                <select id="modernSortSelect" class="modern-sort-select" onchange="onModernSortChange(this.value)">
-                    <option value="title_asc">🔤 Titolo (A → Z)</option>
-                    <option value="title_desc">🔤 Titolo (Z → A)</option>
-                    <option value="year_desc">📅 Anno (Più Recenti)</option>
-                    <option value="year_asc">📅 Anno (Più Storici)</option>
-                    <option value="developer_asc">🏢 Produttore / Dev (A → Z)</option>
-                    <option value="genre_asc">🏷️ Genere (A → Z)</option>
-                    <option value="rating_desc">⭐ Valutazione / Score</option>
-                    <option value="playcount_desc">🔥 Più Giocati</option>
+                <select id="modernSortFieldSelect" class="modern-sort-select" onchange="onSortFieldChange(this.value)">
+                    <option value="title">🔤 Titolo Alfabetico</option>
+                    <option value="year">📅 Anno di Rilascio</option>
+                    <option value="developer">🏢 Sviluppatore / Brand</option>
+                    <option value="genre">🏷️ Genere di Gioco</option>
+                    <option value="rating">⭐ Valutazione & Score</option>
+                    <option value="playcount">🔥 Più Giocati</option>
                 </select>
+                <button type="button" id="sortDirectionToggleBtn" class="btn btn-secondary" onclick="toggleSortDirection()" title="Inverti direzione ordinamento (Crescente / Decrescente)" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 700; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 6px; border-color: rgba(0, 229, 180, 0.4); background: rgba(0, 229, 180, 0.08); color: #00e5b4;">
+                    <span id="sortDirectionIcon">⬆️</span>
+                    <span id="sortDirectionLabel">A → Z</span>
+                </button>
                 <button type="button" class="btn btn-secondary" onclick="shuffleCatalogOrder()" title="Mischia casualmente l'ordine della vista corrente" style="padding: 6px 12px; font-size: 0.80rem; font-weight: 700; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 5px;">
                     <span>🎲</span> <span>Shuffle</span>
                 </button>
@@ -3176,14 +3178,17 @@
 
                     <!-- 6. Display & Multi-Monitor Dinamico (MAME & Arcade Dual-Screen) -->
                     <div class="adv-section-card" id="settingsSectionMultiMonitor">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
                             <label style="font-size: 0.80rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
                                 <span data-i18n="settings_sec_display"><span>🖥️</span> Schermo di Gioco & Multi-Monitor</span>
                             </label>
-                            <button type="button" class="btn btn-secondary" style="padding: 3px 10px; font-size: 0.72rem;" onclick="refreshDisplayList()" data-i18n="settings_btn_refresh_displays">🔄 Rileva Monitor</button>
+                            <div style="display: flex; gap: 6px;">
+                                <button type="button" class="btn btn-secondary" style="padding: 3px 10px; font-size: 0.72rem; border-color: rgba(0, 229, 180, 0.4); background: rgba(0, 229, 180, 0.08); color: #00e5b4; font-weight: 700;" onclick="identifyDisplays('all')" title="Mostra un numero gigante OSD su ciascun monitor connesso">⚡ Identifica Monitor (OSD)</button>
+                                <button type="button" class="btn btn-secondary" style="padding: 3px 10px; font-size: 0.72rem;" onclick="refreshDisplayList()" data-i18n="settings_btn_refresh_displays">🔄 Rileva</button>
+                            </div>
                         </div>
                         <div style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
-                            <span data-i18n="settings_display_desc">Scegli su quale schermo far partire MAME ed emulatori fullscreen. Puoi mantenere lo schermo principale del portatile oppure inviare il gioco su un secondo o terzo monitor collegato.</span>
+                            <span>Scegli su quale schermo far partire i giochi fullscreen. Puoi selezionare <strong>"Segui Finestra RetroHub"</strong> per avviare il gioco nello schermo in cui ti trovi, oppure bloccare l'avvio su un secondo o terzo monitor fisso. Il tasto <strong>⚡ Identifica</strong> proietta a video il numero di ciascun display!</span>
                         </div>
 
                         <!-- Topologia Visuale OLED dei Monitor Connessi -->
@@ -3385,7 +3390,7 @@
                 "side_nintendo": "Mondo Nintendo",
                 "side_sega": "Galassia SEGA",
                 "side_sony": "Sony PlayStation",
-                "side_commodore": "Commodore 8-Bit",
+                "side_commodore": "Commodore & Amiga",
                 "side_amiga": "Amiga Universe",
                 "side_computers": "PC & Home Computer",
                 "side_indie": "PC Indie & Recomp",
@@ -3612,7 +3617,7 @@
                 "side_nintendo": "Nintendo World",
                 "side_sega": "SEGA Galaxy",
                 "side_sony": "Sony PlayStation",
-                "side_commodore": "Commodore 8-Bit",
+                "side_commodore": "Commodore & Amiga",
                 "side_amiga": "Amiga Universe",
                 "side_computers": "PC & Home Computer",
                 "side_indie": "PC Indie & Recomp",
@@ -3839,7 +3844,7 @@
                 "side_nintendo": "Mundo Nintendo",
                 "side_sega": "Galaxia SEGA",
                 "side_sony": "Sony PlayStation",
-                "side_commodore": "Commodore 8-Bit",
+                "side_commodore": "Commodore & Amiga",
                 "side_amiga": "Universo Amiga",
                 "side_computers": "PC y Ordenadores",
                 "side_indie": "PC Indie y Recomp",
@@ -4104,9 +4109,10 @@
         let customCollections = [];
         let activeCustomCollectionId = null;
 
-        // Stato Toolbar Ordinamento Moderno & Epoca Decadi
+        // Stato Toolbar Ordinamento Moderno Universale & Epoca Decadi
         let activeDecadeFilter = 'ALL';
-        let activeCatalogSort = 'title_asc';
+        let activeSortField = 'title';
+        let activeSortDirection = 'asc';
         let isCatalogShuffled = false;
 
         function setDecadeFilter(decade) {
@@ -4117,10 +4123,63 @@
             renderCatalog();
         }
 
-        function onModernSortChange(sortVal) {
-            activeCatalogSort = sortVal;
+        function updateSortDirectionUI() {
+            const iconEl = document.getElementById('sortDirectionIcon');
+            const lblEl = document.getElementById('sortDirectionLabel');
+            const btnEl = document.getElementById('sortDirectionToggleBtn');
+            if (!iconEl || !lblEl) return;
+
+            const isAsc = activeSortDirection === 'asc';
+            iconEl.innerText = isAsc ? '⬆️' : '⬇️';
+
+            let label = '';
+            switch (activeSortField) {
+                case 'title':
+                    label = isAsc ? 'A → Z (Crescente)' : 'Z → A (Decrescente)';
+                    break;
+                case 'year':
+                    label = isAsc ? 'Più Storici (1970 → Oggi)' : 'Più Recenti (Oggi → 1970)';
+                    break;
+                case 'developer':
+                    label = isAsc ? 'Dev A → Z' : 'Dev Z → A';
+                    break;
+                case 'genre':
+                    label = isAsc ? 'Genere A → Z' : 'Genere Z → A';
+                    break;
+                case 'rating':
+                    label = isAsc ? 'Voto 1★ → 5★' : 'Voto 5★ → 1★ (Top)';
+                    break;
+                case 'playcount':
+                    label = isAsc ? 'Meno Giocati' : 'Più Giocati (Top)';
+                    break;
+                default:
+                    label = isAsc ? 'Crescente' : 'Decrescente';
+            }
+            lblEl.innerText = label;
+            if (btnEl) {
+                btnEl.title = `Ordinamento attuale: ${label}. Clicca per invertire direzione`;
+            }
+        }
+
+        function onSortFieldChange(field) {
+            activeSortField = field;
+            if (field === 'year' || field === 'rating' || field === 'playcount') {
+                activeSortDirection = 'desc';
+            } else {
+                activeSortDirection = 'asc';
+            }
             isCatalogShuffled = false;
+            updateSortDirectionUI();
             renderCatalog();
+        }
+
+        function toggleSortDirection() {
+            activeSortDirection = (activeSortDirection === 'asc') ? 'desc' : 'asc';
+            isCatalogShuffled = false;
+            updateSortDirectionUI();
+            renderCatalog();
+            const currentLabel = document.getElementById('sortDirectionLabel')?.innerText || '';
+            showToast(`🔄 Ordinamento invertito: ${currentLabel}`);
         }
 
         function shuffleCatalogOrder() {
@@ -4142,7 +4201,7 @@
             'SONY': ['PSX', 'PS2', 'PSP', 'PS3', 'PSVITA'],
             'ATARI': ['ATARI2600', 'ATARI5200', 'ATARI7800', 'LYNX', 'JAGUAR', 'VECTREX', 'COLECO', 'INTELLIVISION', 'ODYSSEY2'],
             'SNKNEC': ['NEOGEO', 'NEOGEOCD', 'NGP', 'NGPC', 'PCENGINE', 'SUPERGRAFX', 'PCFX'],
-            'COMMODORE': ['C64', 'VIC20', 'PLUS4', 'C128', 'PET'],
+            'COMMODORE': ['C64', 'VIC20', 'AMIGA', 'AMIGA1200', 'CD32', 'PLUS4', 'C128', 'PET'],
             'AMIGA': ['AMIGA', 'AMIGA1200', 'CD32'],
             'COMPUTER': ['DOS', 'SCUMMVM', 'ZXSPECTRUM', 'CPC', 'BBCMICRO', 'APPLE2'],
             'NIPPON': ['X68000', 'MSX', 'MSX2', 'FMTOWNS', 'PC88', 'PC98'],
@@ -4211,6 +4270,7 @@
                     }
                     updateCounters();
                     initHeroSpotlight();
+                    updateSortDirectionUI();
                     renderCatalog();
                 }
             } catch (e) {
@@ -5021,22 +5081,19 @@
                     [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
                 }
             } else {
-                if (activeCatalogSort === 'title_asc') {
-                    filtered.sort((a, b) => a.title.localeCompare(b.title));
-                } else if (activeCatalogSort === 'title_desc') {
-                    filtered.sort((a, b) => b.title.localeCompare(a.title));
-                } else if (activeCatalogSort === 'year_desc') {
-                    filtered.sort((a, b) => (b.year || 0) - (a.year || 0) || a.title.localeCompare(b.title));
-                } else if (activeCatalogSort === 'year_asc') {
-                    filtered.sort((a, b) => (a.year || 0) - (b.year || 0) || a.title.localeCompare(b.title));
-                } else if (activeCatalogSort === 'developer_asc') {
-                    filtered.sort((a, b) => (a.developer || '').localeCompare(b.developer || '') || a.title.localeCompare(b.title));
-                } else if (activeCatalogSort === 'genre_asc') {
-                    filtered.sort((a, b) => (a.genre || '').localeCompare(b.genre || '') || a.title.localeCompare(b.title));
-                } else if (activeCatalogSort === 'rating_desc') {
-                    filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0) || a.title.localeCompare(b.title));
-                } else if (activeCatalogSort === 'playcount_desc') {
-                    filtered.sort((a, b) => (b.play_count || 0) - (a.play_count || 0) || a.title.localeCompare(b.title));
+                const dir = (activeSortDirection === 'asc') ? 1 : -1;
+                if (activeSortField === 'title') {
+                    filtered.sort((a, b) => dir * a.title.localeCompare(b.title));
+                } else if (activeSortField === 'year') {
+                    filtered.sort((a, b) => dir * ((a.year || 0) - (b.year || 0)) || a.title.localeCompare(b.title));
+                } else if (activeSortField === 'developer') {
+                    filtered.sort((a, b) => dir * (a.developer || '').localeCompare(b.developer || '') || a.title.localeCompare(b.title));
+                } else if (activeSortField === 'genre') {
+                    filtered.sort((a, b) => dir * (a.genre || '').localeCompare(b.genre || '') || a.title.localeCompare(b.title));
+                } else if (activeSortField === 'rating') {
+                    filtered.sort((a, b) => dir * ((a.rating || 0) - (b.rating || 0)) || a.title.localeCompare(b.title));
+                } else if (activeSortField === 'playcount') {
+                    filtered.sort((a, b) => dir * ((a.play_count || 0) - (b.play_count || 0)) || a.title.localeCompare(b.title));
                 }
             }
 
@@ -5390,7 +5447,10 @@
                 estTotalMb: estTotalMb,
                 speedMbps: speedMbps,
                 andLaunchAfter: andLaunchAfter,
-                intervalId: null
+                intervalId: null,
+                backendSuccess: false,
+                backendFinished: false,
+                errorMessage: null
             };
             activeDownloads.set(id, downloadItem);
 
@@ -5399,33 +5459,52 @@
             const isEs = (currentLang === 'es');
             showToast(isEn ? `Downloading: ${g.title}...` : (isEs ? `Descargando: ${g.title}...` : `Scaricamento: ${g.title}...`));
 
-            let backendDone = false;
             fetch('/api/library/download', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ game_id: id })
             }).then(res => res.json()).then(data => {
-                backendDone = true;
+                downloadItem.backendFinished = true;
+                if (data && data.success) {
+                    downloadItem.backendSuccess = true;
+                } else {
+                    downloadItem.backendSuccess = false;
+                    downloadItem.errorMessage = (data && data.message) ? data.message : 'File non disponibile sui repository cloud';
+                }
             }).catch(err => {
-                backendDone = true;
+                downloadItem.backendFinished = true;
+                downloadItem.backendSuccess = false;
+                downloadItem.errorMessage = err.message || 'Errore di connessione di rete';
             });
 
             const startTime = Date.now();
             const targetDurationMs = Math.min(3800, Math.max(1600, estTotalMb * 55));
 
             downloadItem.intervalId = setInterval(() => {
+                if (downloadItem.backendFinished && !downloadItem.backendSuccess) {
+                    clearInterval(downloadItem.intervalId);
+                    activeDownloads.delete(id);
+                    // Ripristino overlay visuale card
+                    const card = document.getElementById(`gameCard_${id}`);
+                    const overlay = card ? card.querySelector('.download-overlay') : null;
+                    if (overlay) overlay.style.display = 'none';
+                    updateCardInstallState(id, false);
+                    showToast(`⚠️ Download non riuscito: ${downloadItem.errorMessage}`);
+                    return;
+                }
+
                 const elapsed = Date.now() - startTime;
                 let naturalProgress = (elapsed / targetDurationMs) * 100;
 
-                if (!backendDone && naturalProgress > 92) {
-                    naturalProgress = 92;
+                if (!downloadItem.backendFinished && naturalProgress > 90) {
+                    naturalProgress = 90;
                 }
 
                 downloadItem.speedMbps = +(speedMbps + (Math.random() * 3.0 - 1.5)).toFixed(1);
                 downloadItem.progress = Math.min(100, naturalProgress);
                 updateDownloadUI(id);
 
-                if (downloadItem.progress >= 100) {
+                if (downloadItem.progress >= 100 && downloadItem.backendSuccess) {
                     clearInterval(downloadItem.intervalId);
                     completeDownload(id);
                 }
@@ -6724,6 +6803,20 @@
             }
         }
 
+        async function identifyDisplays(targetId = 'all') {
+            try {
+                const label = targetId === 'all' ? 'tutti gli schermi' : `lo schermo [${targetId}]`;
+                showToast(`⚡ OSD inviato per identificare ${label}...`);
+                await fetch('/api/system/displays/identify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ target_display: targetId })
+                });
+            } catch (e) {
+                console.error('Errore durante identificazione display:', e);
+            }
+        }
+
         function renderDisplaysGrid() {
             const grid = document.getElementById('displaysTopologyGrid');
             if (!grid) return;
@@ -6731,7 +6824,7 @@
             const lbl = document.getElementById('currentDisplayTargetLabel');
             if (lbl) {
                 if (!currentTargetDisplay || currentTargetDisplay === 'auto') {
-                    lbl.innerText = '⚡ Auto (Schermo Attivo di Windows)';
+                    lbl.innerText = '🔄 Segui Finestra RetroHub (Dinamico)';
                 } else {
                     const found = currentDisplays.find(d => d.id === currentTargetDisplay);
                     lbl.innerText = found ? `🖥️ ${found.name} (${found.id})` : `🖥️ ${currentTargetDisplay}`;
@@ -6740,21 +6833,21 @@
 
             let html = '';
 
-            // Scheda 1: Modalità Auto (Predefinito di Sistema)
+            // Scheda 1: Modalità Dinamica (Segui la finestra attuale)
             const isAutoSelected = !currentTargetDisplay || currentTargetDisplay === 'auto';
             html += `
-                <div class="display-card ${isAutoSelected ? 'active-display' : ''}" onclick="selectMonitorTarget('auto')" style="border: ${isAutoSelected ? '2px solid var(--accent-cyan)' : '1px solid var(--border-card)'}; background: ${isAutoSelected ? 'rgba(0, 229, 180, 0.08)' : 'rgba(0,0,0,0.3)'}; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="display-card ${isAutoSelected ? 'active-display' : ''}" onclick="selectMonitorTarget('auto')" style="border: ${isAutoSelected ? '2px solid var(--accent-cyan)' : '1px solid var(--border-card)'}; background: ${isAutoSelected ? 'rgba(0, 229, 180, 0.08)' : 'rgba(0,0,0,0.3)'}; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; padding: 12px; border-radius: var(--radius-sm); transition: all 0.2s ease;">
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <span style="font-size: 0.68rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">DINAMICO</span>
-                            <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.08); color: var(--text-muted); font-weight: 700;">AUTO</span>
+                            <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(0, 229, 180, 0.12); color: var(--accent-cyan); font-weight: 700;">AUTO</span>
                         </div>
-                        <div style="font-size: 1.6rem; margin-bottom: 6px;">⚡</div>
-                        <div style="font-size: 0.84rem; font-weight: 700; color: #fff; margin-bottom: 2px;">Schermo Attivo</div>
-                        <div style="font-size: 0.70rem; color: var(--text-muted); line-height: 1.3;">Avvia sul display principale corrente di Windows.</div>
+                        <div style="font-size: 1.6rem; margin-bottom: 6px;">🔄</div>
+                        <div style="font-size: 0.84rem; font-weight: 700; color: #fff; margin-bottom: 2px;">Segui Finestra RetroHub</div>
+                        <div style="font-size: 0.70rem; color: var(--text-muted); line-height: 1.3;">Avvia l'emulatore sullo schermo in cui stai usando RetroHub in questo momento.</div>
                     </div>
-                    <div style="margin-top: 12px; font-size: 0.70rem; font-weight: 700; color: ${isAutoSelected ? 'var(--accent-cyan)' : 'var(--text-muted)'}; display: flex; align-items: center; gap: 4px;">
-                        ${isAutoSelected ? '✔ In Uso (Predefinito)' : 'Clicca per attivare'}
+                    <div style="margin-top: 12px; font-size: 0.72rem; font-weight: 700; color: ${isAutoSelected ? 'var(--accent-cyan)' : 'var(--text-muted)'}; display: flex; align-items: center; gap: 4px;">
+                        ${isAutoSelected ? '✔ In Uso (Dinamico)' : 'Clicca per attivare'}
                     </div>
                 </div>
             `;
@@ -6769,12 +6862,13 @@
             } else {
                 currentDisplays.forEach((disp, idx) => {
                     const isSelected = currentTargetDisplay === disp.id;
+                    const screenNumber = idx + 1;
                     html += `
-                        <div class="display-card ${isSelected ? 'active-display' : ''}" onclick="selectMonitorTarget('${disp.id}')" style="border: ${isSelected ? '2px solid var(--accent-cyan)' : '1px solid var(--border-card)'}; background: ${isSelected ? 'rgba(0, 229, 180, 0.08)' : 'rgba(0,0,0,0.3)'}; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div class="display-card ${isSelected ? 'active-display' : ''}" onclick="selectMonitorTarget('${disp.id}')" style="border: ${isSelected ? '2px solid var(--accent-cyan)' : '1px solid var(--border-card)'}; background: ${isSelected ? 'rgba(0, 229, 180, 0.08)' : 'rgba(0,0,0,0.3)'}; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; padding: 12px; border-radius: var(--radius-sm); transition: all 0.2s ease;">
                             <div>
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                    <span style="font-size: 0.68rem; font-weight: 700; color: ${disp.is_primary ? '#fbbf24' : 'var(--text-muted)'}; text-transform: uppercase;">
-                                        ${disp.is_primary ? '★ PRINCIPALE' : 'ESTERNO'}
+                                    <span style="font-size: 0.68rem; font-weight: 700; color: ${disp.is_primary ? '#fbbf24' : 'var(--accent-cyan)'}; text-transform: uppercase;">
+                                        ${disp.is_primary ? '💻 LAPTOP' : '🖥️ ESTERNO'} • #${screenNumber}
                                     </span>
                                     <span style="font-size: 0.68rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; background: rgba(0, 229, 180, 0.12); color: var(--accent-cyan); font-weight: 700;">
                                         ${disp.width}x${disp.height}
@@ -6786,12 +6880,17 @@
                                 <div style="font-size: 0.84rem; font-weight: 700; color: #fff; margin-bottom: 2px;">
                                     ${disp.name}
                                 </div>
-                                <div style="font-size: 0.70rem; color: var(--text-muted); font-family: var(--font-mono);">
+                                <div style="font-size: 0.68rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 8px;">
                                     ${disp.id}
                                 </div>
                             </div>
-                            <div style="margin-top: 12px; font-size: 0.70rem; font-weight: 700; color: ${isSelected ? 'var(--accent-cyan)' : 'var(--text-muted)'}; display: flex; align-items: center; gap: 4px;">
-                                ${isSelected ? '✔ Schermo Selezionato' : 'Clicca per assegnare'}
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 6px;">
+                                <span style="font-size: 0.70rem; font-weight: 700; color: ${isSelected ? 'var(--accent-cyan)' : 'var(--text-muted)'};">
+                                    ${isSelected ? '✔ Schermo Selezionato' : 'Clicca per assegnare'}
+                                </span>
+                                <button type="button" class="btn btn-secondary" onclick="event.stopPropagation(); identifyDisplays('${disp.id}')" title="Fai lampeggiare il numero identificativo OSD su questo specifico schermo" style="padding: 2px 7px; font-size: 0.66rem; border-color: rgba(0, 229, 180, 0.4); color: var(--accent-cyan); font-weight: 700;">
+                                    ⚡ Identifica
+                                </button>
                             </div>
                         </div>
                     `;
@@ -6812,8 +6911,8 @@
                     currentTargetDisplay = displayId;
                     renderDisplaysGrid();
                     const dispObj = currentDisplays.find(d => d.id === displayId);
-                    const label = displayId === 'auto' ? 'Schermo Attivo (Auto)' : (dispObj ? dispObj.name : displayId);
-                    showToast(`🖥️ MAME configurato per avviarsi su: ${label}`);
+                    const label = displayId === 'auto' ? 'Segui Finestra RetroHub (Dinamico)' : (dispObj ? dispObj.name : displayId);
+                    showToast(`🖥️ Schermo selezionato: ${label} (OSD inviato a video)`);
                 } else {
                     showToast('Errore salvataggio schermo di destinazione');
                 }
@@ -7278,7 +7377,7 @@
                 closeSettingsModal();
                 localStorage.removeItem('retrohub_wizard_completed');
                 localStorage.removeItem('retrohub_downloaded_ids');
-                localStorage.setItem('retrohub_app_version', '0.46.0');
+                localStorage.setItem('retrohub_app_version', '0.47.0');
                 downloadedGameIds.clear();
                 showToast(isEn ? '🔄 Reset complete: restarting wizard...' : (isEs ? '🔄 Restablecimiento completo: reiniciando...' : '🔄 Reset completato: riavvio Setup Wizard...'));
                 setTimeout(() => {
@@ -7468,8 +7567,8 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Aggiornamento trasparente a v0.46.0 preservando le preferenze e raccolte dell'utente
-                const currentAppVer = '0.46.0';
+                // Controllo Versione: Aggiornamento trasparente a v0.47.0 preservando le preferenze e raccolte dell'utente
+                const currentAppVer = '0.47.0';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.setItem('retrohub_app_version', currentAppVer);
@@ -7749,7 +7848,336 @@
                 ctx.fillRect(x, 0, 1, h);
             }
 
-            // Archi e binari di gioco vintage
+            // Selezione scena tematica autentica per ciascun titolo Game & Watch
+            const gameTitle = (gwCurrentGame && gwCurrentGame.title) ? gwCurrentGame.title.toLowerCase() : '';
+            if (gameTitle.includes('fire')) {
+                renderGwFireScene(ctx, w, h, gwGameState);
+            } else if (gameTitle.includes('parachute')) {
+                renderGwParachuteScene(ctx, w, h, gwGameState);
+            } else if (gameTitle.includes('chef')) {
+                renderGwChefScene(ctx, w, h, gwGameState);
+            } else if (gameTitle.includes('donkey') || gameTitle.includes('dk')) {
+                renderGwDonkeyKongScene(ctx, w, h, gwGameState);
+            } else if (gameTitle.includes('octopus')) {
+                renderGwOctopusScene(ctx, w, h, gwGameState);
+            } else {
+                renderGwBallScene(ctx, w, h, gwGameState);
+            }
+
+            if (!gwGameState.gameOver) {
+                gwAnimFrame = requestAnimationFrame(gwGameLoop);
+            }
+        }
+
+        function renderGwFireScene(ctx, w, h, state) {
+            // Edificio in fiamme a sinistra
+            ctx.fillStyle = '#1c2214';
+            ctx.fillRect(10, 30, 80, 195);
+            for (let wy = 50; wy < 210; wy += 45) {
+                ctx.fillStyle = '#e5e7eb';
+                ctx.fillRect(25, wy, 20, 25);
+                ctx.fillRect(55, wy, 20, 25);
+                ctx.fillStyle = '#1c2214';
+                ctx.beginPath();
+                ctx.moveTo(35, wy + 15);
+                ctx.lineTo(38, wy + 2);
+                ctx.lineTo(41, wy + 15);
+                ctx.fill();
+            }
+            ctx.font = 'bold 12px monospace';
+            ctx.fillText('🔥 FIRE 🔥', 15, 24);
+
+            // Ambulanza a destra
+            ctx.fillStyle = '#1c2214';
+            ctx.fillRect(w - 95, 140, 85, 85);
+            ctx.fillStyle = '#e5e7eb';
+            ctx.fillRect(w - 75, 150, 45, 30);
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(w - 55, 155, 6, 20);
+            ctx.fillRect(w - 62, 162, 20, 6);
+            ctx.fillStyle = '#1c2214';
+            ctx.beginPath();
+            ctx.arc(w - 75, 225, 12, 0, Math.PI * 2);
+            ctx.arc(w - 30, 225, 12, 0, Math.PI * 2);
+            ctx.fill();
+
+            const trackX = [135, 230, 325];
+            const stepY = [55, 95, 135, 175, 205];
+
+            for (const it of state.items) {
+                const tx = trackX[it.track];
+                const ty = stepY[Math.min(it.step, stepY.length - 1)];
+                ctx.fillStyle = '#1c2214';
+                ctx.beginPath();
+                ctx.arc(tx, ty - 12, 7, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#1c2214';
+                ctx.beginPath();
+                ctx.moveTo(tx, ty - 5);
+                ctx.lineTo(tx, ty + 10);
+                ctx.moveTo(tx - 12, ty);
+                ctx.lineTo(tx + 12, ty);
+                ctx.moveTo(tx - 8, ty + 18);
+                ctx.lineTo(tx, ty + 10);
+                ctx.lineTo(tx + 8, ty + 18);
+                ctx.stroke();
+            }
+
+            const px = trackX[state.playerPos];
+            const py = 205;
+            ctx.fillStyle = '#1c2214';
+            ctx.beginPath(); ctx.arc(px - 32, py - 18, 9, 0, Math.PI * 2); ctx.fill();
+            ctx.fillRect(px - 38, py - 8, 12, 22);
+            ctx.beginPath(); ctx.arc(px + 32, py - 18, 9, 0, Math.PI * 2); ctx.fill();
+            ctx.fillRect(px + 26, py - 8, 12, 22);
+            ctx.strokeStyle = '#1c2214';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(px - 30, py - 4);
+            ctx.quadraticCurveTo(px, py + 4, px + 30, py - 4);
+            ctx.stroke();
+        }
+
+        function renderGwParachuteScene(ctx, w, h, state) {
+            ctx.fillStyle = '#1c2214';
+            ctx.fillRect(40, 22, 60, 24);
+            ctx.fillRect(20, 28, 20, 6);
+            ctx.fillRect(15, 20, 6, 20);
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(25, 14);
+            ctx.lineTo(115, 14);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#1c2214';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let x = 0; x < w; x += 30) {
+                ctx.arc(x + 15, 228, 15, Math.PI, 0, false);
+            }
+            ctx.stroke();
+
+            ctx.fillStyle = '#1c2214';
+            ctx.beginPath();
+            ctx.moveTo(370, 230);
+            ctx.lineTo(385, 212);
+            ctx.lineTo(395, 230);
+            ctx.fill();
+
+            const trackX = [120, 230, 340];
+            const stepY = [55, 95, 135, 175, 205];
+
+            for (const it of state.items) {
+                const tx = trackX[it.track];
+                const ty = stepY[Math.min(it.step, stepY.length - 1)];
+                ctx.fillStyle = '#1c2214';
+                ctx.beginPath();
+                ctx.arc(tx, ty - 18, 16, Math.PI, 0, false);
+                ctx.fill();
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(tx - 15, ty - 18);
+                ctx.lineTo(tx, ty - 5);
+                ctx.moveTo(tx + 15, ty - 18);
+                ctx.lineTo(tx, ty - 5);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(tx, ty - 5, 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillRect(tx - 4, ty, 8, 10);
+            }
+
+            const px = trackX[state.playerPos];
+            const py = 216;
+            ctx.fillStyle = '#1c2214';
+            ctx.beginPath();
+            ctx.moveTo(px - 34, py - 4);
+            ctx.lineTo(px + 34, py - 4);
+            ctx.lineTo(px + 24, py + 12);
+            ctx.lineTo(px - 24, py + 12);
+            ctx.closePath();
+            ctx.fill();
+            ctx.beginPath(); ctx.arc(px, py - 16, 7, 0, Math.PI * 2); ctx.fill();
+            ctx.fillRect(px - 5, py - 8, 10, 10);
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(px - 6, py - 6);
+            ctx.lineTo(px - 28, py + 12);
+            ctx.moveTo(px + 6, py - 6);
+            ctx.lineTo(px + 28, py + 12);
+            ctx.stroke();
+        }
+
+        function renderGwChefScene(ctx, w, h, state) {
+            ctx.fillStyle = '#1c2214';
+            ctx.font = 'bold 11px monospace';
+            ctx.fillText('🍳 CHEF KITCHEN', 16, 24);
+
+            ctx.fillRect(15, 140, 45, 50);
+            ctx.beginPath();
+            ctx.moveTo(20, 140); ctx.lineTo(26, 125); ctx.lineTo(32, 140);
+            ctx.moveTo(40, 140); ctx.lineTo(46, 125); ctx.lineTo(52, 140);
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(50, 135); ctx.lineTo(75, 120);
+            ctx.lineTo(82, 115);
+            ctx.stroke();
+
+            const trackX = [120, 230, 340];
+            const stepY = [45, 85, 125, 165, 195];
+
+            for (const it of state.items) {
+                const tx = trackX[it.track];
+                const ty = stepY[Math.min(it.step, stepY.length - 1)];
+                ctx.fillStyle = '#1c2214';
+                if (it.track === 0) {
+                    ctx.beginPath();
+                    ctx.ellipse(tx, ty, 14, 7, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (it.track === 1) {
+                    ctx.lineWidth = 6;
+                    ctx.beginPath();
+                    ctx.arc(tx, ty, 12, 0.2, Math.PI - 0.2, false);
+                    ctx.stroke();
+                } else {
+                    ctx.beginPath();
+                    ctx.ellipse(tx, ty, 12, 6, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.moveTo(tx + 10, ty);
+                    ctx.lineTo(tx + 18, ty - 6);
+                    ctx.lineTo(tx + 18, ty + 6);
+                    ctx.fill();
+                }
+            }
+
+            const px = trackX[state.playerPos];
+            const py = 210;
+            ctx.fillStyle = '#1c2214';
+            ctx.fillRect(px - 14, py - 46, 28, 20);
+            ctx.beginPath();
+            ctx.arc(px - 10, py - 46, 8, 0, Math.PI * 2);
+            ctx.arc(px, py - 50, 10, 0, Math.PI * 2);
+            ctx.arc(px + 10, py - 46, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath(); ctx.arc(px, py - 20, 10, 0, Math.PI * 2); ctx.fill();
+            ctx.fillRect(px - 12, py - 10, 24, 28);
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(px + 6, py - 2);
+            ctx.lineTo(px + 22, py - 10);
+            ctx.lineTo(px + 40, py - 10);
+            ctx.stroke();
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.arc(px + 40, py - 6, 12, 0, Math.PI, false);
+            ctx.stroke();
+        }
+
+        function renderGwDonkeyKongScene(ctx, w, h, state) {
+            ctx.fillStyle = '#1c2214';
+            ctx.beginPath(); ctx.arc(70, 35, 16, 0, Math.PI * 2); ctx.fill();
+            ctx.fillRect(60, 42, 22, 10);
+            ctx.fillRect(45, 48, 50, 35);
+            ctx.lineWidth = 7;
+            ctx.beginPath();
+            ctx.moveTo(48, 55); ctx.lineTo(35, 45); ctx.lineTo(60, 52);
+            ctx.moveTo(92, 55); ctx.lineTo(105, 45); ctx.lineTo(80, 52);
+            ctx.stroke();
+
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#1c2214';
+            ctx.beginPath();
+            ctx.moveTo(30, 85); ctx.lineTo(320, 100);
+            ctx.moveTo(420, 145); ctx.lineTo(80, 165);
+            ctx.moveTo(20, 228); ctx.lineTo(w - 20, 228);
+            ctx.stroke();
+
+            const trackX = [120, 230, 340];
+            const stepY = [55, 95, 135, 175, 205];
+
+            for (const it of state.items) {
+                const tx = trackX[it.track];
+                const ty = stepY[Math.min(it.step, stepY.length - 1)];
+                ctx.fillStyle = '#1c2214';
+                ctx.beginPath();
+                ctx.ellipse(tx, ty, 13, 10, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#e5e7eb';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(tx - 10, ty); ctx.lineTo(tx + 10, ty);
+                ctx.stroke();
+            }
+
+            const px = trackX[state.playerPos];
+            const py = 215;
+            ctx.fillStyle = '#1c2214';
+            ctx.beginPath(); ctx.arc(px, py - 22, 8, 0, Math.PI * 2); ctx.fill();
+            ctx.fillRect(px + 4, py - 24, 8, 5);
+            ctx.fillRect(px - 8, py - 14, 16, 20);
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(px - 6, py - 8); ctx.lineTo(px - 16, py - 22);
+            ctx.moveTo(px + 6, py - 8); ctx.lineTo(px + 16, py - 22);
+            ctx.stroke();
+        }
+
+        function renderGwOctopusScene(ctx, w, h, state) {
+            ctx.fillStyle = '#1c2214';
+            ctx.fillRect(20, 20, 70, 20);
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(55, 40);
+            ctx.quadraticCurveTo(80, 100, 120, 180);
+            ctx.stroke();
+
+            ctx.fillRect(w - 90, 180, 55, 38);
+            ctx.fillStyle = '#e5e7eb';
+            ctx.fillRect(w - 70, 192, 12, 14);
+            ctx.fillStyle = '#1c2214';
+
+            ctx.beginPath(); ctx.arc(w - 110, 70, 32, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#e5e7eb';
+            ctx.beginPath(); ctx.arc(w - 122, 65, 8, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(w - 98, 65, 8, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#1c2214';
+            ctx.beginPath(); ctx.arc(w - 124, 65, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(w - 100, 65, 4, 0, Math.PI * 2); ctx.fill();
+
+            ctx.lineWidth = 7;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(w - 130, 85); ctx.quadraticCurveTo(280, 95, 230, 130);
+            ctx.moveTo(w - 120, 95); ctx.quadraticCurveTo(240, 140, 160, 170);
+            ctx.stroke();
+
+            const trackX = [100, 210, 310];
+            const stepY = [55, 95, 135, 175, 205];
+
+            for (const it of state.items) {
+                const tx = trackX[it.track];
+                const ty = stepY[Math.min(it.step, stepY.length - 1)];
+                ctx.fillStyle = '#1c2214';
+                ctx.beginPath();
+                ctx.arc(tx, ty, 10, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            const px = trackX[state.playerPos];
+            const py = 215;
+            ctx.fillStyle = '#1c2214';
+            ctx.beginPath(); ctx.arc(px, py - 20, 11, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#e5e7eb';
+            ctx.beginPath(); ctx.arc(px + 4, py - 20, 5, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#1c2214';
+            ctx.fillRect(px - 10, py - 8, 20, 24);
+            ctx.beginPath(); ctx.arc(px - 16, py + 4, 8, 0, Math.PI * 2); ctx.fill();
+        }
+
+        function renderGwBallScene(ctx, w, h, state) {
             ctx.strokeStyle = 'rgba(28, 34, 20, 0.18)';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -7761,10 +8189,9 @@
             const trackX = [80, 230, 380];
             const stepY = [40, 80, 120, 160, 200, 225];
 
-            // Render elementi LCD in caduta
             ctx.fillStyle = '#1c2214';
             ctx.strokeStyle = '#1c2214';
-            for (const it of gwGameState.items) {
+            for (const it of state.items) {
                 const tx = trackX[it.track];
                 const ty = stepY[Math.min(it.step, stepY.length - 1)];
 
@@ -7776,22 +8203,16 @@
                 ctx.strokeRect(tx - 11, ty - 11, 22, 22);
             }
 
-            // Render personaggio Mr. Game & Watch
-            const px = trackX[gwGameState.playerPos];
+            const px = trackX[state.playerPos];
             const py = 220;
 
             ctx.fillStyle = '#1c2214';
-            // Testa rotonda
             ctx.beginPath();
             ctx.arc(px, py - 26, 12, 0, Math.PI * 2);
             ctx.fill();
-            // Naso sagomato Gunpei Yokoi
-            ctx.fillRect(px + (gwGameState.playerPos === 0 ? 8 : (gwGameState.playerPos === 2 ? -12 : 8)), py - 28, 6, 4);
-
-            // Corpo
+            ctx.fillRect(px + (state.playerPos === 0 ? 8 : (state.playerPos === 2 ? -12 : 8)), py - 28, 6, 4);
             ctx.fillRect(px - 10, py - 14, 20, 22);
 
-            // Braccia con palette di presa
             ctx.lineWidth = 5;
             ctx.lineCap = 'round';
             ctx.beginPath();
@@ -7803,7 +8224,6 @@
             ctx.lineTo(px + 28, py - 26);
             ctx.stroke();
 
-            // Gambe
             ctx.beginPath();
             ctx.moveTo(px - 5, py + 8);
             ctx.lineTo(px - 12, py + 26);
@@ -7811,20 +8231,15 @@
             ctx.lineTo(px + 12, py + 26);
             ctx.stroke();
 
-            // Mani di presa LCD
             ctx.fillRect(px - 34, py - 28, 12, 6);
             ctx.fillRect(px + 22, py - 28, 12, 6);
 
-            // Linea del pavimento
             ctx.lineWidth = 3;
             ctx.beginPath();
             ctx.moveTo(20, py + 28);
             ctx.lineTo(w - 20, py + 28);
             ctx.stroke();
-
-            if (!gwGameState.gameOver) {
-                gwAnimFrame = requestAnimationFrame(gwGameLoop);
-            }
+        }
         }
     </script>
 </body>

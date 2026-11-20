@@ -163,7 +163,11 @@ impl Launcher {
         }
 
         // 9. Sega Hikaru Arcade
-        if sys_upper == "HIKARU" {
+        if sys_upper == "HIKARU" || (sys_upper == "MAME" && game.title.to_lowercase().contains("nascar")) {
+            let nascar_lnk = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Hikaru - DEmul\Gioca - NASCAR Arcade.lnk");
+            if nascar_lnk.exists() {
+                return Some(nascar_lnk.to_string_lossy().to_string());
+            }
             let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Hikaru - DEmul");
             if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
                 return Some(target);
@@ -172,6 +176,10 @@ impl Launcher {
 
         // 10. ScummVM Adventure
         if sys_upper == "SCUMMVM" {
+            let base_games = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\ScummVM\games");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base_games, &game.title) {
+                return Some(target);
+            }
             let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\ScummVM");
             if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
                 return Some(target);
@@ -191,7 +199,11 @@ impl Launcher {
         }
 
         // 12. Commodore 64 & Amiga
-        if sys_upper == "C64" {
+        if sys_upper == "C64" || sys_upper == "COMMODORE" || sys_upper == "VIC20" || sys_upper == "AMIGA" {
+            let base_roms = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\C64\roms");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base_roms, &game.title) {
+                return Some(target);
+            }
             let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\C64");
             if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
                 return Some(target);
@@ -200,16 +212,28 @@ impl Launcher {
 
         // 13. Nintendo SNES / NES / N64
         if sys_upper == "SNES" {
+            let base_roms = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\SNES\roms");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base_roms, &game.title) {
+                return Some(target);
+            }
             let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\SNES");
             if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
                 return Some(target);
             }
         } else if sys_upper == "NES" {
+            let base_roms = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\NES\roms");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base_roms, &game.title) {
+                return Some(target);
+            }
             let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\NES");
             if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
                 return Some(target);
             }
         } else if sys_upper == "N64" {
+            let base_roms = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Nintendo64\roms");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base_roms, &game.title) {
+                return Some(target);
+            }
             let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\Nintendo64");
             if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
                 return Some(target);
@@ -287,9 +311,31 @@ impl Launcher {
         }
         let t_low = title.to_lowercase();
         let clean_t = t_low.split('(').next().unwrap_or(&t_low).trim();
-        let words: Vec<&str> = clean_t.split_whitespace().filter(|w| w.len() > 3).collect();
+        let words: Vec<&str> = clean_t.split_whitespace().filter(|w| w.len() >= 3).collect();
 
-        // Cache statica per scansione cartella istantanea senza ripetere letture disco ridondanti
+        // 1. Scansione interna directory corrente
+        if let Some(target) = Self::scan_single_dir(dir, clean_t, &words) {
+            return Some(target);
+        }
+
+        // 2. Controllo automatico sottocartelle "games" e "roms"
+        let games_sub = dir.join("games");
+        if games_sub.exists() && games_sub != dir {
+            if let Some(target) = Self::scan_single_dir(&games_sub, clean_t, &words) {
+                return Some(target);
+            }
+        }
+        let roms_sub = dir.join("roms");
+        if roms_sub.exists() && roms_sub != dir {
+            if let Some(target) = Self::scan_single_dir(&roms_sub, clean_t, &words) {
+                return Some(target);
+            }
+        }
+
+        None
+    }
+
+    fn scan_single_dir(dir: &Path, clean_t: &str, words: &[&str]) -> Option<String> {
         static DIR_CACHE: std::sync::Mutex<Option<std::collections::HashMap<PathBuf, Vec<(PathBuf, String, bool)>>>> = std::sync::Mutex::new(None);
         let mut guard = DIR_CACHE.lock().unwrap();
         let cache = guard.get_or_insert_with(std::collections::HashMap::new);
@@ -316,15 +362,19 @@ impl Launcher {
             if *is_dir {
                 let dir_name = name;
                 if dir_name.contains(clean_t) || (!words.is_empty() && words.iter().all(|w| dir_name.contains(w))) {
-                    let gioca = p.join("Gioca.lnk");
-                    if gioca.exists() {
-                        return Some(gioca.to_string_lossy().to_string());
+                    let gioca_lnk = p.join("Gioca.lnk");
+                    if gioca_lnk.exists() {
+                        return Some(gioca_lnk.to_string_lossy().to_string());
+                    }
+                    let gioca_bat = p.join("Gioca.bat");
+                    if gioca_bat.exists() {
+                        return Some(gioca_bat.to_string_lossy().to_string());
                     }
                     if let Ok(sub_entries) = std::fs::read_dir(p) {
                         for sub in sub_entries.flatten() {
                             let sub_p = sub.path();
                             let ext = sub_p.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
-                            if ["chd", "cue", "iso", "bin", "pbp", "cdi", "gdi", "sfc", "z64"].contains(&ext.as_str()) {
+                            if ["chd", "cue", "iso", "bin", "pbp", "cdi", "gdi", "sfc", "smc", "z64", "n64", "v64", "crt", "d64", "prg", "nes", "exe"].contains(&ext.as_str()) {
                                 return Some(sub_p.to_string_lossy().to_string());
                             }
                         }
@@ -525,10 +575,28 @@ impl Launcher {
             let rompaths = format!(r#"roms;{};{}"#, dl_mame.display(), mame_dir.join("roms").display());
 
             let config = crate::config::RetroHubConfig::load();
-            let screen_arg = match config.multi_monitor.target_display.trim() {
-                "" | "auto" | "AUTO" => "-numscreens 1 -screen auto -screen0 auto".to_string(),
-                disp => format!("-numscreens 1 -screen \"{}\" -screen0 \"{}\"", disp, disp),
+            let live_displays = crate::config::detect_system_displays();
+
+            // Risolvi il target display verificando che esista realmente tra i monitor attivi
+            let chosen_screen = match config.multi_monitor.target_display.trim() {
+                "" | "auto" | "AUTO" => {
+                    live_displays.iter().find(|d| d.is_primary).or_else(|| live_displays.first())
+                        .map(|d| d.id.clone())
+                        .unwrap_or_else(|| "\\\\.\\DISPLAY1".to_string())
+                }
+                disp => {
+                    if live_displays.iter().any(|d| d.id == disp) {
+                        disp.to_string()
+                    } else {
+                        live_displays.iter().find(|d| d.is_primary).or_else(|| live_displays.first())
+                            .map(|d| d.id.clone())
+                            .unwrap_or_else(|| "\\\\.\\DISPLAY1".to_string())
+                    }
+                }
             };
+
+            // Escludi cattura mouse per non bloccarlo e imposta il monitor reale
+            let screen_arg = format!(r#"-numscreens 1 -screen "{}" -screen0 "{}" -ui_mouse 0 -nomouse"#, chosen_screen, chosen_screen);
 
             let script = format!(
                 r#"$p = Start-Process -FilePath ".\mame.exe" -ArgumentList '{} -skip_gameinfo {} -rompath "{}"' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
@@ -560,6 +628,58 @@ impl Launcher {
         if let Some(target_file) = resolved_path {
             let ext = target_file.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
             let is_direct_executable = matches!(ext.as_str(), "lnk" | "bat" | "cmd" | "exe");
+
+            // Riconoscimento ed esecuzione nativa ottimizzata giochi MS-DOS con DOSBox Staging
+            let is_dos = system_code.to_uppercase() == "DOS" 
+                || target_file.to_string_lossy().to_lowercase().contains(r"dos\games")
+                || target_file.to_string_lossy().to_lowercase().contains(r"dos/games");
+
+            if is_dos {
+                let dosbox_path = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\DOS\dosbox\dosbox.exe");
+                if dosbox_path.exists() {
+                    let game_dir = if target_file.is_dir() {
+                        target_file.clone()
+                    } else {
+                        target_file.parent().unwrap_or(Path::new(".")).to_path_buf()
+                    };
+
+                    let main_exe = if ext == "exe" || ext == "bat" || ext == "com" {
+                        target_file.file_name().and_then(|f| f.to_str()).unwrap_or("World.exe").to_string()
+                    } else {
+                        let mut found_exe = String::from("World.exe");
+                        if let Ok(rd) = std::fs::read_dir(&game_dir) {
+                            for f in rd.flatten() {
+                                let fp = f.path();
+                                let fext = fp.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+                                let fstem = fp.file_stem().and_then(|s| s.to_str()).unwrap_or("").to_lowercase();
+                                if (fext == "exe" || fext == "bat" || fext == "com") 
+                                    && !fstem.contains("setup") && !fstem.contains("install") && !fstem.contains("readme") {
+                                    found_exe = f.file_name().to_string_lossy().to_string();
+                                    break;
+                                }
+                            }
+                        }
+                        found_exe
+                    };
+
+                    let short_game_dir = Self::to_short_path(&game_dir);
+                    let dosbox_short = Self::to_short_path(&dosbox_path);
+                    let dosbox_dir = dosbox_path.parent().unwrap_or(Path::new("."));
+
+                    let script = format!(
+                        r#"$p = Start-Process -FilePath '{}' -ArgumentList '-c "mount c {}" -c "c:" -c "{}"' -WorkingDirectory '{}' -PassThru; if ($p) {{ Start-Sleep -Milliseconds 400; (New-Object -ComObject WScript.Shell).AppActivate($p.Id) }}"#,
+                        dosbox_short.replace('\'', "''"),
+                        short_game_dir.replace('\'', "''"),
+                        main_exe.replace('\'', "''"),
+                        dosbox_dir.to_string_lossy().replace('\'', "''")
+                    );
+                    Command::new("powershell")
+                        .args(["-NoProfile", "-WindowStyle", "Hidden", "-Command", &script])
+                        .spawn()
+                        .map_err(|e| format!("Errore avvio DOSBox: {}", e))?;
+                    return Ok(format!("Avviato con DOSBox: {} ({})", main_exe, short_game_dir));
+                }
+            }
 
             if is_direct_executable {
                 // Avvio garantito di collegamenti .lnk, script .bat e file eseguibili
@@ -634,6 +754,27 @@ impl Launcher {
             .spawn()
             .map_err(|e| format!("Errore lancio comando Windows: {}", e))?;
         Ok(format!("Comando eseguito: {}", trimmed))
+    }
+
+    #[cfg(windows)]
+    pub fn to_short_path(path: &Path) -> String {
+        use std::os::windows::ffi::OsStrExt;
+        let wide: Vec<u16> = path.as_os_str().encode_wide().chain(std::iter::once(0)).collect();
+        let mut buffer = vec![0u16; 1024];
+        extern "system" {
+            fn GetShortPathNameW(lpszLongPath: *const u16, lpszShortPath: *mut u16, cchBuffer: u32) -> u32;
+        }
+        let len = unsafe { GetShortPathNameW(wide.as_ptr(), buffer.as_mut_ptr(), buffer.len() as u32) };
+        if len > 0 && (len as usize) < buffer.len() {
+            String::from_utf16_lossy(&buffer[..len as usize])
+        } else {
+            path.to_string_lossy().to_string()
+        }
+    }
+
+    #[cfg(not(windows))]
+    pub fn to_short_path(path: &Path) -> String {
+        path.to_string_lossy().to_string()
     }
 }
 
