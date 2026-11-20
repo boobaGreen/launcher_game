@@ -198,13 +198,25 @@ impl Launcher {
             }
         }
 
-        // 12. Commodore 64 & Amiga
-        if sys_upper == "C64" || sys_upper == "COMMODORE" || sys_upper == "VIC20" || sys_upper == "AMIGA" {
+        // 12a. Commodore 64
+        if sys_upper == "C64" || sys_upper == "COMMODORE" || sys_upper == "VIC20" || sys_upper == "PLUS4" {
             let base_roms = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\C64\roms");
             if let Some(target) = Self::match_lnk_or_rom_in_dir(&base_roms, &game.title) {
                 return Some(target);
             }
             let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\C64");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
+                return Some(target);
+            }
+        }
+
+        // 12b. Commodore Amiga
+        if sys_upper == "AMIGA" {
+            let base_roms = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\AMIGA\roms");
+            if let Some(target) = Self::match_lnk_or_rom_in_dir(&base_roms, &game.title) {
+                return Some(target);
+            }
+            let base = PathBuf::from(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\AMIGA");
             if let Some(target) = Self::match_lnk_or_rom_in_dir(&base, &game.title) {
                 return Some(target);
             }
@@ -261,6 +273,7 @@ impl Launcher {
             "GAMECUBE" => &["rvz", "gcm", "iso"],
             "DREAMCAST" | "NAOMI" => &["cdi", "gdi", "chd", "zip"],
             "C64" => &["d64", "t64", "prg", "crt", "zip"],
+            "AMIGA" => &["adf", "dms", "ipf", "hdf", "lha", "zip"],
             "DOS" => &["exe", "bat", "com", "conf"],
             "SCUMMVM" => &["scummvm", "ini"],
             "GAMEWATCH" | "LCD" => &["mgw", "zip", "7z"],
@@ -374,7 +387,7 @@ impl Launcher {
                         for sub in sub_entries.flatten() {
                             let sub_p = sub.path();
                             let ext = sub_p.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
-                            if ["chd", "cue", "iso", "bin", "pbp", "cdi", "gdi", "sfc", "smc", "z64", "n64", "v64", "crt", "d64", "prg", "nes", "exe"].contains(&ext.as_str()) {
+                            if ["chd", "cue", "iso", "bin", "pbp", "cdi", "gdi", "sfc", "smc", "z64", "n64", "v64", "crt", "d64", "prg", "nes", "exe", "adf", "dms", "ipf", "hdf", "lha"].contains(&ext.as_str()) {
                                 return Some(sub_p.to_string_lossy().to_string());
                             }
                         }
@@ -427,6 +440,8 @@ impl Launcher {
             &["NES/Mesen/Mesen.exe", "MegaDrive/Fusion.exe", "Genesis/Fusion.exe"]
         } else if sys_upper.contains("C64") || ext_lower == "d64" || ext_lower == "t64" || ext_lower == "prg" {
             &["C64/VICE/GTK3VICE-3.10-win64/bin/x64sc.exe", "C64/x64sc.exe", "vice/x64sc.exe", "C64/VICE/x64sc.exe"]
+        } else if sys_upper == "AMIGA" || ext_lower == "adf" || ext_lower == "dms" || ext_lower == "ipf" {
+            &["AMIGA/FS-UAE/fs-uae.exe", "AMIGA/winuae.exe", "AMIGA/Winuae64.exe", "winuae/winuae.exe", "fs-uae/fs-uae.exe", "WinUAE/winUAE.exe", "WinUAE/winUAE64.exe", "Program Files/WinUAE/winUAE.exe", "Program Files (x86)/WinUAE/winUAE.exe"]
         } else if sys_upper.contains("DREAMCAST") || sys_upper.contains("NAOMI") || ext_lower == "cdi" || ext_lower == "gdi" {
             &["Dreamcast/flycast.exe", "NAOMI - Flycast/flycast.exe", "flycast/flycast.exe"]
         } else if sys_upper.contains("GAMECUBE") || ext_lower == "gcm" || ext_lower == "rvz" {

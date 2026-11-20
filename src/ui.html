@@ -2128,7 +2128,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">v0.48.0</div>
+            <div class="brand-badge">v0.48.1</div>
         </div>
 
         <div class="nav-search-container">
@@ -5222,30 +5222,124 @@
         const activeDownloads = new Map();
 
         function getEstimatedRomSize(platform) {
-            switch ((platform || '').toUpperCase()) {
-                case 'NES': return 0.5;
-                case 'SNES': return 3.2;
-                case 'MEGADRIVE': case 'GENESIS': return 2.8;
-                case 'GBA': return 8.5;
-                case 'N64': return 24.0;
-                case 'PSX': case 'PS1': return 540.0;
-                case 'MAME': case 'ARCADE': case 'NEOGEO': return 18.5;
-                case 'PINBALL': return 35.0;
-                case 'HYPSEUS': return 920.0;
-                case 'INDIE': case 'PC': return 280.0;
-                default: return 12.0;
-            }
-        }
+                    switch ((platform || '').toUpperCase()) {
+                        case 'NES': return 0.5;
+                        case 'SNES': return 3.2;
+                        case 'MEGADRIVE': case 'GENESIS': return 2.8;
+                        case 'GBA': return 8.5;
+                        case 'N64': return 24.0;
+                        case 'PSX': case 'PS1': return 540.0;
+                        case 'MAME': case 'ARCADE': case 'NEOGEO': return 18.5;
+                        case 'PINBALL': return 35.0;
+                        case 'HYPSEUS': return 920.0;
+                        case 'INDIE': case 'PC': return 280.0;
+                        case 'AMIGA': case 'C64': return 0.88;
+                        default: return 12.0;
+                    }
+                }
 
         function getDownloadStageText(pct) {
-            if (pct < 18) return t('dl_connecting');
-            if (pct < 82) return t('dl_transferring');
-            if (pct < 95) return t('dl_verifying');
-            if (pct < 100) return t('dl_finalizing');
-            return t('dl_completed');
-        }
+                    if (pct < 18) return t('dl_connecting');
+                    if (pct < 82) return t('dl_transferring');
+                    if (pct < 95) return t('dl_verifying');
+                    if (pct < 100) return t('dl_finalizing');
+                    return t('dl_completed');
+                }
 
-        function updateDownloadUI(id) {
+                // Funzione per aggiornare lo stato installazione card (usata in caso di download fallito)
+                function updateCardInstallState(id, success = true) {
+                    const g = allGames.find(x => x.id === id);
+                    if (!g) return;
+
+                    // Aggiorna stato applicazione
+                    g.is_installed = success;
+                    if (success) {
+                        downloadedGameIds.add(g.id);
+                    } else {
+                        const overlay = document.getElementById(`card-dl-overlay-${id}`);
+                        if (overlay) {
+                            overlay.style.display = 'none';
+                            overlay.classList.remove('is-success');
+                        }
+                    }
+                    updateCounters();
+
+                    // Aggiorna badge card
+                    const badgeEl = document.getElementById(`card-badge-${id}`);
+                    if (badgeEl) {
+                        if (success) {
+                            badgeEl.innerText = '💾';
+                            badgeEl.classList.add('card-badge-pop');
+                        } else {
+                            badgeEl.innerText = t('card_download');
+                            badgeEl.classList.remove('card-badge-pop');
+                        }
+                    }
+
+                    // Aggiorna pulsante rapido card
+                    const quickBtn = document.getElementById(`card-quick-btn-${id}`);
+                    if (quickBtn) {
+                        if (success) {
+                            quickBtn.innerText = t('card_play');
+                            quickBtn.disabled = false;
+                            quickBtn.classList.remove('dl-active-btn');
+                        } else {
+                            quickBtn.innerText = t('card_download');
+                            quickBtn.disabled = false;
+                            quickBtn.classList.remove('dl-active-btn');
+                        }
+                    }
+
+                    // Aggiorna modale se aperta
+                    if (activeDetailsGame && activeDetailsGame.id === id) {
+                        const storageBadge = document.getElementById('detailsStorageBadge');
+                        if (storageBadge) {
+                            storageBadge.className = success ? 'status-badge downloaded' : 'status-badge cloud';
+                            storageBadge.innerText = success ? t('details_badge_installed') : t('details_badge_cloud');
+                        }
+                        const removeBtn = document.getElementById('detailsRemoveBtn');
+                        if (removeBtn) removeBtn.style.display = success ? 'inline-flex' : 'none';
+                        const playBtn = document.getElementById('detailsPlayBtn');
+                        if (playBtn) {
+                            if (success) {
+                                playBtn.innerText = t('details_btn_play_installed');
+                                playBtn.disabled = false;
+                                playBtn.style.opacity = '1';
+                                playBtn.style.cursor = 'pointer';
+                            } else {
+                                playBtn.innerText = t('details_btn_play_cloud');
+                                playBtn.disabled = false;
+                                playBtn.style.opacity = '1';
+                                playBtn.style.cursor = 'pointer';
+                            }
+                        }
+                        const modalWidget = document.getElementById('detailsDlWidget');
+                        if (modalWidget) {
+                            modalWidget.style.display = 'none';
+                        }
+                    }
+
+                    // Aggiorna Hero se in primo piano
+                    const heroGame = heroList[heroIndex];
+                    if (heroGame && heroGame.id === id) {
+                        const heroPlayBtn = document.getElementById('heroPlayBtn');
+                        if (heroPlayBtn) {
+                            if (success) {
+                                heroPlayBtn.innerText = t('hero_play_now');
+                                heroPlayBtn.disabled = false;
+                                heroPlayBtn.style.opacity = '1';
+                                heroPlayBtn.style.cursor = 'pointer';
+                            } else {
+                                heroPlayBtn.innerText = t('hero_play_cloud');
+                                heroPlayBtn.disabled = false;
+                                heroPlayBtn.style.opacity = '1';
+                                heroPlayBtn.style.cursor = 'pointer';
+                            }
+                        }
+                    }
+                }
+
+                function updateDownloadUI(id) {
             const item = activeDownloads.get(id);
             if (!item) return;
 
@@ -5485,9 +5579,11 @@
                     clearInterval(downloadItem.intervalId);
                     activeDownloads.delete(id);
                     // Ripristino overlay visuale card
-                    const card = document.getElementById(`gameCard_${id}`);
-                    const overlay = card ? card.querySelector('.download-overlay') : null;
-                    if (overlay) overlay.style.display = 'none';
+                    const overlay = document.getElementById(`card-dl-overlay-${id}`);
+                    if (overlay) {
+                        overlay.style.display = 'none';
+                        overlay.classList.remove('is-success');
+                    }
                     updateCardInstallState(id, false);
                     showToast(`⚠️ Download non riuscito: ${downloadItem.errorMessage}`);
                     return;
@@ -7567,8 +7663,8 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Aggiornamento trasparente a v0.48.0 preservando le preferenze e raccolte dell'utente
-                        const currentAppVer = '0.48.0';
+                // Controllo Versione: Aggiornamento trasparente a v0.48.1 preservando le preferenze e raccolte dell'utente
+                const currentAppVer = '0.48.1';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.setItem('retrohub_app_version', currentAppVer);

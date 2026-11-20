@@ -23,10 +23,14 @@ impl DownloadManager {
         }
 
         // Verifica anche se esiste già in roms/ o emu/
+        let stem = Path::new(clean_name).file_stem().and_then(|s| s.to_str()).unwrap_or(clean_name);
         let local_candidates = [
             PathBuf::from(format!("roms/{}/{}", platform.to_lowercase(), clean_name)),
             PathBuf::from(format!("emu/{}/{}", platform.to_lowercase(), clean_name)),
             PathBuf::from(format!(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\{}\{}", platform.to_lowercase(), clean_name)),
+            PathBuf::from(format!(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\{}\roms\{}", platform.to_uppercase(), clean_name)),
+            PathBuf::from(format!(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\{}\roms\{}\{}", platform.to_uppercase(), stem, clean_name)),
+            PathBuf::from(format!(r"C:\Users\ClaudioDall'Ara\Desktop\Clod\emu\{}\roms\{}\Gioca.lnk", platform.to_uppercase(), stem)),
         ];
         for cand in &local_candidates {
             if cand.exists() {
@@ -80,6 +84,7 @@ impl DownloadManager {
                 "GBA" => "gba",
                 "N64" => "z64",
                 "C64" => "d64",
+                "AMIGA" => "adf",
                 "MAME" => "zip",
                 _ => "zip",
             };
