@@ -2128,7 +2128,7 @@
     <header class="top-navbar">
         <div class="nav-brand" onclick="resetToHome()">
             <div class="brand-logo">🎮 RETROHUB</div>
-            <div class="brand-badge">v0.47</div>
+            <div class="brand-badge">v0.47.1</div>
         </div>
 
         <div class="nav-search-container">
@@ -7377,7 +7377,7 @@
                 closeSettingsModal();
                 localStorage.removeItem('retrohub_wizard_completed');
                 localStorage.removeItem('retrohub_downloaded_ids');
-                localStorage.setItem('retrohub_app_version', '0.47.0');
+                localStorage.setItem('retrohub_app_version', '0.47.1');
                 downloadedGameIds.clear();
                 showToast(isEn ? '🔄 Reset complete: restarting wizard...' : (isEs ? '🔄 Restablecimiento completo: reiniciando...' : '🔄 Reset completato: riavvio Setup Wizard...'));
                 setTimeout(() => {
@@ -7567,8 +7567,8 @@
 
         function loadSavedSettingsFromStorage() {
             try {
-                // Controllo Versione: Aggiornamento trasparente a v0.47.0 preservando le preferenze e raccolte dell'utente
-                const currentAppVer = '0.47.0';
+                // Controllo Versione: Aggiornamento trasparente a v0.47.1 preservando le preferenze e raccolte dell'utente
+                const currentAppVer = '0.47.1';
                 const savedVer = localStorage.getItem('retrohub_app_version');
                 if (savedVer !== currentAppVer) {
                     localStorage.setItem('retrohub_app_version', currentAppVer);
@@ -8239,7 +8239,6 @@
             ctx.moveTo(20, py + 28);
             ctx.lineTo(w - 20, py + 28);
             ctx.stroke();
-        }
         }
     </script>
 </body>
