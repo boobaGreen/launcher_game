@@ -110,7 +110,7 @@
 2. **💿 Laserdisc & FMV:** HYPSEUS (22 titoli, 100% locandine originali WebP/PNG).
 3. **🎯 Pinball & Flipper:** PINBALL (40 tavoli, 100% backglass originali HD).
 4. **📟 LCD & Game & Watch:** GAMEWATCH (15 titoli con 6 motori simulatore autentici).
-5. **🍄 Nintendo Universe:** SNES (86), NES (54), GBA (51), N64 (20), GAMECUBE (5).
+5. **🍄 Nintendo Universe:** SNES (86), NES (54), GBA (51), N64 (20), GameCube (5), **Wii (45).**
 6. **🌀 Sega Universe:** MEGADRIVE (58), DREAMCAST (5) — con filtro combinato Mega Drive / Genesis.
 7. **🎮 Sony PlayStation:** PSX (60 titoli classici 32-bit).
 8. **🦅 Atari & Vintage Pioneers:** ATARI2600 (15), ATARI7800 (4), INTELLIVISION (4), JAGUAR (4), LYNX (4), COLECO (3), VECTREX (3).

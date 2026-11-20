@@ -3,9 +3,9 @@
 [![Rust Version](https://img.shields.io/badge/rust-2021%20edition-orange.svg)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011%20(x86__64)-blue.svg)]()
-[![Status](https://img.shields.io/badge/version-v0.45.0-brightgreen.svg)]()
+[![Status](https://img.shields.io/badge/version-v0.48.0-brightgreen.svg)]()
 
-Client desktop nativo ultra-veloce scritto interamente in **Rust** per la gestione, consultazione multi-tag, sblocco enciclopedico delle copertine e lancio istantaneo dell'intera storia dei videogiochi (oltre **1.734 titoli** su **41 piattaforme**, architettura organizzata in 12 macro-famiglie universali).
+Client desktop nativo ultra-veloce scritto interamente in **Rust** per la gestione, consultazione multi-tag, sblocco enciclopedico delle copertine e lancio istantaneo dell'intera storia dei videogiochi (oltre **1.699 titoli** su **36 piattaforme**, architettura organizzata in 12 macro-famiglie universali).
 
 ---
 
@@ -35,7 +35,8 @@ Client desktop nativo ultra-veloce scritto interamente in **Rust** per la gestio
 * **ScummVM** (64 avventure grafiche in italiano)
 * **Sega NAOMI & Sammy Atomiswave** (Flycast)
 * **Sega Hikaru & Model Arcade** (Planet Harriers, Brave Firefighters...)
-* **Super Nintendo, Nintendo 64, GameCube, Dreamcast, PlayStation 1, NES**
+* **Super Nintendo, Nintendo 64, GameCube, Wii, Dreamcast, PlayStation 1, NES**
+* **Wii (45 titoli 1G1R):** Classici Nintendo GameCube/Wii con supporto grafico completo
 * **Giochi Indie PC & LocoMalito** (33 giochi)
 * *Predisposto per l'integrazione modulare di oltre 200 sistemi (Standard Batocera & RetroBat)*
 
