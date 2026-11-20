@@ -101,28 +101,33 @@ impl DownloadManager {
         if let Some(rom) = t.strip_prefix("MAME:") {
             return format!("{}.zip", rom.trim());
         }
+        let platform_ext = match platform.to_uppercase().as_str() {
+            "SNES" => "sfc",
+            "NES" => "nes",
+            "MEGADRIVE" | "GENESIS" => "md",
+            "GB" => "gb",
+            "GBC" => "gbc",
+            "GBA" => "gba",
+            "N64" => "z64",
+            "C64" => "d64",
+            "AMIGA" => "adf",
+            "MAME" => "zip",
+            _ => "zip",
+        };
         if t.ends_with(".lnk") || t.ends_with(".bat") {
             let base = Path::new(t).file_stem().and_then(|s| s.to_str()).unwrap_or(title);
-            let ext = match platform.to_uppercase().as_str() {
-                "SNES" => "sfc",
-                "NES" => "nes",
-                "MEGADRIVE" | "GENESIS" => "md",
-                "GB" => "gb",
-                "GBC" => "gbc",
-                "GBA" => "gba",
-                "N64" => "z64",
-                "C64" => "d64",
-                "AMIGA" => "adf",
-                "MAME" => "zip",
-                _ => "zip",
-            };
-            return format!("{}.{}", base, ext);
+            return format!("{}.{}", base, platform_ext);
         }
         if !t.is_empty() {
-            return Path::new(t).file_name().and_then(|s| s.to_str()).unwrap_or(t).to_string();
+            if let Some(ext) = Path::new(t).extension().and_then(|e| e.to_str()) {
+                if !ext.is_empty() {
+                    return Path::new(t).file_name().and_then(|s| s.to_str()).unwrap_or(t).to_string();
+                }
+            }
+            return format!("{}.{}", t, platform_ext);
         }
         let clean_title = title.replace([':', '/', '\\', '?', '*', '"', '<', '>', '|'], "");
-        format!("{}.zip", clean_title)
+        format!("{}.{}", clean_title, platform_ext)
     }
 
     /// URL CDN / Mirror di riferimento per il download
